@@ -1,0 +1,84 @@
+/* Admin form */
+form.adminForm {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+form.adminForm div.formItem {
+	width: auto;
+	overflow: hidden;
+	margin-bottom: 8px;
+}
+
+form.adminForm div.formItem label {
+	float: left;
+	line-height: 20px;
+	font-weight: bold;
+	width: 120px;
+}
+
+form.adminForm div.formItem input, form.adminForm div.formItem select {
+	border: 1px #ccc solid;
+	float: left;
+}
+
+form.adminForm div.submit {
+	width: auto;
+	overflow: hidden;
+}
+
+form.adminForm div.submit a {
+	display: block;
+	float: left;
+	border: 1px #666 solid;
+	background-color: #efefef;
+	padding: 3px 10px;
+	text-decoration: none;
+	color: #666;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+/* Admin table */
+table.adminTable {
+	text-align: left;
+}
+
+table.adminTable thead tr th {
+	border-top: 1px #ccc solid;
+	border-bottom: 1px #ccc solid;
+	line-height: 24px;
+	font-weight: bold;
+	padding: 0 5px;
+}
+
+table.adminTable tbody tr td {
+	border-bottom: 1px #efefef solid;
+	line-height: 24px;
+	padding: 0 5px;
+}
+
+a.addItem {
+	float: right;
+	line-height: 40px;
+	border: 1px #9c9 solid;
+	padding: 0 20px 0 46px;
+	margin-bottom: 12px;
+	font-size: 1.75em;
+	text-decoration: none;
+	color: #030;
+	background: url(images/add.png) 16px center no-repeat #cfc;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+fieldset legend {
+	font-size: 1.25em;
+	font-weight: bold;
+}
+
+fieldset label {
+	display: block;
+}

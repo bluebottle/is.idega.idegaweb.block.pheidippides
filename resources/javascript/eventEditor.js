@@ -5,12 +5,12 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.close').click(function(event) {
 		event.preventDefault();
-		$.fancybox().close();
+		jQuery.fancybox.close();
 	});
 	
 	jQuery('a.store').click(function(event)) {
 		event.preventDefault();
-		$('form#eventEditorForm').submit();
-		$.fancybox().close();
+		jQuery('form#eventEditorForm').submit();
+		jQuery.fancybox.close();
 	});
 });
