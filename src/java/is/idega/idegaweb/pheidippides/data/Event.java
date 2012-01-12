@@ -27,6 +27,7 @@ public class Event implements Serializable {
 	private static final String COLUMN_ENTRY_ID = "event_id";
 	private static final String COLUMN_NAME = "event_name";
 	private static final String COLUMN_DESCRIPTION = "event_description";
+	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
 	private static final String COLUMN_REPORT_SIGN = "report_sign";
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -40,6 +41,9 @@ public class Event implements Serializable {
 
 	@Column(name = Event.COLUMN_DESCRIPTION)
 	private String eventDescription;
+	
+	@Column(name = Event.COLUMN_LOCALIZED_KEY)
+	private String localizedKey;
 
 	@Column(name = Event.COLUMN_REPORT_SIGN)
 	private String reportSign;
@@ -52,7 +56,8 @@ public class Event implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	@SuppressWarnings("unused")
+	private void setId(Long id) {
 		this.id = id;
 	}
 
@@ -70,6 +75,14 @@ public class Event implements Serializable {
 
 	public void setEventDescription(String eventDescription) {
 		this.eventDescription = eventDescription;
+	}
+
+	public String getLocalizedKey() {
+		return localizedKey;
+	}
+
+	public void setLocalizedKey(String localizedKey) {
+		this.localizedKey = localizedKey;
 	}
 
 	public String getReportSign() {

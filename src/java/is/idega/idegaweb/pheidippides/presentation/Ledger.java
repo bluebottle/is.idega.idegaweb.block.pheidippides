@@ -91,7 +91,7 @@ public class Ledger extends IWBaseComponent {
 			ledgers = getService().getMealLedgers(school, date, year, schoolClass);
 		}
 		
-		Set<School> schools = new TreeSet(getService().getAllSchools());
+		Set<School> schools = new TreeSet<School>(getService().getAllSchools());
 		List<SelectOption> options = new ArrayList<SelectOption>();
 		options.add(new SelectOption(""));
 		for (School school2 : schools) {
@@ -105,7 +105,7 @@ public class Ledger extends IWBaseComponent {
 		GrubBean bean = getBeanInstance("grubBean");
 		bean.setDate(date);
 		if (registrations != null) {
-			bean.setStudents(new ArrayList(registrations.keySet()));
+			bean.setStudents(new ArrayList<Student>(registrations.keySet()));
 			bean.setRegistrationMap(registrations);
 		}
 		bean.setLedgerMap(ledgers);

@@ -1,0 +1,37 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
+				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></th>
+				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></th>
+				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></th>
+				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
+				<th class="lastColumn"></th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<ui:repeat value="#{pheidippidesBean.events}" var="event">
+				<tr>
+					<td class="firstColumn"><h:outputText value="#{event.id}" /></td>
+					<td><h:outputText value="#{event.name}" /></td>
+					<td><h:outputText value="#{event.description}" /></td>
+					<td><h:outputText value="#{event.localizedKey}" /></td>
+					<td><h:outputText value="#{event.reportSign}" /></td>
+					<td><h:outputText value="#{event.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+					<td class="lastColumn"><h:outputText value="#{event.name}" /></td>
+				</tr>
+			</ui:repeat>
+		</tbody>
+	</table>
+</ui:component>
+</html>

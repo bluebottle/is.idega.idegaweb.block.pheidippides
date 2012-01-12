@@ -21,9 +21,10 @@ import is.idega.idegaweb.pheidippides.data.Student;
 import java.util.Date;
 import java.util.List;
 
+import com.idega.core.persistence.GenericDao;
 import com.idega.util.IWTimestamp;
 
-public interface GrubDao {
+public interface GrubDao extends GenericDao {
 
 	public School getSchool(String schoolID);
 
