@@ -38,13 +38,21 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			event = new Event();
 			event.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}
-		event.setEventName(name);
-		event.setEventDescription(description);
+		event.setName(name);
+		event.setDescription(description);
 		event.setLocalizedKey(localizedKey);
 		event.setReportSign(reportSign);
 
 		getEntityManager().persist(event);
 		
 		return event;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeEvent(Long eventID) {
+		Event event = getEvent(eventID);
+		getEntityManager().remove(event);
+		
+		return true;
 	}	
 }

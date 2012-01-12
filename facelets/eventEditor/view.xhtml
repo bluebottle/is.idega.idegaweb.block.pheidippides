@@ -6,7 +6,9 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 >
 <ui:component>
-	<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+	<a href="#{pheidippidesBeanBean.responseURL}" class="addItem"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_event']}" /></span></a>
+
+	<table id="" class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
 				<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
@@ -15,6 +17,7 @@
 				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></th>
 				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></th>
 				<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
+				<th></th>
 				<th class="lastColumn"></th>
 			</tr>
 		</thead>
@@ -28,7 +31,20 @@
 					<td><h:outputText value="#{event.localizedKey}" /></td>
 					<td><h:outputText value="#{event.reportSign}" /></td>
 					<td><h:outputText value="#{event.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
-					<td class="lastColumn"><h:outputText value="#{event.name}" /></td>
+					<td>
+						<h:outputLink value="#{pheidippidesBeanBean.responseURL}" styleClass="editItem">
+							<f:param name="prm_event_pk" value="#{event.id}" />
+							<f:param name="prm_action" value="2" />
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+						</h:outputLink>
+					</td>
+					<td class="lastColumn">
+						<h:outputLink styleClass="deleteItem">
+							<f:param name="prm_event_pk" value="#{event.id}" />
+							<f:param name="prm_action" value="3" />
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
+						</h:outputLink>
+					</td>
 				</tr>
 			</ui:repeat>
 		</tbody>

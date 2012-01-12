@@ -10,5 +10,6 @@ public interface PheidippidesDao {
 	public Event getEvent(String name);
 	public List<Event> getEvents();
 	public Event storeEvent(Long eventID, String name, String description, String localizedKey, String reportSign);
+	public boolean removeEvent(Long eventID);
 	
 }

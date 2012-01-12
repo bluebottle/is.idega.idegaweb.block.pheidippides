@@ -11,7 +11,35 @@ import org.springframework.stereotype.Service;
 @Scope("request")
 public class PheidippidesBean {
 
+	public String eventHandler;
+	public String responseURL;
+	
+	public Event event;
 	public List<Event> events;
+
+	public String getEventHandler() {
+		return eventHandler;
+	}
+
+	public void setEventHandler(String eventHandler) {
+		this.eventHandler = eventHandler;
+	}
+
+	public String getResponseURL() {
+		return responseURL;
+	}
+
+	public void setResponseURL(String responseURL) {
+		this.responseURL = responseURL;
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
+	}
 
 	public List<Event> getEvents() {
 		return events;

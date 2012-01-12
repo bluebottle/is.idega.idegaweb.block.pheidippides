@@ -37,10 +37,10 @@ public class Event implements Serializable {
 	private Long id;
 
 	@Column(name = Event.COLUMN_NAME)
-	private String eventName;
+	private String name;
 
 	@Column(name = Event.COLUMN_DESCRIPTION)
-	private String eventDescription;
+	private String description;
 	
 	@Column(name = Event.COLUMN_LOCALIZED_KEY)
 	private String localizedKey;
@@ -61,20 +61,20 @@ public class Event implements Serializable {
 		this.id = id;
 	}
 
-	public String getEventName() {
-		return eventName;
+	public String getName() {
+		return name;
 	}
 
-	public void setEventName(String eventName) {
-		this.eventName = eventName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getEventDescription() {
-		return eventDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setEventDescription(String eventDescription) {
-		this.eventDescription = eventDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getLocalizedKey() {
