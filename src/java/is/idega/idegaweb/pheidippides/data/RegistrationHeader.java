@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.idega.core.idgenerator.business.UUIDGenerator;
+
 @Entity
 @Table(name = RegistrationHeader.ENTITY_NAME)
 @NamedQueries({
@@ -37,7 +39,10 @@ public class RegistrationHeader implements Serializable {
 	
 	@PrePersist
 	public void setDefaultValues() {
-		
+		if (getUuid() == null || "".equals(getUuid().trim())) {
+			String uuid = UUIDGenerator.getInstance().generateUUID();
+			setUuid(uuid);
+		}
 	}
 	
 	@Id
@@ -72,7 +77,7 @@ public class RegistrationHeader implements Serializable {
 		return uuid;
 	}
 
-	public void setUuid(String uuid) {
+	private void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
