@@ -7,5 +7,6 @@
     <entity class="is.idega.idegaweb.pheidippides.data.Distance" />
     <entity class="is.idega.idegaweb.pheidippides.data.Event" />
     <entity class="is.idega.idegaweb.pheidippides.data.Race" />
+    <entity class="is.idega.idegaweb.pheidippides.data.RegistrationHeader" />
         
 </entity-mappings>
