@@ -36,6 +36,7 @@ public class Race implements Serializable {
 	private static final String COLUMN_OPEN_REGISTRATION = "open_registration";
 	private static final String COLUMN_CLOSE_REGISTRATION = "close_registration";
 	private static final String COLUMN_HAS_FAMILY_DISCOUNT = "family_discount";
+	private static final String COLUMN_NUMBER_OF_RELAY_LEGS = "relay_legs";
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
@@ -65,6 +66,9 @@ public class Race implements Serializable {
 
 	@Column(name = Race.COLUMN_HAS_FAMILY_DISCOUNT)
 	private boolean familyDiscount;
+
+	@Column(name = Race.COLUMN_NUMBER_OF_RELAY_LEGS)
+	private int numberOfRelayLegs;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Race.COLUMN_CREATED_DATE)
@@ -133,5 +137,13 @@ public class Race implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public int getNumberOfRelayLegs() {
+		return numberOfRelayLegs;
+	}
+
+	public void setNumberOfRelayLegs(int numberOfRelayLegs) {
+		this.numberOfRelayLegs = numberOfRelayLegs;
 	}
 }

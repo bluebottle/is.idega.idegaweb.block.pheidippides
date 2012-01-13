@@ -6,49 +6,49 @@ import java.util.Date;
 public class Participant implements Serializable {
 	private static final long serialVersionUID = -7894754146844154272L;
 
-	private String first_name;
-	private String middle_name;
-	private String last_name;
-	private String full_name;
-	private String personal_id;
-	private Date date_of_birth;
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private String fullName;
+	private String personalId;
+	private Date dateOfBirth;
 	private String uuid;
 	private String address;
-	private String postal_address;
+	private String postalAddress;
 	private String nationality;
 	private String email;
-	private String phone_home;
-	private String phone_mobile;
+	private String phoneHome;
+	private String phoneMobile;
 	
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getMiddle_name() {
-		return middle_name;
+	public String getMiddleName() {
+		return middleName;
 	}
-	public void setMiddle_name(String middle_name) {
-		this.middle_name = middle_name;
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	public String getFull_name() {
-		return full_name;
+	public String getFullName() {
+		return fullName;
 	}
-	public void setFull_name(String full_name) {
-		this.full_name = full_name;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
-	public String getPersonal_id() {
-		return personal_id;
+	public String getPersonalId() {
+		return personalId;
 	}
-	public void setPersonal_id(String personal_id) {
-		this.personal_id = personal_id;
+	public void setPersonalId(String personalId) {
+		this.personalId = personalId;
 	}
 	public String getUuid() {
 		return uuid;
@@ -62,11 +62,11 @@ public class Participant implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getPostal_address() {
-		return postal_address;
+	public String getPostalAddress() {
+		return postalAddress;
 	}
-	public void setPostal_address(String postal_address) {
-		this.postal_address = postal_address;
+	public void setPostalAddress(String postalAddress) {
+		this.postalAddress = postalAddress;
 	}
 	public String getNationality() {
 		return nationality;
@@ -80,22 +80,22 @@ public class Participant implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPhone_home() {
-		return phone_home;
+	public String getPhoneHome() {
+		return phoneHome;
 	}
-	public void setPhone_home(String phone_home) {
-		this.phone_home = phone_home;
+	public void setPhoneHome(String phoneHome) {
+		this.phoneHome = phoneHome;
 	}
-	public String getPhone_mobile() {
-		return phone_mobile;
+	public String getPhoneMobile() {
+		return phoneMobile;
 	}
-	public void setPhone_mobile(String phone_mobile) {
-		this.phone_mobile = phone_mobile;
+	public void setPhoneMobile(String phoneMobile) {
+		this.phoneMobile = phoneMobile;
 	}
 	public Date getDateOfBirth() {
-		return date_of_birth;
+		return dateOfBirth;
 	}
-	public void setDateOfBirth(Date date_of_birth) {
-		this.date_of_birth = date_of_birth;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 }
