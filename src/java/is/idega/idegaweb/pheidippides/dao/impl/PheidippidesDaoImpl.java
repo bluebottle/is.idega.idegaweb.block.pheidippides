@@ -2,6 +2,7 @@ package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
 
 import java.util.List;
 
@@ -55,4 +56,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		
 		return true;
 	}	
+	
+	public List<Participant> getParticipants(Event event, int year) {
+		return null;
+	}
+	
+	public Participant getParticipant(String uuid) {
+		return null;
+	}
 }
