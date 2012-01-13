@@ -1,7 +1,7 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
-	jQuery('a.addItem, a.editItem').fancybox();
+	jQuery('a.editItem').fancybox();
 	
 	jQuery('a.close').live('click', function(event) {
 		event.preventDefault();
@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		jQuery('form#eventEditorForm').submit();
+		jQuery('form#stringLocalizerForm').submit();
 		jQuery.fancybox.close();
 	});
 });

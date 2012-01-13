@@ -6,28 +6,28 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 >
 <ui:component>
-	<form class="smallAdminForm" id="eventEditorForm" action="" method="post">
+	<form class="smallAdminForm" id="distanceEditorForm" action="" method="post">
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
-		<input type="hidden" name="prm_event_pk" value="#{pheidippidesBean.event.id}" />
+		<input type="hidden" name="prm_distance_pk" value="#{pheidippidesBean.distance.id}" />
 		
 		<fieldset class="formSection">
-			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_event']}" /></legend>
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_distance']}" /></legend>
 			
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
-				<input type="text" name="prm_name" value="#{pheidippidesBean.event.name}" />
+				<input type="text" name="prm_name" value="#{pheidippidesBean.distance.name}" />
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
-				<input type="text" name="prm_description" value="#{pheidippidesBean.event.description}" />
+				<input type="text" name="prm_description" value="#{pheidippidesBean.distance.description}" />
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></label>
-				<input type="text" name="prm_localized_key" value="#{pheidippidesBean.event.localizedKey}" />
+				<input type="text" name="prm_localized_key" value="#{pheidippidesBean.distance.localizedKey}" />
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></label>
-				<input type="text" name="prm_report_sign" value="#{pheidippidesBean.event.reportSign}" />
+				<input type="text" name="prm_report_sign" value="#{pheidippidesBean.distance.reportSign}" />
 			</div>
 		</fieldset>
 		

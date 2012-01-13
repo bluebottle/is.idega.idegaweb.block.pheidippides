@@ -7,6 +7,8 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
@@ -18,6 +20,7 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.business.BuilderService;
 import com.idega.core.builder.business.BuilderServiceFactory;
+import com.idega.core.localisation.business.ICLocaleBusiness;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -25,22 +28,22 @@ import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+import com.idega.util.messages.MessageResource;
 
-public class EventEditor extends IWBaseComponent implements IWPageEventListener {
+public class StringLocalizer extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
-	private static final int ACTION_DELETE = 3;
-	
+
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
-	private static final String PARAMETER_NAME = "prm_name";
-	private static final String PARAMETER_DESCRIPTION = "prm_description";
-	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
-	private static final String PARAMETER_REPORT_SIGN = "prm_report_sign";
-	
+	private static final String PARAMETER_LOCALE = "prm_locale";
+	private static final String PARAMETER_KEY = "prm_key";
+	private static final String PARAMETER_VALUE = "prm_value";
+
 	@Autowired
 	private PheidippidesDao dao;
 	
@@ -51,7 +54,7 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	private JQuery jQuery;
 	
 	private IWBundle iwb;
-
+	
 	@Override
 	protected void initializeComponent(FacesContext context) {
 		try {
@@ -60,39 +63,55 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/stringLocalizer.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-	
-			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-			properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
-			
+
 			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(EventEditor.class, properties));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
+			bean.setResponseURL(service.getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
+			bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
+			bean.setEvents(getDao().getEvents());
 			if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
 				bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
+				
+				List<MessageResource> resourceList = getResourceList(iwc.getIWMainApplication(), getBundleIdentifier(), iwc.isParameterSet(PARAMETER_LOCALE) ? LocaleUtil.getLocale(iwc.getParameter(PARAMETER_LOCALE)) : LocaleUtil.getIcelandicLocale());
+				for(MessageResource resource : resourceList) {
+					
+					Set<String> keys = resource.getAllLocalisedKeys();
+					List<AdvancedProperty> filtered = new ArrayList<AdvancedProperty>();
+					
+					for (String string : keys) {
+						if (string.indexOf(bean.getEvent().getLocalizedKey()) != -1) {
+							filtered.add(new AdvancedProperty(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""), String.valueOf(resource.getMessage(string))));
+							
+							if (iwc.isParameterSet(PARAMETER_KEY) && iwc.getParameter(PARAMETER_KEY).equals(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""))) {
+								bean.setProperty(new AdvancedProperty(string, String.valueOf(resource.getMessage(string))));
+							}
+						}
+					}
+					bean.setProperties(filtered);
+				}
 			}
+			
+			List<Locale> locales = ICLocaleBusiness.getListOfLocalesJAVA();
+			List<AdvancedProperty> localeList = new ArrayList<AdvancedProperty>();
+			for (Locale locale : locales) {
+				localeList.add(new AdvancedProperty(locale.toString(), locale.getDisplayLanguage(iwc.getCurrentLocale())));
+			}
+			bean.setLocales(localeList);
+
 	
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 			switch (parseAction(iwc)) {
 				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/view.xhtml"));
 					break;
 	
 				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
-					break;
-					
-				case ACTION_DELETE:
-					getDao().removeEvent(bean.getEvent().getId());
-					bean.setEvent(null);
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/editor.xhtml"));
 					break;
 			}
-			bean.setEvents(getDao().getEvents());
-
 			add(facelet);
 		}
 		catch (RemoteException re) {
@@ -100,6 +119,14 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 		}
 	}
 	
+	private List<MessageResource> getResourceList(IWMainApplication iwma, String bundleIdentifier, Locale locale) {
+		List<MessageResource> resourceList = new ArrayList<MessageResource>(1);
+		MessageResource resource = iwma.getMessageFactory().getResource("slide_resource", bundleIdentifier, locale);
+		if(resource != null)
+			resourceList.add(resource);
+
+		return resourceList;
+	}
 	private int parseAction(IWContext iwc) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
 		return action;
@@ -134,13 +161,9 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	}
 	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		getDao().storeEvent(
-			iwc.isParameterSet(PARAMETER_EVENT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)) : null,
-			iwc.getParameter(PARAMETER_NAME),
-			iwc.getParameter(PARAMETER_DESCRIPTION),
-			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
-			iwc.getParameter(PARAMETER_REPORT_SIGN)
-		);
+		Locale locale = iwc.isParameterSet(PARAMETER_LOCALE) ? LocaleUtil.getLocale(iwc.getParameter(PARAMETER_LOCALE)) : LocaleUtil.getIcelandicLocale();
+		
+		IWMainApplication.getDefaultIWMainApplication().getMessageFactory().setLocalisedMessageToAutoInsertRes(iwc.getParameter(PARAMETER_KEY), iwc.getParameter(PARAMETER_VALUE), getBundleIdentifier(), locale);
 		
 		return true;
 	}

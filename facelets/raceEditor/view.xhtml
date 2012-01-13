@@ -1,0 +1,88 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="adminForm" action="" method="post">
+		<fieldset class="navigation">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_editor']}" /></legend>
+			
+			<ui:fragment rendered="#{not empty pheidippidesBean.event and not empty param['prm_year']}">
+				<a href="#{pheidippidesBean.responseURL}" class="addItem"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race']}" /></span></a>
+			</ui:fragment>
+	
+			<div class="formItem">
+				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<c:selectOne name="prm_event_pk">
+					<ui:repeat value="#{pheidippidesBean.events}" var="event">
+						<c:selectOption name="#{event.name}" content="#{event.id}" selected="#{event.id eq param['prm_event_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<c:selectOne name="prm_year">
+					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="submit">
+				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
+			</div>
+		</fieldset>
+
+		<fieldset class="formSection">
+			<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['open_registration']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
+						<th></th>
+						<th class="lastColumn"></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<ui:repeat value="#{pheidippidesBean.races}" var="race">
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{race.id}" /></td>
+							<td><h:outputText value="#{race.year}" /></td>
+							<td><h:outputText value="#{race.event.name}" /></td>
+							<td><h:outputText value="#{race.distance.name}" /></td>
+							<td><h:outputText value="#{race.openRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
+							<td><h:outputText value="#{race.closeRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
+							<td class="discount_#{race.familyDiscount}"><span></span></td>
+							<td><h:outputText value="#{race}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td>
+								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
+									<f:param name="prm_event_pk" value="#{param['prm_event_pk]}" />
+									<f:param name="prm_year" value="#{param['prm_year']}" />
+									<f:param name="prm_race_pk" value="#{race.id}" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+								</h:outputLink>
+							</td>
+							<td class="lastColumn">
+								<h:outputLink styleClass="deleteItem">
+									<f:param name="prm_race_pk" value="#{race.id}" />
+									<f:param name="prm_action" value="3" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
+								</h:outputLink>
+							</td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+	</form>
+</ui:component>
+</html>

@@ -1,9 +1,12 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -20,6 +23,7 @@ import com.idega.util.IWTimestamp;
 @Scope(BeanDefinition.SCOPE_SINGLETON)
 public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesDao {
 
+	/* Event methods */
 	public Event getEvent(Long eventID) {
 		return find(Event.class, eventID);
 	}
@@ -55,8 +59,92 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		getEntityManager().remove(event);
 		
 		return true;
+	}
+
+	/* Distance methods */
+	public Distance getDistance(Long distanceID) {
+		return find(Distance.class, distanceID);
+	}
+
+	public Distance getDistance(String name) {
+		return getSingleResult("distance.findByName", Distance.class, new Param("name", name));
+	}
+
+	public List<Distance> getDistances() {
+		return getResultList("distance.findAll", Distance.class);
+	}
+
+	@Transactional(readOnly = false)
+	public Distance storeDistance(Long distanceID, String name, String description, String localizedKey, String reportSign) {
+		Distance distance = distanceID != null ? getDistance(distanceID) : null;
+		if (distance == null) {
+			distance = new Distance();
+			distance.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		distance.setName(name);
+		distance.setDescription(description);
+		distance.setLocalizedKey(localizedKey);
+		distance.setReportSign(reportSign);
+		
+		getEntityManager().persist(distance);
+		
+		return distance;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeDistance(Long distanceID) {
+		Distance distance = getDistance(distanceID);
+		getEntityManager().remove(distance);
+		
+		return true;
+	}
+
+	/* Race methods */
+	public Race getRace(Long raceID) {
+		return find(Race.class, raceID);
+	}
+
+	public List<Race> getRaces(Event event, Integer year) {
+		if (event == null && year == null) {
+			return getResultList("race.findAll", Race.class);
+		}
+		else if (event != null && year == null) {
+			return getResultList("race.findAllByEvent", Race.class, new Param("event", event));
+		}
+		else if (event == null && year != null) {
+			return getResultList("race.findAllByYear", Race.class, new Param("year", year));
+		}
+		else {
+			return getResultList("race.findAllByEventYear", Race.class, new Param("event", event), new Param("year", year));
+		}
+	}
+
+	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount) {
+		Race race = raceID != null ? getRace(raceID) : null;
+		if (race == null) {
+			race = new Race();
+			race.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		race.setYear(year);
+		race.setEvent(event);
+		race.setDistance(distance);
+		race.setOpenRegistrationDate(openRegistrationDate);
+		race.setCloseRegistrationDate(closeRegistrationDate);
+		race.setFamilyDiscount(familyDiscount);
+		
+		getEntityManager().persist(race);
+		
+		return race;
+	}
+
+	public boolean removeRace(Long raceID) {
+		Race race = getRace(raceID);
+		getEntityManager().remove(race);
+		
+		return true;
 	}	
 	
+	/* Participant methods */
 	public List<Participant> getParticipants(Event event, int year) {
 		return null;
 	}

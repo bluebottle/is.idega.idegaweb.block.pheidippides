@@ -7,9 +7,9 @@
 >
 <ui:component>
 	<fieldset class="formSection noNavigation">
-		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event_editor']}" /></legend>
+		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance_editor']}" /></legend>
 
-		<a href="#{pheidippidesBean.responseURL}" class="addItem"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_event']}" /></span></a>
+		<a href="#{pheidippidesBean.responseURL}" class="addItem"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}" /></span></a>
 	
 		<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 			<thead>
@@ -26,23 +26,23 @@
 			</thead>
 			
 			<tbody>
-				<ui:repeat value="#{pheidippidesBean.events}" var="event">
+				<ui:repeat value="#{pheidippidesBean.distances}" var="distance">
 					<tr>
-						<td class="firstColumn"><h:outputText value="#{event.id}" /></td>
-						<td><h:outputText value="#{event.name}" /></td>
-						<td><h:outputText value="#{event.description}" /></td>
-						<td><h:outputText value="#{event.localizedKey}" /></td>
-						<td><h:outputText value="#{event.reportSign}" /></td>
-						<td><h:outputText value="#{event.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+						<td class="firstColumn"><h:outputText value="#{distance.id}" /></td>
+						<td><h:outputText value="#{distance.name}" /></td>
+						<td><h:outputText value="#{distance.description}" /></td>
+						<td><h:outputText value="#{distance.localizedKey}" /></td>
+						<td><h:outputText value="#{distance.reportSign}" /></td>
+						<td><h:outputText value="#{distance.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 						<td>
 							<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
-								<f:param name="prm_event_pk" value="#{event.id}" />
+								<f:param name="prm_event_pk" value="#{distance.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 							</h:outputLink>
 						</td>
 						<td class="lastColumn">
 							<h:outputLink styleClass="deleteItem">
-								<f:param name="prm_event_pk" value="#{event.id}" />
+								<f:param name="prm_event_pk" value="#{distance.id}" />
 								<f:param name="prm_action" value="3" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
 							</h:outputLink>

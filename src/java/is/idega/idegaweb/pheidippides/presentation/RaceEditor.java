@@ -18,28 +18,32 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.business.BuilderService;
 import com.idega.core.builder.business.BuilderServiceFactory;
-import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
+import com.idega.presentation.ui.handlers.IWDatePickerHandler;
+import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class EventEditor extends IWBaseComponent implements IWPageEventListener {
+public class RaceEditor extends IWBaseComponent {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
 	
+	private static final String PARAMETER_DISTANCE_PK = "prm_distance_pk";
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
-	private static final String PARAMETER_NAME = "prm_name";
-	private static final String PARAMETER_DESCRIPTION = "prm_description";
-	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
-	private static final String PARAMETER_REPORT_SIGN = "prm_report_sign";
+	private static final String PARAMETER_RACE_PK = "prm_race_pk";
+	private static final String PARAMETER_YEAR = "prm_year";
+	
+	private static final String PARAMETER_OPEN_REGISTRATION = "prm_open_registration";
+	private static final String PARAMETER_CLOSE_REGISTRATION = "prm_close_registration";
+	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -63,35 +67,43 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-	
+			
 			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 			properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
 			
+			List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
+			int year = new IWTimestamp().getYear()  + 1;
+			while (year >= 2005) {
+				years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
+			}
+			
 			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(EventEditor.class, properties));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
-			if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
-				bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
-			}
-	
+			bean.setResponseURL(service.getUriToObject(RaceEditor.class, properties));
+			bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
+			bean.setProperties(years);
+			bean.setDistances(getDao().getDistances());
+			bean.setEvents(getDao().getEvents());
+			bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
+			bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
+			
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 			switch (parseAction(iwc)) {
 				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
 					break;
 	
 				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/editor.xhtml"));
 					break;
 					
 				case ACTION_DELETE:
-					getDao().removeEvent(bean.getEvent().getId());
-					bean.setEvent(null);
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					getDao().removeRace(bean.getRace().getId());
+					bean.setRace(null);
+					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
 					break;
 			}
-			bean.setEvents(getDao().getEvents());
+			bean.setRaces(getDao().getRaces(bean.getEvent(), iwc.isParameterSet(PARAMETER_YEAR) ? Integer.parseInt(iwc.getParameter(PARAMETER_YEAR)) : null));
 
 			add(facelet);
 		}
@@ -99,7 +111,7 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 			throw new IBORuntimeException(re);
 		}
 	}
-	
+
 	private int parseAction(IWContext iwc) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
 		return action;
@@ -132,14 +144,16 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 		
 		return jQuery;
 	}
-	
+
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		getDao().storeEvent(
-			iwc.isParameterSet(PARAMETER_EVENT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)) : null,
-			iwc.getParameter(PARAMETER_NAME),
-			iwc.getParameter(PARAMETER_DESCRIPTION),
-			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
-			iwc.getParameter(PARAMETER_REPORT_SIGN)
+		getDao().storeRace(
+			iwc.isParameterSet(PARAMETER_RACE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK)) : null,
+			Integer.parseInt(iwc.getParameter(PARAMETER_YEAR)),
+			getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))),
+			getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))),
+			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), iwc.getCurrentLocale()) : null,
+			iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
+			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT)
 		);
 		
 		return true;

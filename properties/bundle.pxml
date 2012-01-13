@@ -11,6 +11,21 @@
       <value>
         <map>
           <key>
+            <name>is.idega.idegaweb.pheidippides.presentation.DistanceEditor</name>
+            <value>
+              <map>
+                <key>
+                  <name>component_property_file</name>
+                  <type>java.lang.String</type>
+                  <value>is.idega.idegaweb.pheidippides.presentation.DistanceEditor.pxml</value>
+                  <simple>false</simple>
+                  <reload>false</reload>
+                </key>
+              </map>
+            </value>
+            <type>map</type>
+          </key>
+          <key>
             <name>is.idega.idegaweb.pheidippides.presentation.EventEditor</name>
             <value>
               <map>
@@ -18,6 +33,36 @@
                   <name>component_property_file</name>
                   <type>java.lang.String</type>
                   <value>is.idega.idegaweb.pheidippides.presentation.EventEditor.pxml</value>
+                  <simple>false</simple>
+                  <reload>false</reload>
+                </key>
+              </map>
+            </value>
+            <type>map</type>
+          </key>
+          <key>
+            <name>is.idega.idegaweb.pheidippides.presentation.RaceEditor</name>
+            <value>
+              <map>
+                <key>
+                  <name>component_property_file</name>
+                  <type>java.lang.String</type>
+                  <value>is.idega.idegaweb.pheidippides.presentation.RaceEditor.pxml</value>
+                  <simple>false</simple>
+                  <reload>false</reload>
+                </key>
+              </map>
+            </value>
+            <type>map</type>
+          </key>
+          <key>
+            <name>is.idega.idegaweb.pheidippides.presentation.StringLocalizer</name>
+            <value>
+              <map>
+                <key>
+                  <name>component_property_file</name>
+                  <type>java.lang.String</type>
+                  <value>is.idega.idegaweb.pheidippides.presentation.StringLocalizer.pxml</value>
                   <simple>false</simple>
                   <reload>false</reload>
                 </key>

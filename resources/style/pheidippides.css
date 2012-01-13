@@ -8,6 +8,7 @@ form.adminForm div.formItem {
 	width: auto;
 	overflow: hidden;
 	margin-bottom: 8px;
+	clear: both;
 }
 
 form.adminForm div.formItem label {
@@ -77,8 +78,28 @@ a.addItem {
 fieldset legend {
 	font-size: 1.25em;
 	font-weight: bold;
+	float: left;
 }
 
 fieldset label {
 	display: block;
+	width: auto;
+	overflow: hidden;
+	margin-bottom: 8px;
+}
+
+fieldset label input {
+	float: right;
+}
+
+form.smallAdminForm fieldset {
+	padding: 10px;
+	width: auto;
+	overflow: hidden;
+}
+
+form.smallAdminForm fieldset legend {
+	float: none;
+	margin-bottom: 12px;
+	border-bottom: 1px #ccc solid;
 }

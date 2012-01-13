@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		jQuery('form#eventEditorForm').submit();
+		jQuery('form#distanceEditorForm').submit();
 		jQuery.fancybox.close();
 	});
 });

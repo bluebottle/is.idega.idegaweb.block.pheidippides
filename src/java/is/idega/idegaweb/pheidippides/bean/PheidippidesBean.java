@@ -1,11 +1,15 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Race;
 
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.idega.builder.bean.AdvancedProperty;
 
 @Service("pheidippidesBean")
 @Scope("request")
@@ -16,6 +20,16 @@ public class PheidippidesBean {
 	
 	public Event event;
 	public List<Event> events;
+	
+	public Distance distance;
+	public List<Distance> distances;
+	
+	public Race race;
+	public List<Race> races;
+	
+	public List<AdvancedProperty> locales;
+	public List<AdvancedProperty> properties;
+	public AdvancedProperty property;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -47,6 +61,62 @@ public class PheidippidesBean {
 
 	public void setEvents(List<Event> events) {
 		this.events = events;
+	}
+
+	public Distance getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Distance distance) {
+		this.distance = distance;
+	}
+
+	public List<Distance> getDistances() {
+		return distances;
+	}
+
+	public void setDistances(List<Distance> distances) {
+		this.distances = distances;
+	}
+
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
+	public List<Race> getRaces() {
+		return races;
+	}
+
+	public void setRaces(List<Race> races) {
+		this.races = races;
+	}
+
+	public List<AdvancedProperty> getLocales() {
+		return locales;
+	}
+
+	public void setLocales(List<AdvancedProperty> locales) {
+		this.locales = locales;
+	}
+
+	public List<AdvancedProperty> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(List<AdvancedProperty> properties) {
+		this.properties = properties;
+	}
+
+	public AdvancedProperty getProperty() {
+		return property;
+	}
+
+	public void setProperty(AdvancedProperty property) {
+		this.property = property;
 	}
 	
 }

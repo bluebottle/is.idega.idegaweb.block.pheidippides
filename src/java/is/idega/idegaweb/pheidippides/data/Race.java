@@ -20,13 +20,16 @@ import javax.persistence.TemporalType;
 @Table(name = Race.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "race.findAll", query = "select r from Race r"),
+	@NamedQuery(name = "race.findByEvent", query = "select r from Race r where r.event = :event"),
+	@NamedQuery(name = "race.findByYear", query = "select r from Race r where r.year = :year"),
 	@NamedQuery(name = "race.findByEventAndYear", query = "select r from Race r where r.event = :event and r.year = :year")
 })
 public class Race implements Serializable {
 	private static final long serialVersionUID = 7926415194738887757L;
 
 	public static final String ENTITY_NAME = "ph_race";
-	private static final String COLUMN_ENTRY_ID = "race_id";
+	
+	private static final String COLUMN_RACE_ID = "race_id";
 	private static final String COLUMN_YEAR = "year";
 	private static final String COLUMN_EVENT = "event";
 	private static final String COLUMN_DISTANCE = "distance";
@@ -37,7 +40,7 @@ public class Race implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = Race.COLUMN_ENTRY_ID)
+	@Column(name = Race.COLUMN_RACE_ID)
 	private Long id;
 
 	@Column(name = Race.COLUMN_YEAR)

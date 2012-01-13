@@ -28,14 +28,14 @@ import com.idega.presentation.IWContext;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class EventEditor extends IWBaseComponent implements IWPageEventListener {
+public class DistanceEditor extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
 	
-	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
+	private static final String PARAMETER_DISTANCE_PK = "prm_distance_pk";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DESCRIPTION = "prm_description";
 	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
@@ -60,7 +60,7 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/distanceEditor.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 	
@@ -69,29 +69,29 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 			
 			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(EventEditor.class, properties));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
-			if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
-				bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
+			bean.setResponseURL(service.getUriToObject(DistanceEditor.class, properties));
+			bean.setEventHandler(IWMainApplication.getEncryptedClassName(DistanceEditor.class));
+			if (iwc.isParameterSet(PARAMETER_DISTANCE_PK)) {
+				bean.setDistance(getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))));
 			}
 	
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 			switch (parseAction(iwc)) {
 				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("distanceEditor/view.xhtml"));
 					break;
 	
 				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
+					facelet.setFaceletURI(iwb.getFaceletURI("distanceEditor/editor.xhtml"));
 					break;
 					
 				case ACTION_DELETE:
-					getDao().removeEvent(bean.getEvent().getId());
-					bean.setEvent(null);
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+					getDao().removeDistance(bean.getDistance().getId());
+					bean.setDistance(null);
+					facelet.setFaceletURI(iwb.getFaceletURI("distanceEditor/view.xhtml"));
 					break;
 			}
-			bean.setEvents(getDao().getEvents());
+			bean.setDistances(getDao().getDistances());
 
 			add(facelet);
 		}
@@ -134,8 +134,8 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	}
 	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		getDao().storeEvent(
-			iwc.isParameterSet(PARAMETER_EVENT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)) : null,
+		getDao().storeDistance(
+			iwc.isParameterSet(PARAMETER_DISTANCE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK)) : null,
 			iwc.getParameter(PARAMETER_NAME),
 			iwc.getParameter(PARAMETER_DESCRIPTION),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY),

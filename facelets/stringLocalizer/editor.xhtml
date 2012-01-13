@@ -1,0 +1,28 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="smallAdminForm" id="stringLocalizerForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_event_pk" value="#{param['prm_event_pk']}" />
+		<input type="hidden" name="prm_locale" value="#{param['prm_locale']}" />
+		<input type="hidden" name="prm_key" value="#{pheidippidesBean.property.id}" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_localization']}" /></legend>
+			
+			<div class="formItem">
+				<label for="prm_value"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['value']}" /></label>
+				<textarea name="prm_value">#{pheidippidesBean.property.value}</textarea>
+			</div>
+		</fieldset>
+		
+		<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+		<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+	</form>
+</ui:component>
+</html>

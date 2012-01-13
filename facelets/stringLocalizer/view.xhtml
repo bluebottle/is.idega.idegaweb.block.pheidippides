@@ -1,0 +1,65 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="adminForm" action="" method="post">
+		<fieldset class="navigation">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['string_localizer']}" /></legend>
+			
+			<div class="formItem">
+				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<c:selectOne name="prm_event_pk">
+					<ui:repeat value="#{pheidippidesBean.events}" var="event">
+						<c:selectOption name="#{event.name}" content="#{event.id}" selected="#{event.id eq param['prm_event_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['locale']}" /></label>
+				<c:selectOne name="prm_locale">
+					<ui:repeat value="#{pheidippidesBean.locales}" var="locale">
+						<c:selectOption name="#{locale.value}" content="#{locale.id}" selected="#{locale.id eq param['prm_locale']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="submit">
+				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
+			</div>
+		</fieldset>
+	
+		<fieldset class="formSection">
+			<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['key']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['value']}" /></th>
+						<th class="lastColumn"></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<ui:repeat value="#{pheidippidesBean.properties}" var="string">
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{string.id}" /></td>
+							<td><h:outputText value="#{string.value}" /></td>
+							<td class="lastColumn">
+								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
+									<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
+									<f:param name="prm_locale" value="#{param['prm_locale']}" />
+									<f:param name="prm_key" value="#{string.id}" />
+									<f:param name="prm_action" value="2" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+								</h:outputLink>
+							</td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+	</form>
+</ui:component>
+</html>
