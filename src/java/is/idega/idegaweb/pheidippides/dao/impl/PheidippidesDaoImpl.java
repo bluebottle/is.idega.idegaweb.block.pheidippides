@@ -109,17 +109,17 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			return getResultList("race.findAll", Race.class);
 		}
 		else if (event != null && year == null) {
-			return getResultList("race.findAllByEvent", Race.class, new Param("event", event));
+			return getResultList("race.findByEvent", Race.class, new Param("event", event));
 		}
 		else if (event == null && year != null) {
-			return getResultList("race.findAllByYear", Race.class, new Param("year", year));
+			return getResultList("race.findByYear", Race.class, new Param("year", year));
 		}
 		else {
-			return getResultList("race.findAllByEventYear", Race.class, new Param("event", event), new Param("year", year));
+			return getResultList("race.findByEventAndYear", Race.class, new Param("event", event), new Param("year", year));
 		}
 	}
 
-	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount) {
+	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount, int relayLegs) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -131,6 +131,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		race.setOpenRegistrationDate(openRegistrationDate);
 		race.setCloseRegistrationDate(closeRegistrationDate);
 		race.setFamilyDiscount(familyDiscount);
+		race.setNumberOfRelayLegs(relayLegs);
 		
 		getEntityManager().persist(race);
 		

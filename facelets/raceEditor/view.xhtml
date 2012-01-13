@@ -10,8 +10,13 @@
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_editor']}" /></legend>
 			
-			<ui:fragment rendered="#{not empty pheidippidesBean.event and not empty param['prm_year']}">
-				<a href="#{pheidippidesBean.responseURL}" class="addItem"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race']}" /></span></a>
+			<ui:fragment rendered="#{not empty param['prm_event_pk'] and not empty param['prm_year']}">
+				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race']}" styleClass="addItem">
+					<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
+					<f:param name="prm_year" value="#{param['prm_year']}" />
+					<f:param name="prm_action" value="2" />
+					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race']}" /></span>
+				</h:outputLink>
 			</ui:fragment>
 	
 			<div class="formItem">
@@ -46,6 +51,7 @@
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['open_registration']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_legs']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
 						<th></th>
 						<th class="lastColumn"></th>
@@ -62,12 +68,14 @@
 							<td><h:outputText value="#{race.openRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
 							<td><h:outputText value="#{race.closeRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
 							<td class="discount_#{race.familyDiscount}"><span></span></td>
-							<td><h:outputText value="#{race}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td><h:outputText value="#{race.numberOfRelayLegs}" /></td>
+							<td><h:outputText value="#{race.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td>
-								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
-									<f:param name="prm_event_pk" value="#{param['prm_event_pk]}" />
-									<f:param name="prm_year" value="#{param['prm_year']}" />
+								<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race']}" styleClass="editItem">
 									<f:param name="prm_race_pk" value="#{race.id}" />
+									<f:param name="prm_event_pk" value="#{race.event.id}" />
+									<f:param name="prm_year" value="#{race.year}" />
+									<f:param name="prm_action" value="2" />
 									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 								</h:outputLink>
 							</td>

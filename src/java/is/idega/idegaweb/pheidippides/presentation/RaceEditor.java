@@ -18,6 +18,7 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.business.BuilderService;
 import com.idega.core.builder.business.BuilderServiceFactory;
+import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWException;
@@ -29,7 +30,7 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class RaceEditor extends IWBaseComponent {
+public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
@@ -44,6 +45,7 @@ public class RaceEditor extends IWBaseComponent {
 	private static final String PARAMETER_OPEN_REGISTRATION = "prm_open_registration";
 	private static final String PARAMETER_CLOSE_REGISTRATION = "prm_close_registration";
 	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
+	private static final String PARAMETER_RELAY_LEGS = "prm_relay_legs";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -64,22 +66,19 @@ public class RaceEditor extends IWBaseComponent {
 	
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceEditor.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 			
-			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-			properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
-			
 			List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-			int year = new IWTimestamp().getYear()  + 1;
+			int year = new IWTimestamp().getYear();
 			while (year >= 2005) {
 				years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 			}
 			
 			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(RaceEditor.class, properties));
+			bean.setResponseURL(service.getUriToObject(RaceEditor.class, new ArrayList<AdvancedProperty>()));
 			bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
 			bean.setProperties(years);
 			bean.setDistances(getDao().getDistances());
@@ -152,8 +151,9 @@ public class RaceEditor extends IWBaseComponent {
 			getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))),
 			getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))),
 			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT)
+					iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
+			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT),
+			iwc.isParameterSet(PARAMETER_RELAY_LEGS) ? Integer.parseInt(iwc.getParameter(PARAMETER_RELAY_LEGS)) : 0
 		);
 		
 		return true;
