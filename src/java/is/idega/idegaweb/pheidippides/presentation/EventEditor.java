@@ -4,7 +4,6 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
-import com.idega.business.IBORuntimeException;
-import com.idega.core.builder.business.BuilderService;
-import com.idega.core.builder.business.BuilderServiceFactory;
+import com.idega.builder.business.BuilderLogicWrapper;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -45,6 +42,9 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	private PheidippidesDao dao;
 	
 	@Autowired
+	private BuilderLogicWrapper builderLogicWrapper;
+	
+	@Autowired
 	private Web2Business web2Business;
 	
 	@Autowired
@@ -54,50 +54,44 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
-		try {
-			IWContext iwc = IWContext.getIWContext(context);
-			iwb = getBundle(context, getBundleIdentifier());
-	
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
-			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-	
-			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-			properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
-			
-			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
-			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(EventEditor.class, properties));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
-			if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
-				bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
-			}
-	
-			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-			switch (parseAction(iwc)) {
-				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
-					break;
-	
-				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
-					break;
-					
-				case ACTION_DELETE:
-					getDao().removeEvent(bean.getEvent().getId());
-					bean.setEvent(null);
-					facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
-					break;
-			}
-			bean.setEvents(getDao().getEvents());
+		IWContext iwc = IWContext.getIWContext(context);
+		iwb = getBundle(context, getBundleIdentifier());
 
-			add(facelet);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
+		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
+		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+		properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
+		
+		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(EventEditor.class, properties));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
+		if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
+			bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
 		}
-		catch (RemoteException re) {
-			throw new IBORuntimeException(re);
+
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		switch (parseAction(iwc)) {
+			case ACTION_VIEW:
+				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+				break;
+
+			case ACTION_EDIT:
+				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
+				break;
+				
+			case ACTION_DELETE:
+				getDao().removeEvent(bean.getEvent().getId());
+				bean.setEvent(null);
+				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+				break;
 		}
+		bean.setEvents(getDao().getEvents());
+
+		add(facelet);
 	}
 	
 	private int parseAction(IWContext iwc) {
@@ -115,6 +109,14 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 		}
 		
 		return dao;
+	}
+
+	private BuilderLogicWrapper getBuilderLogicWrapper() {
+		if (builderLogicWrapper == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return builderLogicWrapper;
 	}
 
 	private Web2Business getWeb2Business() {

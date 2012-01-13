@@ -1,6 +1,9 @@
 change_localization=Breyta \u00FE\u00FD\u00F0ingu
 close=Loka
 close_registration=Skr\u00E1ningu l\u00FDkur
+confirm_distance_delete=Ertu viss um a\u00F0 \u00FE\u00FA viljir ey\u00F0a \u00FEessari vegalengd?
+confirm_event_delete=Ertu viss um a\u00F0 \u00FE\u00FA viljir ey\u00F0a \u00FEessum vi\u00F0bur\u00F0i?
+confirm_race_delete=Ertu viss um a\u00F0 \u00FE\u00FA viljir ey\u00F0a \u00FEessu hlaupi?
 create_distance=B\u00FAa til vegalengd
 create_event=B\u00FAa til vi\u00F0bur\u00F0
 create_race=B\u00FAa til hlaup

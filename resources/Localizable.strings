@@ -1,6 +1,9 @@
 change_localization=Change localization
 close=Close
 close_registration=Close registration
+confirm_distance_delete=Are you sure you want to delete this distance?
+confirm_event_delete=Are you sure you want to delete this event?
+confirm_race_delete=Are you sure you want to delete this race?
 create_distance=Create distance
 create_event=Create event
 create_race=Create race

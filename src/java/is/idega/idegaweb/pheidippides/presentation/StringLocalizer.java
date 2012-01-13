@@ -4,7 +4,6 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
-import com.idega.business.IBORuntimeException;
-import com.idega.core.builder.business.BuilderService;
-import com.idega.core.builder.business.BuilderServiceFactory;
+import com.idega.builder.business.BuilderLogicWrapper;
 import com.idega.core.localisation.business.ICLocaleBusiness;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
@@ -48,6 +45,9 @@ public class StringLocalizer extends IWBaseComponent implements IWPageEventListe
 	private PheidippidesDao dao;
 	
 	@Autowired
+	private BuilderLogicWrapper builderLogicWrapper;
+	
+	@Autowired
 	private Web2Business web2Business;
 	
 	@Autowired
@@ -57,66 +57,60 @@ public class StringLocalizer extends IWBaseComponent implements IWPageEventListe
 	
 	@Override
 	protected void initializeComponent(FacesContext context) {
-		try {
-			IWContext iwc = IWContext.getIWContext(context);
-			iwb = getBundle(context, getBundleIdentifier());
-	
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/stringLocalizer.js"));
-			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+		IWContext iwc = IWContext.getIWContext(context);
+		iwb = getBundle(context, getBundleIdentifier());
 
-			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
-			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
-			bean.setEvents(getDao().getEvents());
-			if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
-				bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/stringLocalizer.js"));
+		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
+		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+
+		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
+		bean.setEvents(getDao().getEvents());
+		if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
+			bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
+			
+			List<MessageResource> resourceList = getResourceList(iwc.getIWMainApplication(), getBundleIdentifier(), iwc.isParameterSet(PARAMETER_LOCALE) ? LocaleUtil.getLocale(iwc.getParameter(PARAMETER_LOCALE)) : LocaleUtil.getIcelandicLocale());
+			for(MessageResource resource : resourceList) {
 				
-				List<MessageResource> resourceList = getResourceList(iwc.getIWMainApplication(), getBundleIdentifier(), iwc.isParameterSet(PARAMETER_LOCALE) ? LocaleUtil.getLocale(iwc.getParameter(PARAMETER_LOCALE)) : LocaleUtil.getIcelandicLocale());
-				for(MessageResource resource : resourceList) {
-					
-					Set<String> keys = resource.getAllLocalisedKeys();
-					List<AdvancedProperty> filtered = new ArrayList<AdvancedProperty>();
-					
-					for (String string : keys) {
-						if (string.indexOf(bean.getEvent().getLocalizedKey()) != -1) {
-							filtered.add(new AdvancedProperty(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""), String.valueOf(resource.getMessage(string))));
-							
-							if (iwc.isParameterSet(PARAMETER_KEY) && iwc.getParameter(PARAMETER_KEY).equals(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""))) {
-								bean.setProperty(new AdvancedProperty(string, String.valueOf(resource.getMessage(string))));
-							}
+				Set<String> keys = resource.getAllLocalisedKeys();
+				List<AdvancedProperty> filtered = new ArrayList<AdvancedProperty>();
+				
+				for (String string : keys) {
+					if (string.indexOf(bean.getEvent().getLocalizedKey()) != -1) {
+						filtered.add(new AdvancedProperty(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""), String.valueOf(resource.getMessage(string))));
+						
+						if (iwc.isParameterSet(PARAMETER_KEY) && iwc.getParameter(PARAMETER_KEY).equals(string.replaceAll(bean.getEvent().getLocalizedKey() + ".", ""))) {
+							bean.setProperty(new AdvancedProperty(string, String.valueOf(resource.getMessage(string))));
 						}
 					}
-					bean.setProperties(filtered);
 				}
+				bean.setProperties(filtered);
 			}
-			
-			List<Locale> locales = ICLocaleBusiness.getListOfLocalesJAVA();
-			List<AdvancedProperty> localeList = new ArrayList<AdvancedProperty>();
-			for (Locale locale : locales) {
-				localeList.add(new AdvancedProperty(locale.toString(), locale.getDisplayLanguage(iwc.getCurrentLocale())));
-			}
-			bean.setLocales(localeList);
+		}
+		
+		List<Locale> locales = ICLocaleBusiness.getListOfLocalesJAVA();
+		List<AdvancedProperty> localeList = new ArrayList<AdvancedProperty>();
+		for (Locale locale : locales) {
+			localeList.add(new AdvancedProperty(locale.toString(), locale.getDisplayLanguage(iwc.getCurrentLocale())));
+		}
+		bean.setLocales(localeList);
 
-	
-			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-			switch (parseAction(iwc)) {
-				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/view.xhtml"));
-					break;
-	
-				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/editor.xhtml"));
-					break;
-			}
-			add(facelet);
+
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		switch (parseAction(iwc)) {
+			case ACTION_VIEW:
+				facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/view.xhtml"));
+				break;
+
+			case ACTION_EDIT:
+				facelet.setFaceletURI(iwb.getFaceletURI("stringLocalizer/editor.xhtml"));
+				break;
 		}
-		catch (RemoteException re) {
-			throw new IBORuntimeException(re);
-		}
+		add(facelet);
 	}
 	
 	private List<MessageResource> getResourceList(IWMainApplication iwma, String bundleIdentifier, Locale locale) {
@@ -142,6 +136,14 @@ public class StringLocalizer extends IWBaseComponent implements IWPageEventListe
 		}
 		
 		return dao;
+	}
+
+	private BuilderLogicWrapper getBuilderLogicWrapper() {
+		if (builderLogicWrapper == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return builderLogicWrapper;
 	}
 
 	private Web2Business getWeb2Business() {

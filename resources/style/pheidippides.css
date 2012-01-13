@@ -49,15 +49,19 @@ table.adminTable {
 table.adminTable thead tr th {
 	border-top: 1px #ccc solid;
 	border-bottom: 1px #ccc solid;
-	line-height: 24px;
 	font-weight: bold;
-	padding: 0 5px;
+	line-height: 1.25em;
+	padding: 4px 5px;
 }
 
 table.adminTable tbody tr td {
 	border-bottom: 1px #efefef solid;
-	line-height: 24px;
-	padding: 0 5px;
+	line-height: 1.25em;
+	padding: 4px 5px;
+}
+
+table.adminTable tr .action {
+	width: 16px;
 }
 
 table.adminTable tbody tr td.discount_true span {
@@ -67,8 +71,25 @@ table.adminTable tbody tr td.discount_true span {
 	background: url(images/check.png);
 }
 
+table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem {
+	display: inline;
+	padding-left: 16px;
+	height: 16px;
+	background: url(images/edit.png);
+}
+
+table.adminTable tbody tr td a.editItem span, table.adminTable tbody tr td a.deleteItem span {
+	display: none;
+}
+
+table.adminTable tbody tr td a.deleteItem {
+	background: url(images/delete.png);
+}
+
 a.addItem {
-	float: right;
+	position: absolute;
+	top: 0;
+	right: 0;
 	line-height: 40px;
 	border: 1px #9c9 solid;
 	padding: 0 20px 0 46px;
@@ -82,13 +103,29 @@ a.addItem {
 	-webkit-border-radius: 8px;
 }
 
+fieldset {
+	position: relative;
+}
+
+fieldset.formSection.noNavigation legend {
+	margin-bottom: 36px;
+}
+
+fieldset.navigation legend {
+	margin-bottom: 18px;
+}
+
+fieldset.navigation div.submit {
+	margin-bottom: 18px;
+}
+
 fieldset legend {
-	font-size: 1.25em;
+	font-size: 1.5em;
 	font-weight: bold;
 	float: left;
 }
 
-fieldset label {
+/*fieldset label {
 	display: block;
 	width: auto;
 	overflow: hidden;
@@ -97,7 +134,7 @@ fieldset label {
 
 fieldset label input {
 	float: right;
-}
+}*/
 
 form.smallAdminForm {
 	padding: 15px;
@@ -129,6 +166,9 @@ form.smallAdminForm fieldset div.formItem label {
 	line-height: 30px;
 }
 
+form.smallAdminForm fieldset div.formItem span {
+	line-height: 30px;
+}
 
 form.smallAdminForm fieldset div.formItem input, form.smallAdminForm fieldset div.formItem select {
 	font-size: 1.25em;

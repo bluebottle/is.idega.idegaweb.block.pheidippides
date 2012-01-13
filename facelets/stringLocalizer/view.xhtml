@@ -37,7 +37,7 @@
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['key']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['value']}" /></th>
-						<th class="lastColumn"></th>
+						<th class="action lastColumn"></th>
 					</tr>
 				</thead>
 				
@@ -46,7 +46,7 @@
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{string.id}" /></td>
 							<td><h:outputText value="#{string.value}" /></td>
-							<td class="lastColumn">
+							<td class="action lastColumn">
 								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
 									<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 									<f:param name="prm_locale" value="#{param['prm_locale']}" />

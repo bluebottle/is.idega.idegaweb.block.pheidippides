@@ -16,6 +16,14 @@
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race']}" /></legend>
 			
 			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<span><h:outputText value="#{pheidippidesBean.event.name}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<span><h:outputText value="#{param['prm_year']}" /></span>
+			</div>
+			<div class="formItem">
 				<label for="prm_distance_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
 				<c:selectOne name="prm_distance_pk">
 					<ui:repeat value="#{pheidippidesBean.distances}" var="distance">

@@ -4,7 +4,6 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
-import com.idega.business.IBORuntimeException;
-import com.idega.core.builder.business.BuilderService;
-import com.idega.core.builder.business.BuilderServiceFactory;
+import com.idega.builder.business.BuilderLogicWrapper;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -51,6 +48,9 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 	private PheidippidesDao dao;
 	
 	@Autowired
+	private BuilderLogicWrapper builderLogicWrapper;
+	
+	@Autowired
 	private Web2Business web2Business;
 	
 	@Autowired
@@ -60,55 +60,50 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
-		try {
-			IWContext iwc = IWContext.getIWContext(context);
-			iwb = getBundle(context, getBundleIdentifier());
-	
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceEditor.js"));
-			PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-			
-			List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-			int year = new IWTimestamp().getYear();
-			while (year >= 2005) {
-				years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
-			}
-			
-			BuilderService service = BuilderServiceFactory.getBuilderService(iwc);
-			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-			bean.setResponseURL(service.getUriToObject(RaceEditor.class, new ArrayList<AdvancedProperty>()));
-			bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
-			bean.setProperties(years);
-			bean.setDistances(getDao().getDistances());
-			bean.setEvents(getDao().getEvents());
-			bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
-			bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
-			
-			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-			switch (parseAction(iwc)) {
-				case ACTION_VIEW:
-					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
-					break;
-	
-				case ACTION_EDIT:
-					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/editor.xhtml"));
-					break;
-					
-				case ACTION_DELETE:
-					getDao().removeRace(bean.getRace().getId());
-					bean.setRace(null);
-					facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
-					break;
-			}
-			bean.setRaces(getDao().getRaces(bean.getEvent(), iwc.isParameterSet(PARAMETER_YEAR) ? Integer.parseInt(iwc.getParameter(PARAMETER_YEAR)) : null));
+		IWContext iwc = IWContext.getIWContext(context);
+		iwb = getBundle(context, getBundleIdentifier());
 
-			add(facelet);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceEditor.js"));
+
+		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
+		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+
+		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
+		int year = new IWTimestamp().getYear();
+		while (year >= 2005) {
+			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
-		catch (RemoteException re) {
-			throw new IBORuntimeException(re);
+		
+		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RaceEditor.class, new ArrayList<AdvancedProperty>()));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
+		bean.setProperties(years);
+		bean.setDistances(getDao().getDistances());
+		bean.setEvents(getDao().getEvents());
+		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
+		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
+		
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		switch (parseAction(iwc)) {
+			case ACTION_VIEW:
+				facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
+				break;
+
+			case ACTION_EDIT:
+				facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/editor.xhtml"));
+				break;
+				
+			case ACTION_DELETE:
+				getDao().removeRace(bean.getRace().getId());
+				bean.setRace(null);
+				facelet.setFaceletURI(iwb.getFaceletURI("raceEditor/view.xhtml"));
+				break;
 		}
+		bean.setRaces(getDao().getRaces(bean.getEvent(), iwc.isParameterSet(PARAMETER_YEAR) ? Integer.parseInt(iwc.getParameter(PARAMETER_YEAR)) : null));
+
+		add(facelet);
 	}
 
 	private int parseAction(IWContext iwc) {
@@ -126,6 +121,14 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 		}
 		
 		return dao;
+	}
+
+	private BuilderLogicWrapper getBuilderLogicWrapper() {
+		if (builderLogicWrapper == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return builderLogicWrapper;
 	}
 
 	private Web2Business getWeb2Business() {
