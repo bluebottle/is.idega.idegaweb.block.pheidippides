@@ -8,6 +8,7 @@
 <ui:component>
 	<form class="smallAdminForm" id="raceEditorForm" action="" method="post">
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_race_pk" value="#{pheidippidesBean.race.id}" />
 		<input type="hidden" name="prm_event_pk" value="#{param['prm_event_pk']}" />
 		<input type="hidden" name="prm_year" value="#{param['prm_year']}" />
 		
@@ -15,8 +16,8 @@
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race']}" /></legend>
 			
 			<div class="formItem">
-				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
-				<c:selectOne name="prm_year">
+				<label for="prm_distance_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
+				<c:selectOne name="prm_distance_pk">
 					<ui:repeat value="#{pheidippidesBean.distances}" var="distance">
 						<c:selectOption name="#{distance.name}" content="#{distance.id}" selected="#{distance.id eq pheidippidesBean.race.distance.id}" />
 					</ui:repeat>
@@ -24,14 +25,18 @@
 			</div>
 			<div class="formItem">
 				<label for="prm_open_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['open_registration']}" /></label>
-				<c:datePicker name="prm_open_registration" showTime="true" setDate="#{pheidippidesBean.race.openRegistrationDate}" />
+				<c:datePicker inputName="prm_open_registration" showTime="#{1 == 1}" initialDate="#{pheidippidesBean.race.openRegistrationDate}" />
 			</div>
 			<div class="formItem">
 				<label for="prm_close_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></label>
-				<c:datePicker name="prm_close_registration" showTime="true" setDate="#{pheidippidesBean.race.closeRegistrationDate}" />
+				<c:datePicker inputName="prm_close_registration" showTime="true" initialDate="#{pheidippidesBean.race.closeRegistrationDate}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_relay_legs"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_legs']}" /></label>
+				<input type="text" name="prm_relay_legs" value="#{pheidippidesBean.race.numberOfRelayLegs}" />
 			</div>
 			<div class="formItem checkbox">
-				<c:checkBox name="prm_family_discount" value="true" checked="#{pheidippidesBean.race.familyDiscount}" />
+				<c:checkBox name="prm_family_discount" content="true" checked="#{pheidippidesBean.race.familyDiscount}" />
 				<label for="prm_family_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></label>
 			</div>
 		</fieldset>
