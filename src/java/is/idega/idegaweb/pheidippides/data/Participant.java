@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Participant implements Serializable {
 	private static final long serialVersionUID = -7894754146844154272L;
@@ -10,6 +11,7 @@ public class Participant implements Serializable {
 	private String last_name;
 	private String full_name;
 	private String personal_id;
+	private Date date_of_birth;
 	private String uuid;
 	private String address;
 	private String postal_address;
@@ -89,5 +91,11 @@ public class Participant implements Serializable {
 	}
 	public void setPhone_mobile(String phone_mobile) {
 		this.phone_mobile = phone_mobile;
+	}
+	public Date getDateOfBirth() {
+		return date_of_birth;
+	}
+	public void setDateOfBirth(Date date_of_birth) {
+		this.date_of_birth = date_of_birth;
 	}
 }
