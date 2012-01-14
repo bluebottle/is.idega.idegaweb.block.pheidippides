@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.presentation;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class ShirtSizeEditor extends IWBaseComponent implements IWPageEventListe
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		getDao().storeShirtSize(
 			iwc.isParameterSet(PARAMETER_SHIRT_SIZE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK)) : null,
-			iwc.getParameter(PARAMETER_SIZE),
+					ShirtSizeSizes.valueOf(iwc.getParameter(PARAMETER_SIZE)),
 			ShirtSizeGender.valueOf(iwc.getParameter(PARAMETER_GENDER)),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
 			iwc.getParameter(PARAMETER_REPORT_SIGN)

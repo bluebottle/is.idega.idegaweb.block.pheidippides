@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.dao;
 
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -34,7 +35,7 @@ public interface PheidippidesDao {
 
 	public ShirtSize getShirtSize(Long shirtSizeID);
 	public List<ShirtSize> getShirtSizes();
-	public ShirtSize storeShirtSize(Long shirtSizeID, String size, ShirtSizeGender gender, String localizedKey, String reportSign);
+	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign);
 	public boolean removeShirtSize(Long shirtSizeID);
 
 }

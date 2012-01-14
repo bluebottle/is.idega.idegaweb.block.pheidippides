@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -174,7 +175,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return getResultList("shirtSize.findAll", ShirtSize.class);
 	}
 
-	public ShirtSize storeShirtSize(Long shirtSizeID, String size, ShirtSizeGender gender, String localizedKey, String reportSign) {
+	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign) {
 		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
 		if (size == null) {
 			shirtSize = new ShirtSize();
