@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
+import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
@@ -39,6 +40,8 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
 	
+	private static final String PARAMETER_MINIMUM_AGE = "prm_minimum_age";
+	private static final String PARAMETER_MAXIMUM_AGE = "prm_maximum_age";
 	private static final String PARAMETER_OPEN_REGISTRATION = "prm_open_registration";
 	private static final String PARAMETER_CLOSE_REGISTRATION = "prm_close_registration";
 	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
@@ -65,6 +68,8 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
+		/*PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());*/
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceEditor.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
@@ -153,6 +158,8 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 			Integer.parseInt(iwc.getParameter(PARAMETER_YEAR)),
 			getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))),
 			getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))),
+			iwc.isParameterSet(PARAMETER_MINIMUM_AGE) ? Integer.parseInt(iwc.getParameter(PARAMETER_MINIMUM_AGE)) : 0,
+			iwc.isParameterSet(PARAMETER_MAXIMUM_AGE) ? Integer.parseInt(iwc.getParameter(PARAMETER_MAXIMUM_AGE)) : 100,
 			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), iwc.getCurrentLocale()) : null,
 					iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
 			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT),

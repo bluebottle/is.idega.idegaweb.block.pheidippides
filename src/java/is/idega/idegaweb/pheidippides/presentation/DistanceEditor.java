@@ -5,13 +5,13 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
+import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
@@ -59,15 +59,13 @@ public class DistanceEditor extends IWBaseComponent implements IWPageEventListen
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/distanceEditor.js"));
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
-		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-		properties.add(new AdvancedProperty(PARAMETER_ACTION, String.valueOf(ACTION_EDIT)));
-		
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(DistanceEditor.class, properties));
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(DistanceEditor.class, new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(DistanceEditor.class));
 		if (iwc.isParameterSet(PARAMETER_DISTANCE_PK)) {
 			bean.setDistance(getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))));

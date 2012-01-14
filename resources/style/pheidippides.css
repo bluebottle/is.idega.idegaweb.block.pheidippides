@@ -52,16 +52,37 @@ table.adminTable thead tr th {
 	font-weight: bold;
 	line-height: 1.25em;
 	padding: 4px 5px;
+	border-right: 1px #eee solid;
 }
 
 table.adminTable tbody tr td {
 	border-bottom: 1px #efefef solid;
 	line-height: 1.25em;
 	padding: 4px 5px;
+	border-right: 1px #eee solid;
+}
+
+table.adminTable tr .lastColumn {
+	border-right: 0;
 }
 
 table.adminTable tr .action {
 	width: 16px;
+}
+
+table.adminTable th.header {
+	background: url(images/bg.gif) 5px center no-repeat;
+	padding-left: 16px;
+}
+
+table.adminTable th.headerSortDown {
+	background-image: url(images/asc.gif);
+	background-color: #eee;
+}
+
+table.adminTable th.headerSortUp {
+	background-image: url(images/desc.gif);
+	background-color: #eee;
 }
 
 table.adminTable tbody tr td.discount_true span {

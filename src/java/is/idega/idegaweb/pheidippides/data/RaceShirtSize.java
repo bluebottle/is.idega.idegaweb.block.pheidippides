@@ -30,7 +30,10 @@ public class RaceShirtSize implements Serializable {
 	private static final String COLUMN_RACE = "race";
 	private static final String COLUMN_SHIRT_SIZE = "shirt_size";
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
+	
+	/* TODO: Eh, er þetta ekki óþarfi ef verðið á bolnum er í RacePrice?!? */
 	private static final String COLUMN_PRICE = "price";
+
 	private static final String COLUMN_ORDER = "order_number";
 	private static final String COLUMN_CREATED_DATE = "created";
 

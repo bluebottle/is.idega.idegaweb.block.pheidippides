@@ -35,13 +35,16 @@ public class RacePrice implements Serializable {
 	private static final String COLUMN_VALID_FROM = "valid_from";
 	private static final String COLUMN_VALID_TO = "valid_to";
 	private static final String COLUMN_RACE = "race";
+	private static final String COLUMN_CREATED_DATE = "created";
+
+	/* TODO: Pæling: Er kannski betra að hafa upphæðirnar sjálfar í annarri töflu (ProductPrice?) sem hefur þá type (enum), nafn, upphæð, gjaldmiðill og required dálka?
+	 * TODO: Eða jafnvel að þessi tafla sé bara með eitt verð + gjaldmiðil + type?  Þá er alltaf hægt að bæta við gjaldmiðlum seinna eða bara hafa ISK eftir þörfum (Powerade)...  */
 	private static final String COLUMN_PRICE = "price";
 	private static final String COLUMN_PRICE_EUR = "price_eur";
 	private static final String COLUMN_FAMILY_DISCOUNT = "family_discount";
 	private static final String COLUMN_FAMILY_DISCOUNT_EUR = "family_discount_eur";
 	private static final String COLUMN_SHIRT_PRICE = "shirt_price";
 	private static final String COLUMN_SHIRT_PRICE_EUR = "shirt_price_eur";
-	private static final String COLUMN_CREATED_DATE = "created";
 	
 	@PrePersist
 	public void setDefaultValues() {
