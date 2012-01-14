@@ -1,10 +1,12 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
+import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Date;
 import java.util.List;
@@ -56,9 +58,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	@Transactional(readOnly = false)
 	public boolean removeEvent(Long eventID) {
 		Event event = getEvent(eventID);
-		getEntityManager().remove(event);
+		if (event != null) {
+			getEntityManager().remove(event);
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 
 	/* Distance methods */
@@ -94,9 +99,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	@Transactional(readOnly = false)
 	public boolean removeDistance(Long distanceID) {
 		Distance distance = getDistance(distanceID);
-		getEntityManager().remove(distance);
+		if (distance != null) {
+			getEntityManager().remove(distance);
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 
 	/* Race methods */
@@ -140,9 +148,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 
 	public boolean removeRace(Long raceID) {
 		Race race = getRace(raceID);
-		getEntityManager().remove(race);
+		if (race != null) {
+			getEntityManager().remove(race);
+			return true;
+		}
 		
-		return true;
+		return false;
 	}	
 	
 	/* Participant methods */
@@ -152,5 +163,40 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	
 	public Participant getParticipant(String uuid) {
 		return null;
+	}
+
+	/* ShirtSize methods */
+	public ShirtSize getShirtSize(Long shirtSizeID) {
+		return find(ShirtSize.class, shirtSizeID);
+	}
+
+	public List<ShirtSize> getShirtSizes() {
+		return getResultList("shirtSize.findAll", ShirtSize.class);
+	}
+
+	public ShirtSize storeShirtSize(Long shirtSizeID, String size, ShirtSizeGender gender, String localizedKey, String reportSign) {
+		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
+		if (size == null) {
+			shirtSize = new ShirtSize();
+			shirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		shirtSize.setSize(size);
+		shirtSize.setGender(gender);
+		shirtSize.setLocalizedKey(localizedKey);
+		shirtSize.setReportSign(reportSign);
+		
+		getEntityManager().persist(shirtSize);
+		
+		return shirtSize;
+	}
+
+	public boolean removeShirtSize(Long shirtSizeID) {
+		ShirtSize shirtSize = getShirtSize(shirtSizeID);
+		if (shirtSize != null) {
+			getEntityManager().remove(shirtSize);
+			return true;
+		}
+
+		return false;
 	}
 }

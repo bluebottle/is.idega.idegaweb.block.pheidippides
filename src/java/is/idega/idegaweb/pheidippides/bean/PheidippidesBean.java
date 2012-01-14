@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.bean;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class PheidippidesBean {
 	
 	public Race race;
 	public List<Race> races;
+	
+	public ShirtSize shirtSize;
+	public List<ShirtSize> shirtSizes;
 	
 	public List<AdvancedProperty> locales;
 	public List<AdvancedProperty> properties;
@@ -93,6 +97,22 @@ public class PheidippidesBean {
 
 	public void setRaces(List<Race> races) {
 		this.races = races;
+	}
+
+	public ShirtSize getShirtSize() {
+		return shirtSize;
+	}
+
+	public void setShirtSize(ShirtSize shirtSize) {
+		this.shirtSize = shirtSize;
+	}
+
+	public List<ShirtSize> getShirtSizes() {
+		return shirtSizes;
+	}
+
+	public void setShirtSizes(List<ShirtSize> shirtSizes) {
+		this.shirtSizes = shirtSizes;
 	}
 
 	public List<AdvancedProperty> getLocales() {
