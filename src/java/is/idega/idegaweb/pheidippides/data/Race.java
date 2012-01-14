@@ -37,6 +37,8 @@ public class Race implements Serializable {
 	private static final String COLUMN_CLOSE_REGISTRATION = "close_registration";
 	private static final String COLUMN_HAS_FAMILY_DISCOUNT = "family_discount";
 	private static final String COLUMN_NUMBER_OF_RELAY_LEGS = "relay_legs";
+	private static final String COLUMN_MIN_AGE = "min_age";
+	private static final String COLUMN_MAX_AGE = "max_age";
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
@@ -69,7 +71,13 @@ public class Race implements Serializable {
 
 	@Column(name = Race.COLUMN_NUMBER_OF_RELAY_LEGS)
 	private int numberOfRelayLegs;
-	
+
+	@Column(name = Race.COLUMN_MIN_AGE)
+	private int mininumAge;
+
+	@Column(name = Race.COLUMN_MAX_AGE)
+	private int maximumAge;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Race.COLUMN_CREATED_DATE)
 	private Date createdDate;
@@ -145,5 +153,21 @@ public class Race implements Serializable {
 
 	public void setNumberOfRelayLegs(int numberOfRelayLegs) {
 		this.numberOfRelayLegs = numberOfRelayLegs;
+	}
+
+	public int getMininumAge() {
+		return mininumAge;
+	}
+
+	public void setMininumAge(int mininumAge) {
+		this.mininumAge = mininumAge;
+	}
+
+	public int getMaximumAge() {
+		return maximumAge;
+	}
+
+	public void setMaximumAge(int maximumAge) {
+		this.maximumAge = maximumAge;
 	}
 }
