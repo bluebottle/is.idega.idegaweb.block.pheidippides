@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.data;
 
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,14 +35,14 @@ public class ShirtSize implements Serializable {
 	private static final String COLUMN_REPORT_SIGN = "report_sign";
 	private static final String COLUMN_CREATED_DATE = "created";
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = ShirtSize.COLUMN_ENTRY_ID)
 	private Long id;
 
 	@Column(name = ShirtSize.COLUMN_SIZE)
-	private String size;
+	@Enumerated(EnumType.STRING)
+	private ShirtSizeSizes size;
 
 	@Column(name = ShirtSize.COLUMN_GENDER)
 	@Enumerated(EnumType.STRING)
@@ -90,11 +91,11 @@ public class ShirtSize implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public String getSize() {
+	public ShirtSizeSizes getSize() {
 		return size;
 	}
 
-	public void setSize(String size) {
+	public void setSize(ShirtSizeSizes size) {
 		this.size = size;
 	}
 
