@@ -64,9 +64,9 @@
 					<ui:repeat value="#{pheidippidesBean.races}" var="race">
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{race.id}" /></td>
+							<td><h:outputText value="#{race.event.name}" /></td>
 							<td><h:outputText value="#{race.year}" /></td>
 							<td><h:outputText value="#{race.distance.name}" /></td>
-							<td><h:outputText value="#{race.event.name}" /></td>
 							<td><h:outputText value="#{race.mininumAge}" /></td>
 							<td><h:outputText value="#{race.maximumAge}" /></td>
 							<td><h:outputText value="#{race.openRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
