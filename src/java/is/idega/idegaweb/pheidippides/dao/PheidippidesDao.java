@@ -1,9 +1,11 @@
 package is.idega.idegaweb.pheidippides.dao;
 
+import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Date;
 import java.util.List;
@@ -29,5 +31,10 @@ public interface PheidippidesDao {
 	public List<Race> getRaces(Event event, Integer year);
 	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistration, Date closeRegistration, boolean familyDiscount, int relayLegs);
 	public boolean removeRace(Long raceID);
+
+	public ShirtSize getShirtSize(Long shirtSizeID);
+	public List<ShirtSize> getShirtSizes();
+	public ShirtSize storeShirtSize(Long shirtSizeID, String size, ShirtSizeGender gender, String localizedKey, String reportSign);
+	public boolean removeShirtSize(Long shirtSizeID);
 
 }
