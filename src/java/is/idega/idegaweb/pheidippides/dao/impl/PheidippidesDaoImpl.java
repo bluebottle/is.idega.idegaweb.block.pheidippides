@@ -177,7 +177,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 
 	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign) {
 		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
-		if (size == null) {
+		if (shirtSize == null) {
 			shirtSize = new ShirtSize();
 			shirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}

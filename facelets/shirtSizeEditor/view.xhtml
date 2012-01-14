@@ -4,6 +4,7 @@
 		xmlns:c="http://xmlns.idega.com/com.idega.core"
 		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
 		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
 	<fieldset class="formSection noNavigation">
@@ -30,7 +31,7 @@
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{shirtSize.id}" /></td>
 						<td><h:outputText value="#{shirtSize.size}" /></td>
-						<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_gender.'shirtSize.gender]}" /></td>
+						<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat('shirt_gender.', shirtSize.gender)]}" /></td>
 						<td><h:outputText value="#{shirtSize.localizedKey}" /></td>
 						<td><h:outputText value="#{shirtSize.reportSign}" /></td>
 						<td><h:outputText value="#{shirtSize.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE facelet-taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN" "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+<facelet-taglib xmlns="http://java.sun.com/JSF/Facelet">
+
+	<namespace>http://xmlns.idega.com/is.idega.idegaweb.pheidippides</namespace>
+	
+	<function>
+		<function-name>concat</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.lang.String concat(java.lang.String, java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<function-name>getGenders</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.util.List getGenders()</function-signature>
+	</function>
+
+	<function>
+		<function-name>getSizes</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.util.List getSizes()</function-signature>
+	</function>
+
+</facelet-taglib>
