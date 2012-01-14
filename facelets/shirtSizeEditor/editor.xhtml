@@ -1,0 +1,46 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="smallAdminForm" id="shirtSizeEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_shirt_size_pk" value="#{pheidippidesBean.shirtSize.id}" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_shirt_size']}" /></legend>
+			
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['size']}" /></label>
+				<c:selectOne name="prm_size">
+					<ui:repeat value="#{pheidippidesBean.sizes}" var="size">
+						<c:selectOption name="#{size}" content="#{size}" selected="#{size eq pheidippidesBean.shirtSize.size}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
+				<c:selectOne name="prm_gender">
+					<ui:repeat value="#{pheidippidesBean.genders}" var="gender">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_gender.'gender]}" content="#{gender}" selected="#{gender eq pheidippidesBean.shirtSize.gender}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></label>
+				<input type="text" name="prm_localized_key" value="#{pheidippidesBean.shirtSize.localizedKey}" />
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></label>
+				<input type="text" name="prm_report_sign" value="#{pheidippidesBean.shirtSize.reportSign}" />
+			</div>
+		</fieldset>
+		
+		<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+		<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+	</form>
+</ui:component>
+</html>

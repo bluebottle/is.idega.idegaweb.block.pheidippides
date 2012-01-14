@@ -1,10 +1,13 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -139,4 +142,11 @@ public class PheidippidesBean {
 		this.property = property;
 	}
 	
+	public List<ShirtSizeSizes> getSizes() {
+		return Arrays.asList(ShirtSizeSizes.values());
+	}
+	
+	public List<ShirtSizeGender> getGenders() {
+		return Arrays.asList(ShirtSizeGender.values());
+	}
 }

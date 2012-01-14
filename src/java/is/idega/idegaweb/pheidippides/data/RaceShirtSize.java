@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 @Table(name = RaceShirtSize.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "raceShirtSize.findAll", query = "select r from RaceShirtSize r"),
-	@NamedQuery(name = "raceShirtSize.findAllByRace", query = "select r from RaceShirtSize r where r.race = :race order by r.order_number")
+	@NamedQuery(name = "raceShirtSize.findAllByRace", query = "select r from RaceShirtSize r where r.race = :race order by r.orderNumber")
 })
 public class RaceShirtSize implements Serializable {
 	private static final long serialVersionUID = -6362144793780058939L;

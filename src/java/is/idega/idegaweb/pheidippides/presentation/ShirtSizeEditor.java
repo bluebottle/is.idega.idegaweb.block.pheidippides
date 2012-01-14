@@ -140,7 +140,7 @@ public class ShirtSizeEditor extends IWBaseComponent implements IWPageEventListe
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		getDao().storeShirtSize(
 			iwc.isParameterSet(PARAMETER_SHIRT_SIZE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK)) : null,
-					ShirtSizeSizes.valueOf(iwc.getParameter(PARAMETER_SIZE)),
+			ShirtSizeSizes.valueOf(iwc.getParameter(PARAMETER_SIZE)),
 			ShirtSizeGender.valueOf(iwc.getParameter(PARAMETER_GENDER)),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
 			iwc.getParameter(PARAMETER_REPORT_SIGN)
