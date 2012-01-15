@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service("pheidippidesRegistrationSession")
 public class PheidippidesRegistrationSession {
 	private boolean registrationWithPersonalId = true;
+	private String registrantUUID = null;
 	private List<ParticipantHolder> holders = null;
 	
 	public boolean isRegistrationWithPersonalId() {
@@ -34,5 +35,11 @@ public class PheidippidesRegistrationSession {
 	public void empty() {
 		this.registrationWithPersonalId = true;
 		this.holders = null;
+	}
+	public String getRegistrantUUID() {
+		return registrantUUID;
+	}
+	public void setRegistrantUUID(String registrantUUID) {
+		this.registrantUUID = registrantUUID;
 	}
 }

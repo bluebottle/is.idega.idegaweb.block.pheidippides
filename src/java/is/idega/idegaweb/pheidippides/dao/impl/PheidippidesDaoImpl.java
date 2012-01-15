@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
@@ -9,6 +10,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Date;
@@ -130,6 +132,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		}
 	}
 
+	@Transactional(readOnly = false)
 	public Race storeRace(Long raceID, int year, Event event, Distance distance, int minimumAge, int maximumAge, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount, int relayLegs) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
@@ -151,6 +154,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return race;
 	}
 
+	@Transactional(readOnly = false)
 	public boolean removeRace(Long raceID) {
 		Race race = getRace(raceID);
 		if (race != null) {
@@ -179,6 +183,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return getResultList("shirtSize.findAll", ShirtSize.class);
 	}
 
+	@Transactional(readOnly = false)
 	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign) {
 		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
 		if (shirtSize == null) {
@@ -195,6 +200,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return shirtSize;
 	}
 
+	@Transactional(readOnly = false)
 	public boolean removeShirtSize(Long shirtSizeID) {
 		ShirtSize shirtSize = getShirtSize(shirtSizeID);
 		if (shirtSize != null) {
@@ -213,6 +219,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return getResultList("racePrice.findByRace", RacePrice.class, new Param("race", race));
 	}
 
+	@Transactional(readOnly = false)
 	public RacePrice storeRacePrice(Long racePriceID, Race race, Date validFrom, Date validTo, int price, int priceKids, int familyDiscount, int shirtPrice, Currency currency) {
 		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID) : null;
 		if (racePrice == null) {
@@ -227,10 +234,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		racePrice.setFamilyDiscount(familyDiscount);
 		racePrice.setShirtPrice(shirtPrice);
 		racePrice.setCurrency(currency);
+
+		getEntityManager().persist(racePrice);
 		
 		return racePrice;
 	}
 
+	@Transactional(readOnly = false)
 	public boolean removeRacePrice(Long racePriceID) {
 		RacePrice price = getRacePrice(racePriceID);
 		if (price != null) {
@@ -240,4 +250,25 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		
 		return false;
 	}
+	
+	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID) {
+		return find(RegistrationHeader.class, registrationHeaderID);
+	}
+	
+	@Transactional(readOnly = false)
+	public RegistrationHeader storeRegistrationHeader(Long registrationHeaderID, RegistrationHeaderStatus status, String registrantUUID) {
+		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID) : null;
+		if (header == null) {
+			header = new RegistrationHeader();
+			header.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		
+		header.setStatus(status);
+		header.setRegistrantUUID(registrantUUID);
+		
+		getEntityManager().persist(header);
+		
+		return header;
+	}
+
 }
