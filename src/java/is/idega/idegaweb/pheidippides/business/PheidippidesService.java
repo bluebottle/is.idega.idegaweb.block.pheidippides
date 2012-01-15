@@ -51,6 +51,7 @@ public class PheidippidesService {
 			p.setDateOfBirth(user.getDateOfBirth());
 			p.setUuid(registration.getUserUUID());
 			p.setNationality(registration.getNationality());
+			p.setGender(user.getGender().getName());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			
@@ -63,6 +64,9 @@ public class PheidippidesService {
 			Address address = user.getUsersMainAddress();
 			p.setAddress(address.getStreetAddress());
 			p.setPostalAddress(address.getPostalAddress());
+			p.setPostalCode(address.getPostalCode().getPostalCode());
+			p.setCity(address.getCity());
+			p.setCountry(address.getCountry().getName());
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
@@ -89,6 +93,12 @@ public class PheidippidesService {
 		}
 		
 		return p;
+	}
+	
+	public boolean storeRegistration() {
+		
+		
+		return true;
 	}
 	
 	public UserBusiness getUserBusiness() {

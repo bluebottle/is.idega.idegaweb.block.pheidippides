@@ -15,10 +15,14 @@ public class Participant implements Serializable {
 	private String uuid;
 	private String address;
 	private String postalAddress;
+	private String postalCode;
+	private String city;
+	private String country;
 	private String nationality;
 	private String email;
 	private String phoneHome;
 	private String phoneMobile;
+	private String gender;
 	
 	public String getFirstName() {
 		return firstName;
@@ -97,5 +101,29 @@ public class Participant implements Serializable {
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }
