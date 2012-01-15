@@ -13,25 +13,29 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = RelayTeam.ENTITY_NAME)
-public class RelayTeam implements Serializable {
-	private static final long serialVersionUID = 3359638759228394552L;
+@Table(name = Team.ENTITY_NAME)
+public class Team implements Serializable {
+	private static final long serialVersionUID = -5257885804159831004L;
 
-	public static final String ENTITY_NAME = "ph_relay_team";
-	private static final String COLUMN_ENTRY_ID = "relay_team_id";
+	public static final String ENTITY_NAME = "ph_team";
+	private static final String COLUMN_ENTRY_ID = "team_id";
 	private static final String COLUMN_NAME = "name";
+	private static final String COLUMN_RELAY_TEAM = "relay_team";
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = RelayTeam.COLUMN_ENTRY_ID)
+	@Column(name = Team.COLUMN_ENTRY_ID)
 	private Long id;
 	
-	@Column(name = RelayTeam.COLUMN_NAME)
+	@Column(name = Team.COLUMN_NAME)
 	private String name;
 
+	@Column(name = Team.COLUMN_RELAY_TEAM)
+	private boolean isRelayTeam;	
+	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = RelayTeam.COLUMN_CREATED_DATE)
+	@Column(name = Team.COLUMN_CREATED_DATE)
 	private Date createdDate;
 
 	public Long getId() {
@@ -57,5 +61,13 @@ public class RelayTeam implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public boolean isRelayTeam() {
+		return isRelayTeam;
+	}
+
+	public void setRelayTeam(boolean isRelayTeam) {
+		this.isRelayTeam = isRelayTeam;
 	}
 }

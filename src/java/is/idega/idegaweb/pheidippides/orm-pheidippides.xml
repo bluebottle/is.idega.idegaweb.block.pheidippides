@@ -10,8 +10,8 @@
     <entity class="is.idega.idegaweb.pheidippides.data.Race" />
     <entity class="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
     <entity class="is.idega.idegaweb.pheidippides.data.RegistrationHeader" />
-    <entity class="is.idega.idegaweb.pheidippides.data.RelayTeam" />
     <entity class="is.idega.idegaweb.pheidippides.data.ShirtSize" />
+    <entity class="is.idega.idegaweb.pheidippides.data.Team" />
     
         
 </entity-mappings>
