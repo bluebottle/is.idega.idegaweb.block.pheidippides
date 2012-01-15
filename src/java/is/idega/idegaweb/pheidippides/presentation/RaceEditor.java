@@ -69,10 +69,21 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
-		/*PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());*/
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
+		
+		List<String> scripts = new ArrayList<String>();
+		JQuery jQuery = getJQuery();
+		scripts.add(jQuery.getBundleURIToJQueryLib());
+		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5", "ui.datepicker.js"));
+		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5/datepicker/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
+
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceEditor.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.core.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.theme.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.datepicker.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();

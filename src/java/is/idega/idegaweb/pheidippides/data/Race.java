@@ -155,11 +155,11 @@ public class Race implements Serializable {
 		this.numberOfRelayLegs = numberOfRelayLegs;
 	}
 
-	public int getMininumAge() {
+	public int getMinimumAge() {
 		return minimumAge;
 	}
 
-	public void setMininumAge(int minimumAge) {
+	public void setMinimumAge(int minimumAge) {
 		this.minimumAge = minimumAge;
 	}
 

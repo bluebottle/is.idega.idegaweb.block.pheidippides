@@ -31,9 +31,6 @@ public class RaceShirtSize implements Serializable {
 	private static final String COLUMN_SHIRT_SIZE = "shirt_size";
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
 	
-	/* TODO: Eh, er þetta ekki óþarfi ef verðið á bolnum er í RacePrice?!? */
-	private static final String COLUMN_PRICE = "price";
-
 	private static final String COLUMN_ORDER = "order_number";
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -52,9 +49,6 @@ public class RaceShirtSize implements Serializable {
 
 	@Column(name = RaceShirtSize.COLUMN_LOCALIZED_KEY)
 	private String localizedKey;
-
-	@Column(name = RaceShirtSize.COLUMN_PRICE)
-	private int price;
 
 	@Column(name = RaceShirtSize.COLUMN_ORDER)
 	private int orderNumber;
@@ -104,14 +98,6 @@ public class RaceShirtSize implements Serializable {
 		this.localizedKey = localizedKey;
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
 	public int getOrderNumber() {
 		return orderNumber;
 	}
@@ -119,5 +105,4 @@ public class RaceShirtSize implements Serializable {
 	public void setOrderNumber(int orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-
 }

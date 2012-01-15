@@ -137,7 +137,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		race.setYear(year);
 		race.setEvent(event);
 		race.setDistance(distance);
-		race.setMininumAge(minimumAge);
+		race.setMinimumAge(minimumAge);
 		race.setMaximumAge(maximumAge);
 		race.setOpenRegistrationDate(openRegistrationDate);
 		race.setCloseRegistrationDate(closeRegistrationDate);

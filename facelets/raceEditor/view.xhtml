@@ -48,8 +48,7 @@
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['min_age']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['max_age']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['age']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['open_registration']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></th>
@@ -67,8 +66,7 @@
 							<td><h:outputText value="#{race.event.name}" /></td>
 							<td><h:outputText value="#{race.year}" /></td>
 							<td><h:outputText value="#{race.distance.name}" /></td>
-							<td><h:outputText value="#{race.mininumAge}" /></td>
-							<td><h:outputText value="#{race.maximumAge}" /></td>
+							<td><h:outputText value="#{race.minimumAge} - #{race.maximumAge}" /></td>
 							<td><h:outputText value="#{race.openRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
 							<td><h:outputText value="#{race.closeRegistrationDate}"><f:convertDateTime type="both" pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
 							<td class="discount_#{race.familyDiscount}"><span></span></td>
