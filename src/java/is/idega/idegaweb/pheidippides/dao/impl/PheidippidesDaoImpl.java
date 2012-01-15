@@ -13,6 +13,8 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.List;
 
@@ -269,6 +271,5 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		getEntityManager().persist(header);
 		
 		return header;
-	}
-
+	}	
 }

@@ -6,6 +6,7 @@ import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.Registration;
 
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -111,5 +112,27 @@ public class PheidippidesService {
 		} catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
 		}
+	}
+	
+	public String createValitorSecurityString(String seed) {
+		try {
+			byte[] bytestOfMessage = seed.getBytes("UTF-8");
+			MessageDigest algorithm = MessageDigest.getInstance("MD5");
+			algorithm.reset();
+			algorithm.update(bytestOfMessage);
+			byte messageDigest[] = algorithm.digest();
+		            
+			StringBuffer hexString = new StringBuffer();
+			for (int i=0;i<messageDigest.length;i++) {
+				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+			}
+
+			return hexString.toString();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 }
