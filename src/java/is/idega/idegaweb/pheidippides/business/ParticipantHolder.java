@@ -14,4 +14,40 @@ public class ParticipantHolder {
 	private String leg;
 	private Team team;
 	
+	public Participant getParticipant() {
+		return participant;
+	}
+	public void setParticipant(Participant participant) {
+		this.participant = participant;
+	}
+	public Race getRace() {
+		return race;
+	}
+	public void setRace(Race race) {
+		this.race = race;
+	}
+	public ShirtSize getShirtSize() {
+		return shirtSize;
+	}
+	public void setShirtSize(ShirtSize shirtSize) {
+		this.shirtSize = shirtSize;
+	}
+	public Charity getCharity() {
+		return charity;
+	}
+	public void setCharity(Charity charity) {
+		this.charity = charity;
+	}
+	public String getLeg() {
+		return leg;
+	}
+	public void setLeg(String leg) {
+		this.leg = leg;
+	}
+	public Team getTeam() {
+		return team;
+	}
+	public void setTeam(Team team) {
+		this.team = team;
+	}	
 }

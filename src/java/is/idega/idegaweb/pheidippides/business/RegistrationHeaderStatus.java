@@ -4,6 +4,7 @@ public enum RegistrationHeaderStatus {
 	WaitingForPayment,
 	Paid,
 	ManualPayment,
+	RegisteredWithoutPayment,
 	Imported,
 	Cancelled,
 	UserDidntFinishPayment
