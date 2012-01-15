@@ -13,6 +13,7 @@ public class ParticipantHolder {
 	private Charity charity;
 	private String leg;
 	private Team team;
+	private int amount;
 	
 	public Participant getParticipant() {
 		return participant;
@@ -49,5 +50,11 @@ public class ParticipantHolder {
 	}
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}	
 }

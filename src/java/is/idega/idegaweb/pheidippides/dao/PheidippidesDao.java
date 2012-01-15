@@ -2,8 +2,10 @@ package is.idega.idegaweb.pheidippides.dao;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -12,6 +14,7 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.Date;
 import java.util.List;
@@ -54,4 +57,5 @@ public interface PheidippidesDao {
 	public RegistrationHeader storeRegistrationHeader(Long registrationHeaderID, RegistrationHeaderStatus status, String registrantUUID);
 	
 	public Registration getRegistration(Long registrationID);
+	public Registration storeRegistration(Long registrationID, RegistrationHeader header, RegistrationStatus status, Race race, ShirtSize shirtSize, Team team, int amount, Charity charity, String paymentGroup, String nationality);
 }

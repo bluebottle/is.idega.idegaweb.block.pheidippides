@@ -32,6 +32,7 @@ public class Registration implements Serializable {
 	private static final String COLUMN_ENTRY_ID = "registration_id";
 	private static final String COLUMN_REGISTRATION_HEADER = "registration_header";
 	private static final String COLUMN_RACE = "race";
+	private static final String COLUMN_SHIRT_SIZE = "shirt_size";
 	private static final String COLUMN_USER_UUID = "user_uuid";
 	private static final String COLUMN_NATIONALITY = "nationality";
 	private static final String COLUMN_TEAM = "team";
@@ -54,6 +55,10 @@ public class Registration implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = Registration.COLUMN_RACE)
 	private Race race;
+
+	@ManyToOne
+	@JoinColumn(name = Registration.COLUMN_SHIRT_SIZE)
+	private ShirtSize shirtSize;
 
 	@Column(name = Registration.COLUMN_USER_UUID)
 	private String userUUID;
@@ -181,5 +186,13 @@ public class Registration implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public ShirtSize getShirtSize() {
+		return shirtSize;
+	}
+
+	public void setShirtSize(ShirtSize shirtSize) {
+		this.shirtSize = shirtSize;
 	}
 }

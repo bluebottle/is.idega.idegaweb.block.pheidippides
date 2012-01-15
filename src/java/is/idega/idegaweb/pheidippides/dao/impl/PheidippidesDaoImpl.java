@@ -2,9 +2,11 @@ package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -13,6 +15,7 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.Date;
 import java.util.List;
@@ -295,20 +298,72 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return find(Registration.class, registrationID);
 	}
 
-/*	@Transactional(readOnly = false)
-	public Registration storeRegistration(Long registrationID, RegistrationHeaderStatus status, String registrantUUID) {
-		Registration registration = registrationID != null ? getRegistrationHeader(registrationHeaderID) : null;
+	@Transactional(readOnly = false)
+	public Registration storeRegistration(Long registrationID, RegistrationHeader header, RegistrationStatus status, Race race, ShirtSize shirtSize, Team team, int amount, Charity charity, String paymentGroup, String nationality) {
+		Registration registration = registrationID != null ? getRegistration(registrationID) : null;
 		if (registration == null) {
 			registration = new Registration();
+			registration.setHeader(header);
 			registration.setCreatedDate(IWTimestamp.getTimestampRightNow());
+			race = increaseRaceParticipantNumber(race.getId());
+			registration.setRace(race);
+			registration.setParticipantNumber(race.getCurrentParticipantNumber());
+		}
+
+		if (!registration.getRace().equals(race)) {
+			race = increaseRaceParticipantNumber(race.getId());
+			
+			Registration newReg = new Registration();
+			newReg.setHeader(registration.getHeader());
+			newReg.setAmountPaid(registration.getAmountPaid());
+			newReg.setCharity(registration.getCharity());
+			newReg.setHeader(registration.getHeader());
+			newReg.setNationality(registration.getNationality());
+			newReg.setPaymentGroup(registration.getPaymentGroup());
+			newReg.setShirtSize(registration.getShirtSize());
+			newReg.setStatus(registration.getStatus());
+			newReg.setRace(race);
+			newReg.setParticipantNumber(race.getCurrentParticipantNumber());
+			newReg.setTeam(registration.getTeam());
+			newReg.setUserUUID(registration.getUserUUID());
+			getEntityManager().persist(newReg);
+
+			registration.setStatus(RegistrationStatus.Moved);
+			getEntityManager().persist(registration);
+			
+			registration = newReg;
+		} 
+		
+		if (status != null) {
+			registration.setStatus(status);
 		}
 		
-		registration.setStatus(status);
-		registration.setRegistrantUUID(registrantUUID);
+		if (shirtSize != null) {
+			registration.setShirtSize(shirtSize);
+		}
+		
+		if (team != null) {
+			registration.setTeam(team);
+		}
+		
+		if (amount > 0) {
+			registration.setAmountPaid(amount);
+		}
+		
+		if (charity != null) {
+			registration.setCharity(charity);
+		}
+		
+		if (paymentGroup != null) {
+			registration.setPaymentGroup(paymentGroup);
+		}
+		
+		if (nationality != null) {
+			registration.setNationality(nationality);
+		}
 		
 		getEntityManager().persist(registration);
 		
 		return registration;
-	}*/	
-
+	}
 }
