@@ -10,11 +10,10 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 import java.util.Date;
 import java.util.List;
 
@@ -255,6 +254,23 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		return false;
 	}
 	
+	@Transactional(readOnly = false)
+	public Race increaseRaceParticipantNumber(Long raceID) {
+		Race race = getRace(raceID);
+		if (race != null) {
+			int participantNumber = race.getCurrentParticipantNumber();
+			participantNumber++;
+			if (race.getMaxParticipantNumber() == -1 || participantNumber <= race.getMaxParticipantNumber()) {
+				race.setCurrentParticipantNumber(participantNumber);
+				getEntityManager().persist(race);
+			}
+			
+			return race;
+		}
+
+		return null;
+	}
+	
 	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID) {
 		return find(RegistrationHeader.class, registrationHeaderID);
 	}
@@ -273,5 +289,26 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		getEntityManager().persist(header);
 		
 		return header;
-	}	
+	}
+
+	public Registration getRegistration(Long registrationID) {
+		return find(Registration.class, registrationID);
+	}
+
+/*	@Transactional(readOnly = false)
+	public Registration storeRegistration(Long registrationID, RegistrationHeaderStatus status, String registrantUUID) {
+		Registration registration = registrationID != null ? getRegistrationHeader(registrationHeaderID) : null;
+		if (registration == null) {
+			registration = new Registration();
+			registration.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		
+		registration.setStatus(status);
+		registration.setRegistrantUUID(registrantUUID);
+		
+		getEntityManager().persist(registration);
+		
+		return registration;
+	}*/	
+
 }

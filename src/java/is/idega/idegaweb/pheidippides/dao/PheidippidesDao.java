@@ -9,6 +9,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
@@ -47,5 +48,10 @@ public interface PheidippidesDao {
 	public RacePrice storeRacePrice(Long racePriceID, Race race, Date validFrom, Date validTo, int price, int priceKids, int familyDiscount, int shirtPrice, Currency currency);
 	public boolean removeRacePrice(Long racePriceID);
 
+	public Race increaseRaceParticipantNumber(Long raceID);
+	
+	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID);
 	public RegistrationHeader storeRegistrationHeader(Long registrationHeaderID, RegistrationHeaderStatus status, String registrantUUID);
+	
+	public Registration getRegistration(Long registrationID);
 }

@@ -41,7 +41,7 @@ public class Race implements Serializable {
 	private static final String COLUMN_MIN_AGE = "min_age";
 	private static final String COLUMN_MAX_AGE = "max_age";
 	private static final String COLUMN_CREATED_DATE = "created";
-	private static final String COLUMN_NEXT_PARTICIPANT_NUMBER = "next_participant_number";
+	private static final String COLUMN_CURRENT_PARTICIPANT_NUMBER = "current_participant_number";
 	private static final String COLUMN_MAX_PARTICIPANT_NUMBER = "max_participant_number";
 
 	@Id
@@ -85,8 +85,8 @@ public class Race implements Serializable {
 	@Column(name = Race.COLUMN_CREATED_DATE)
 	private Date createdDate;
 
-	@Column(name = Race.COLUMN_NEXT_PARTICIPANT_NUMBER)
-	private int nextParticipantNumber;
+	@Column(name = Race.COLUMN_CURRENT_PARTICIPANT_NUMBER)
+	private int currentParticipantNumber;
 
 	@Column(name = Race.COLUMN_MAX_PARTICIPANT_NUMBER)
 	private int maxParticipantNumber;
@@ -180,12 +180,12 @@ public class Race implements Serializable {
 		this.maximumAge = maximumAge;
 	}
 
-	public int getNextParticipantNumber() {
-		return nextParticipantNumber;
+	public int getCurrentParticipantNumber() {
+		return currentParticipantNumber;
 	}
 
-	public void setNextParticipantNumber(int nextParticipantNumber) {
-		this.nextParticipantNumber = nextParticipantNumber;
+	public void setCurrentParticipantNumber(int currentParticipantNumber) {
+		this.currentParticipantNumber = currentParticipantNumber;
 	}
 
 	public int getMaxParticipantNumber() {
