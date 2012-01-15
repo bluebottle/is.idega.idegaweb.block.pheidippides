@@ -8,7 +8,9 @@
     <entity class="is.idega.idegaweb.pheidippides.data.Distance" />
     <entity class="is.idega.idegaweb.pheidippides.data.Event" />
     <entity class="is.idega.idegaweb.pheidippides.data.Race" />
+    <entity class="is.idega.idegaweb.pheidippides.data.RacePrice" />
     <entity class="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
+    <entity class="is.idega.idegaweb.pheidippides.data.Registration" />
     <entity class="is.idega.idegaweb.pheidippides.data.RegistrationHeader" />
     <entity class="is.idega.idegaweb.pheidippides.data.ShirtSize" />
     <entity class="is.idega.idegaweb.pheidippides.data.Team" />

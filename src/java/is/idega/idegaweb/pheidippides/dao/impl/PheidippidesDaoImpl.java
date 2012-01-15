@@ -239,6 +239,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 
 		getEntityManager().persist(racePrice);
 		
+		getEntityManager().persist(racePrice);
+		
 		return racePrice;
 	}
 

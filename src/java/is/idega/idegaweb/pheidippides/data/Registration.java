@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = Registration.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "registration.findAll", query = "select r from RegistrationHeader r")
+	@NamedQuery(name = "registration.findAll", query = "select r from Registration r")
 })
 public class Registration implements Serializable {
 	private static final long serialVersionUID = -1263634010602700985L;
