@@ -100,8 +100,8 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		}
 		
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RaceEditor.class, new ArrayList<AdvancedProperty>()));
-		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RacePriceEditor.class, new ArrayList<AdvancedProperty>()));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RacePriceEditor.class));
 		
 		/* Events */
 		bean.setEvents(getDao().getEvents());
@@ -116,6 +116,9 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
+		
+		/* Race price */
+		bean.setRacePrice(iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? getDao().getRacePrice(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK))) : null);
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {

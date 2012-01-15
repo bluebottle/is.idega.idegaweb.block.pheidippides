@@ -13,20 +13,20 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_distance']}" /></legend>
 			
-			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
-				<input type="text" name="prm_name" value="#{pheidippidesBean.distance.name}" />
+			<div class="formItem required">
+				<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+				<input type="text" class="required" name="prm_name" value="#{pheidippidesBean.distance.name}" />
 			</div>
 			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
+				<label for="prm_description"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
 				<input type="text" name="prm_description" value="#{pheidippidesBean.distance.description}" />
 			</div>
 			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></label>
+				<label for="prm_localized_key"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></label>
 				<input type="text" name="prm_localized_key" value="#{pheidippidesBean.distance.localizedKey}" />
 			</div>
 			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></label>
+				<label for="prm_report_sign"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></label>
 				<input type="text" name="prm_report_sign" value="#{pheidippidesBean.distance.reportSign}" />
 			</div>
 		</fieldset>

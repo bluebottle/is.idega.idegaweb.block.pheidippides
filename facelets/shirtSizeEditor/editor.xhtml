@@ -14,17 +14,17 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_shirt_size']}" /></legend>
 			
-			<div class="formItem">
+			<div class="formItem required">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['size']}" /></label>
-				<c:selectOne name="prm_size">
+				<c:selectOne styleClass="required" name="prm_size">
 					<ui:repeat value="#{p:getSizes()}" var="size">
 						<c:selectOption name="#{size}" content="#{size}" selected="#{size eq pheidippidesBean.shirtSize.size}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
-			<div class="formItem">
+			<div class="formItem required">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
-				<c:selectOne name="prm_gender">
+				<c:selectOne styleClass="required" name="prm_gender">
 					<ui:repeat value="#{p:getGenders()}" var="gender">
 						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat('shirt_gender.', gender)]}" content="#{gender}" selected="#{gender eq pheidippidesBean.shirtSize.gender}" />
 					</ui:repeat>

@@ -12,7 +12,11 @@ jQuery(document).ready(function() {
         } 
 	}); 
 	
-	jQuery('a.addItem, a.editItem').fancybox();
+	jQuery('a.addItem, a.editItem').fancybox({
+		'onComplete': function() {
+			jQuery('#distanceEditorForm').validate();
+		}
+	});
 	
 	jQuery('a.deleteItem').click(function() {
 		var link = jQuery(this);
@@ -28,7 +32,10 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		jQuery('form#distanceEditorForm').submit();
-		jQuery.fancybox.close();
+		var form = jQuery('form#distanceEditorForm');
+		if (form.valid()) {
+			form.submit();
+			jQuery.fancybox.close();
+		}
 	});
 });

@@ -7,7 +7,7 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<form class="smallAdminForm" id="raceEditorForm" action="" method="post">
+	<form class="smallAdminForm" id="racePriceEditorForm" action="" method="post">
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
 		<input type="hidden" name="prm_race_price_pk" value="#{param['prm_race_price_pk']}" />
 		<input type="hidden" name="prm_race_pk" value="#{param['prm_race_pk']}" />
@@ -34,7 +34,7 @@
 				<input class="datePicker required" name="prm_valid_from" value="#{p:formatDate(pheidippidesBean.racePrice.validFrom)}" />
 			</div>
 			<div class="formItem required">
-				<label for="prm_valid_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></label>
+				<label for="prm_valid_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></label>
 				<input class="datePicker required" name="prm_valid_to" value="#{p:formatDate(pheidippidesBean.racePrice.validTo)}" />
 			</div>
 			<div class="formItem">
@@ -46,7 +46,7 @@
 				<input type="text" class="digits" name="prm_price_kids" value="#{pheidippidesBean.racePrice.priceKids}" />
 			</div>
 			<div class="formItem">
-				<label for="prm_family_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></label>
+				<label for="prm_family_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_amount']}" /></label>
 				<input type="text" class="digits" name="prm_family_discount" value="#{pheidippidesBean.racePrice.familyDiscount}" />
 			</div>
 			<div class="formItem">

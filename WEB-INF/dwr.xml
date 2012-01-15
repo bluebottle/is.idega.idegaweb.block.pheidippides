@@ -11,5 +11,6 @@
         
 		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event" />
 		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Distance" />
 	</allow>
 </dwr>
