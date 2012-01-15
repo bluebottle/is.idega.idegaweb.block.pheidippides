@@ -8,41 +8,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = Charity.ENTITY_NAME)
-@NamedQueries({
-	@NamedQuery(name = "charity.findAll", query = "select c from Charity c order by c.name")
-})
-public class Charity implements Serializable {
-	private static final long serialVersionUID = 8536035056191428820L;
+@Table(name = RelayTeam.ENTITY_NAME)
+public class RelayTeam implements Serializable {
+	private static final long serialVersionUID = 3359638759228394552L;
 
-	public static final String ENTITY_NAME = "ph_charity";
-	private static final String COLUMN_ENTRY_ID = "charity_id";
+	public static final String ENTITY_NAME = "ph_relay_team";
+	private static final String COLUMN_ENTRY_ID = "relay_team_id";
 	private static final String COLUMN_NAME = "name";
-	private static final String COLUMN_PERSONAL_ID = "personal_id";
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = Charity.COLUMN_ENTRY_ID)
+	@Column(name = RelayTeam.COLUMN_ENTRY_ID)
 	private Long id;
 	
-	@Column(name = Charity.COLUMN_NAME)
+	@Column(name = RelayTeam.COLUMN_NAME)
 	private String name;
 
-	@Column(name = Charity.COLUMN_PERSONAL_ID)
-	private String personalId;
-
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = Charity.COLUMN_CREATED_DATE)
+	@Column(name = RelayTeam.COLUMN_CREATED_DATE)
 	private Date createdDate;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -60,14 +51,6 @@ public class Charity implements Serializable {
 		this.name = name;
 	}
 
-	public String getPersonalId() {
-		return personalId;
-	}
-
-	public void setPersonalId(String personalId) {
-		this.personalId = personalId;
-	}
-
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -75,5 +58,4 @@ public class Charity implements Serializable {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-
 }
