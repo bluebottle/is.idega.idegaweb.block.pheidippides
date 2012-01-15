@@ -30,4 +30,9 @@ public class PheidippidesRegistrationSession {
 	public List<ParticipantHolder> getParticipantHolders() {
 		return holders;
 	}
+	
+	public void empty() {
+		this.registrationWithPersonalId = true;
+		this.holders = null;
+	}
 }
