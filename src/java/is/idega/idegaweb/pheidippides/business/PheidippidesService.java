@@ -95,8 +95,10 @@ public class PheidippidesService {
 		return p;
 	}
 	
-	public boolean storeRegistration() {
-		
+	public boolean storeRegistration(List<ParticipantHolder> holders) {
+		if (holders != null && !holders.isEmpty()) {
+			//dao.
+		}
 		
 		return true;
 	}

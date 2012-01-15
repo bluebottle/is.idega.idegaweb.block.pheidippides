@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -9,5 +10,24 @@ import org.springframework.stereotype.Service;
 @Service("pheidippidesRegistrationSession")
 public class PheidippidesRegistrationSession {
 	private boolean registrationWithPersonalId = true;
-	private List<ParticipantHolder> holder = null;
+	private List<ParticipantHolder> holders = null;
+	
+	public boolean isRegistrationWithPersonalId() {
+		return registrationWithPersonalId;
+	}
+	public void setRegistrationWithPersonalId(boolean registrationWithPersonalId) {
+		this.registrationWithPersonalId = registrationWithPersonalId;
+	}
+	
+	public void addParticipantHolder(ParticipantHolder holder) {
+		if (holders == null) {
+			holders = new ArrayList<ParticipantHolder>();
+		}
+		
+		holders.add(holder);
+	}
+	
+	public List<ParticipantHolder> getParticipantHolders() {
+		return holders;
+	}
 }
