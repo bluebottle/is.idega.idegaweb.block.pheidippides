@@ -187,6 +187,12 @@ form.smallAdminForm fieldset div.formItem label {
 	line-height: 30px;
 }
 
+form.smallAdminForm fieldset div.formItem.required label:after {
+	content: '*';
+	color: #a00;
+	padding-left: 3px;
+}
+
 form.smallAdminForm fieldset div.formItem span {
 	line-height: 30px;
 }
@@ -196,10 +202,25 @@ form.smallAdminForm fieldset div.formItem input, form.smallAdminForm fieldset di
 	width: 250px;
 	border: 1px #ccc solid;
 	padding: 2px 4px;
+	float: left;
 }
 
 form.smallAdminForm fieldset div.formItem select {
 	padding: 0;
+}
+
+form.smallAdminForm fieldset div.formItem .error {
+	border-color: #a00;
+	color: #a00;
+}
+
+form.smallAdminForm fieldset div.formItem .error {
+	background: url(images/close.png) 220px center no-repeat;
+	padding-right: 32px;
+}
+
+form.smallAdminForm fieldset div.formItem label.error {
+	display: none !important;
 }
 
 form.smallAdminForm fieldset div.formItem.checkbox input {

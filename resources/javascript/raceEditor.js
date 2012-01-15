@@ -1,35 +1,29 @@
 jQuery.noConflict();
 
-jQuery.validator.setDefaults({
-	debug: true,
-	success: "valid"
-});
-
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
             8: { 
                 sorter: false 
             }, 
-            11: { 
+            10: { 
                 sorter: false 
             },
-            12: { 
+            11: { 
                 sorter: false 
             } 
         } 
 	});
 	
-	/*jQuery('#raceEditorForm').validate({
-		rules: {
-			prm_minimum_age: {
-				required: true,
-				digits: true
-			}
+	jQuery('a.addItem, a.editItem').fancybox({
+		'onComplete': function() {
+			jQuery('#raceEditorForm').validate();
+			jQuery('input.datePicker').datepicker({
+				showTime: true,
+				regional: ['is']
+			});
 		}
-	});*/
-	
-	jQuery('a.addItem, a.editItem').fancybox();
+	});
 	
 	jQuery('a.deleteItem').click(function() {
 		var link = jQuery(this);
@@ -45,7 +39,10 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		jQuery('form#raceEditorForm').submit();
-		jQuery.fancybox.close();
+		var form = jQuery('form#raceEditorForm');
+		if (form.valid()) {
+			form.submit();
+			jQuery.fancybox.close();
+		}
 	});
 });

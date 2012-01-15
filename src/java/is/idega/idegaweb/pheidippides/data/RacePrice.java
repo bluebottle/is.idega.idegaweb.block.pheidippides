@@ -1,5 +1,7 @@
 package is.idega.idegaweb.pheidippides.data;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +9,8 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,14 +41,11 @@ public class RacePrice implements Serializable {
 	private static final String COLUMN_RACE = "race";
 	private static final String COLUMN_CREATED_DATE = "created";
 
-	/* TODO: Pæling: Er kannski betra að hafa upphæðirnar sjálfar í annarri töflu (ProductPrice?) sem hefur þá type (enum), nafn, upphæð, gjaldmiðill og required dálka?
-	 * TODO: Eða jafnvel að þessi tafla sé bara með eitt verð + gjaldmiðil + type?  Þá er alltaf hægt að bæta við gjaldmiðlum seinna eða bara hafa ISK eftir þörfum (Powerade)...  */
 	private static final String COLUMN_PRICE = "price";
-	private static final String COLUMN_PRICE_EUR = "price_eur";
+	private static final String COLUMN_PRICE_KIDS = "price_kids";
 	private static final String COLUMN_FAMILY_DISCOUNT = "family_discount";
-	private static final String COLUMN_FAMILY_DISCOUNT_EUR = "family_discount_eur";
 	private static final String COLUMN_SHIRT_PRICE = "shirt_price";
-	private static final String COLUMN_SHIRT_PRICE_EUR = "shirt_price_eur";
+	private static final String COLUMN_CURRENCY = "currency";
 	
 	@PrePersist
 	public void setDefaultValues() {
@@ -93,21 +94,19 @@ public class RacePrice implements Serializable {
 	@Column(name = RacePrice.COLUMN_PRICE)
 	private int price;
 
-	@Column(name = RacePrice.COLUMN_PRICE_EUR)
-	private int priceEUR;
+	@Column(name = RacePrice.COLUMN_PRICE_KIDS)
+	private int priceKids;
 
 	@Column(name = RacePrice.COLUMN_FAMILY_DISCOUNT)
 	private int familyDiscount;
 
-	@Column(name = RacePrice.COLUMN_FAMILY_DISCOUNT_EUR)
-	private int familyDiscountEUR;
-
 	@Column(name = RacePrice.COLUMN_SHIRT_PRICE)
 	private int shirtPrice;
-
-	@Column(name = RacePrice.COLUMN_SHIRT_PRICE_EUR)
-	private int shirtPriceEUR;
 	
+	@Column(name = RacePrice.COLUMN_CURRENCY)
+	@Enumerated(EnumType.STRING)
+	private Currency currency;
+
 	public Date getValidFrom() {
 		return validFrom;
 	}
@@ -132,12 +131,12 @@ public class RacePrice implements Serializable {
 		this.price = price;
 	}
 
-	public int getPriceEUR() {
-		return priceEUR;
+	public int getPriceKids() {
+		return priceKids;
 	}
 
-	public void setPriceEUR(int priceEUR) {
-		this.priceEUR = priceEUR;
+	public void setPriceKids(int priceKids) {
+		this.priceKids = priceKids;
 	}
 
 	public int getFamilyDiscount() {
@@ -148,14 +147,6 @@ public class RacePrice implements Serializable {
 		this.familyDiscount = familyDiscount;
 	}
 
-	public int getFamilyDiscountEUR() {
-		return familyDiscountEUR;
-	}
-
-	public void setFamilyDiscountEUR(int familyDiscountEUR) {
-		this.familyDiscountEUR = familyDiscountEUR;
-	}
-
 	public int getShirtPrice() {
 		return shirtPrice;
 	}
@@ -163,13 +154,13 @@ public class RacePrice implements Serializable {
 	public void setShirtPrice(int shirtPrice) {
 		this.shirtPrice = shirtPrice;
 	}
-
-	public int getShirtPriceEUR() {
-		return shirtPriceEUR;
+	
+	public Currency getCurrency() {
+		return this.currency;
 	}
-
-	public void setShirtPriceEUR(int shirtPriceEUR) {
-		this.shirtPriceEUR = shirtPriceEUR;
+	
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	public Date getCreatedDate() {
