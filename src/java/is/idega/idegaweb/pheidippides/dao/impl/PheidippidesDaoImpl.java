@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
@@ -7,6 +8,7 @@ import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Date;
@@ -200,6 +202,42 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			return true;
 		}
 
+		return false;
+	}
+
+	public RacePrice getRacePrice(Long racePriceID) {
+		return find(RacePrice.class, racePriceID);
+	}
+
+	public List<RacePrice> getRacePrices(Race race) {
+		return getResultList("racePrice.findByRace", RacePrice.class, new Param("race", race));
+	}
+
+	public RacePrice storeRacePrice(Long racePriceID, Race race, Date validFrom, Date validTo, int price, int priceKids, int familyDiscount, int shirtPrice, Currency currency) {
+		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID) : null;
+		if (racePrice == null) {
+			racePrice = new RacePrice();
+			racePrice.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		racePrice.setRace(race);
+		racePrice.setValidFrom(validFrom);
+		racePrice.setValidTo(validTo);
+		racePrice.setPrice(price);
+		racePrice.setPriceKids(priceKids);
+		racePrice.setFamilyDiscount(familyDiscount);
+		racePrice.setShirtPrice(shirtPrice);
+		racePrice.setCurrency(currency);
+		
+		return racePrice;
+	}
+
+	public boolean removeRacePrice(Long racePriceID) {
+		RacePrice price = getRacePrice(racePriceID);
+		if (price != null) {
+			getEntityManager().remove(price);
+			return true;
+		}
+		
 		return false;
 	}
 }

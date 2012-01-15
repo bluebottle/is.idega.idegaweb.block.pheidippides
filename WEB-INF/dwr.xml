@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN" "http://getahead.org/dwr//dwr30.dtd">
+
+<dwr>
+	<allow>
+        <create creator="jsf" javascript="PheidippidesService">
+            <param name="managedBeanName" value="pheidippidesService" />
+            <param name="class" value="is.idega.idegaweb.pheidippides.business.PheidippidesService" />
+            <include method="getRaces" />
+        </create>
+        
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race" />
+	</allow>
+</dwr>

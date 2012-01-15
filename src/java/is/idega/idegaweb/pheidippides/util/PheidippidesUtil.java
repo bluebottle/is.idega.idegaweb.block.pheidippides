@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.util;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 
@@ -27,6 +28,10 @@ public class PheidippidesUtil {
 
 	public static List<ShirtSizeGender> getGenders() {
 		return Arrays.asList(ShirtSizeGender.values());
+	}
+	
+	public static List<Currency> getCurrencies() {
+		return Arrays.asList(Currency.values());
 	}
 
 	public static String formatDate(Date date) {

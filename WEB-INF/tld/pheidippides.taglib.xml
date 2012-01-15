@@ -24,6 +24,12 @@
 	</function>
 
 	<function>
+		<function-name>getCurrencies</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.util.List getCurrencies()</function-signature>
+	</function>
+
+	<function>
 		<function-name>formatDate</function-name>
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
 		<function-signature>java.lang.String formatDate(java.util.Date)</function-signature>

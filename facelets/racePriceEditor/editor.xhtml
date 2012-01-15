@@ -1,0 +1,70 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="raceEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_race_price_pk" value="#{param['prm_race_price_pk']}" />
+		<input type="hidden" name="prm_race_pk" value="#{param['prm_race_pk']}" />
+		<input type="hidden" name="prm_event_pk" value="#{param['prm_event_pk']}" />
+		<input type="hidden" name="prm_year" value="#{param['prm_year']}" />
+		
+		<fieldset>
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_price']}" /></legend>
+			
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<span><h:outputText value="#{pheidippidesBean.event.name}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<span><h:outputText value="#{param['prm_year']}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
+				<span><h:outputText value="#{pheidippidesBean.race.distance.name}" /></span>
+			</div>
+			<div class="formItem required">
+				<label for="prm_valid_from"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></label>
+				<input class="datePicker required" name="prm_valid_from" value="#{p:formatDate(pheidippidesBean.racePrice.validFrom)}" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_valid_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></label>
+				<input class="datePicker required" name="prm_valid_to" value="#{p:formatDate(pheidippidesBean.racePrice.validTo)}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_price"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['price']}" /></label>
+				<input type="text" class="required digits" name="prm_price" value="#{pheidippidesBean.racePrice.price}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_price_kids"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['price_kids']}" /></label>
+				<input type="text" class="digits" name="prm_price_kids" value="#{pheidippidesBean.racePrice.priceKids}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_family_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></label>
+				<input type="text" class="digits" name="prm_family_discount" value="#{pheidippidesBean.racePrice.familyDiscount}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_shirt_price"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_price']}" /></label>
+				<input type="text" class="digits" name="prm_shirt_price" value="#{pheidippidesBean.racePrice.shirtPrice}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_currency"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['currency']}" /></label>
+				<c:selectOne name="prm_currency">
+					<ui:repeat value="#{p:getCurrencies()}" var="currency">
+						<c:selectOption name="#{currency}" content="#{currency}" selected="#{currency eq pheidippidesBean.racePrice.currency}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+		</fieldset>
+		
+		<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+		<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+	</form>
+</ui:component>
+</html>
