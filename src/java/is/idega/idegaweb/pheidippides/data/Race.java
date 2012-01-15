@@ -41,6 +41,8 @@ public class Race implements Serializable {
 	private static final String COLUMN_MIN_AGE = "min_age";
 	private static final String COLUMN_MAX_AGE = "max_age";
 	private static final String COLUMN_CREATED_DATE = "created";
+	private static final String COLUMN_NEXT_PARTICIPANT_NUMBER = "next_participant_number";
+	private static final String COLUMN_MAX_PARTICIPANT_NUMBER = "max_participant_number";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -82,6 +84,12 @@ public class Race implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Race.COLUMN_CREATED_DATE)
 	private Date createdDate;
+
+	@Column(name = Race.COLUMN_NEXT_PARTICIPANT_NUMBER)
+	private int nextParticipantNumber;
+
+	@Column(name = Race.COLUMN_MAX_PARTICIPANT_NUMBER)
+	private int maxParticipantNumber;
 
 	public Long getId() {
 		return id;
@@ -170,5 +178,21 @@ public class Race implements Serializable {
 
 	public void setMaximumAge(int maximumAge) {
 		this.maximumAge = maximumAge;
+	}
+
+	public int getNextParticipantNumber() {
+		return nextParticipantNumber;
+	}
+
+	public void setNextParticipantNumber(int nextParticipantNumber) {
+		this.nextParticipantNumber = nextParticipantNumber;
+	}
+
+	public int getMaxParticipantNumber() {
+		return maxParticipantNumber;
+	}
+
+	public void setMaxParticipantNumber(int maxParticipantNumber) {
+		this.maxParticipantNumber = maxParticipantNumber;
 	}
 }

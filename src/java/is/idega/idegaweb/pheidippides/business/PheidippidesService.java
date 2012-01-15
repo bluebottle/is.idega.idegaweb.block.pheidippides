@@ -37,6 +37,7 @@ import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
+import com.idega.user.data.GenderHome;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
@@ -127,10 +128,10 @@ public class PheidippidesService {
 			}
 
 			for (ParticipantHolder participantHolder : holders) {
+				User user = null;
+				Participant participant = participantHolder
+						.getParticipant();
 				if (createUsers) {
-					Participant participant = participantHolder
-							.getParticipant();
-					User user = null;
 					if (participant.getUuid() != null) {
 						try {
 							user = getUserBusiness().getUserByUniqueId(
@@ -140,10 +141,66 @@ public class PheidippidesService {
 						}
 					}
 
-					/*if (user == null) {
-						Name fullName = new Name(participant.getFirstName(), participant.getMiddleName(), participant.getLastName());
-						user = saveUser(fullName, new IWTimestamp(participant.getDateOfBirth()), Gender.   participant.getGender();
-					}*/
+					try {
+						if (user == null) {
+							Gender gender = null;
+							if (participant.getGender().equals(
+									getGenderHome().getMaleGender().getName())) {
+								gender = getGenderHome().getMaleGender();
+							} else {
+								gender = getGenderHome().getFemaleGender();
+							}
+							Name fullName = new Name(
+									participant.getFirstName(),
+									participant.getMiddleName(),
+									participant.getLastName());
+							user = saveUser(
+									fullName,
+									new IWTimestamp(participant
+											.getDateOfBirth()),
+									gender,
+									participant.getAddress(),
+									participant.getPostalCode(),
+									participant.getCity(),
+									getCountryHome().findByCountryName(
+											participant.getCountry()));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						user = null; //Something got fucked up
+					}
+				} else {
+					try {
+						user = getUserBusiness().getUserByUniqueId(participant.getUuid());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (user != null) {
+					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
+						try {
+							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());
+						} catch (Exception e) {
+						}				
+					}
+					
+					if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
+						try {
+							getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
+						} catch (Exception e) {
+						}				
+					}
+
+					if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
+						try {
+							getUserBusiness().updateUserMail(user, participant.getEmail());
+						} catch (Exception e) {
+						}				
+					}
+					
+					//Registration registration = dao.storeR
+					//participantHolder.get
 				}
 			}
 		}
@@ -171,8 +228,8 @@ public class PheidippidesService {
 				Integer countryID = (Integer) country.getPrimaryKey();
 				PostalCode p = null;
 				try {
-					p = getPostalCodeHome().findByPostalCodeAndCountryId(postal,
-							countryID.intValue());
+					p = getPostalCodeHome().findByPostalCodeAndCountryId(
+							postal, countryID.intValue());
 				} catch (FinderException fe) {
 					p = getPostalCodeHome().create();
 					p.setCountry(country);
@@ -263,6 +320,14 @@ public class PheidippidesService {
 	private CountryHome getCountryHome() {
 		try {
 			return (CountryHome) IDOLookup.getHome(Country.class);
+		} catch (RemoteException rme) {
+			throw new RuntimeException(rme.getMessage());
+		}
+	}
+
+	private GenderHome getGenderHome() {
+		try {
+			return (GenderHome) IDOLookup.getHome(Gender.class);
 		} catch (RemoteException rme) {
 			throw new RuntimeException(rme.getMessage());
 		}
