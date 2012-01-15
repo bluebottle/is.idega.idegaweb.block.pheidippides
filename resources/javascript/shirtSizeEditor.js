@@ -1,6 +1,17 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
+	jQuery("table.adminTable").tablesorter({ 
+        headers: { 
+            6: { 
+                sorter: false 
+            }, 
+            7: { 
+                sorter: false 
+            } 
+        } 
+	}); 
+	
 	jQuery('a.addItem, a.editItem').fancybox();
 	
 	jQuery('a.deleteItem').click(function() {

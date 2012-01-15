@@ -128,7 +128,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		}
 	}
 
-	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount, int relayLegs) {
+	public Race storeRace(Long raceID, int year, Event event, Distance distance, int minimumAge, int maximumAge, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount, int relayLegs) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -137,6 +137,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		race.setYear(year);
 		race.setEvent(event);
 		race.setDistance(distance);
+		race.setMininumAge(minimumAge);
+		race.setMaximumAge(maximumAge);
 		race.setOpenRegistrationDate(openRegistrationDate);
 		race.setCloseRegistrationDate(closeRegistrationDate);
 		race.setFamilyDiscount(familyDiscount);
@@ -177,7 +179,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 
 	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign) {
 		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
-		if (size == null) {
+		if (shirtSize == null) {
 			shirtSize = new ShirtSize();
 			shirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}

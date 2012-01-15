@@ -30,7 +30,7 @@ public interface PheidippidesDao {
 
 	public Race getRace(Long raceID);
 	public List<Race> getRaces(Event event, Integer year);
-	public Race storeRace(Long raceID, int year, Event event, Distance distance, Date openRegistration, Date closeRegistration, boolean familyDiscount, int relayLegs);
+	public Race storeRace(Long raceID, int year, Event event, Distance distance, int minimumAge, int maximumAge, Date openRegistration, Date closeRegistration, boolean familyDiscount, int relayLegs);
 	public boolean removeRace(Long raceID);
 
 	public ShirtSize getShirtSize(Long shirtSizeID);

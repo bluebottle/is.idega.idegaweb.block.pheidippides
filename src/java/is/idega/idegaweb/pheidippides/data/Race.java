@@ -73,7 +73,7 @@ public class Race implements Serializable {
 	private int numberOfRelayLegs;
 
 	@Column(name = Race.COLUMN_MIN_AGE)
-	private int mininumAge;
+	private int minimumAge;
 
 	@Column(name = Race.COLUMN_MAX_AGE)
 	private int maximumAge;
@@ -156,11 +156,11 @@ public class Race implements Serializable {
 	}
 
 	public int getMininumAge() {
-		return mininumAge;
+		return minimumAge;
 	}
 
-	public void setMininumAge(int mininumAge) {
-		this.mininumAge = mininumAge;
+	public void setMininumAge(int minimumAge) {
+		this.minimumAge = minimumAge;
 	}
 
 	public int getMaximumAge() {

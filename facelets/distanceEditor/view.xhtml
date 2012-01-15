@@ -9,7 +9,10 @@
 	<fieldset class="formSection noNavigation">
 		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance_editor']}" /></legend>
 
-		<a href="#{pheidippidesBean.responseURL}" class="addItem" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}" /></span></a>
+		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}" styleClass="addItem">
+			<f:param name="prm_action" value="2" />
+			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}" /></span>
+		</h:outputLink>
 	
 		<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 			<thead>
@@ -37,6 +40,7 @@
 						<td class="action">
 							<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}">
 								<f:param name="prm_distance_pk" value="#{distance.id}" />
+								<f:param name="prm_action" value="2" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 							</h:outputLink>
 						</td>
