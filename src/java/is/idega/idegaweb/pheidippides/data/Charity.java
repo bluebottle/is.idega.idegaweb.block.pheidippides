@@ -25,6 +25,7 @@ public class Charity implements Serializable {
 	public static final String ENTITY_NAME = "ph_charity";
 	private static final String COLUMN_ENTRY_ID = "charity_id";
 	private static final String COLUMN_NAME = "name";
+	private static final String COLUMN_DESCRIPTION = "description";
 	private static final String COLUMN_PERSONAL_ID = "personal_id";
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -35,6 +36,9 @@ public class Charity implements Serializable {
 	
 	@Column(name = Charity.COLUMN_NAME)
 	private String name;
+
+	@Column(name = Charity.COLUMN_DESCRIPTION)
+	private String description;
 
 	@Column(name = Charity.COLUMN_PERSONAL_ID)
 	private String personalId;
@@ -74,6 +78,14 @@ public class Charity implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
