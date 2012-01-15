@@ -22,40 +22,73 @@ import java.util.List;
 public interface PheidippidesDao {
 
 	public Event getEvent(Long eventID);
+
 	public Event getEvent(String name);
+
 	public List<Event> getEvents();
-	public Event storeEvent(Long eventID, String name, String description, String localizedKey, String reportSign);
+
+	public Event storeEvent(Long eventID, String name, String description,
+			String localizedKey, String reportSign);
+
 	public boolean removeEvent(Long eventID);
 
 	public List<Participant> getParticipants(Event event, int year);
+
 	public Participant getParticipant(String uuid);
-	
+
 	public Distance getDistance(Long distanceID);
+
 	public Distance getDistance(String name);
+
 	public List<Distance> getDistances();
-	public Distance storeDistance(Long distanceID, String name, String description, String localizedKey, String reportSign);
+
+	public Distance storeDistance(Long distanceID, String name,
+			String description, String localizedKey, String reportSign);
+
 	public boolean removeDistance(Long distanceID);
 
 	public Race getRace(Long raceID);
+
 	public List<Race> getRaces(Event event, Integer year);
-	public Race storeRace(Long raceID, int year, Event event, Distance distance, int minimumAge, int maximumAge, Date openRegistration, Date closeRegistration, boolean familyDiscount, int relayLegs);
+
+	public Race storeRace(Long raceID, int year, Event event,
+			Distance distance, int minimumAge, int maximumAge,
+			Date openRegistration, Date closeRegistration,
+			boolean familyDiscount, int relayLegs);
+
 	public boolean removeRace(Long raceID);
 
 	public ShirtSize getShirtSize(Long shirtSizeID);
+
 	public List<ShirtSize> getShirtSizes();
-	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign);
+
+	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size,
+			ShirtSizeGender gender, String localizedKey, String reportSign);
+
 	public boolean removeShirtSize(Long shirtSizeID);
 
 	public RacePrice getRacePrice(Long racePriceID);
+
 	public List<RacePrice> getRacePrices(Race race);
-	public RacePrice storeRacePrice(Long racePriceID, Race race, Date validFrom, Date validTo, int price, int priceKids, int familyDiscount, int shirtPrice, Currency currency);
+
+	public RacePrice storeRacePrice(Long racePriceID, Race race,
+			Date validFrom, Date validTo, int price, int priceKids,
+			int familyDiscount, int shirtPrice, Currency currency);
+
 	public boolean removeRacePrice(Long racePriceID);
 
 	public Race increaseRaceParticipantNumber(Long raceID);
-	
+
 	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID);
-	public RegistrationHeader storeRegistrationHeader(Long registrationHeaderID, RegistrationHeaderStatus status, String registrantUUID);
-	
+
+	public RegistrationHeader storeRegistrationHeader(
+			Long registrationHeaderID, RegistrationHeaderStatus status,
+			String registrantUUID);
+
 	public Registration getRegistration(Long registrationID);
-	public Registration storeRegistration(Long registrationID, RegistrationHeader header, RegistrationStatus status, Race race, ShirtSize shirtSize, Team team, int amount, Charity charity, String paymentGroup, String nationality);
+
+	public Registration storeRegistration(Long registrationID,
+			RegistrationHeader header, RegistrationStatus status, Race race,
+			ShirtSize shirtSize, Team team, String leg, int amount,
+			Charity charity, String paymentGroup, String nationality);
 }

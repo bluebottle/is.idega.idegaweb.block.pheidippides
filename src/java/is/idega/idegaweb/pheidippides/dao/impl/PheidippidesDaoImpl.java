@@ -32,23 +32,26 @@ import com.idega.util.IWTimestamp;
 @Repository("pheidippidesDao")
 @Transactional(readOnly = true)
 @Scope(BeanDefinition.SCOPE_SINGLETON)
-public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesDao {
+public class PheidippidesDaoImpl extends GenericDaoImpl implements
+		PheidippidesDao {
 
 	/* Event methods */
 	public Event getEvent(Long eventID) {
 		return find(Event.class, eventID);
 	}
-	
+
 	public Event getEvent(String name) {
-		return getSingleResult("event.findByName", Event.class, new Param("eventName", name));
+		return getSingleResult("event.findByName", Event.class, new Param(
+				"eventName", name));
 	}
-	
+
 	public List<Event> getEvents() {
 		return getResultList("event.findAll", Event.class);
 	}
 
 	@Transactional(readOnly = false)
-	public Event storeEvent(Long eventID, String name, String description, String localizedKey, String reportSign) {
+	public Event storeEvent(Long eventID, String name, String description,
+			String localizedKey, String reportSign) {
 		Event event = eventID != null ? getEvent(eventID) : null;
 		if (event == null) {
 			event = new Event();
@@ -60,7 +63,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		event.setReportSign(reportSign);
 
 		getEntityManager().persist(event);
-		
+
 		return event;
 	}
 
@@ -71,7 +74,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			getEntityManager().remove(event);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -81,7 +84,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	}
 
 	public Distance getDistance(String name) {
-		return getSingleResult("distance.findByName", Distance.class, new Param("name", name));
+		return getSingleResult("distance.findByName", Distance.class,
+				new Param("name", name));
 	}
 
 	public List<Distance> getDistances() {
@@ -89,7 +93,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	}
 
 	@Transactional(readOnly = false)
-	public Distance storeDistance(Long distanceID, String name, String description, String localizedKey, String reportSign) {
+	public Distance storeDistance(Long distanceID, String name,
+			String description, String localizedKey, String reportSign) {
 		Distance distance = distanceID != null ? getDistance(distanceID) : null;
 		if (distance == null) {
 			distance = new Distance();
@@ -99,9 +104,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		distance.setDescription(description);
 		distance.setLocalizedKey(localizedKey);
 		distance.setReportSign(reportSign);
-		
+
 		getEntityManager().persist(distance);
-		
+
 		return distance;
 	}
 
@@ -112,7 +117,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			getEntityManager().remove(distance);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -124,20 +129,23 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	public List<Race> getRaces(Event event, Integer year) {
 		if (event == null && year == null) {
 			return getResultList("race.findAll", Race.class);
-		}
-		else if (event != null && year == null) {
-			return getResultList("race.findByEvent", Race.class, new Param("event", event));
-		}
-		else if (event == null && year != null) {
-			return getResultList("race.findByYear", Race.class, new Param("year", year));
-		}
-		else {
-			return getResultList("race.findByEventAndYear", Race.class, new Param("event", event), new Param("year", year));
+		} else if (event != null && year == null) {
+			return getResultList("race.findByEvent", Race.class, new Param(
+					"event", event));
+		} else if (event == null && year != null) {
+			return getResultList("race.findByYear", Race.class, new Param(
+					"year", year));
+		} else {
+			return getResultList("race.findByEventAndYear", Race.class,
+					new Param("event", event), new Param("year", year));
 		}
 	}
 
 	@Transactional(readOnly = false)
-	public Race storeRace(Long raceID, int year, Event event, Distance distance, int minimumAge, int maximumAge, Date openRegistrationDate, Date closeRegistrationDate, boolean familyDiscount, int relayLegs) {
+	public Race storeRace(Long raceID, int year, Event event,
+			Distance distance, int minimumAge, int maximumAge,
+			Date openRegistrationDate, Date closeRegistrationDate,
+			boolean familyDiscount, int relayLegs) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -152,9 +160,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		race.setCloseRegistrationDate(closeRegistrationDate);
 		race.setFamilyDiscount(familyDiscount);
 		race.setNumberOfRelayLegs(relayLegs);
-		
+
 		getEntityManager().persist(race);
-		
+
 		return race;
 	}
 
@@ -165,15 +173,15 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			getEntityManager().remove(race);
 			return true;
 		}
-		
+
 		return false;
-	}	
-	
+	}
+
 	/* Participant methods */
 	public List<Participant> getParticipants(Event event, int year) {
 		return null;
 	}
-	
+
 	public Participant getParticipant(String uuid) {
 		return null;
 	}
@@ -188,8 +196,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	}
 
 	@Transactional(readOnly = false)
-	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size, ShirtSizeGender gender, String localizedKey, String reportSign) {
-		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID) : null;
+	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size,
+			ShirtSizeGender gender, String localizedKey, String reportSign) {
+		ShirtSize shirtSize = shirtSizeID != null ? getShirtSize(shirtSizeID)
+				: null;
 		if (shirtSize == null) {
 			shirtSize = new ShirtSize();
 			shirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
@@ -198,9 +208,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		shirtSize.setGender(gender);
 		shirtSize.setLocalizedKey(localizedKey);
 		shirtSize.setReportSign(reportSign);
-		
+
 		getEntityManager().persist(shirtSize);
-		
+
 		return shirtSize;
 	}
 
@@ -220,12 +230,16 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	}
 
 	public List<RacePrice> getRacePrices(Race race) {
-		return getResultList("racePrice.findByRace", RacePrice.class, new Param("race", race));
+		return getResultList("racePrice.findByRace", RacePrice.class,
+				new Param("race", race));
 	}
 
 	@Transactional(readOnly = false)
-	public RacePrice storeRacePrice(Long racePriceID, Race race, Date validFrom, Date validTo, int price, int priceKids, int familyDiscount, int shirtPrice, Currency currency) {
-		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID) : null;
+	public RacePrice storeRacePrice(Long racePriceID, Race race,
+			Date validFrom, Date validTo, int price, int priceKids,
+			int familyDiscount, int shirtPrice, Currency currency) {
+		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID)
+				: null;
 		if (racePrice == null) {
 			racePrice = new RacePrice();
 			racePrice.setCreatedDate(IWTimestamp.getTimestampRightNow());
@@ -240,9 +254,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 		racePrice.setCurrency(currency);
 
 		getEntityManager().persist(racePrice);
-		
+
 		getEntityManager().persist(racePrice);
-		
+
 		return racePrice;
 	}
 
@@ -253,44 +267,48 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 			getEntityManager().remove(price);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Transactional(readOnly = false)
 	public Race increaseRaceParticipantNumber(Long raceID) {
 		Race race = getRace(raceID);
 		if (race != null) {
 			int participantNumber = race.getCurrentParticipantNumber();
 			participantNumber++;
-			if (race.getMaxParticipantNumber() == -1 || participantNumber <= race.getMaxParticipantNumber()) {
+			if (race.getMaxParticipantNumber() == -1
+					|| participantNumber <= race.getMaxParticipantNumber()) {
 				race.setCurrentParticipantNumber(participantNumber);
 				getEntityManager().persist(race);
 			}
-			
+
 			return race;
 		}
 
 		return null;
 	}
-	
+
 	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID) {
 		return find(RegistrationHeader.class, registrationHeaderID);
 	}
-	
+
 	@Transactional(readOnly = false)
-	public RegistrationHeader storeRegistrationHeader(Long registrationHeaderID, RegistrationHeaderStatus status, String registrantUUID) {
-		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID) : null;
+	public RegistrationHeader storeRegistrationHeader(
+			Long registrationHeaderID, RegistrationHeaderStatus status,
+			String registrantUUID) {
+		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID)
+				: null;
 		if (header == null) {
 			header = new RegistrationHeader();
 			header.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}
-		
+
 		header.setStatus(status);
 		header.setRegistrantUUID(registrantUUID);
-		
+
 		getEntityManager().persist(header);
-		
+
 		return header;
 	}
 
@@ -299,25 +317,31 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 	}
 
 	@Transactional(readOnly = false)
-	public Registration storeRegistration(Long registrationID, RegistrationHeader header, RegistrationStatus status, Race race, ShirtSize shirtSize, Team team, int amount, Charity charity, String paymentGroup, String nationality) {
-		Registration registration = registrationID != null ? getRegistration(registrationID) : null;
+	public Registration storeRegistration(Long registrationID,
+			RegistrationHeader header, RegistrationStatus status, Race race,
+			ShirtSize shirtSize, Team team, String leg, int amount,
+			Charity charity, String paymentGroup, String nationality) {
+		Registration registration = registrationID != null ? getRegistration(registrationID)
+				: null;
 		if (registration == null) {
 			registration = new Registration();
 			registration.setHeader(header);
 			registration.setCreatedDate(IWTimestamp.getTimestampRightNow());
 			race = increaseRaceParticipantNumber(race.getId());
 			registration.setRace(race);
-			registration.setParticipantNumber(race.getCurrentParticipantNumber());
+			registration.setParticipantNumber(race
+					.getCurrentParticipantNumber());
 		}
 
 		if (!registration.getRace().equals(race)) {
 			race = increaseRaceParticipantNumber(race.getId());
-			
+
 			Registration newReg = new Registration();
 			newReg.setHeader(registration.getHeader());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
 			newReg.setHeader(registration.getHeader());
+			newReg.setLeg(registration.getLeg());
 			newReg.setNationality(registration.getNationality());
 			newReg.setPaymentGroup(registration.getPaymentGroup());
 			newReg.setShirtSize(registration.getShirtSize());
@@ -330,40 +354,44 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements PheidippidesD
 
 			registration.setStatus(RegistrationStatus.Moved);
 			getEntityManager().persist(registration);
-			
+
 			registration = newReg;
-		} 
-		
+		}
+
 		if (status != null) {
 			registration.setStatus(status);
 		}
-		
+
 		if (shirtSize != null) {
 			registration.setShirtSize(shirtSize);
 		}
-		
+
 		if (team != null) {
 			registration.setTeam(team);
+		}
+
+		if (leg != null) {
+			registration.setLeg(leg);
 		}
 		
 		if (amount > 0) {
 			registration.setAmountPaid(amount);
 		}
-		
+
 		if (charity != null) {
 			registration.setCharity(charity);
 		}
-		
+
 		if (paymentGroup != null) {
 			registration.setPaymentGroup(paymentGroup);
 		}
-		
+
 		if (nationality != null) {
 			registration.setNationality(nationality);
 		}
-		
+
 		getEntityManager().persist(registration);
-		
+
 		return registration;
 	}
 }

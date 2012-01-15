@@ -199,7 +199,7 @@ public class PheidippidesService {
 						}				
 					}
 					
-					//Registration registration = dao.storeR
+					Registration registration = dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), null, participant.getNationality());
 					//participantHolder.get
 				}
 			}
