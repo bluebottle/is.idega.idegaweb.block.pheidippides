@@ -215,7 +215,7 @@ form.smallAdminForm fieldset div.formItem .error {
 }
 
 form.smallAdminForm fieldset div.formItem .error {
-	background: url(images/close.png) 220px center no-repeat;
+	background: url(images/close.png) right center no-repeat;
 	padding-right: 32px;
 }
 
@@ -256,4 +256,94 @@ form.smallAdminForm a.store {
 
 form.smallAdminForm a.close {
 	color: #666;
-}	
+}
+
+/* Registration form */
+form.registrationForm h1 {
+	font-size: 1.5em;
+	float: left;
+	margin-bottom: 8px;
+}
+
+form.registrationForm h2 {
+	float: right;
+}
+
+form.registrationForm p {
+	clear: both;
+}
+
+form.registrationForm ul.distances {
+	list-style: disc;
+	padding-left: 20px;
+	margin: 8px 0;
+}
+
+form.registrationForm fieldset {
+	clear: both;
+	font-size: 1.2em;
+}
+
+form.registrationForm fieldset.formSection {
+	border-top: 1px #ccc solid;
+	padding-top: 18px;
+}
+
+form.registrationForm fieldset.formSection div.formItem {
+	width: auto;
+	overflow: hidden;
+	margin-bottom: 8px;
+}
+
+form.registrationForm fieldset.formSection div.formItem label {
+	float: left;
+	font-weight: bold;
+	width: 150px;
+	line-height: 29px;
+}
+
+form.registrationForm fieldset.formSection div.formItem label.error {
+	display: none !important;
+}
+
+form.registrationForm fieldset.formSection div.formItem.required label:after {
+	content: '*';
+	color: #a00;
+	padding-left: 4px;
+}
+
+form.registrationForm fieldset.formSection div.formItem input, form.registrationForm fieldset.formSection div.formItem select {
+	border: 1px #ccc solid;
+	font-size: 1em;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 3px 4px;
+}
+
+form.registrationForm fieldset.formSection div.formItem input {
+}
+
+form.registrationForm fieldset.formSection div.formItem .error {
+	border-color: #a00;
+	color: #a00;
+	background: url(images/close.png) right center no-repeat;
+	padding-right: 32px;
+}
+
+form.registrationForm a {
+	margin-top: 12px;
+	float: left;
+	display: block;
+	border: 2px solid #666;
+	padding: 10px 16px;
+	text-decoration: none;
+	background-color: #EFEFEF;
+	font-weight: bold;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	font-size: 1.3em;
+}
+
+form.registrationForm a.next {
+	float: right;
+}

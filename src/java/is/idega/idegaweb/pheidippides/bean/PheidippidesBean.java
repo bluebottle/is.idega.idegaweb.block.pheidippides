@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,11 @@ public class PheidippidesBean {
 	public RacePrice racePrice;
 	public List<RacePrice> racePrices;
 	
+	public Locale locale;
 	public List<AdvancedProperty> locales;
-	public List<AdvancedProperty> properties;
+
 	public AdvancedProperty property;
+	public List<AdvancedProperty> properties;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -133,6 +136,14 @@ public class PheidippidesBean {
 
 	public void setRacePrices(List<RacePrice> racePrices) {
 		this.racePrices = racePrices;
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 
 	public List<AdvancedProperty> getLocales() {

@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -21,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.idega.builder.bean.AdvancedProperty;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
@@ -51,6 +51,20 @@ public class PheidippidesService {
 
 	public List<Race> getRaces(Long eventPK, int year) {
 		return dao.getRaces(dao.getEvent(eventPK), year);
+	}
+	
+	public List<Race> getOpenRaces(Long eventPK, int year) {
+		List<Race> races = getRaces(eventPK, year);
+		List<Race> openRaces = new ArrayList<Race>();
+		
+		IWTimestamp stamp = new IWTimestamp();
+		for (Race race : races) {
+			if (stamp.isBetween(new IWTimestamp(race.getOpenRegistrationDate()), new IWTimestamp(race.getCloseRegistrationDate()))) {
+				openRaces.add(race);
+			}
+		}
+		
+		return openRaces;
 	}
 
 	public Participant getParticipant(Registration registration) {
@@ -257,48 +271,21 @@ public class PheidippidesService {
 
 	}
 
-	/**
-	 * Gets all countries. This method is for example used when displaying a
-	 * dropdown menu of all countries
-	 * 
-	 * @return Collection of all countries
-	 */
-	public Collection getCountries() {
-		return getCountries(null);
-	}
-
-	/**
-	 * Gets all countries. This method is for example used when displaying a
-	 * dropdown menu of all countries
-	 * 
-	 * @return Colleciton of all countries
-	 */
-	public Collection getCountries(String[] presetCountries) {
-		List countries = null;
+	@SuppressWarnings("unchecked")
+	public List<AdvancedProperty> getCountries() {
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+		
 		try {
-			countries = new ArrayList(getCountryHome().findAll());
-
-			if (presetCountries != null) {
-				// iterate reverse through the array to get the correct order:
-				for (int i = presetCountries.length - 1; i > -1; i--) {
-					String presetCountry = presetCountries[i];
-					List tempList = new ArrayList(countries);
-					for (Iterator iter = tempList.iterator(); iter.hasNext();) {
-						Country country = (Country) iter.next();
-						String countryIsoAbbr = country.getIsoAbbreviation();
-						if (countryIsoAbbr != null
-								&& countryIsoAbbr
-										.equalsIgnoreCase(presetCountry)) {
-							countries.remove(country);
-							countries.add(0, country);
-						}
-					}
-				}
+			Collection<Country> countries = getCountryHome().findAll();
+			for (Country country : countries) {
+				properties.add(new AdvancedProperty(country.getPrimaryKey().toString(), country.getName()));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		return countries;
+		catch (FinderException fe) {
+			fe.printStackTrace();
+		}
+		
+		return properties;
 	}
 
 	private AddressHome getAddressHome() {
