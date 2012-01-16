@@ -83,12 +83,12 @@ public interface PheidippidesDao {
 
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID);
+			String registrantUUID, String paymentGroup);
 
 	public Registration getRegistration(Long registrationID);
 
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String paymentGroup, String nationality);
+			Charity charity, String nationality);
 }

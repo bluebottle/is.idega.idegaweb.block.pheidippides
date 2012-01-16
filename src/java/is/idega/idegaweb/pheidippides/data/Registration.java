@@ -40,7 +40,6 @@ public class Registration implements Serializable {
 	private static final String COLUMN_PARTICIPANT_NUMBER = "participant_number";
 	private static final String COLUMN_AMOUNT_PAID = "amount_paid";
 	private static final String COLUMN_CHARITY = "charity";
-	private static final String COLUMN_PAYMENT_GROUP = "payment_group";
 	private static final String COLUMN_STATUS = "status";
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -84,9 +83,6 @@ public class Registration implements Serializable {
 	@JoinColumn(name = Registration.COLUMN_CHARITY)
 	private Charity charity;
 
-	@Column(name = Registration.COLUMN_PAYMENT_GROUP)
-	private String paymentGroup;	
-	
 	@Column(name = Registration.COLUMN_STATUS)
 	@Enumerated(EnumType.STRING)
 	private RegistrationStatus status;
@@ -166,14 +162,6 @@ public class Registration implements Serializable {
 
 	public void setCharity(Charity charity) {
 		this.charity = charity;
-	}
-
-	public String getPaymentGroup() {
-		return paymentGroup;
-	}
-
-	public void setPaymentGroup(String paymentGroup) {
-		this.paymentGroup = paymentGroup;
 	}
 
 	public RegistrationStatus getStatus() {

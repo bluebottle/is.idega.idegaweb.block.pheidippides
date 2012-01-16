@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -46,6 +47,24 @@ import com.idega.util.text.Name;
 @Service("pheidippidesService")
 public class PheidippidesService {
 
+	private static final String VALITOR_RETURN_URL_CANCEL = "VALITOR_RETURN_URL_CANCEL";
+	private static final String VALITOR_RETURN_URL_SERVER_SIDE = "VALITOR_RETURN_URL_SERVER_SIDE";
+	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
+	private static final String VALITOR_RETURN_URL = "VALITOR_RETURN_URL";
+	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
+	private static final String VALITOR_SHOP_ID = "VALITOR_SHOP_ID";
+	private static final String ADEINSHEIMILD = "Adeinsheimild";
+	private static final String GJALDMIDILL = "Gjaldmidill";
+	private static final String LANG = "Lang";
+	private static final String VEFVERSLUN_ID = "VefverslunID";
+	private static final String VALITOR_URL = "VALITOR_URL";
+	private static final String VARA = "Vara_";
+	private static final String VARA_LYSING = "_Lysing";
+	private static final String VARA_FJOLDI = "_Fjoldi";
+	private static final String VARA_VERD = "_Verd";
+	private static final String VARA_AFSLATTUR = "_Afslattur";
+	
+	
 	@Autowired
 	private PheidippidesDao dao;
 
@@ -128,19 +147,68 @@ public class PheidippidesService {
 	}
 
 	public String storeRegistration(List<ParticipantHolder> holders,
-			boolean doPayment, String registrantUUID, boolean createUsers) {
+			boolean doPayment, String registrantUUID, boolean createUsers, Locale locale, String paymentGroup) {
+		
+		String valitorURL = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_URL, "https://testvefverslun.valitor.is/default.aspx");
+		String valitorShopID = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_SHOP_ID, "1");
+		String valitorSecurityNumber = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL, "http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLText = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
+		String valitorReturnURLServerSide = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_SERVER_SIDE, "http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLCancel = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_CANCEL, "http://skraning.marathon.is/pages/valitor");
+		
+		StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
+		
+		StringBuilder url = new StringBuilder(valitorURL);
+		url.append("?");
+		url.append(VEFVERSLUN_ID);
+		url.append("=");
+		url.append(valitorShopID);
+		url.append("&");
+		url.append(LANG);
+		url.append("=");
+		if (Locale.ENGLISH.equals(locale)) {
+			url.append("en");
+		} else {
+			url.append("is");			
+		}
+		String currency = "ISK";
+		if (createUsers) {
+			currency = "EUR";
+		}
+		url.append("&");
+		url.append(GJALDMIDILL);
+		url.append("=");
+		url.append(currency);
+		url.append("&");
+		url.append(ADEINSHEIMILD);
+		url.append("=");
+		url.append("0");
+		securityString.append("0");
+		url.append("&");
+		url.append("KaupandaUpplysingar");
+		url.append("=");
+		url.append("0");
+		
+		
 		if (holders != null && !holders.isEmpty()) {
 			RegistrationHeader header = null;
 			if (doPayment) {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.WaitingForPayment,
-						registrantUUID);
+						registrantUUID, paymentGroup);
 			} else {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
-						registrantUUID);
+						registrantUUID, paymentGroup);
 			}
 
+			url.append("&");
+			url.append("Tilvisunarnumer");
+			url.append("=");
+			url.append(header.getUuid());
+
+			
 			for (ParticipantHolder participantHolder : holders) {
 				User user = null;
 				Participant participant = participantHolder
@@ -213,13 +281,13 @@ public class PheidippidesService {
 						}				
 					}
 					
-					Registration registration = dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), null, participant.getNationality());
+					Registration registration = dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality());
 					//participantHolder.get
 				}
 			}
 		}
 
-		return "";
+		return url.toString();
 	}
 
 	public static void main(String args[]) {

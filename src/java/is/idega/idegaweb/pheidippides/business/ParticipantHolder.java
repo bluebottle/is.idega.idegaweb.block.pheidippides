@@ -14,6 +14,7 @@ public class ParticipantHolder {
 	private String leg;
 	private Team team;
 	private int amount;
+	private int discount;
 	
 	private String valitorDescription = null;
 	
@@ -64,5 +65,11 @@ public class ParticipantHolder {
 	}
 	public void setValitorDescription(String valitorDescription) {
 		this.valitorDescription = valitorDescription;
+	}
+	public int getDiscount() {
+		return discount;
+	}
+	public void setDiscount(int discount) {
+		this.discount = discount;
 	}	
 }

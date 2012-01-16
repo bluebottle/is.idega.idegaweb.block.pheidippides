@@ -40,7 +40,8 @@ public class ValitorFilter extends BaseFilter {
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		PheidippidesRegistrationSession session = (PheidippidesRegistrationSession) springContext.getBean("pheidippidesRegistrationSession");
 		
-		String url = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId());
+		
+		String url = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null);
 		session.empty();
 		
 		response.sendRedirect(url);

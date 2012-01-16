@@ -296,7 +296,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Transactional(readOnly = false)
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID) {
+			String registrantUUID, String paymentGroup) {
 		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID)
 				: null;
 		if (header == null) {
@@ -305,7 +305,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 
 		header.setStatus(status);
-		header.setRegistrantUUID(registrantUUID);
+		if (registrantUUID != null) {
+			header.setRegistrantUUID(registrantUUID);
+		}
+		
+		if (paymentGroup != null) {
+			header.setPaymentGroup(paymentGroup);
+		}
 
 		getEntityManager().persist(header);
 
@@ -320,7 +326,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String paymentGroup, String nationality) {
+			Charity charity, String nationality) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {
@@ -343,7 +349,6 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHeader(registration.getHeader());
 			newReg.setLeg(registration.getLeg());
 			newReg.setNationality(registration.getNationality());
-			newReg.setPaymentGroup(registration.getPaymentGroup());
 			newReg.setShirtSize(registration.getShirtSize());
 			newReg.setStatus(registration.getStatus());
 			newReg.setRace(race);
@@ -380,10 +385,6 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		if (charity != null) {
 			registration.setCharity(charity);
-		}
-
-		if (paymentGroup != null) {
-			registration.setPaymentGroup(paymentGroup);
 		}
 
 		if (nationality != null) {

@@ -35,6 +35,7 @@ public class RegistrationHeader implements Serializable {
 	private static final String COLUMN_UUID = "uuid";
 	private static final String COLUMN_STATUS = "status";
 	private static final String COLUMN_REGISTRANT_UUID = "registrant_uuid";
+	private static final String COLUMN_PAYMENT_GROUP = "payment_group";
 	private static final String COLUMN_CREATED_DATE = "created";
 	
 	@PrePersist
@@ -59,6 +60,10 @@ public class RegistrationHeader implements Serializable {
 	
 	@Column(name = RegistrationHeader.COLUMN_REGISTRANT_UUID)
 	private String registrantUUID;
+
+	@Column(name = RegistrationHeader.COLUMN_PAYMENT_GROUP)
+	private String paymentGroup;	
+	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
@@ -95,6 +100,14 @@ public class RegistrationHeader implements Serializable {
 
 	public void setRegistrantUUID(String registrantUUID) {
 		this.registrantUUID = registrantUUID;
+	}
+
+	public String getPaymentGroup() {
+		return paymentGroup;
+	}
+
+	public void setPaymentGroup(String paymentGroup) {
+		this.paymentGroup = paymentGroup;
 	}
 
 	public Date getCreatedDate() {
