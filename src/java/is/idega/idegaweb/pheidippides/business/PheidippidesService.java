@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.business;
 
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;

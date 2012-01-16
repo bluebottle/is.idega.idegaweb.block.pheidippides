@@ -4,15 +4,34 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 
-	<!-- GolfRegistryFilter listens for member registry updates from IWMember -->
 	<filter>
 		<filter-name>ValitorFilter</filter-name>
 		<filter-class>is.idega.idegaweb.pheidippides.servlet.filter.ValitorFilter</filter-class>
 	</filter>
 
+	<filter>
+		<filter-name>RegistrationFilter</filter-name>
+		<filter-class>is.idega.idegaweb.pheidippides.servlet.filter.RegistrationFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>MyPageFilter</filter-name>
+		<filter-class>is.idega.idegaweb.pheidippides.servlet.filter.MyPageFilter</filter-class>
+	</filter>
+
 	<filter-mapping>
 		<filter-name>ValitorFilter</filter-name>
-		<url-pattern>/registration/valitor/</url-pattern>
+		<url-pattern>/valitor/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>RegistrationFilter</filter-name>
+		<url-pattern>/registration/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>MyPageFilter</filter-name>
+		<url-pattern>/mypage/*</url-pattern>
 	</filter-mapping>
 
 </web-app>
