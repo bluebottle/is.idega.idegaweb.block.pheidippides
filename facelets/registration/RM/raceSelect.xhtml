@@ -1,0 +1,44 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="3" />
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 3" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_race_help')]}" /></div>
+
+		<fieldset class="formSection">
+			<div class="formItem required">
+				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
+				<c:selectOne styleClass="required" name="prm_race_pk">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
+					<ui:repeat value="#{pheidippidesBean.races}" var="race">
+						<c:selectOption name="#{race.distance.name}" content="#{race.id}" selected="#{race.id eq param['prm_race_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem required">
+				<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['tee_shirt']}" /></label>
+				<c:selectOne styleClass="" name="prm_shirt_size">
+					<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
+						<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq param['prm_shirt_size']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+		</fieldset>
+		
+		<fieldset class="submit">
+			<a href="#" class="back" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="next" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>

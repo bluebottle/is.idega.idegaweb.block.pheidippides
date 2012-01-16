@@ -15,6 +15,7 @@ public class ParticipantHolder {
 	private Team team;
 	private int amount;
 	private int discount;
+	private boolean acceptsWaiver;
 	
 	private String valitorDescription = null;
 	
@@ -71,5 +72,11 @@ public class ParticipantHolder {
 	}
 	public void setDiscount(int discount) {
 		this.discount = discount;
+	}
+	public boolean isAcceptsWaiver() {
+		return acceptsWaiver;
+	}
+	public void setAcceptsWaiver(boolean acceptsWaiver) {
+		this.acceptsWaiver = acceptsWaiver;
 	}	
 }

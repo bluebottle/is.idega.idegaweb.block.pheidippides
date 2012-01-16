@@ -7,10 +7,18 @@
             <param name="managedBeanName" value="pheidippidesService" />
             <param name="class" value="is.idega.idegaweb.pheidippides.business.PheidippidesService" />
             <include method="getRaces" />
+            <include method="getShirts" />
+            <include method="isValidPersonalID" />
         </create>
         
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race" />
+		<convert converter="enum" match="is.idega.idegaweb.pheidippides.business.ShirtSizeGender" />
+		<convert converter="enum" match="is.idega.idegaweb.pheidippides.business.ShirtSizeSizes" />
+
 		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Distance" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Participant" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.ShirtSize" />
 	</allow>
 </dwr>

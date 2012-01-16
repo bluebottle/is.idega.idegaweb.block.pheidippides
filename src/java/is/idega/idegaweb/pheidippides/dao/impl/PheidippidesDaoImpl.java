@@ -12,6 +12,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
@@ -394,5 +395,75 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		getEntityManager().persist(registration);
 
 		return registration;
+	}
+
+	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK) {
+		return find(RaceShirtSize.class, raceShirtSizePK);
+	}
+
+	public List<RaceShirtSize> getRaceShirtSizes(Race race) {
+		return getResultList("raceShirtSize.findAllByRace", RaceShirtSize.class, new Param("race", race));
+	}
+
+	@Transactional(readOnly = false)
+	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race, ShirtSize shirtSize, String localizedKey, int orderNumber) {
+		RaceShirtSize raceShirtSize = raceShirtSizePK != null ? getRaceShirtSize(raceShirtSizePK) : null;
+		if (raceShirtSize == null) {
+			raceShirtSize = new RaceShirtSize();
+			raceShirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		raceShirtSize.setRace(race);
+		raceShirtSize.setSize(shirtSize);
+		raceShirtSize.setLocalizedKey(localizedKey);
+		raceShirtSize.setOrderNumber(orderNumber);
+		
+		getEntityManager().persist(raceShirtSize);
+		
+		return raceShirtSize;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeRaceShirtSize(Long raceShirtSizePK) {
+		RaceShirtSize raceShirtSize = getRaceShirtSize(raceShirtSizePK);
+		if (raceShirtSize != null){
+			getEntityManager().remove(raceShirtSize);
+			return true;
+		}
+		
+		return false;
+	}
+
+	public Charity getCharity(Long charityPK) {
+		return find(Charity.class, charityPK);
+	}
+
+	public List<Charity> getCharities() {
+		return getResultList("charity.findAll", Charity.class);
+	}
+
+	@Transactional(readOnly = false)
+	public Charity storeCharity(Long charityPK, String name, String personalID, String description) {
+		Charity charity = charityPK != null ? getCharity(charityPK) : null;
+		if (charity == null) {
+			charity = new Charity();
+			charity.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		charity.setName(name);
+		charity.setPersonalId(personalID);
+		charity.setDescription(description);
+		
+		getEntityManager().persist(charity);
+		
+		return charity;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeCharity(Long charityPK) {
+		Charity charity = getCharity(charityPK);
+		if (charity != null) {
+			getEntityManager().remove(charityPK);
+			return true;
+		}
+		return false;
 	}
 }

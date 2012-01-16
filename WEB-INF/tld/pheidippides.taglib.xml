@@ -35,4 +35,10 @@
 		<function-signature>java.lang.String formatDate(java.util.Date)</function-signature>
 	</function>
 
+	<function>
+		<function-name>getFullName</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.lang.String getFullName(java.lang.String, java.lang.String, java.lang.String, java.util.Locale)</function-signature>
+	</function>
+
 </facelet-taglib>

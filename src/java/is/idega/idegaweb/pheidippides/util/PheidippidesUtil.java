@@ -7,12 +7,14 @@ import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.idega.util.IWTimestamp;
+import com.idega.util.text.Name;
 
 @Service("pheidippidesUtil")
 @Scope(BeanDefinition.SCOPE_SINGLETON)
@@ -39,5 +41,9 @@ public class PheidippidesUtil {
 			return new IWTimestamp(date).getDateString("d.M.yyyy H:mm");
 		}
 		return "";
+	}
+	
+	public static String getFullName(String firstName, String middleName, String lastName, Locale locale) {
+		return new Name(firstName, middleName, lastName).getName(locale, true);
 	}
 }

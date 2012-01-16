@@ -15,14 +15,13 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_localization']}" /></legend>
 			
-			<div class="formItem">
-				<label for="prm_value"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['value']}" /></label>
-				<textarea name="prm_value">#{pheidippidesBean.property.value}</textarea>
-			</div>
+			<textarea class="tinymce" name="prm_value">#{pheidippidesBean.property.value}</textarea>
 		</fieldset>
 		
-		<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
-		<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
 	</form>
 </ui:component>
 </html>

@@ -45,7 +45,7 @@
 					<ui:repeat value="#{pheidippidesBean.properties}" var="string">
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{string.id}" /></td>
-							<td><h:outputText value="#{string.value}" /></td>
+							<td><h:outputText escape="false" value="#{string.value}" /></td>
 							<td class="action lastColumn">
 								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem">
 									<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />

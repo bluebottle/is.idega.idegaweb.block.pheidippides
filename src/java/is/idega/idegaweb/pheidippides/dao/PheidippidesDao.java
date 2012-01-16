@@ -11,6 +11,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
@@ -91,4 +92,20 @@ public interface PheidippidesDao {
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
 			Charity charity, String nationality);
+	
+	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
+	
+	public List<RaceShirtSize> getRaceShirtSizes(Race race);
+	
+	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race, ShirtSize shirtSize, String localizedKey, int orderNumber);
+	
+	public boolean removeRaceShirtSize(Long raceShirtSizePK);
+	
+	public Charity getCharity(Long charityPK);
+	
+	public List<Charity> getCharities();
+	
+	public Charity storeCharity(Long charityPK, String name, String personalID, String description);
+	
+	public boolean removeCharity(Long charityPK);
 }
