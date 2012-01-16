@@ -21,7 +21,8 @@
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 					</tr>
 				</thead>
 			
@@ -30,7 +31,8 @@
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{p:getFullName(holder.participant.firstName, holder.participant.middleName, holder.participant.lastName, pheidippidesBean.locale)}" /></td>
 							<td><h:outputText value="#{holder.race.distance.name}" /></td>
-							<td class="lastColumn"><h:outputText value="#{holder.shirtSize.size} - #{holder.shirtSize.gender}" /></td>
+							<td><h:outputText value="#{holder.shirtSize.size} - #{holder.shirtSize.gender}" /></td>
+							<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
 						</tr>
 					</ui:repeat>
 					
@@ -38,7 +40,8 @@
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{p:getFullName(current.participant.firstName, current.participant.middleName, current.participant.lastName, pheidippidesBean.locale)}" /></td>
 						<td><h:outputText value="#{current.race.distance.name}" /></td>
-						<td class="lastColumn"><h:outputText value="#{current.shirtSize.size} - #{current.shirtSize.gender}" /></td>
+						<td><h:outputText value="#{current.shirtSize.size} - #{current.shirtSize.gender}" /></td>
+						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -46,7 +49,7 @@
 		
 		<fieldset class="submit">
 			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
+			<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
 			<a href="/registration/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
 			<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
 		</fieldset>

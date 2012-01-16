@@ -37,8 +37,9 @@ public class PheidippidesRegistrationSession {
 	}
 
 	public void empty() {
-		this.registrationWithPersonalId = true;
+		this.registrationWithPersonalId = false;
 		this.holders = null;
+		this.currentParticipant = null;
 	}
 
 	public String getRegistrantUUID() {

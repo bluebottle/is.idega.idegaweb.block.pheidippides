@@ -7,6 +7,8 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -330,7 +332,11 @@ public class PheidippidesService {
 					url.append(counter);
 					url.append(VARA_LYSING);
 					url.append("=");
-					url.append(participantHolder.getValitorDescription());
+					try {
+						url.append(URLEncoder.encode(participantHolder.getValitorDescription(), "UTF-8"));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 					url.append("&");
 					url.append(VARA);
 					url.append(counter);
@@ -455,7 +461,13 @@ public class PheidippidesService {
 	}
 
 	public void calculatePrices(ParticipantHolder current, List<ParticipantHolder> holder) {
-		
+		current.setAmount(100);
+		if (holder != null) {
+			for (ParticipantHolder participantHolder : holder) {
+				participantHolder.setAmount(100);
+				participantHolder.setDiscount(100);
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

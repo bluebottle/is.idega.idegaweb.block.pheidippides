@@ -347,8 +347,24 @@ form.registrationForm fieldset.formSection div.formItem .error {
 	padding-right: 32px;
 }
 
+form.registrationForm fieldset.formSection table {
+	font-size: 0.85em;
+}
+
+form.registrationForm fieldset.formSection thead tr th {
+	text-align: left;
+	padding: 2px 3px;
+}
+
+form.registrationForm fieldset.formSection tbody tr td {
+	padding: 2px 3px;
+}
+
+form.registrationForm fieldset.submit {
+	margin-top: 24px;
+}
+
 form.registrationForm fieldset.submit a {
-	margin-top: 12px;
 	float: left;
 	display: block;
 	border: 2px solid #666;
@@ -359,9 +375,10 @@ form.registrationForm fieldset.submit a {
 	border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
-	font-size: 1.3em;
+	font-size: 1em;
 }
 
-form.registrationForm fieldset.submit a.next {
+form.registrationForm fieldset.submit a.next, form.registrationForm fieldset.submit a.valitor {
 	float: right;
+	margin-left: 4px;
 }

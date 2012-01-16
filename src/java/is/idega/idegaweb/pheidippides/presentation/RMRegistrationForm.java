@@ -36,6 +36,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_WAIVER = 6;
 	private static final int ACTION_OVERVIEW = 7;
 	private static final int ACTION_RECEIPT = 8;
+	private static final int ACTION_REGISTER_ANOTHER = 9;
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
@@ -156,11 +157,22 @@ public class RMRegistrationForm extends IWBaseComponent {
 					
 				case ACTION_OVERVIEW:
 					getSession().getCurrentParticipant().setAcceptsWaiver(true);
+					getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getSession().getCurrentParticipant().getRace().getDistance().getName());
+					getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders());
 					showOverview(iwc, bean);
 					break;
 					
 				case ACTION_RECEIPT:
+					getSession().addParticipantHolder(getSession().getCurrentParticipant());
+					getSession().setCurrentParticipant(null);
+					getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null);
 					showReceipt(iwc, bean);
+					break;
+
+				case ACTION_REGISTER_ANOTHER:
+					getSession().addParticipantHolder(getSession().getCurrentParticipant());
+					getSession().setCurrentParticipant(null);
+					showPersonSelect(iwc, bean);
 					break;
 			}
 		}
