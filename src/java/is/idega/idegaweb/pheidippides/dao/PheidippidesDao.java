@@ -91,7 +91,7 @@ public interface PheidippidesDao {
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String nationality);
+			Charity charity, String nationality, String userUUID, int discount);
 	
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
 	

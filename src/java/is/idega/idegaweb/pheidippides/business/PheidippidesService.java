@@ -322,7 +322,7 @@ public class PheidippidesService {
 						}				
 					}
 					
-					dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality());
+					dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality(), participant.getUuid(), participantHolder.getDiscount());
 					
 					securityString.append("1");
 					securityString.append(participantHolder.getAmount());
