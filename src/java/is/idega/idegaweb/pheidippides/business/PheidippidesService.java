@@ -47,6 +47,13 @@ import com.idega.util.text.Name;
 @Service("pheidippidesService")
 public class PheidippidesService {
 
+	private static final String RAFRAEN_UNDIRSKRIFT = "RafraenUndirskrift";
+	private static final String SLOD_NOTANDI_HAETTIR_VID = "SlodNotandiHaettirVid";
+	private static final String SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE = "SlodTokstAdGjaldfaeraServerSide";
+	private static final String SLOD_TOKST_AD_GJALDFAERA_TEXTI = "SlodTokstAdGjaldfaeraTexti";
+	private static final String SLOD_TOKST_AD_GJALDFAERA = "SlodTokstAdGjaldfaera";
+	private static final String TILVISUNARNUMER = "Tilvisunarnumer";
+	private static final String KAUPANDA_UPPLYSINGAR = "KaupandaUpplysingar";
 	private static final String VALITOR_RETURN_URL_CANCEL = "VALITOR_RETURN_URL_CANCEL";
 	private static final String VALITOR_RETURN_URL_SERVER_SIDE = "VALITOR_RETURN_URL_SERVER_SIDE";
 	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
@@ -185,12 +192,7 @@ public class PheidippidesService {
 		url.append("=");
 		url.append("0");
 		securityString.append("0");
-		url.append("&");
-		url.append("KaupandaUpplysingar");
-		url.append("=");
-		url.append("0");
-		
-		
+				
 		if (holders != null && !holders.isEmpty()) {
 			RegistrationHeader header = null;
 			if (doPayment) {
@@ -202,13 +204,8 @@ public class PheidippidesService {
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
 						registrantUUID, paymentGroup);
 			}
-
-			url.append("&");
-			url.append("Tilvisunarnumer");
-			url.append("=");
-			url.append(header.getUuid());
-
 			
+			int counter = 1;
 			for (ParticipantHolder participantHolder : holders) {
 				User user = null;
 				Participant participant = participantHolder
@@ -281,10 +278,73 @@ public class PheidippidesService {
 						}				
 					}
 					
-					Registration registration = dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality());
-					//participantHolder.get
+					dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality());
+					
+					securityString.append("1");
+					securityString.append(participantHolder.getAmount());
+					securityString.append(participantHolder.getDiscount());
+					
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_LYSING);
+					url.append("=");
+					url.append(participantHolder.getValitorDescription());
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_FJOLDI);
+					url.append("=");
+					url.append("1");
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_VERD);
+					url.append("=");
+					url.append(participantHolder.getAmount());
+					url.append("&");
+					url.append(VARA);
+					url.append(counter++);
+					url.append(VARA_AFSLATTUR);
+					url.append("=");
+					url.append(participantHolder.getDiscount());
 				}
 			}
+
+			securityString.append(valitorShopID);
+			securityString.append(header.getUuid());
+			securityString.append(valitorReturnURL);
+			securityString.append(valitorReturnURLServerSide);
+			securityString.append(currency);
+			
+			url.append("&");
+			url.append(KAUPANDA_UPPLYSINGAR);
+			url.append("=");
+			url.append("0");
+			url.append("&");
+			url.append(TILVISUNARNUMER);
+			url.append("=");
+			url.append(header.getUuid());
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA);
+			url.append("=");
+			url.append(valitorReturnURL);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI);
+			url.append("=");
+			url.append(valitorReturnURLText);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE);
+			url.append("=");
+			url.append(valitorReturnURLServerSide);
+			url.append("&");
+			url.append(SLOD_NOTANDI_HAETTIR_VID);
+			url.append("=");
+			url.append(valitorReturnURLCancel);
+			url.append("&");
+			url.append(RAFRAEN_UNDIRSKRIFT);
+			url.append("=");
+			url.append(createValitorSecurityString(securityString.toString()));
 		}
 
 		return url.toString();
