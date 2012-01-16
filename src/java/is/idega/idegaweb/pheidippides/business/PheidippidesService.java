@@ -74,29 +74,30 @@ public class PheidippidesService {
 	private static final String VARA_FJOLDI = "_Fjoldi";
 	private static final String VARA_VERD = "_Verd";
 	private static final String VARA_AFSLATTUR = "_Afslattur";
-	
-	
+
 	@Autowired
 	private PheidippidesDao dao;
 
 	public List<Race> getRaces(Long eventPK, int year) {
 		return dao.getRaces(dao.getEvent(eventPK), year);
 	}
-	
+
 	public List<Race> getOpenRaces(Long eventPK, int year) {
 		List<Race> races = getRaces(eventPK, year);
 		List<Race> openRaces = new ArrayList<Race>();
-		
+
 		IWTimestamp stamp = new IWTimestamp();
 		for (Race race : races) {
-			if (stamp.isBetween(new IWTimestamp(race.getOpenRegistrationDate()), new IWTimestamp(race.getCloseRegistrationDate()))) {
+			if (stamp.isBetween(
+					new IWTimestamp(race.getOpenRegistrationDate()),
+					new IWTimestamp(race.getCloseRegistrationDate()))) {
 				openRaces.add(race);
 			}
 		}
-		
+
 		return openRaces;
 	}
-	
+
 	public List<RaceShirtSize> getShirts(Long racePK) {
 		if (racePK != null) {
 			return dao.getRaceShirtSizes(dao.getRace(racePK));
@@ -119,7 +120,7 @@ public class PheidippidesService {
 
 		return p;
 	}
-	
+
 	public Participant getParticipant(String personalID) {
 		Participant p = null;
 
@@ -133,14 +134,14 @@ public class PheidippidesService {
 
 		return p;
 	}
-	
+
 	public boolean isValidPersonalID(String personalID) {
 		if (personalID != null && personalID.length() == 10) {
 			return getParticipant(personalID) != null;
 		}
 		return true;
 	}
-	
+
 	private Participant getParticipant(User user) {
 		Participant p = new Participant();
 		p.setFirstName(user.getFirstName());
@@ -153,7 +154,7 @@ public class PheidippidesService {
 		if (user.getGender() != null) {
 			p.setGender(user.getGender().getName());
 		}
-	
+
 		try {
 			Address address = user.getUsersMainAddress();
 			if (address != null) {
@@ -166,7 +167,7 @@ public class PheidippidesService {
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-	
+
 		try {
 			Phone homePhone = user.getUsersHomePhone();
 			if (homePhone != null) {
@@ -175,7 +176,7 @@ public class PheidippidesService {
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-	
+
 		try {
 			Phone mobilePhone = user.getUsersMobilePhone();
 			if (mobilePhone != null) {
@@ -184,7 +185,7 @@ public class PheidippidesService {
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-	
+
 		try {
 			Email email = user.getUsersEmail();
 			if (email != null) {
@@ -193,23 +194,46 @@ public class PheidippidesService {
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-	
+
 		return p;
 	}
 
 	public String storeRegistration(List<ParticipantHolder> holders,
-			boolean doPayment, String registrantUUID, boolean createUsers, Locale locale, String paymentGroup) {
-		
-		String valitorURL = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_URL, "https://testvefverslun.valitor.is/default.aspx");
-		String valitorShopID = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_SHOP_ID, "1");
-		String valitorSecurityNumber = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_SECURITY_NUMBER, "12345");
-		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL, "http://skraning.marathon.is/pages/valitor");
-		String valitorReturnURLText = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
-		String valitorReturnURLServerSide = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_SERVER_SIDE, "http://skraning.marathon.is/pages/valitor");
-		String valitorReturnURLCancel = IWMainApplication.getDefaultIWApplicationContext().getSystemProperties().getProperty(VALITOR_RETURN_URL_CANCEL, "http://skraning.marathon.is/pages/valitor");
-		
+			boolean doPayment, String registrantUUID, boolean createUsers,
+			Locale locale, String paymentGroup) {
+
+		String valitorURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getSystemProperties()
+				.getProperty(VALITOR_URL,
+						"https://testvefverslun.valitor.is/default.aspx");
+		String valitorShopID = IWMainApplication
+				.getDefaultIWApplicationContext().getSystemProperties()
+				.getProperty(VALITOR_SHOP_ID, "1");
+		String valitorSecurityNumber = IWMainApplication
+				.getDefaultIWApplicationContext().getSystemProperties()
+				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorReturnURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getSystemProperties()
+				.getProperty(VALITOR_RETURN_URL,
+						"http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLText = IWMainApplication
+				.getDefaultIWApplicationContext().getSystemProperties()
+				.getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
+		String valitorReturnURLServerSide = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getSystemProperties()
+				.getProperty(VALITOR_RETURN_URL_SERVER_SIDE,
+						"http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLCancel = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getSystemProperties()
+				.getProperty(VALITOR_RETURN_URL_CANCEL,
+						"http://skraning.marathon.is/pages/valitor");
+
 		StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
-		
+
 		StringBuilder url = new StringBuilder(valitorURL);
 		url.append("?");
 		url.append(VEFVERSLUN_ID);
@@ -221,7 +245,7 @@ public class PheidippidesService {
 		if (Locale.ENGLISH.equals(locale)) {
 			url.append("en");
 		} else {
-			url.append("is");			
+			url.append("is");
 		}
 		String currency = "ISK";
 		if (createUsers) {
@@ -236,7 +260,7 @@ public class PheidippidesService {
 		url.append("=");
 		url.append("0");
 		securityString.append("0");
-				
+
 		if (holders != null && !holders.isEmpty()) {
 			RegistrationHeader header = null;
 			if (doPayment) {
@@ -248,12 +272,11 @@ public class PheidippidesService {
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
 						registrantUUID, paymentGroup);
 			}
-			
+
 			int counter = 1;
 			for (ParticipantHolder participantHolder : holders) {
 				User user = null;
-				Participant participant = participantHolder
-						.getParticipant();
+				Participant participant = participantHolder.getParticipant();
 				if (createUsers) {
 					if (participant.getUuid() != null) {
 						try {
@@ -290,51 +313,70 @@ public class PheidippidesService {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						user = null; //Something got fucked up
+						user = null; // Something got fucked up
 					}
 				} else {
 					try {
-						user = getUserBusiness().getUserByUniqueId(participant.getUuid());
+						user = getUserBusiness().getUserByUniqueId(
+								participant.getUuid());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				
+
 				if (user != null) {
-					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
+					if (participant.getPhoneMobile() != null
+							&& !"".equals(participant.getPhoneMobile())) {
 						try {
-							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());
+							getUserBusiness().updateUserMobilePhone(user,
+									participant.getPhoneMobile());
 						} catch (Exception e) {
-						}				
-					}
-					
-					if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-						try {
-							getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
-						} catch (Exception e) {
-						}				
+						}
 					}
 
-					if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
+					if (participant.getPhoneHome() != null
+							&& !"".equals(participant.getPhoneHome())) {
 						try {
-							getUserBusiness().updateUserMail(user, participant.getEmail());
+							getUserBusiness().updateUserHomePhone(user,
+									participant.getPhoneHome());
 						} catch (Exception e) {
-						}				
+						}
 					}
-					
-					dao.storeRegistration(null, header, RegistrationStatus.Unconfirmed, participantHolder.getRace(), participantHolder.getShirtSize(), participantHolder.getTeam(), participantHolder.getLeg(), participantHolder.getAmount(), participantHolder.getCharity(), participant.getNationality(), participant.getUuid(), participantHolder.getDiscount());
-					
+
+					if (participant.getEmail() != null
+							&& !"".equals(participant.getEmail())) {
+						try {
+							getUserBusiness().updateUserMail(user,
+									participant.getEmail());
+						} catch (Exception e) {
+						}
+					}
+
+					dao.storeRegistration(null, header,
+							RegistrationStatus.Unconfirmed,
+							participantHolder.getRace(),
+							participantHolder.getShirtSize(),
+							participantHolder.getTeam(),
+							participantHolder.getLeg(),
+							participantHolder.getAmount(),
+							participantHolder.getCharity(),
+							participant.getNationality(),
+							participant.getUuid(),
+							participantHolder.getDiscount());
+
 					securityString.append("1");
 					securityString.append(participantHolder.getAmount());
 					securityString.append(participantHolder.getDiscount());
-					
+
 					url.append("&");
 					url.append(VARA);
 					url.append(counter);
 					url.append(VARA_LYSING);
 					url.append("=");
 					try {
-						url.append(URLEncoder.encode(participantHolder.getValitorDescription(), "UTF-8"));
+						url.append(URLEncoder.encode(
+								participantHolder.getValitorDescription(),
+								"UTF-8"));
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
@@ -364,7 +406,7 @@ public class PheidippidesService {
 			securityString.append(valitorReturnURL);
 			securityString.append(valitorReturnURLServerSide);
 			securityString.append(currency);
-			
+
 			url.append("&");
 			url.append(KAUPANDA_UPPLYSINGAR);
 			url.append("=");
@@ -400,18 +442,28 @@ public class PheidippidesService {
 
 	public static void main(String args[]) {
 		PheidippidesService service = new PheidippidesService();
-		String uuid = service.createValitorSecurityString("12345011999018536035056191428820http://www.mbl.ishttp://www.visir.isISK");
-		uuid = service.createValitorSecurityString("2ef8ec654c0215000110000207456http://www.minsida.is/takkfyrirhttp://www.minsida.is/sale.aspx?c=82 82&ref=232ISK");
-		
-		StringBuilder builder = new StringBuilder("https://testvefverslun.valitor.is/default.aspx");
-		builder.append("?VefverslunID=1").append("&Lang=is").append("&Gjaldmidill=ISK").append("&Adeinsheimild=0").append("&Vara_1_Lysing=Palli");
-		builder.append("&Vara_1_Fjoldi=1").append("&Vara_1_Verd=1999").append("&Vara_1_Afslattur=0").append("&KaupandaUpplysingar=0").append("&Tilvisunarnumer=8536035056191428820");
-		builder.append("&SlodTokstAdGjaldfaera=http://www.mbl.is").append("&SlodTokstAdGjaldfaeraTexti=Eureka").append("&SlodTokstAdGjaldfaeraServerSide=http://www.visir.is");
-		builder.append("&SlodNotandiHaettirVid=http://www.bleikt.is").append("&RafraenUndirskrift=").append(uuid);
-		
+		String uuid = service
+				.createValitorSecurityString("12345011999018536035056191428820http://www.mbl.ishttp://www.visir.isISK");
+		uuid = service
+				.createValitorSecurityString("2ef8ec654c0215000110000207456http://www.minsida.is/takkfyrirhttp://www.minsida.is/sale.aspx?c=82 82&ref=232ISK");
+
+		StringBuilder builder = new StringBuilder(
+				"https://testvefverslun.valitor.is/default.aspx");
+		builder.append("?VefverslunID=1").append("&Lang=is")
+				.append("&Gjaldmidill=ISK").append("&Adeinsheimild=0")
+				.append("&Vara_1_Lysing=Palli");
+		builder.append("&Vara_1_Fjoldi=1").append("&Vara_1_Verd=1999")
+				.append("&Vara_1_Afslattur=0").append("&KaupandaUpplysingar=0")
+				.append("&Tilvisunarnumer=8536035056191428820");
+		builder.append("&SlodTokstAdGjaldfaera=http://www.mbl.is")
+				.append("&SlodTokstAdGjaldfaeraTexti=Eureka")
+				.append("&SlodTokstAdGjaldfaeraServerSide=http://www.visir.is");
+		builder.append("&SlodNotandiHaettirVid=http://www.bleikt.is")
+				.append("&RafraenUndirskrift=").append(uuid);
+
 		System.out.println("url = " + builder.toString());
 	}
-	
+
 	public User saveUser(Name fullName, IWTimestamp dateOfBirth, Gender gender,
 			String address, String postal, String city, Country country) {
 		User user = null;
@@ -461,7 +513,8 @@ public class PheidippidesService {
 
 	}
 
-	public void calculatePrices(ParticipantHolder current, List<ParticipantHolder> holder) {
+	public void calculatePrices(ParticipantHolder current,
+			List<ParticipantHolder> holder) {
 		current.setAmount(100);
 		if (holder != null) {
 			for (ParticipantHolder participantHolder : holder) {
@@ -470,21 +523,21 @@ public class PheidippidesService {
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<AdvancedProperty> getCountries() {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-		
+
 		try {
 			Collection<Country> countries = getCountryHome().findAll();
 			for (Country country : countries) {
-				properties.add(new AdvancedProperty(country.getPrimaryKey().toString(), country.getName()));
+				properties.add(new AdvancedProperty(country.getPrimaryKey()
+						.toString(), country.getName()));
 			}
-		}
-		catch (FinderException fe) {
+		} catch (FinderException fe) {
 			fe.printStackTrace();
 		}
-		
+
 		return properties;
 	}
 
