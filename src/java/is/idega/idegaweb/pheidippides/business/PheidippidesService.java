@@ -222,6 +222,20 @@ public class PheidippidesService {
 		return "";
 	}
 
+	public static void main(String args[]) {
+		PheidippidesService service = new PheidippidesService();
+		String uuid = service.createValitorSecurityString("12345011999018536035056191428820http://www.mbl.ishttp://www.visir.isISK");
+		uuid = service.createValitorSecurityString("2ef8ec654c0215000110000207456http://www.minsida.is/takkfyrirhttp://www.minsida.is/sale.aspx?c=82 82&ref=232ISK");
+		
+		StringBuilder builder = new StringBuilder("https://testvefverslun.valitor.is/default.aspx");
+		builder.append("?VefverslunID=1").append("&Lang=is").append("&Gjaldmidill=ISK").append("&Adeinsheimild=0").append("&Vara_1_Lysing=Palli");
+		builder.append("&Vara_1_Fjoldi=1").append("&Vara_1_Verd=1999").append("&Vara_1_Afslattur=0").append("&KaupandaUpplysingar=0").append("&Tilvisunarnumer=8536035056191428820");
+		builder.append("&SlodTokstAdGjaldfaera=http://www.mbl.is").append("&SlodTokstAdGjaldfaeraTexti=Eureka").append("&SlodTokstAdGjaldfaeraServerSide=http://www.visir.is");
+		builder.append("&SlodNotandiHaettirVid=http://www.bleikt.is").append("&RafraenUndirskrift=").append(uuid);
+		
+		System.out.println("url = " + builder.toString());
+	}
+	
 	public User saveUser(Name fullName, IWTimestamp dateOfBirth, Gender gender,
 			String address, String postal, String city, Country country) {
 		User user = null;
@@ -271,6 +285,10 @@ public class PheidippidesService {
 
 	}
 
+	public void calculatePrices(ParticipantHolder current, List<ParticipantHolder> holder) {
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<AdvancedProperty> getCountries() {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
@@ -340,7 +358,11 @@ public class PheidippidesService {
 
 			StringBuffer hexString = new StringBuffer();
 			for (int i = 0; i < messageDigest.length; i++) {
-				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+				String tmp = Integer.toHexString(0xFF & messageDigest[i]);
+				if (tmp.length() < 2) {
+					tmp = "0" + tmp;
+				}
+				hexString.append(tmp);
 			}
 
 			return hexString.toString();

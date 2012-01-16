@@ -31,6 +31,10 @@ public class ValitorFilter extends BaseFilter {
 		HttpServletRequest request = (HttpServletRequest) srequest;
 		HttpServletResponse response = (HttpServletResponse) sresponse;
 		
+		//String action = request.getParameter(PARAMETER_ACTION);
+		
+		
+		
 		IWContext iwc = new IWContext(request, response, request.getSession().getServletContext());
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
