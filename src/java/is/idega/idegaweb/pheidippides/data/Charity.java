@@ -37,7 +37,7 @@ public class Charity implements Serializable {
 	@Column(name = Charity.COLUMN_NAME)
 	private String name;
 
-	@Column(name = Charity.COLUMN_DESCRIPTION)
+	@Column(name = Charity.COLUMN_DESCRIPTION, length = 4000)
 	private String description;
 
 	@Column(name = Charity.COLUMN_PERSONAL_ID)

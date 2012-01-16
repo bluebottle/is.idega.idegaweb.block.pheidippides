@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.business;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 
@@ -85,64 +86,104 @@ public class PheidippidesService {
 		
 		return openRaces;
 	}
+	
+	public List<RaceShirtSize> getShirts(Long racePK) {
+		if (racePK != null) {
+			return dao.getRaceShirtSizes(dao.getRace(racePK));
+		}
+		return new ArrayList<RaceShirtSize>();
+	}
 
 	public Participant getParticipant(Registration registration) {
-		Participant p = new Participant();
-
-		User user = null;
+		Participant p = null;
 
 		try {
-			user = getUserBusiness().getUserByUniqueId(
+			User user = getUserBusiness().getUserByUniqueId(
 					registration.getUserUUID());
-			p.setFirstName(user.getFirstName());
-			p.setMiddleName(user.getMiddleName());
-			p.setLastName(user.getLastName());
-			p.setFullName(user.getName());
-			p.setPersonalId(user.getPersonalID());
-			p.setDateOfBirth(user.getDateOfBirth());
-			p.setUuid(registration.getUserUUID());
+			p = getParticipant(user);
 			p.setNationality(registration.getNationality());
-			p.setGender(user.getGender().getName());
 		} catch (RemoteException e) {
 			e.printStackTrace();
-
-			return null;
 		} catch (FinderException e) {
-			return null;
 		}
 
+		return p;
+	}
+	
+	public Participant getParticipant(String personalID) {
+		Participant p = null;
+
+		try {
+			User user = getUserBusiness().getUser(personalID);
+			p = getParticipant(user);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+		}
+
+		return p;
+	}
+	
+	public boolean isValidPersonalID(String personalID) {
+		if (personalID != null && personalID.length() == 10) {
+			return getParticipant(personalID) != null;
+		}
+		return true;
+	}
+	
+	private Participant getParticipant(User user) {
+		Participant p = new Participant();
+		p.setFirstName(user.getFirstName());
+		p.setMiddleName(user.getMiddleName());
+		p.setLastName(user.getLastName());
+		p.setFullName(user.getName());
+		p.setPersonalId(user.getPersonalID());
+		p.setDateOfBirth(user.getDateOfBirth());
+		p.setUuid(user.getUniqueId());
+		if (user.getGender() != null) {
+			p.setGender(user.getGender().getName());
+		}
+	
 		try {
 			Address address = user.getUsersMainAddress();
-			p.setAddress(address.getStreetAddress());
-			p.setPostalAddress(address.getPostalAddress());
-			p.setPostalCode(address.getPostalCode().getPostalCode());
-			p.setCity(address.getCity());
-			p.setCountry(address.getCountry().getName());
+			if (address != null) {
+				p.setAddress(address.getStreetAddress());
+				p.setPostalAddress(address.getPostalAddress());
+				p.setPostalCode(address.getPostalCode().getPostalCode());
+				p.setCity(address.getCity());
+				p.setCountry(address.getCountry().getName());
+			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-
+	
 		try {
 			Phone homePhone = user.getUsersHomePhone();
-			p.setPhoneHome(homePhone.getNumber());
+			if (homePhone != null) {
+				p.setPhoneHome(homePhone.getNumber());
+			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-
+	
 		try {
 			Phone mobilePhone = user.getUsersMobilePhone();
-			p.setPhoneMobile(mobilePhone.getNumber());
+			if (mobilePhone != null) {
+				p.setPhoneMobile(mobilePhone.getNumber());
+			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-
+	
 		try {
 			Email email = user.getUsersEmail();
-			p.setEmail(email.getEmailAddress());
+			if (email != null) {
+				p.setEmail(email.getEmailAddress());
+			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-
+	
 		return p;
 	}
 

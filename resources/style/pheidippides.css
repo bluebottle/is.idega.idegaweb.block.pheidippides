@@ -93,8 +93,8 @@ table.adminTable tbody tr td.discount_true span {
 }
 
 table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem {
-	display: inline;
-	padding-left: 16px;
+	display: block;
+	width: 16px;
 	height: 16px;
 	background: url(images/edit.png);
 }
@@ -205,6 +205,12 @@ form.smallAdminForm fieldset div.formItem input, form.smallAdminForm fieldset di
 	float: left;
 }
 
+form.smallAdminForm fieldset textarea.tinymce {
+	border: 1px #ccc solid;
+	width: 640px;
+	height: 480px;
+}
+
 form.smallAdminForm fieldset div.formItem select {
 	padding: 0;
 }
@@ -235,7 +241,7 @@ form.smallAdminForm fieldset div.formItem.checkbox label {
 	width: auto;
 }
 
-form.smallAdminForm a {
+form.smallAdminForm div.submit a {
 	margin-top: 12px;
 	float: left;
 	display: block;
@@ -250,11 +256,11 @@ form.smallAdminForm a {
 	font-size: 1.3em;
 }
 
-form.smallAdminForm a.store {
+form.smallAdminForm div.submit a.store {
 	float: right;
 }
 
-form.smallAdminForm a.close {
+form.smallAdminForm div.submit a.close {
 	color: #666;
 }
 
@@ -269,8 +275,13 @@ form.registrationForm h2 {
 	float: right;
 }
 
-form.registrationForm p {
+form.registrationForm div.helpText {
 	clear: both;
+	padding-top: 8px;
+}
+
+form.registrationForm div.helpText p {
+	margin-bottom: 12px;
 }
 
 form.registrationForm ul.distances {
@@ -319,7 +330,14 @@ form.registrationForm fieldset.formSection div.formItem input, form.registration
 	padding: 3px 4px;
 }
 
-form.registrationForm fieldset.formSection div.formItem input {
+form.registrationForm fieldset.formSection div.formItem.checkbox input {
+	float: left;
+	margin-top: 8px;
+	margin-right: 8px;
+}
+
+form.registrationForm fieldset.formSection div.formItem.checkbox label {
+	width: auto;
 }
 
 form.registrationForm fieldset.formSection div.formItem .error {
@@ -329,7 +347,7 @@ form.registrationForm fieldset.formSection div.formItem .error {
 	padding-right: 32px;
 }
 
-form.registrationForm a {
+form.registrationForm fieldset.submit a {
 	margin-top: 12px;
 	float: left;
 	display: block;
@@ -344,6 +362,6 @@ form.registrationForm a {
 	font-size: 1.3em;
 }
 
-form.registrationForm a.next {
+form.registrationForm fieldset.submit a.next {
 	float: right;
 }

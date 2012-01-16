@@ -1,9 +1,11 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.List;
@@ -33,8 +35,12 @@ public class PheidippidesBean {
 	public ShirtSize shirtSize;
 	public List<ShirtSize> shirtSizes;
 	
+	public List<RaceShirtSize> raceShirtSizes;
+	
 	public RacePrice racePrice;
 	public List<RacePrice> racePrices;
+	
+	public List<Charity> charities;
 	
 	public Locale locale;
 	public List<AdvancedProperty> locales;
@@ -122,6 +128,14 @@ public class PheidippidesBean {
 		this.shirtSizes = shirtSizes;
 	}
 
+	public List<RaceShirtSize> getRaceShirtSizes() {
+		return raceShirtSizes;
+	}
+
+	public void setRaceShirtSizes(List<RaceShirtSize> raceShirtSizes) {
+		this.raceShirtSizes = raceShirtSizes;
+	}
+
 	public RacePrice getRacePrice() {
 		return racePrice;
 	}
@@ -136,6 +150,14 @@ public class PheidippidesBean {
 
 	public void setRacePrices(List<RacePrice> racePrices) {
 		this.racePrices = racePrices;
+	}
+
+	public List<Charity> getCharities() {
+		return charities;
+	}
+
+	public void setCharities(List<Charity> charities) {
+		this.charities = charities;
 	}
 
 	public Locale getLocale() {
