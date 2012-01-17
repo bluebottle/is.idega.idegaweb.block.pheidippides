@@ -530,12 +530,12 @@ public class PheidippidesService {
 	}
 
 	public void calculatePrices(ParticipantHolder current,
-			List<ParticipantHolder> holder) {
+			List<ParticipantHolder> holder, boolean isRegistrationWithPersonalID) {
 		int childCount = 0;
 		if (holder != null && !holder.isEmpty()) {
 			for (ParticipantHolder participantHolder : holder) {
 				Race race = participantHolder.getRace();
-				RacePrice price = dao.getCurrentRacePrice(race);
+				RacePrice price = dao.getCurrentRacePrice(race, isRegistrationWithPersonalID ? Currency.ISK : Currency.EUR);
 				Participant participant = participantHolder.getParticipant();
 
 				Age age = new Age(participant.getDateOfBirth());
@@ -564,7 +564,7 @@ public class PheidippidesService {
 		
 		if (current != null) {
 			Race race = current.getRace();
-			RacePrice price = dao.getCurrentRacePrice(race);
+			RacePrice price = dao.getCurrentRacePrice(race, isRegistrationWithPersonalID ? Currency.ISK : Currency.EUR);
 			Participant participant = current.getParticipant();
 
 			Age age = new Age(participant.getDateOfBirth());

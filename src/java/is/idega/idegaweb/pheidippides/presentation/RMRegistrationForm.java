@@ -227,7 +227,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 				case ACTION_OVERVIEW:
 					getSession().getCurrentParticipant().setAcceptsWaiver(true);
 					getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getSession().getCurrentParticipant().getRace().getDistance().getName());
-					getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders());
+					getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
 					showOverview(iwc, bean);
 					break;
 					

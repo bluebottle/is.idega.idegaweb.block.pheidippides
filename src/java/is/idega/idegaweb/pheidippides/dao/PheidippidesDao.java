@@ -72,7 +72,7 @@ public interface PheidippidesDao {
 
 	public List<RacePrice> getRacePrices(Race race);
 	
-	public RacePrice getCurrentRacePrice(Race race);
+	public RacePrice getCurrentRacePrice(Race race, Currency currency);
 
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
