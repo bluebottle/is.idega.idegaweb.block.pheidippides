@@ -3,13 +3,16 @@ package is.idega.idegaweb.pheidippides.bean;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,7 @@ public class PheidippidesBean {
 	public ShirtSize shirtSize;
 	public List<ShirtSize> shirtSizes;
 	
+	public RaceShirtSize raceShirtSize;
 	public List<RaceShirtSize> raceShirtSizes;
 	
 	public RacePrice racePrice;
@@ -42,6 +46,10 @@ public class PheidippidesBean {
 	
 	public Charity charity;
 	public List<Charity> charities;
+	
+	public Registration registration;
+	public List<Registration> registrations;
+	public Map<Registration, Participant> participantsMap;
 	
 	public Locale locale;
 	public List<AdvancedProperty> locales;
@@ -129,6 +137,14 @@ public class PheidippidesBean {
 		this.shirtSizes = shirtSizes;
 	}
 
+	public RaceShirtSize getRaceShirtSize() {
+		return raceShirtSize;
+	}
+
+	public void setRaceShirtSize(RaceShirtSize raceShirtSize) {
+		this.raceShirtSize = raceShirtSize;
+	}
+
 	public List<RaceShirtSize> getRaceShirtSizes() {
 		return raceShirtSizes;
 	}
@@ -167,6 +183,30 @@ public class PheidippidesBean {
 
 	public void setCharities(List<Charity> charities) {
 		this.charities = charities;
+	}
+
+	public Registration getRegistration() {
+		return registration;
+	}
+
+	public void setRegistration(Registration registration) {
+		this.registration = registration;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
+	public Map<Registration, Participant> getParticipantsMap() {
+		return participantsMap;
+	}
+
+	public void setParticipantsMap(Map<Registration, Participant> participantsMap) {
+		this.participantsMap = participantsMap;
 	}
 
 	public Locale getLocale() {

@@ -1,0 +1,52 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="raceShirtEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_race_shirt_pk" value="#{param['prm_race_shirt_pk']}" />
+		<input type="hidden" name="prm_race_pk" value="#{param['prm_race_pk']}" />
+		<input type="hidden" name="prm_event_pk" value="#{param['prm_event_pk']}" />
+		<input type="hidden" name="prm_year" value="#{param['prm_year']}" />
+		
+		<fieldset>
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_shirt']}" /></legend>
+			
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<span><h:outputText value="#{pheidippidesBean.event.name}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<span><h:outputText value="#{param['prm_year']}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
+				<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(pheidippidesBean.race.distance.localizedKey, pheidippidesBean.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></span>
+			</div>
+			<div class="formItem required">
+				<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></label>
+				<c:selectOne name="prm_shirt_size">
+					<ui:repeat value="#{pheidippidesBean.shirtSizes}" var="shirtSize">
+						<c:selectOption name="#{shirtSize.size} - #{shirtSize.gender}" content="#{shirtSize.id}" selected="#{pheidippidesBean.raceShirtSize.size.id eq shirtSize.id}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_order_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['order_number']}" /></label>
+				<input type="text" class="digits" name="prm_order_number" value="#{pheidippidesBean.raceShirtSize.orderNumber}" />
+			</div>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

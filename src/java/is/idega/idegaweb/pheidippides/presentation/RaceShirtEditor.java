@@ -2,7 +2,6 @@ package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
-import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
@@ -40,15 +38,10 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
-	private static final String PARAMETER_RACE_PRICE_PK = "prm_race_price_pk";
+	private static final String PARAMETER_RACE_SHIRT_PK = "prm_race_shirt_pk";
 	
-	private static final String PARAMETER_VALID_FROM = "prm_valid_from";
-	private static final String PARAMETER_VALID_TO = "prm_valid_to";
-	private static final String PARAMETER_PRICE = "prm_price";
-	private static final String PARAMETER_PRICE_KIDS = "prm_price_kids";
-	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
-	private static final String PARAMETER_SHIRT_PRICE = "prm_shirt_price";
-	private static final String PARAMETER_CURRENCY = "prm_currency";
+	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
+	private static final String PARAMETER_ORDER_NUMBER = "prm_order_number";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -85,7 +78,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5/datepicker/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
 
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/racePriceEditor.js"));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceShirtEditor.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.core.css"));
@@ -102,6 +95,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RaceShirtEditor.class, new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceShirtEditor.class));
+		bean.setLocale(iwc.getCurrentLocale());
 		
 		/* Events */
 		bean.setEvents(getDao().getEvents());
@@ -116,28 +110,33 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
+
+		/* Shirt sizes */ 
+		bean.setShirtSizes(getDao().getShirtSizes());
 		
-		/* Race price */
-		bean.setRacePrice(iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? getDao().getRacePrice(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK))) : null);
+		/* Race shirt */
+		bean.setRaceShirtSize(iwc.isParameterSet(PARAMETER_RACE_SHIRT_PK) ? getDao().getRaceShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_RACE_SHIRT_PK))) : null);
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/view.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("raceShirtEditor/view.xhtml"));
 				break;
 
 			case ACTION_EDIT:
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/editor.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("raceShirtEditor/editor.xhtml"));
 				break;
 				
 			case ACTION_DELETE:
-				getDao().removeRacePrice(bean.getRacePrice().getId());
-				bean.setRace(null);
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/view.xhtml"));
+				if (bean.getRaceShirtSize() != null) {
+					getDao().removeRaceShirtSize(bean.getRaceShirtSize().getId());
+					bean.setRaceShirtSize(null);
+				}
+				facelet.setFaceletURI(iwb.getFaceletURI("raceShirtEditor/view.xhtml"));
 				break;
 		}
 		if (bean.getRace() != null) {
-			bean.setRacePrices(getDao().getRacePrices(bean.getRace()));
+			bean.setRaceShirtSizes(getDao().getRaceShirtSizes(bean.getRace()));
 		}
 
 		add(facelet);
@@ -185,16 +184,12 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 	}
 
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		getDao().storeRacePrice(
-			iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK)) : null,
+		getDao().storeRaceShirtSize(
+			iwc.isParameterSet(PARAMETER_RACE_SHIRT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_SHIRT_PK)) : null,
 			getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))),
-			iwc.isParameterSet(PARAMETER_VALID_FROM) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_FROM), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_VALID_TO) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_TO), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE)) : 0,
-			iwc.isParameterSet(PARAMETER_PRICE_KIDS) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE_KIDS)) : 0,
-			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT) ? Integer.parseInt(iwc.getParameter(PARAMETER_FAMILY_DISCOUNT)) : 0,
-			iwc.isParameterSet(PARAMETER_SHIRT_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_SHIRT_PRICE)) : 0,
-			Currency.valueOf(iwc.getParameter(PARAMETER_CURRENCY))
+			getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))),
+			null,
+			iwc.isParameterSet(PARAMETER_ORDER_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_ORDER_NUMBER)) : 0
 		);
 		
 		return true;

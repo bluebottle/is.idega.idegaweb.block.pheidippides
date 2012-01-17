@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = BankReference.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "bankReference.findByHeader", query = "select b from BankReference b where b.registrationHeader = :header")
+	@NamedQuery(name = "bankReference.findByHeader", query = "select b from BankReference b where b.header = :header")
 })
 public class BankReference implements Serializable {
 	private static final long serialVersionUID = -8698331644705962525L;

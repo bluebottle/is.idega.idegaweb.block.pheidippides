@@ -27,7 +27,7 @@
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
-				<span><h:outputText value="#{pheidippidesBean.race.distance.name}" /></span>
+				<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(pheidippidesBean.race.distance.localizedKey, pheidippidesBean.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></span>
 			</div>
 			<div class="formItem required">
 				<label for="prm_valid_from"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></label>

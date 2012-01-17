@@ -11,15 +11,15 @@
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
 	
 		<fieldset class="navigation">
-			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_price_editor']}" /></legend>
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_shirt_editor']}" /></legend>
 			
 			<ui:fragment rendered="#{not empty param['prm_event_pk'] and not empty param['prm_year'] and not empty param['prm_race_pk']}">
-				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_price']}" styleClass="addItem">
+				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_shirt']}" styleClass="addItem">
 					<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 					<f:param name="prm_year" value="#{param['prm_year']}" />
 					<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 					<f:param name="prm_action" value="2" />
-					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race_price']}" /></span>
+					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race_shirt']}" /></span>
 				</h:outputLink>
 			</ui:fragment>
 	
@@ -52,20 +52,15 @@
 			</div>
 		</fieldset>
 
-		<ui:fragment rendered="#{not empty pheidippidesBean.racePrices}">
+		<ui:fragment rendered="#{not empty pheidippidesBean.raceShirtSizes}">
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 					<thead>
 						<tr>
 							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['price']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['price_kids']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_amount']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_price']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['currency']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['order_number']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
 							<th class="action"></th>
 							<th class="action lastColumn"></th>
@@ -73,21 +68,16 @@
 					</thead>
 					
 					<tbody>
-						<ui:repeat value="#{pheidippidesBean.racePrices}" var="racePrice">
+						<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
 							<tr>
-								<td class="firstColumn"><h:outputText value="#{racePrice.id}" /></td>
+								<td class="firstColumn"><h:outputText value="#{raceShirt.id}" /></td>
 								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(pheidippidesBean.race.distance.localizedKey, pheidippidesBean.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-								<td><h:outputText value="#{racePrice.validFrom}"><f:convertDateTime type="both" pattern="d.M.yyyy"/></h:outputText></td>
-								<td><h:outputText value="#{racePrice.validTo}"><f:convertDateTime type="both" pattern="d.M.yyyy"/></h:outputText></td>
-								<td><h:outputText value="#{racePrice.price}" /></td>
-								<td><h:outputText value="#{racePrice.priceKids}" /></td>
-								<td><h:outputText value="#{racePrice.familyDiscount}" /></td>
-								<td><h:outputText value="#{racePrice.shirtPrice}" /></td>
-								<td><h:outputText value="#{racePrice.currency}" /></td>
-								<td><h:outputText value="#{racePrice.createdDate}"><f:convertDateTime type="date" pattern="d.M.yyyy"/></h:outputText></td>
+								<td><h:outputText value="#{raceShirt.size.size} - #{raceShirt.size.gender}"><f:convertDateTime type="both" pattern="d.M.yyyy"/></h:outputText></td>
+								<td><h:outputText value="#{raceShirt.orderNumber}" /></td>
+								<td><h:outputText value="#{raceShirt.createdDate}"><f:convertDateTime type="date" pattern="d.M.yyyy"/></h:outputText></td>
 								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race_price']}" styleClass="editItem">
-										<f:param name="prm_race_price_pk" value="#{racePrice.id}" />
+									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race_shirt']}" styleClass="editItem">
+										<f:param name="prm_race_shirt_pk" value="#{raceShirt.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
@@ -96,8 +86,8 @@
 									</h:outputLink>
 								</td>
 								<td class="action lastColumn">
-									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_race_price_delete']}">
-										<f:param name="prm_race_price_pk" value="#{racePrice.id}" />
+									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_race_shirt_delete']}">
+										<f:param name="prm_race_shirt_pk" value="#{raceShirt.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />

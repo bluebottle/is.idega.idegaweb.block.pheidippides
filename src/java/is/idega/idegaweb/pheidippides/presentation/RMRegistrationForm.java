@@ -234,7 +234,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 				case ACTION_RECEIPT:
 					getSession().addParticipantHolder(getSession().getCurrentParticipant());
 					getSession().setCurrentParticipant(null);
-					getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null);
+					getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
 					showReceipt(iwc, bean);
 					break;
 

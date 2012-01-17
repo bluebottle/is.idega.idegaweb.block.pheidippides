@@ -23,7 +23,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = Registration.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "registration.findAll", query = "select r from Registration r")
+	@NamedQuery(name = "registration.findAll", query = "select r from Registration r"),
+	@NamedQuery(name = "registration.findByRace", query = "select r from Registration r where r.race = :race"),
+	@NamedQuery(name = "registration.findByRaceAndStatus", query = "select r from Registration r where r.race = :race and r.status = :status")
 })
 public class Registration implements Serializable {
 	private static final long serialVersionUID = -1263634010602700985L;

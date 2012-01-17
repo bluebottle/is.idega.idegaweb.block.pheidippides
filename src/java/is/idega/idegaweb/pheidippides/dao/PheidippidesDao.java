@@ -91,6 +91,8 @@ public interface PheidippidesDao {
 
 	public Registration getRegistration(Long registrationID);
 
+	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
+	
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,

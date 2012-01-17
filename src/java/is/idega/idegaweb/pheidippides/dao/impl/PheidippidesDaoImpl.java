@@ -328,6 +328,15 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Registration getRegistration(Long registrationID) {
 		return find(Registration.class, registrationID);
 	}
+	
+	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
+		if (status != null) {
+			return getResultList("registration.findByRaceAndStatus", Registration.class, new Param("race", race), new Param("status", status));
+		}
+		else {
+			return getResultList("registration.findByRace", Registration.class, new Param("race", race));
+		}
+	}
 
 	@Transactional(readOnly = false)
 	public Registration storeRegistration(Long registrationID,

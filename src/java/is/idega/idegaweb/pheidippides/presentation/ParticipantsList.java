@@ -2,7 +2,8 @@ package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import java.util.ArrayList;
@@ -24,13 +25,11 @@ import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
-import com.idega.presentation.ui.handlers.IWDatePickerHandler;
-import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class RacePriceEditor extends IWBaseComponent implements IWPageEventListener {
+public class ParticipantsList extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
@@ -40,15 +39,9 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
-	private static final String PARAMETER_RACE_PRICE_PK = "prm_race_price_pk";
-	
-	private static final String PARAMETER_VALID_FROM = "prm_valid_from";
-	private static final String PARAMETER_VALID_TO = "prm_valid_to";
-	private static final String PARAMETER_PRICE = "prm_price";
-	private static final String PARAMETER_PRICE_KIDS = "prm_price_kids";
-	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
-	private static final String PARAMETER_SHIRT_PRICE = "prm_shirt_price";
-	private static final String PARAMETER_CURRENCY = "prm_currency";
+
+	@Autowired
+	private PheidippidesService service;
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -73,24 +66,8 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
-		
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
-
-		List<String> scripts = new ArrayList<String>();
-		JQuery jQuery = getJQuery();
-		scripts.add(jQuery.getBundleURIToJQueryLib());
-		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5", "ui.datepicker.js"));
-		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5/datepicker/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
-		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
-
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/racePriceEditor.js"));
-
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.core.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.theme.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.datepicker.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
@@ -100,10 +77,10 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		}
 		
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RacePriceEditor.class, new ArrayList<AdvancedProperty>()));
-		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RacePriceEditor.class));
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
 		bean.setLocale(iwc.getCurrentLocale());
-		
+
 		/* Events */
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
@@ -117,31 +94,36 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
-		
-		/* Race price */
-		bean.setRacePrice(iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? getDao().getRacePrice(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK))) : null);
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI(getFaceletURI()));
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/view.xhtml"));
+				showView(iwc, bean);
 				break;
 
 			case ACTION_EDIT:
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/editor.xhtml"));
+				showEdit(iwc, bean, facelet);
 				break;
 				
 			case ACTION_DELETE:
-				getDao().removeRacePrice(bean.getRacePrice().getId());
-				bean.setRacePrice(null);
-				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/view.xhtml"));
+				handleDelete(iwc, bean);
 				break;
 		}
 		if (bean.getRace() != null) {
-			bean.setRacePrices(getDao().getRacePrices(bean.getRace()));
+			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
+			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 		}
 
 		add(facelet);
+	}
+	
+	protected RegistrationStatus getStatus() {
+		return RegistrationStatus.OK;
+	}
+	
+	protected String getFaceletURI() {
+		return "participantsList/view.xhtml";
 	}
 
 	private int parseAction(IWContext iwc) {
@@ -153,6 +135,25 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
 	
+	protected void showView(IWContext iwc, PheidippidesBean bean) {
+		/* Does nothing... */
+	}
+	
+	protected void showEdit(IWContext iwc, PheidippidesBean bean, FaceletComponent facelet) {
+		/* Does nothing... */
+	}
+	
+	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
+	}
+	
+	private PheidippidesService getService() {
+		if (service == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return service;
+	}
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
@@ -184,20 +185,8 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		
 		return jQuery;
 	}
-
+	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		getDao().storeRacePrice(
-			iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK)) : null,
-			getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))),
-			iwc.isParameterSet(PARAMETER_VALID_FROM) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_FROM), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_VALID_TO) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_TO), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE)) : 0,
-			iwc.isParameterSet(PARAMETER_PRICE_KIDS) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE_KIDS)) : 0,
-			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT) ? Integer.parseInt(iwc.getParameter(PARAMETER_FAMILY_DISCOUNT)) : 0,
-			iwc.isParameterSet(PARAMETER_SHIRT_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_SHIRT_PRICE)) : 0,
-			Currency.valueOf(iwc.getParameter(PARAMETER_CURRENCY))
-		);
-		
 		return true;
 	}
 }

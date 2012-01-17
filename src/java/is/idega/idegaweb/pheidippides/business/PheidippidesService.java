@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.business;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
@@ -7,6 +8,7 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,8 +17,10 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -41,12 +45,14 @@ import com.idega.core.location.data.PostalCodeHome;
 import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
+import com.idega.idegaweb.IWResourceBundle;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
 import com.idega.user.data.GenderHome;
 import com.idega.user.data.User;
 import com.idega.util.Age;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.text.Name;
 
 @Scope("singleton")
@@ -150,6 +156,19 @@ public class PheidippidesService {
 
 		return p;
 	}
+	
+	public Map<Registration, Participant> getParticantMap(List<Registration> registrations) {
+		Map<Registration, Participant> participants = new HashMap<Registration, Participant>();
+		
+		for (Registration registration : registrations) {
+			Participant participant = getParticipant(registration);
+			if (participant != null) {
+				participants.put(registration, participant);
+			}
+		}
+		
+		return participants;
+	}
 
 	public boolean isValidPersonalID(String personalID) {
 		if (personalID != null && personalID.length() == 10) {
@@ -216,7 +235,7 @@ public class PheidippidesService {
 
 	public String storeRegistration(List<ParticipantHolder> holders,
 			boolean doPayment, String registrantUUID, boolean createUsers,
-			Locale locale, String paymentGroup) {
+			Locale locale, String paymentGroup, boolean isBankTransfer) {
 
 		String valitorURL = IWMainApplication
 				.getDefaultIWApplicationContext()
@@ -287,6 +306,9 @@ public class PheidippidesService {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
 						registrantUUID, paymentGroup);
+			}
+			if (isBankTransfer) {
+				dao.storeBankReference(header);
 			}
 
 			int counter = 1;
@@ -494,7 +516,7 @@ public class PheidippidesService {
 				a.setStreetName(address);
 				a.setCity(city);
 				a.setCountry(country);
-				a.setAddressType(getAddressHome().getAddressType2());
+				a.setAddressType(getAddressHome().getAddressType1());
 				a.store();
 
 				Integer countryID = (Integer) country.getPrimaryKey();
@@ -682,5 +704,10 @@ public class PheidippidesService {
 		}
 
 		return null;
+	}
+	
+	public String getLocalizedRaceName(Race race, String language) {
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
+		return PheidippidesUtil.escapeXML(iwrb.getLocalizedString(race.getEvent().getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName()));
 	}
 }

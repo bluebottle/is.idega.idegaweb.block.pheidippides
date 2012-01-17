@@ -3,10 +3,10 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
-            10: { 
+            5: { 
                 sorter: false 
             },
-            11: { 
+            6: { 
                 sorter: false 
             } 
         } 
@@ -43,10 +43,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.addItem, a.editItem').fancybox({
 		'onComplete': function() {
-			jQuery('#racePriceEditorForm').validate();
-			jQuery('input.datePicker').datepicker({
-				regional: ['is']
-			});
+			jQuery('#raceShirtEditorForm').validate();
 		}
 	});
 	
@@ -64,7 +61,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		var form = jQuery('form#racePriceEditorForm');
+		var form = jQuery('form#raceShirtEditorForm');
 		if (form.valid()) {
 			form.submit();
 			jQuery.fancybox.close();
