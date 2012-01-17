@@ -9,6 +9,7 @@
             <include method="getRaces" />
             <include method="getShirts" />
             <include method="isValidPersonalID" />
+            <include method="getParticipant" />
         </create>
         
 		<convert converter="enum" match="is.idega.idegaweb.pheidippides.business.ShirtSizeGender" />

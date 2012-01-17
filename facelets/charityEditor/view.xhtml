@@ -1,0 +1,60 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<fieldset class="formSection noNavigation">
+		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['charity_editor']}" /></legend>
+
+		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_charity']}" styleClass="addItem">
+			<f:param name="prm_action" value="2" />
+			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_charity']}" /></span>
+		</h:outputLink>
+	
+		<ui:fragment rendered="#{not empty pheidippidesBean.charities}">
+			<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
+						<th class="action"></th>
+						<th class="action lastColumn"></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<ui:repeat value="#{pheidippidesBean.charities}" var="charity">
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{charity.id}" /></td>
+							<td><h:outputText value="#{charity.name}" /></td>
+							<td><h:outputText value="#{charity.personalId}" /></td>
+							<td><h:outputText escape="false" value="#{charity.description}" /></td>
+							<td><h:outputText value="#{charity.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td class="action">
+								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_charity']}">
+									<f:param name="prm_charity_pk" value="#{charity.id}" />
+									<f:param name="prm_action" value="2" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+								</h:outputLink>
+							</td>
+							<td class="action lastColumn">
+								<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_charity_delete']}">
+									<f:param name="prm_charity_pk" value="#{charity.id}" />
+									<f:param name="prm_action" value="3" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
+								</h:outputLink>
+							</td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</ui:fragment>
+	</fieldset>
+</ui:component>
+</html>

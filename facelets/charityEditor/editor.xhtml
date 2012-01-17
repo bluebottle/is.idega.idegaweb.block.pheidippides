@@ -1,0 +1,36 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="smallAdminForm" id="charityEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_charity_pk" value="#{pheidippidesBean.charity.id}" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_charity']}" /></legend>
+			
+			<div class="formItem required">
+				<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+				<input type="text" class="required" name="prm_name" value="#{pheidippidesBean.charity.name}" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
+				<input type="text" class="required" name="prm_personal_id" value="#{pheidippidesBean.charity.personalId}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_description"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
+				<textarea name="prm_description"><h:outputText value="#{pheidippidesBean.charity.description}" /></textarea>
+			</div>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

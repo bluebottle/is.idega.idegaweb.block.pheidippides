@@ -29,7 +29,7 @@ public interface PheidippidesDao {
 	public List<Event> getEvents();
 
 	public Event storeEvent(Long eventID, String name, String description,
-			String localizedKey, String reportSign);
+			String localizedKey, String reportSign, List<Charity> charities);
 
 	public boolean removeEvent(Long eventID);
 

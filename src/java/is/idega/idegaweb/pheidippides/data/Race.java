@@ -37,6 +37,7 @@ public class Race implements Serializable {
 	private static final String COLUMN_OPEN_REGISTRATION = "open_registration";
 	private static final String COLUMN_CLOSE_REGISTRATION = "close_registration";
 	private static final String COLUMN_HAS_FAMILY_DISCOUNT = "family_discount";
+	private static final String COLUMN_HAS_CHARITY = "charity_run";
 	private static final String COLUMN_NUMBER_OF_RELAY_LEGS = "relay_legs";
 	private static final String COLUMN_MIN_AGE = "min_age";
 	private static final String COLUMN_MAX_AGE = "max_age";
@@ -71,6 +72,9 @@ public class Race implements Serializable {
 
 	@Column(name = Race.COLUMN_HAS_FAMILY_DISCOUNT)
 	private boolean familyDiscount;
+
+	@Column(name = Race.COLUMN_HAS_CHARITY)
+	private boolean charityRun;
 
 	@Column(name = Race.COLUMN_NUMBER_OF_RELAY_LEGS)
 	private int numberOfRelayLegs;
@@ -146,6 +150,14 @@ public class Race implements Serializable {
 
 	public void setFamilyDiscount(boolean familyDiscount) {
 		this.familyDiscount = familyDiscount;
+	}
+
+	public boolean isCharityRun() {
+		return charityRun;
+	}
+
+	public void setCharityRun(boolean charityRun) {
+		this.charityRun = charityRun;
 	}
 
 	public Date getCreatedDate() {

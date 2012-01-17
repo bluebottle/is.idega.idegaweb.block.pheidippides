@@ -52,4 +52,9 @@ public class PheidippidesUtil {
 		string = StringEscapeUtils.unescapeHtml(string.replaceAll("\\<[^>]*>", ""));
 		return string;
 	}
+	
+	public static boolean contains(List<?> objects, Object object) {
+		boolean contains = objects.contains(object);
+		return contains;
+	}
 }

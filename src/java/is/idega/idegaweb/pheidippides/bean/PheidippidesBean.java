@@ -40,6 +40,7 @@ public class PheidippidesBean {
 	public RacePrice racePrice;
 	public List<RacePrice> racePrices;
 	
+	public Charity charity;
 	public List<Charity> charities;
 	
 	public Locale locale;
@@ -150,6 +151,14 @@ public class PheidippidesBean {
 
 	public void setRacePrices(List<RacePrice> racePrices) {
 		this.racePrices = racePrices;
+	}
+
+	public Charity getCharity() {
+		return charity;
+	}
+
+	public void setCharity(Charity charity) {
+		this.charity = charity;
 	}
 
 	public List<Charity> getCharities() {

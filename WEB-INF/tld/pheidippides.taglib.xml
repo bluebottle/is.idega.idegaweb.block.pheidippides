@@ -47,4 +47,10 @@
 		<function-signature>java.lang.String escapeXML(java.lang.String)</function-signature>
 	</function>
 
+	<function>
+		<function-name>contains</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>boolean contains(java.util.List, java.lang.Object)</function-signature>
+	</function>
+
 </facelet-taglib>

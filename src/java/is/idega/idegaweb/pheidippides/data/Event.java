@@ -2,12 +2,15 @@ package is.idega.idegaweb.pheidippides.data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -51,6 +54,9 @@ public class Event implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Event.COLUMN_CREATED_DATE)
 	private Date createdDate;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<Charity> charities;
 
 	public Long getId() {
 		return id;
@@ -99,5 +105,13 @@ public class Event implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public List<Charity> getCharities() {
+		return charities;
+	}
+
+	public void setCharities(List<Charity> charities) {
+		this.charities = charities;
 	}
 }

@@ -48,6 +48,14 @@
 				<label for="prm_close_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></label>
 				<input class="datePicker required" name="prm_close_registration" value="#{p:formatDate(pheidippidesBean.race.closeRegistrationDate)}" />
 			</div>
+			<div class="formItem required">
+				<label for="prm_current_participant_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['current_participant_number']}" /></label>
+				<input type="text" class="required digits" name="prm_current_participant_number" value="#{pheidippidesBean.race.currentParticipantNumber}" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_maximum_participant_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['maximum_participant_number']}" /></label>
+				<input type="text" class="required digits" name="prm_maximum_participant_number" value="#{pheidippidesBean.race.maxParticipantNumber}" />
+			</div>
 			<div class="formItem">
 				<label for="prm_relay_legs"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_legs']}" /></label>
 				<input type="text" class="digits" name="prm_relay_legs" value="#{pheidippidesBean.race.numberOfRelayLegs}" />
@@ -55,6 +63,10 @@
 			<div class="formItem checkbox">
 				<c:checkBox name="prm_family_discount" content="true" checked="#{pheidippidesBean.race.familyDiscount}" />
 				<label for="prm_family_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['family_discount']}" /></label>
+			</div>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_charity_run" content="true" checked="#{pheidippidesBean.race.charityRun}" />
+				<label for="prm_charity_run"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['charity_run']}" /></label>
 			</div>
 		</fieldset>
 		

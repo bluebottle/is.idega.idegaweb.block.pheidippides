@@ -203,6 +203,7 @@ form.smallAdminForm fieldset div.formItem input, form.smallAdminForm fieldset di
 	border: 1px #ccc solid;
 	padding: 2px 4px;
 	float: left;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 form.smallAdminForm fieldset textarea.tinymce {
@@ -213,6 +214,11 @@ form.smallAdminForm fieldset textarea.tinymce {
 
 form.smallAdminForm fieldset div.formItem select {
 	padding: 0;
+}
+
+form.smallAdminForm fieldset.formSection div.formItem select.multiple {
+	font-size: 0.75em;
+	height: 150px;
 }
 
 form.smallAdminForm fieldset div.formItem .error {
@@ -354,6 +360,14 @@ form.registrationForm fieldset.formSection div.formItem .error {
 
 form.registrationForm fieldset.formSection table {
 	font-size: 0.85em;
+}
+
+form.registrationForm fieldset.formSection table tr.relayPartner {
+	font-size: 0.9em;
+}
+
+form.registrationForm fieldset.formSection table tr.relayPartner td.firstColumn {
+	padding-left: 14px;
 }
 
 form.registrationForm fieldset.formSection thead tr th {

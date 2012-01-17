@@ -17,13 +17,13 @@
 
 		<fieldset class="formSection">
 			<div class="formItem checkbox">
-				<c:checkBox name="prm_use_charity" styleClass="required" checked="#{pheidippidesRegistrationBean.currentParticipant.acceptsWaiver}" />
+				<c:checkBox name="prm_use_charity" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
 				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
 			</div>
 		</fieldset>
 		
 		<fieldset class="submit">
-			<a href="#" class="back" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.charityRun ? 5 : pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

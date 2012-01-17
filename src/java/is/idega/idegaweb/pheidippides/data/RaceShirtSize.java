@@ -30,7 +30,6 @@ public class RaceShirtSize implements Serializable {
 	private static final String COLUMN_RACE = "race";
 	private static final String COLUMN_SHIRT_SIZE = "shirt_size";
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
-	
 	private static final String COLUMN_ORDER = "order_number";
 	private static final String COLUMN_CREATED_DATE = "created";
 

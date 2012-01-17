@@ -1,7 +1,6 @@
 package is.idega.idegaweb.pheidippides.business;
 
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -14,6 +13,7 @@ import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +44,7 @@ import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
 import com.idega.user.data.GenderHome;
 import com.idega.user.data.User;
+import com.idega.util.Age;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 
@@ -96,6 +97,20 @@ public class PheidippidesService {
 		}
 
 		return openRaces;
+	}
+	
+	public List<Race> getAvailableRaces(Long eventPK, int year, Date dateOfBirth) {
+		List<Race> races = getOpenRaces(eventPK, year);
+		List<Race> availableRaces = new ArrayList<Race>();
+		
+		Age age = new Age(dateOfBirth);
+		for (Race race : races) {
+			if (race.getMinimumAge() <= age.getYears() && race.getMaximumAge() >= age.getYears()) {
+				availableRaces.add(race);
+			}
+		}
+		
+		return availableRaces;
 	}
 
 	public List<RaceShirtSize> getShirts(Long racePK) {

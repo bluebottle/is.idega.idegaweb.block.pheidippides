@@ -3,10 +3,8 @@ package is.idega.idegaweb.pheidippides.presentation;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Charity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.context.FacesContext;
 
@@ -27,19 +25,17 @@ import com.idega.presentation.IWContext;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class EventEditor extends IWBaseComponent implements IWPageEventListener {
+public class CharityEditor extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
 	
-	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
+	private static final String PARAMETER_CHARITY_PK = "prm_charity_pk";
+	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DESCRIPTION = "prm_description";
-	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
-	private static final String PARAMETER_REPORT_SIGN = "prm_report_sign";
-	private static final String PARAMETER_CHARITY = "prm_charity_pk";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -64,35 +60,34 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/eventEditor.js"));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/charityEditor.js"));
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(EventEditor.class, new ArrayList<AdvancedProperty>()));
-		bean.setEventHandler(IWMainApplication.getEncryptedClassName(EventEditor.class));
-		if (iwc.isParameterSet(PARAMETER_EVENT_PK)) {
-			bean.setEvent(getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))));
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(CharityEditor.class, new ArrayList<AdvancedProperty>()));
+		bean.setEventHandler(IWMainApplication.getEncryptedClassName(CharityEditor.class));
+		if (iwc.isParameterSet(PARAMETER_CHARITY_PK)) {
+			bean.setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY_PK))));
 		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
-				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("charityEditor/view.xhtml"));
 				break;
 
 			case ACTION_EDIT:
-				bean.setCharities(getDao().getCharities());
-				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/editor.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("charityEditor/editor.xhtml"));
 				break;
 				
 			case ACTION_DELETE:
-				getDao().removeEvent(bean.getEvent().getId());
-				bean.setEvent(null);
-				facelet.setFaceletURI(iwb.getFaceletURI("eventEditor/view.xhtml"));
+				getDao().removeCharity(bean.getCharity().getId());
+				bean.setDistance(null);
+				facelet.setFaceletURI(iwb.getFaceletURI("charityEditor/view.xhtml"));
 				break;
 		}
-		bean.setEvents(getDao().getEvents());
+		bean.setCharities(getDao().getCharities());
 
 		add(facelet);
 	}
@@ -139,21 +134,11 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	}
 	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		List<Charity> charities = new ArrayList<Charity>();
-		if (iwc.isParameterSet(PARAMETER_CHARITY)) {
-			String[] charityPKs = iwc.getParameterValues(PARAMETER_CHARITY);
-			for (String charityPK : charityPKs) {
-				charities.add(getDao().getCharity(Long.parseLong(charityPK)));
-			}
-		}
-		
-		getDao().storeEvent(
-			iwc.isParameterSet(PARAMETER_EVENT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)) : null,
+		getDao().storeCharity(
+			iwc.isParameterSet(PARAMETER_CHARITY_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_CHARITY_PK)) : null,
 			iwc.getParameter(PARAMETER_NAME),
-			iwc.getParameter(PARAMETER_DESCRIPTION),
-			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
-			iwc.getParameter(PARAMETER_REPORT_SIGN),
-			charities
+			iwc.getParameter(PARAMETER_PERSONAL_ID),
+			iwc.getParameter(PARAMETER_DESCRIPTION)
 		);
 		
 		return true;

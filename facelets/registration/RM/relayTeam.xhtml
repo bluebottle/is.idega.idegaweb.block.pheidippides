@@ -27,8 +27,11 @@
 				<thead>
 					<tr>
 						<th class="firstColumn">#</th>
-						<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
+						<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+						</ui:fragment>
+						<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></th>
 						</ui:fragment>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
@@ -40,20 +43,26 @@
 				<tbody>
 					<tr>
 						<td class="firstColumn">1</td>
-						<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
+						<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
 							<td><h:outputText value="#{participant.participant.personalId}" /></td>
+						</ui:fragment>
+						<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+							<td><h:outputText value="#{participant.participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 						</ui:fragment>
 						<td><h:outputText value="#{participant.participant.fullName}" /></td>
 						<td><h:outputText value="#{participant.participant.email}" /></td>
 						<td><h:outputText value="#{participant.shirtSize.size}" /></td>
-						<td><input type="text" name="prm_relay_leg" value="#{participant.leg}" /></td>
+						<td><input type="text" name="prm_relay_leg_first" value="#{participant.leg}" /></td>
 					</tr>
 					
 					<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
-							<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
-								<td><input type="text" name="prm_personal_id" /></td>
+							<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
+								<td><input type="text" name="prm_personalId" /></td>
+							</ui:fragment>
+							<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+								<td><c:datePicker inputName="prm_date_of_birth" /></td>
 							</ui:fragment>
 							<td><input type="text" name="prm_name" /></td>
 							<td><input type="text" name="prm_email" /></td>

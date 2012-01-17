@@ -52,7 +52,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Transactional(readOnly = false)
 	public Event storeEvent(Long eventID, String name, String description,
-			String localizedKey, String reportSign) {
+			String localizedKey, String reportSign, List<Charity> charities) {
 		Event event = eventID != null ? getEvent(eventID) : null;
 		if (event == null) {
 			event = new Event();
@@ -62,6 +62,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		event.setDescription(description);
 		event.setLocalizedKey(localizedKey);
 		event.setReportSign(reportSign);
+		event.setCharities(charities);
 
 		getEntityManager().persist(event);
 
@@ -468,7 +469,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public boolean removeCharity(Long charityPK) {
 		Charity charity = getCharity(charityPK);
 		if (charity != null) {
-			getEntityManager().remove(charityPK);
+			getEntityManager().remove(charity);
 			return true;
 		}
 		return false;

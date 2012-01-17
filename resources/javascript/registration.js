@@ -32,6 +32,29 @@ jQuery(document).ready(function() {
 		}
 	});
 	
+	jQuery('input[name="prm_personalId"]').keyup(function() {
+		var input = jQuery(this);
+		var value = input.val();
+		var parent = input.parent().parent();
+		
+		var empty = true;
+		if (value.length == 10) {
+			PheidippidesService.getParticipant(value, {
+				callback: function(participant) {
+					if (participant != null) {
+						jQuery('input[name="prm_name"]', parent).val(participant.fullName);
+						jQuery('input[name="prm_email"]', parent).val(participant.email);
+						empty = false;
+					}
+				}
+			});
+		}
+		if (empty) {
+			jQuery('input[name="prm_name"]', parent).val('');
+			jQuery('input[name="prm_email"]', parent).val('');
+		}
+	});
+	
 	jQuery('select[name="prm_race_pk"]').change(function() {
 		var racePK = jQuery(this).val();
 		var shirt = jQuery('select[name="prm_shirt_size"]');
