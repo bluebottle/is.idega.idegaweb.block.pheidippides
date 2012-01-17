@@ -9,11 +9,15 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
+import com.idega.builder.bean.AdvancedProperty;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
@@ -39,7 +43,8 @@ public class RMRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_REGISTER_ANOTHER = 9;
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
-	private static final String PARAMETER_RACE_PK = "prm_race_pk";
+	private static final String PARAMETER_RACE = "prm_race_pk";
+	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
 	private static final String PARAMETER_ADDRESS = "prm_address";
@@ -135,15 +140,21 @@ public class RMRegistrationForm extends IWBaseComponent {
 					break;
 		
 				case ACTION_RELAY_TEAM:
-					if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))));
+					if (iwc.isParameterSet(PARAMETER_RACE)) {
+						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
+						getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
 					}
-					showRelayTeam(iwc, bean);
+					if (getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() > 1) {
+						showRelayTeam(iwc, bean);
+					}
+					else {
+						showCharitySelect(iwc, bean);
+					}
 					break;
 		
 				case ACTION_CHARITY_SELECT:
-					if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))));
+					if (iwc.isParameterSet(PARAMETER_RACE)) {
+						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
 					}
 					showCharitySelect(iwc, bean);
 					break;
@@ -196,6 +207,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 
 	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
 		bean.setProperties(getService().getCountries());
+		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/participant.xhtml"));
@@ -204,7 +216,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 
 	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
-		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK)))) : null);
+		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : null);
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/raceSelect.xhtml"));
@@ -212,6 +224,17 @@ public class RMRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showRelayTeam(IWContext iwc, PheidippidesBean bean) {
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+		for (int i = 0; i < getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() - 1; i++) {
+			properties.add(new AdvancedProperty(String.valueOf(i + 2), String.valueOf(i + 2)));
+		}
+		
+		bean.setProperties(properties);
+		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(getSession().getCurrentParticipant().getRace()));
+		
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/relayTeam.xhtml"));
+		add(facelet);
 	}
 
 	private void showCharitySelect(IWContext iwc, PheidippidesBean bean) {

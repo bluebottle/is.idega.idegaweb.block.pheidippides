@@ -1,0 +1,81 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="4" />
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 4" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.relay_team_help')]}" /></div>
+
+		<fieldset class="formSection">
+			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="participant" />
+			
+			<div class="formItem required">
+				<label for="prm_team_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></label>
+				<input type="text" class="required" name="prm_team_name" value="#{participant.team.name}" />
+			</div>
+			
+			<table class="relayTeam" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn">#</th>
+						<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+						</ui:fragment>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr>
+						<td class="firstColumn">1</td>
+						<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
+							<td><h:outputText value="#{participant.participant.personalId}" /></td>
+						</ui:fragment>
+						<td><h:outputText value="#{participant.participant.fullName}" /></td>
+						<td><h:outputText value="#{participant.participant.email}" /></td>
+						<td><h:outputText value="#{participant.shirtSize.size}" /></td>
+						<td><input type="text" name="prm_relay_leg" value="#{participant.leg}" /></td>
+					</tr>
+					
+					<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
+							<ui:fragment rendered="#{pheidippidesBean.locale.language eq 'is'}">
+								<td><input type="text" name="prm_personal_id" /></td>
+							</ui:fragment>
+							<td><input type="text" name="prm_name" /></td>
+							<td><input type="text" name="prm_email" /></td>
+							<td>
+								<c:selectOne name="prm_shirt_size">
+									<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
+									<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
+										<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq participant.shirtSize.id}" />
+									</ui:repeat>
+								</c:selectOne>
+							</td>
+							<td><input type="text" name="prm_relay_leg" value="#{participant.leg}" /></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+		
+		<fieldset class="submit">
+			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="next" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>

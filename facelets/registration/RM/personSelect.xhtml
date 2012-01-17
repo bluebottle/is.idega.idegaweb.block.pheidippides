@@ -17,7 +17,7 @@
 			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.available_races_information')]}" />
 			<ul class="distances">
 				<ui:repeat value="#{pheidippidesBean.races}" var="race">
-					<li><h:outputText value="#{race.distance.description}" /></li>
+					<li><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></li>
 				</ui:repeat>
 			</ul>
 		</div>

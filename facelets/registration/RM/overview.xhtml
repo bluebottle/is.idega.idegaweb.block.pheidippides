@@ -39,7 +39,7 @@
 					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{p:getFullName(current.participant.firstName, current.participant.middleName, current.participant.lastName, pheidippidesBean.locale)}" /></td>
-						<td><h:outputText value="#{current.race.distance.name}" /></td>
+						<td><h:outputText value="#{#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}}" /></td>
 						<td><h:outputText value="#{current.shirtSize.size} - #{current.shirtSize.gender}" /></td>
 						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
 					</tr>
