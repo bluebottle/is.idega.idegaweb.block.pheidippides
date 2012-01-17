@@ -17,7 +17,7 @@
 
 		<fieldset class="formSection">
 			<div class="formItem checkbox">
-				<input id="prm_use_charity" type="checkbox" name="prm_use_charity" />
+				<c:checkBox name="prm_use_charity" checked="#{not empty pheidippidesRegistrationSession.currentParticipant.charity}" />
 				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['use_charity']}" /></label>
 			</div>
 			<div class="formItem">
@@ -25,14 +25,14 @@
 				<c:selectOne name="prm_charity_pk">
 					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_charity']}" content="" />
 					<ui:repeat value="#{pheidippidesBean.charities}" var="charity">
-						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationBean.charity.id}" />
+						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationSession.currentParticipant.charity.id}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
 		</fieldset>
 		
 		<fieldset class="submit">
-			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

@@ -278,6 +278,7 @@ form.registrationForm h2 {
 form.registrationForm div.helpText {
 	clear: both;
 	padding-top: 8px;
+	line-height: 1.25em;
 }
 
 form.registrationForm div.helpText p {
@@ -288,6 +289,10 @@ form.registrationForm ul.distances {
 	list-style: disc;
 	padding-left: 20px;
 	margin: 8px 0;
+}
+
+form.registrationForm ul.distances p {
+	margin-bottom: 3px;
 }
 
 form.registrationForm fieldset {

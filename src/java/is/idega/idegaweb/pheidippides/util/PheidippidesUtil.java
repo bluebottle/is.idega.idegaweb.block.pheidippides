@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,10 @@ public class PheidippidesUtil {
 	
 	public static String getFullName(String firstName, String middleName, String lastName, Locale locale) {
 		return new Name(firstName, middleName, lastName).getName(locale, true);
+	}
+	
+	public static String escapeXML(String string) {
+		string = StringEscapeUtils.unescapeHtml(string.replaceAll("\\<[^>]*>", ""));
+		return string;
 	}
 }

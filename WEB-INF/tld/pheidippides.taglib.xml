@@ -41,4 +41,10 @@
 		<function-signature>java.lang.String getFullName(java.lang.String, java.lang.String, java.lang.String, java.util.Locale)</function-signature>
 	</function>
 
+	<function>
+		<function-name>escapeXML</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.lang.String escapeXML(java.lang.String)</function-signature>
+	</function>
+
 </facelet-taglib>

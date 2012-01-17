@@ -17,7 +17,7 @@
 
 		<fieldset class="formSection">
 			<div class="formItem checkbox">
-				<input type="checkbox" class="required" name="prm_waiver" />
+				<c:checkBox name="prm_use_charity" styleClass="required" checked="#{pheidippidesRegistrationBean.currentParticipant.acceptsWaiver}" />
 				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
 			</div>
 		</fieldset>

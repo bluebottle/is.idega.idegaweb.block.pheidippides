@@ -1,7 +1,5 @@
 package is.idega.idegaweb.pheidippides.business;
 
-import is.idega.idegaweb.pheidippides.data.Participant;
-
 import java.util.ArrayList;
 import java.util.List;
 
