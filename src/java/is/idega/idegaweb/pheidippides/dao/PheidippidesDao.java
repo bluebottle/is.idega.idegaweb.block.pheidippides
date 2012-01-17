@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -110,4 +111,8 @@ public interface PheidippidesDao {
 	public Charity storeCharity(Long charityPK, String name, String personalID, String description);
 	
 	public boolean removeCharity(Long charityPK);
+	
+	public BankReference storeBankReference(RegistrationHeader header);
+	
+	public BankReference findBankReference(RegistrationHeader header);
 }

@@ -6,6 +6,7 @@ import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -477,5 +478,18 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			return true;
 		}
 		return false;
+	}
+
+	@Transactional(readOnly = false)
+	public BankReference storeBankReference(RegistrationHeader header) {
+		BankReference reference = new BankReference();
+		reference.setHeader(header);
+		getEntityManager().persist(reference);
+		
+		return reference;
+	}
+	
+	public BankReference findBankReference(RegistrationHeader header) {
+		return getSingleResult("bankReference.findByHeader", BankReference.class, new Param("header", header));
 	}
 }
