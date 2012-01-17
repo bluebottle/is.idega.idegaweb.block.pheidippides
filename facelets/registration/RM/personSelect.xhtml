@@ -36,6 +36,9 @@
 		</fieldset>
 		
 		<fieldset class="submit">
+			<ui:fragment rendered="#{not empty pheidippidesRegistrationSession.participantHolders}">
+				<a href="#" class="back" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			</ui:fragment>
 			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

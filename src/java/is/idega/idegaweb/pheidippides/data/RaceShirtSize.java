@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,11 +39,11 @@ public class RaceShirtSize implements Serializable {
 	@Column(name = RaceShirtSize.COLUMN_ENTRY_ID)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = RaceShirtSize.COLUMN_RACE)
 	private Race race;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = RaceShirtSize.COLUMN_SHIRT_SIZE)
 	private ShirtSize size;
 
@@ -60,8 +61,7 @@ public class RaceShirtSize implements Serializable {
 		return id;
 	}
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

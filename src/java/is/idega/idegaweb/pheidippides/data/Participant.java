@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Participant implements Serializable {
+
 	private static final long serialVersionUID = -7894754146844154272L;
 
 	private String firstName;
@@ -177,5 +178,42 @@ public class Participant implements Serializable {
 
 	public void setShirtSize(ShirtSize shirtSize) {
 		this.shirtSize = shirtSize;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
+		result = prime * result + ((personalId == null) ? 0 : personalId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Participant other = (Participant) obj;
+		if (dateOfBirth == null) {
+			if (other.dateOfBirth != null)
+				return false;
+		} else if (!dateOfBirth.equals(other.dateOfBirth))
+			return false;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
+			return false;
+		if (personalId == null) {
+			if (other.personalId != null)
+				return false;
+		} else if (!personalId.equals(other.personalId))
+			return false;
+		return true;
 	}
 }

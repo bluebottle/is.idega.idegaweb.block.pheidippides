@@ -17,7 +17,7 @@
 
 		<fieldset class="formSection">
 			<div class="formItem checkbox">
-				<c:checkBox name="prm_use_charity" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
+				<c:checkBox name="prm_waiver" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
 				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
 			</div>
 		</fieldset>

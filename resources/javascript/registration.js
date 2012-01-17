@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 				}
 			});
 		}
-		else {
+		else if (value.length != 0) {
 			valid = false;
 		}
 		return valid;
@@ -98,9 +98,7 @@ jQuery(document).ready(function() {
 		jQuery('input[name="prm_action"]').val(link.attr('rel'));
 		
 		var form = jQuery('form.registrationForm');
-		form.validate({
-			onsubmit: false
-		});
+		form.validate().cancelSubmit = true;
 		form.submit();
 	});
 });

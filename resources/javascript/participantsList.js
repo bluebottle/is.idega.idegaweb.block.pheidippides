@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
 				for (var i = 0; i < races.length; i++) {
 					PheidippidesService.getLocalizedRaceName(races[i], language, {
 						callback: function(property) {
-							shirt.append('<option value="' + property.id + '">' + property.value + '</option>');
+							race.append('<option value="' + property.id + '">' + property.value + '</option>');
 						}
 					});
 				}

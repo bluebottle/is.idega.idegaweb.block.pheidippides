@@ -4,12 +4,15 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
+import is.idega.idegaweb.pheidippides.data.Distance;
+import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -736,7 +739,6 @@ public class PheidippidesService {
 
 			return hexString.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -745,11 +747,17 @@ public class PheidippidesService {
 	
 	public AdvancedProperty getLocalizedRaceName(Race race, String language) {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
-		return new AdvancedProperty(String.valueOf(race.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(race.getEvent().getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName())));
+		Event event = race.getEvent();
+		Distance distance = race.getDistance();
+		
+		return new AdvancedProperty(String.valueOf(race.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + distance.getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), distance.getName())));
 	}
 	
 	public AdvancedProperty getLocalizedShirtName(RaceShirtSize raceShirt, String language) {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
-		return new AdvancedProperty(String.valueOf(raceShirt.getSize().getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(raceShirt.getRace().getEvent().getLocalizedKey() + "." + raceShirt.getSize().getLocalizedKey(), raceShirt.getSize().getSize().toString() + " - " + raceShirt.getSize().getGender().toString())));
+		ShirtSize size = raceShirt.getSize();
+		Event event = raceShirt.getRace().getEvent();
+		
+		return new AdvancedProperty(String.valueOf(size.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getSize().toString() + " - " +size.getGender().toString())));
 	}
 }

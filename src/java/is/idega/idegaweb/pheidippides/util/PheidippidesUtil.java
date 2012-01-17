@@ -61,7 +61,7 @@ public class PheidippidesUtil {
 	}
 	
 	public static String formatReceipt(String string, RegistrationAnswerHolder answer) {
-		Object[] args = { answer.getAmount(), answer.getBankReference().getReferenceNumber() };
+		String[] args = { String.valueOf(answer.getAmount()), answer.getBankReference().getReferenceNumber() };
 		return MessageFormat.format(string, args);
 	}
 }

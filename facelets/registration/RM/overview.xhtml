@@ -27,24 +27,27 @@
 				</thead>
 			
 				<tbody>
+					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
+
 					<ui:repeat value="#{pheidippidesRegistrationSession.participantHolders}" var="holder">
-						<tr>
-							<td class="firstColumn"><h:outputText value="#{p:getFullName(holder.participant.firstName, holder.participant.middleName, holder.participant.lastName, pheidippidesBean.locale)}" /></td>
-							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
-							<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
-						</tr>
-						<ui:fragment rendered="#{not empty holder.relayPartners}">
-							<ui:repeat value="#{holder.relayPartners}" var="partner">
-								<tr class="relayPartner">
-									<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
-									<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
-								</tr>
-							</ui:repeat>
+						<ui:fragment rendered="#{current ne holder}">
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{p:getFullName(holder.participant.firstName, holder.participant.middleName, holder.participant.lastName, pheidippidesBean.locale)}" /></td>
+								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
+								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
+								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
+							</tr>
+							<ui:fragment rendered="#{not empty holder.relayPartners}">
+								<ui:repeat value="#{holder.relayPartners}" var="partner">
+									<tr class="relayPartner">
+										<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
+										<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
+									</tr>
+								</ui:repeat>
+							</ui:fragment>
 						</ui:fragment>
 					</ui:repeat>
 					
-					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>

@@ -166,12 +166,6 @@ public class RMRegistrationForm extends IWBaseComponent {
 					break;
 		
 				case ACTION_CHARITY_SELECT:
-					if (iwc.isParameterSet(PARAMETER_RACE)) {
-						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
-					}
-					if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
-						getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
-					}
 					if (iwc.isParameterSet(PARAMETER_TEAM_NAME)) {
 						ParticipantHolder holder = getSession().getCurrentParticipant();
 
@@ -226,25 +220,34 @@ public class RMRegistrationForm extends IWBaseComponent {
 					break;
 					
 				case ACTION_OVERVIEW:
-					getSession().getCurrentParticipant().setAcceptsWaiver(true);
-					getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getSession().getCurrentParticipant().getRace().getDistance().getName());
-					getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
+					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
+						getSession().getCurrentParticipant().setAcceptsWaiver(true);
+						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getSession().getCurrentParticipant().getRace().getDistance().getName());
+						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
+					}
+					else {
+						getSession().setCurrentParticipant(getSession().getParticipantHolders().get(getSession().getParticipantHolders().size() - 1));
+					}
 					showOverview(iwc, bean);
 					break;
 					
 				case ACTION_RECEIPT:
 					getSession().addParticipantHolder(getSession().getCurrentParticipant());
-					getSession().setCurrentParticipant(null);
 					
 					RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
 					bean.setAnswer(answer);
+					getSession().empty();
 					
 					showReceipt(iwc, bean);
 					break;
 
 				case ACTION_REGISTER_ANOTHER:
-					getSession().addParticipantHolder(getSession().getCurrentParticipant());
-					getSession().setCurrentParticipant(null);
+					if (getSession().getCurrentParticipant() != null) {
+						if (getSession().getParticipantHolders() == null || !getSession().getParticipantHolders().contains(getSession().getCurrentParticipant())) {
+							getSession().addParticipantHolder(getSession().getCurrentParticipant());
+						}
+						getSession().setCurrentParticipant(null);
+					}
 					showPersonSelect(iwc, bean);
 					break;
 			}
