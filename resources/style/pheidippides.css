@@ -281,13 +281,13 @@ form.registrationForm h2 {
 	float: right;
 }
 
-form.registrationForm div.helpText {
+form.registrationForm div.helpText, form.registrationForm div.receipt {
 	clear: both;
 	padding-top: 8px;
 	line-height: 1.25em;
 }
 
-form.registrationForm div.helpText p {
+form.registrationForm div.helpText p, form.registrationForm div.receipt p {
 	margin-bottom: 12px;
 }
 

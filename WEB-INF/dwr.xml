@@ -11,16 +11,34 @@
             <include method="isValidPersonalID" />
             <include method="getParticipant" />
             <include method="getLocalizedRaceName" />
+            <include method="getLocalizedShirtName" />
         </create>
         
 		<convert converter="enum" match="is.idega.idegaweb.pheidippides.business.ShirtSizeGender" />
 		<convert converter="enum" match="is.idega.idegaweb.pheidippides.business.ShirtSizeSizes" />
 
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Distance" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Participant" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
-		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.ShirtSize" />
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Distance">
+			<param name="exclude" value="id"/>
+		</convert>
+		
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Event">
+			<param name="exclude" value="id"/>
+		</convert>
+		
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Participant">
+			<param name="exclude" value="id"/>
+		</convert>
+		
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.Race">
+			<param name="exclude" value="id"/>
+		</convert>
+		
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.RaceShirtSize">
+			<param name="exclude" value="id"/>
+		</convert>
+		
+		<convert converter="bean" match="is.idega.idegaweb.pheidippides.data.ShirtSize">
+			<param name="exclude" value="id"/>
+		</convert>
 	</allow>
 </dwr>

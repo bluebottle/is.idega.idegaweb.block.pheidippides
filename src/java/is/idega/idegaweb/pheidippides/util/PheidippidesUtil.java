@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.util;
 
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.ibm.icu.text.MessageFormat;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 
@@ -56,5 +58,10 @@ public class PheidippidesUtil {
 	public static boolean contains(List<?> objects, Object object) {
 		boolean contains = objects.contains(object);
 		return contains;
+	}
+	
+	public static String formatReceipt(String string, RegistrationAnswerHolder answer) {
+		Object[] args = { answer.getAmount(), answer.getBankReference().getReferenceNumber() };
+		return MessageFormat.format(string, args);
 	}
 }

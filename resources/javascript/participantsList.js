@@ -22,20 +22,14 @@ jQuery(document).ready(function() {
 		PheidippidesService.getRaces(eventPK, year, {
 			callback: function(races) {
 				dwr.util.removeAllOptions(race.attr('id'));
-				dwr.util.addOptions(
-					race.attr('id'),
-					races,
-					function(race) {
-						return race.id;
-					},
-					function(race) {
-						PheidippidesService.getLocalizedRaceName(race, language, {
-							callback: function(name) {
-								return name;
-							}
-						});
-					}
-				);
+				
+				for (var i = 0; i < races.length; i++) {
+					PheidippidesService.getLocalizedRaceName(races[i], language, {
+						callback: function(property) {
+							shirt.append('<option value="' + property.id + '">' + property.value + '</option>');
+						}
+					});
+				}
 				dwr.util.setValue(race.attr('id'), value);
 			}
 		});

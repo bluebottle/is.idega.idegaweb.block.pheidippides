@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -56,6 +57,8 @@ public class PheidippidesBean {
 
 	public AdvancedProperty property;
 	public List<AdvancedProperty> properties;
+	
+	public RegistrationAnswerHolder answer;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -239,5 +242,13 @@ public class PheidippidesBean {
 
 	public void setProperty(AdvancedProperty property) {
 		this.property = property;
+	}
+
+	public RegistrationAnswerHolder getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(RegistrationAnswerHolder answer) {
+		this.answer = answer;
 	}
 }

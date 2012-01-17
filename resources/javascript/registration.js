@@ -57,24 +57,27 @@ jQuery(document).ready(function() {
 	
 	jQuery('select[name="prm_race_pk"]').change(function() {
 		var racePK = jQuery(this).val();
+		var language = jQuery('input[name="prm_language"]').val();
 		var shirt = jQuery('select[name="prm_shirt_size"]');
+		var value = shirt.val();
 		
 		PheidippidesService.getShirts(racePK, {
 			callback: function(shirtSizes) {
+				var firstOption = shirt.children('option:first').detach();
 				dwr.util.removeAllOptions(shirt.attr('id'));
-				dwr.util.addOptions(
-					shirt.attr('id'),
-					shirtSizes,
-					function(raceShirt) {
-						return raceShirt.size.id;
-					},
-					function(raceShirt) {
-						return raceShirt.size.size + ' - ' + raceShirt.size.gender;
-					}
-				);
+				
+				firstOption.prependTo(shirt);
+				for (var i = 0; i < shirtSizes.length; i++) {
+					PheidippidesService.getLocalizedShirtName(shirtSizes[i], language, {
+						callback: function(property) {
+							shirt.append('<option value="' + property.id + '">' + property.value + '</option>');
+						}
+					});
+				}
+				dwr.util.setValue(shirt.attr('id'), value);
 			}
 		});
-	}).trigger('change');
+	});
 	
 	jQuery('a.next').click(function(event) {
 		event.preventDefault();

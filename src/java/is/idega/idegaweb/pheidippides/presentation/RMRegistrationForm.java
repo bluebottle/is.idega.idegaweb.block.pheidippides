@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
@@ -234,7 +235,10 @@ public class RMRegistrationForm extends IWBaseComponent {
 				case ACTION_RECEIPT:
 					getSession().addParticipantHolder(getSession().getCurrentParticipant());
 					getSession().setCurrentParticipant(null);
-					getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+					
+					RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+					bean.setAnswer(answer);
+					
 					showReceipt(iwc, bean);
 					break;
 
@@ -274,7 +278,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 
 	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant().getDateOfBirth()));
-		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : null);
+		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : (getSession().getCurrentParticipant().getRace() != null ? getDao().getRaceShirtSizes(getDao().getRace(getSession().getCurrentParticipant().getRace().getId())) : null));
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/raceSelect.xhtml"));

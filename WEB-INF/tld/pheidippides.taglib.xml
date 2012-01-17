@@ -53,4 +53,10 @@
 		<function-signature>boolean contains(java.util.List, java.lang.Object)</function-signature>
 	</function>
 
+	<function>
+		<function-name>formatReceipt</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>boolean formatReceipt(java.lang.String, is.idega.idegaweb.pheidippides.RegistrationAnswerHolder)</function-signature>
+	</function>
+
 </facelet-taglib>

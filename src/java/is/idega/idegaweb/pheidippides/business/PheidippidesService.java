@@ -743,8 +743,13 @@ public class PheidippidesService {
 		return null;
 	}
 	
-	public String getLocalizedRaceName(Race race, String language) {
+	public AdvancedProperty getLocalizedRaceName(Race race, String language) {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
-		return PheidippidesUtil.escapeXML(iwrb.getLocalizedString(race.getEvent().getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName()));
+		return new AdvancedProperty(String.valueOf(race.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(race.getEvent().getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName())));
+	}
+	
+	public AdvancedProperty getLocalizedShirtName(RaceShirtSize raceShirt, String language) {
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
+		return new AdvancedProperty(String.valueOf(raceShirt.getSize().getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(raceShirt.getRace().getEvent().getLocalizedKey() + "." + raceShirt.getSize().getLocalizedKey(), raceShirt.getSize().getSize().toString() + " - " + raceShirt.getSize().getGender().toString())));
 	}
 }
