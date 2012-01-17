@@ -56,6 +56,7 @@ public class BankReference implements Serializable {
 		NumberFormat format = NumberFormat.getIntegerInstance();
 		format.setMaximumIntegerDigits(7);
 		format.setMinimumIntegerDigits(7);
+		format.setGroupingUsed(false);
 		
 		return format.format(getId());
 	}
