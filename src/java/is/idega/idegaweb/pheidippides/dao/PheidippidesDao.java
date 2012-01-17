@@ -71,6 +71,8 @@ public interface PheidippidesDao {
 	public RacePrice getRacePrice(Long racePriceID);
 
 	public List<RacePrice> getRacePrices(Race race);
+	
+	public RacePrice getCurrentRacePrice(Race race);
 
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,

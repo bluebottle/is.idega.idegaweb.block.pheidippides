@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.business;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
@@ -530,13 +531,72 @@ public class PheidippidesService {
 
 	public void calculatePrices(ParticipantHolder current,
 			List<ParticipantHolder> holder) {
-		current.setAmount(100);
+		int childCount = 0;
+		if (holder != null && !holder.isEmpty()) {
+			for (ParticipantHolder participantHolder : holder) {
+				Race race = participantHolder.getRace();
+				RacePrice price = dao.getCurrentRacePrice(race);
+				Participant participant = participantHolder.getParticipant();
+
+				Age age = new Age(participant.getDateOfBirth());
+				if (age.getYears() <= 16) {
+					if (price.getPriceKids() > 0) {
+						participantHolder.setAmount(price.getPriceKids());
+					} else {
+						participantHolder.setAmount(price.getPrice());						
+					}
+				}
+				else {
+					participantHolder.setAmount(price.getPrice());						
+				}
+								
+				if (race.isFamilyDiscount()) {
+					if (age.getYears() <= 16) {
+						childCount++;
+					}
+					
+					if (childCount > 1 && price.getFamilyDiscount() > 0) {
+						participantHolder.setAmount(participantHolder.getAmount() - price.getFamilyDiscount());												
+					}
+				}
+			}
+		}
+		
+		if (current != null) {
+			Race race = current.getRace();
+			RacePrice price = dao.getCurrentRacePrice(race);
+			Participant participant = current.getParticipant();
+
+			Age age = new Age(participant.getDateOfBirth());
+			if (age.getYears() <= 16) {
+				if (price.getPriceKids() > 0) {
+					current.setAmount(price.getPriceKids());
+				} else {
+					current.setAmount(price.getPrice());						
+				}
+			}
+			else {
+				current.setAmount(price.getPrice());						
+			}
+							
+			if (race.isFamilyDiscount()) {
+				if (age.getYears() <= 16) {
+					childCount++;
+				}
+				
+				if (childCount > 1 && price.getFamilyDiscount() > 0) {
+					current.setAmount(current.getAmount() - price.getFamilyDiscount());												
+				}
+			}			
+		}
+		
+		/*current.setAmount(100);
 		if (holder != null) {
 			for (ParticipantHolder participantHolder : holder) {
 				participantHolder.setAmount(100);
 				participantHolder.setDiscount(100);
 			}
-		}
+		}*/
 	}
 
 	@SuppressWarnings("unchecked")
