@@ -556,7 +556,7 @@ public class PheidippidesService {
 					}
 					
 					if (childCount > 1 && price.getFamilyDiscount() > 0) {
-						participantHolder.setAmount(participantHolder.getAmount() - price.getFamilyDiscount());												
+						participantHolder.setDiscount(participantHolder.getAmount() - price.getFamilyDiscount());												
 					}
 				}
 			}
@@ -585,7 +585,7 @@ public class PheidippidesService {
 				}
 				
 				if (childCount > 1 && price.getFamilyDiscount() > 0) {
-					current.setAmount(current.getAmount() - price.getFamilyDiscount());												
+					current.setDiscount(current.getAmount() - price.getFamilyDiscount());												
 				}
 			}			
 		}
