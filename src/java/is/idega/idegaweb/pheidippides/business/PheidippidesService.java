@@ -1,7 +1,9 @@
 package is.idega.idegaweb.pheidippides.business;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
@@ -70,6 +72,8 @@ public class PheidippidesService {
 	private static final String VALITOR_RETURN_URL_SERVER_SIDE = "VALITOR_RETURN_URL_SERVER_SIDE";
 	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
 	private static final String VALITOR_RETURN_URL = "VALITOR_RETURN_URL";
+	private static final String VALITOR_SECURITY_NUMBER_EUR = "VALITOR_SECURITY_NUMBER_EUR";
+	private static final String VALITOR_SHOP_ID_EUR = "VALITOR_SHOP_ID_EUR";
 	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
 	private static final String VALITOR_SHOP_ID = "VALITOR_SHOP_ID";
 	private static final String ADEINSHEIMILD = "Adeinsheimild";
@@ -233,10 +237,12 @@ public class PheidippidesService {
 		return p;
 	}
 
-	public String storeRegistration(List<ParticipantHolder> holders,
+	public RegistrationAnswerHolder storeRegistration(List<ParticipantHolder> holders,
 			boolean doPayment, String registrantUUID, boolean createUsers,
 			Locale locale, String paymentGroup, boolean isBankTransfer) {
 
+		RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
+		
 		String valitorURL = IWMainApplication
 				.getDefaultIWApplicationContext()
 				.getSystemProperties()
@@ -248,6 +254,13 @@ public class PheidippidesService {
 		String valitorSecurityNumber = IWMainApplication
 				.getDefaultIWApplicationContext().getSystemProperties()
 				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorShopIDEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getSystemProperties()
+				.getProperty(VALITOR_SHOP_ID_EUR, "1");
+		String valitorSecurityNumberEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getSystemProperties()
+				.getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
+
 		String valitorReturnURL = IWMainApplication
 				.getDefaultIWApplicationContext()
 				.getSystemProperties()
@@ -267,13 +280,22 @@ public class PheidippidesService {
 				.getProperty(VALITOR_RETURN_URL_CANCEL,
 						"http://skraning.marathon.is/pages/valitor");
 
-		StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
+		StringBuilder securityString = null;
+		if (createUsers) {
+			securityString = new StringBuilder(valitorSecurityNumberEUR);
+		} else {
+			securityString = new StringBuilder(valitorSecurityNumber);			
+		}
 
 		StringBuilder url = new StringBuilder(valitorURL);
 		url.append("?");
 		url.append(VEFVERSLUN_ID);
 		url.append("=");
-		url.append(valitorShopID);
+		if (createUsers) {
+			url.append(valitorShopIDEUR);			
+		} else {
+			url.append(valitorShopID);
+		}
 		url.append("&");
 		url.append(LANG);
 		url.append("=");
@@ -307,10 +329,15 @@ public class PheidippidesService {
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
 						registrantUUID, paymentGroup);
 			}
+			holder.setHeader(header);
+
 			if (isBankTransfer) {
-				dao.storeBankReference(header);
+				BankReference reference = dao.storeBankReference(header);
+				holder.setBankReference(reference);
 			}
 
+			int amount = 0;
+			
 			int counter = 1;
 			for (ParticipantHolder participantHolder : holders) {
 				User user = null;
@@ -402,6 +429,8 @@ public class PheidippidesService {
 							participant.getUuid(),
 							participantHolder.getDiscount());
 
+					amount += participantHolder.getAmount() - participantHolder.getDiscount();
+					
 					securityString.append("1");
 					securityString.append(participantHolder.getAmount());
 					securityString.append(participantHolder.getDiscount());
@@ -439,7 +468,11 @@ public class PheidippidesService {
 				}
 			}
 
-			securityString.append(valitorShopID);
+			if (createUsers) {
+				securityString.append(valitorShopIDEUR);				
+			} else {
+				securityString.append(valitorShopID);
+			}
 			securityString.append(header.getUuid());
 			securityString.append(valitorReturnURL);
 			securityString.append(valitorReturnURLServerSide);
@@ -473,9 +506,13 @@ public class PheidippidesService {
 			url.append(RAFRAEN_UNDIRSKRIFT);
 			url.append("=");
 			url.append(createValitorSecurityString(securityString.toString()));
+			
+			holder.setAmount(amount);
+			holder.setValitorURL(url.toString());
 		}
 
-		return url.toString();
+		
+		return holder;
 	}
 
 	public static void main(String args[]) {

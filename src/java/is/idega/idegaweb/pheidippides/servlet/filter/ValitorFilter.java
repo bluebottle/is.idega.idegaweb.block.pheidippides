@@ -1,4 +1,5 @@
 package is.idega.idegaweb.pheidippides.servlet.filter;
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 
@@ -38,10 +39,10 @@ public class ValitorFilter extends BaseFilter {
 		
 		session.addParticipantHolder(session.getCurrentParticipant());
 		
-		String url = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false);
+		RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false);
 		session.empty();
 		
-		response.sendRedirect(url);
+		response.sendRedirect(holder.getValitorURL());
 	}
 
 }

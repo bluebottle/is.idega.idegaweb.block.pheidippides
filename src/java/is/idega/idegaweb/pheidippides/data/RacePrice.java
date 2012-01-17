@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 	@NamedQuery(name = "racePrice.findAll", query = "select r from RacePrice r"),
 	@NamedQuery(name = "racePrice.findByRace", query = "select r from RacePrice r where r.race = :race"),
-	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom >= :date and (r.validTo is null or r.validTo <= :date) and r.currency = :currency")
+	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency")
 })
 public class RacePrice implements Serializable {
 	private static final long serialVersionUID = -1799532522822250416L;
@@ -58,7 +58,7 @@ public class RacePrice implements Serializable {
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			
-			setValidFrom(validFrom);
+			setValidFrom(cal.getTime());
 		}
 		
 		if (getValidTo() != null) {
@@ -70,7 +70,7 @@ public class RacePrice implements Serializable {
 			cal.set(Calendar.SECOND, 59);
 			cal.set(Calendar.MILLISECOND, 999);
 			
-			setValidTo(validTo);
+			setValidTo(cal.getTime());
 		}
 	}
 	
