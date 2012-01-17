@@ -6,6 +6,9 @@ import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParticipantHolder {
 	private Participant participant;
 	private Race race;
@@ -16,6 +19,8 @@ public class ParticipantHolder {
 	private int amount;
 	private int discount;
 	private boolean acceptsWaiver;
+	
+	private List<Participant> relayPartners;
 	
 	private String valitorDescription = null;
 	
@@ -78,5 +83,32 @@ public class ParticipantHolder {
 	}
 	public void setAcceptsWaiver(boolean acceptsWaiver) {
 		this.acceptsWaiver = acceptsWaiver;
-	}	
+	}
+	public List<Participant> getRelayPartners() {
+		return relayPartners;
+	}
+	public void setRelayPartners(List<Participant> relayPartners) {
+		this.relayPartners = relayPartners;
+	}
+	public void addRelayPartner(Participant relayPartner) {
+		if (this.relayPartners == null) {
+			this.relayPartners = new ArrayList<Participant>();
+		}
+		
+		this.relayPartners.add(relayPartner);
+	}
+	public void removeRelayPartner(Participant relayPartner) {
+		if (this.relayPartners == null) {
+			return;
+		}
+		
+		this.relayPartners.remove(relayPartner);
+	}
+	public void clearRelayPartners() {
+		if (this.relayPartners != null) {
+			this.relayPartners.clear();
+		}
+		
+		this.relayPartners = null;
+	}
 }
