@@ -39,6 +39,7 @@ public class Registration implements Serializable {
 	private static final String COLUMN_LEG = "leg";
 	private static final String COLUMN_PARTICIPANT_NUMBER = "participant_number";
 	private static final String COLUMN_AMOUNT_PAID = "amount_paid";
+	private static final String COLUMN_AMOUNT_DISCOUNT = "amount_discount";
 	private static final String COLUMN_CHARITY = "charity";
 	private static final String COLUMN_STATUS = "status";
 	private static final String COLUMN_CREATED_DATE = "created";
@@ -78,6 +79,9 @@ public class Registration implements Serializable {
 
 	@Column(name = Registration.COLUMN_AMOUNT_PAID)
 	private int amountPaid;
+
+	@Column(name = Registration.COLUMN_AMOUNT_DISCOUNT)
+	private int amountDiscount;
 
 	@ManyToOne
 	@JoinColumn(name = Registration.COLUMN_CHARITY)
@@ -194,5 +198,13 @@ public class Registration implements Serializable {
 
 	public void setLeg(String leg) {
 		this.leg = leg;
+	}
+
+	public int getAmountDiscount() {
+		return amountDiscount;
+	}
+
+	public void setAmountDiscount(int amountDiscount) {
+		this.amountDiscount = amountDiscount;
 	}
 }
