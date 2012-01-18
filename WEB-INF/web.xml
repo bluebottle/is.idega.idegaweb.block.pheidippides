@@ -4,6 +4,28 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 
+	<servlet>
+		<display-name>Valitor Success</display-name>
+		<servlet-name>ValitorSuccess</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorSuccess</servlet-class>
+	</servlet>
+
+	<servlet>
+		<display-name>Valitor Cancellation</display-name>
+		<servlet-name>ValitorCancel</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorCancel</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ValitorSuccess</servlet-name>
+		<url-pattern>/valitorSuccess/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ValitorCancel</servlet-name>
+		<url-pattern>/valitorCancel/*</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>ValitorFilter</filter-name>
 		<filter-class>is.idega.idegaweb.pheidippides.servlet.filter.ValitorFilter</filter-class>
