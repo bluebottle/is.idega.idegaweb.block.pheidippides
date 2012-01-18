@@ -589,7 +589,17 @@ public class PheidippidesService {
 			url.append("&");
 			url.append(KAUPANDA_UPPLYSINGAR);
 			url.append("=");
-			url.append("0");
+			url.append("1");
+			url.append("&");
+			url.append("NafnSkylda");
+			url.append("=");
+			url.append("1");
+			if (!createUsers) {
+				url.append("&");
+				url.append("KennitalaSkylda");
+				url.append("=");
+				url.append("1");
+			}
 			url.append("&");
 			url.append(TILVISUNARNUMER);
 			url.append("=");
