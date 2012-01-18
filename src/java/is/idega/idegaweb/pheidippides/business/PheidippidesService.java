@@ -878,6 +878,24 @@ public class PheidippidesService {
 		return new AdvancedProperty(String.valueOf(size.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getSize().toString() + " - " +size.getGender().toString())));
 	}
 
+	
+	public RegistrationHeader markRegistrationAsPaymentCancelled(String uniqueID) {
+		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
+		
+		return markRegistrationAsPaymentCancelled(header);
+	}
+	public RegistrationHeader markRegistrationAsPaymentCancelled(RegistrationHeader header) {
+		List<Registration> registrations = dao.getRegistrations(header);
+		header = dao.storeRegistrationHeader(header.getId(), RegistrationHeaderStatus.UserDidntFinishPayment, null, null, null);
+		for (Registration registration : registrations) {
+			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
+				dao.storeRegistration(registration.getId(), header, RegistrationStatus.Cancelled, null, null, null, null, 0, null, null, null, 0);
+			}
+		}
+		
+		return header;
+	}
+
 	public RegistrationHeader markRegistrationAsPaid(String uniqueID, boolean manualPayment) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 		

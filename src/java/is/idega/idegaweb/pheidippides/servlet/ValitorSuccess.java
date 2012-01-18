@@ -33,6 +33,8 @@ public class ValitorSuccess extends HttpServlet {
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		
+		service.markRegistrationAsPaid(iwc.getParameter(""), false);
+		
 		PrintWriter out = resp.getWriter();
 		out.println("The Valitor success response has been processed...");
 		out.close();
