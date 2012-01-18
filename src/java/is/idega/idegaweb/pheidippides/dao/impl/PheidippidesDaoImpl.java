@@ -518,4 +518,25 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public BankReference findBankReference(RegistrationHeader header) {
 		return getSingleResult("bankReference.findByHeader", BankReference.class, new Param("header", header));
 	}
+	
+	public Team getTeam(Long teamID) {
+		return find(Team.class, teamID);
+	}
+	
+	public Team storeTeam(Long teamID, String name) {
+		Team team = teamID != null ? getTeam(teamID) : null;
+		if (team == null) {
+			team = new Team();
+			team.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		
+		if (name != null) {
+			team.setName(name);
+		}
+		
+		getEntityManager().persist(team);
+		
+		return team;
+		
+	}
 }
