@@ -33,6 +33,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.FinderException;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -55,10 +56,12 @@ import com.idega.core.messaging.MessagingSettings;
 import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
+import com.idega.idegaweb.IWMainApplicationSettings;
 import com.idega.idegaweb.IWResourceBundle;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
 import com.idega.user.data.GenderHome;
+import com.idega.user.data.Group;
 import com.idega.user.data.User;
 import com.idega.util.Age;
 import com.idega.util.IWTimestamp;
@@ -260,38 +263,38 @@ public class PheidippidesService {
 
 		String valitorURL = IWMainApplication
 				.getDefaultIWApplicationContext()
-				.getSystemProperties()
+				.getApplicationSettings()
 				.getProperty(VALITOR_URL,
 						"https://testvefverslun.valitor.is/default.aspx");
 		String valitorShopID = IWMainApplication
-				.getDefaultIWApplicationContext().getSystemProperties()
+				.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_SHOP_ID, "1");
 		String valitorSecurityNumber = IWMainApplication
-				.getDefaultIWApplicationContext().getSystemProperties()
+				.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
 		String valitorShopIDEUR = IWMainApplication
-				.getDefaultIWApplicationContext().getSystemProperties()
+				.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_SHOP_ID_EUR, "1");
 		String valitorSecurityNumberEUR = IWMainApplication
-				.getDefaultIWApplicationContext().getSystemProperties()
+				.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
 
 		String valitorReturnURL = IWMainApplication
 				.getDefaultIWApplicationContext()
-				.getSystemProperties()
+				.getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL,
 						"http://skraning.marathon.is/pages/valitor");
 		String valitorReturnURLText = IWMainApplication
-				.getDefaultIWApplicationContext().getSystemProperties()
+				.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
 		String valitorReturnURLServerSide = IWMainApplication
 				.getDefaultIWApplicationContext()
-				.getSystemProperties()
+				.getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL_SERVER_SIDE,
 						"http://skraning.marathon.is/pages/valitor");
 		String valitorReturnURLCancel = IWMainApplication
 				.getDefaultIWApplicationContext()
-				.getSystemProperties()
+				.getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL_CANCEL,
 						"http://skraning.marathon.is/pages/valitor");
 
@@ -991,7 +994,9 @@ public class PheidippidesService {
 							e.printStackTrace();
 						}
 					}
-
+					
+					addUserToRootRunnersGroup(user);
+					
 					Email email = getUserBusiness().getUserMail(user);
 					Locale locale = LocaleUtil.getLocale(header.getLocale());
 					IWResourceBundle iwrb = IWMainApplication
@@ -1012,15 +1017,15 @@ public class PheidippidesService {
 							getLocalizedRaceName(registration.getRace(),
 									header.getLocale()).getValue(),
 							userNameString, passwordString };
-					String subject = iwrb.getLocalizedString(registration
-							.getRace().getEvent()
+					String subject = PheidippidesUtil.escapeXML(iwrb.getLocalizedString(registration
+							.getRace().getEvent().getLocalizedKey()
 							+ "."
 							+ "registration_received_subject_mail",
-							"Your registration has been received.");
-					String body = MessageFormat.format(iwrb.getLocalizedString(
-							registration.getRace().getEvent() + "."
+							"Your registration has been received."));
+					String body = MessageFormat.format(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(
+							registration.getRace().getEvent().getLocalizedKey() + "."
 									+ "registration_received_body_mail",
-							"Your registration has been received."), args);
+							"Your registration has been received.")), args);
 					sendMessage(email.getEmailAddress(), subject, body);
 				} catch (RemoteException e) {
 					e.printStackTrace();
@@ -1031,6 +1036,73 @@ public class PheidippidesService {
 		}
 
 		return header;
+	}
+	
+	public void sendPaymentTransferEmail(ParticipantHolder holder, RegistrationAnswerHolder answer, Locale locale) {
+		try {
+			User user = getUserBusiness().getUserByUniqueId(holder.getParticipant().getUuid());
+			Email email = getUserBusiness().getUserMail(user);
+			
+			IWResourceBundle iwrb = IWMainApplication
+					.getDefaultIWMainApplication()
+					.getBundle(
+							PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+					.getResourceBundle(locale);
+			Object[] args = { String.valueOf(answer.getAmount()), answer.getBankReference().getReferenceNumber() };
+			String subject = PheidippidesUtil.escapeXML(iwrb.getLocalizedString(holder
+					.getRace().getEvent().getLocalizedKey()
+					+ "."
+					+ "receipt_subject",
+					"Your registration has been received."));
+			String body = MessageFormat.format(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(
+					holder.getRace().getEvent().getLocalizedKey() + "."
+							+ "receipt_body",
+					"Your registration has been received.")), args);
+			sendMessage(email.getEmailAddress(), subject, body);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void addUserToRootRunnersGroup(User user) throws RemoteException {
+		try {
+			Group runners = getRootRunnersGroup();
+			if (!getUserBusiness().isMemberOfGroup(((Integer) runners.getPrimaryKey()).intValue(), user)) {
+				runners.addGroup(user, IWTimestamp.getTimestampRightNow());
+				if (user.getPrimaryGroup() == null) {
+					user.setPrimaryGroup(runners);
+					user.store();
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Group getRootRunnersGroup() throws CreateException, FinderException, RemoteException {
+		return getGroupCreateIfNecessaryStoreAsApplicationBinding("root.runners.group", "Runners", "The root group for all runners in Pheidippides");
+	}
+
+	private Group getGroupCreateIfNecessaryStoreAsApplicationBinding(String parameter, String createName, String createDescription) throws RemoteException, FinderException, CreateException {
+		IWMainApplicationSettings settings = IWMainApplication.getDefaultIWMainApplication().getSettings();
+		String groupId = settings.getProperty(parameter);
+
+		Group group = null;
+		if (groupId != null) {
+			group = getUserBusiness().getGroupBusiness().getGroupByGroupID(new Integer(groupId));
+		}
+		else {
+			System.err.println("Trying to store " + createName + " group");
+			group = getUserBusiness().getGroupBusiness().createGroup(createName, createDescription);
+
+			groupId = group.getPrimaryKey().toString();
+			settings.setProperty(parameter, groupId);
+		}
+
+		return group;
 	}
 
 	private void sendMessage(String email, String subject, String body) {

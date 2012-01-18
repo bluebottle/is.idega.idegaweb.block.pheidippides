@@ -22,8 +22,6 @@ import is.idega.idegaweb.pheidippides.data.Team;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -427,7 +425,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 					.getCurrentParticipantNumber());
 		}
 
-		if (!registration.getRace().equals(race)) {
+		if (race != null && !registration.getRace().equals(race)) {
 			race = increaseRaceParticipantNumber(race.getId());
 
 			Registration newReg = new Registration();

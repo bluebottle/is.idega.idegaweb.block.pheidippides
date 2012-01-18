@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.servlet;
 
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 
 import java.io.IOException;
@@ -37,17 +38,19 @@ public class ValitorSuccess extends HttpServlet {
 		String uniqueID = iwc.getParameter("uniqueID");
 		RegistrationHeader header = service.getRegistrationHeader(uniqueID);
 		
-		String securityString = iwc.getParameter("RafraenUndirskriftSvar");
-		String cardType = iwc.getParameter("Kortategund");
-		String cardNumber = iwc.getParameter("KortnumerSidustu");
-		String paymentDate = iwc.getParameter("Dagsetning");
-		String authorizationNumber = iwc.getParameter("Heimildarnumer");
-		String transactionNumber = iwc.getParameter("Faerslunumer");
-		String referenceNumber = iwc.getParameter("Tilvisunarnumer");
-		String comment = iwc.getParameter("Athugasemd");
-		String saleID = iwc.getParameter("VefverslunSalaID");
-		
-		service.markRegistrationAsPaid(header, false, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
+		if (header.getStatus().equals(RegistrationHeaderStatus.WaitingForPayment)) {
+			String securityString = iwc.getParameter("RafraenUndirskriftSvar");
+			String cardType = iwc.getParameter("Kortategund");
+			String cardNumber = iwc.getParameter("KortnumerSidustu");
+			String paymentDate = iwc.getParameter("Dagsetning");
+			String authorizationNumber = iwc.getParameter("Heimildarnumer");
+			String transactionNumber = iwc.getParameter("Faerslunumer");
+			String referenceNumber = iwc.getParameter("Tilvisunarnumer");
+			String comment = iwc.getParameter("Athugasemd");
+			String saleID = iwc.getParameter("VefverslunSalaID");
+			
+			service.markRegistrationAsPaid(header, false, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
+		}
 		
 		PrintWriter out = resp.getWriter();
 		out.println("The Valitor success response has been processed...");

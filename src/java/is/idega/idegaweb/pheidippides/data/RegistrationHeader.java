@@ -117,7 +117,7 @@ public class RegistrationHeader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
 	private Date createdDate;
-
+	
 	public Long getId() {
 		return id;
 	}
