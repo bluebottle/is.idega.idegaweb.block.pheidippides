@@ -61,19 +61,23 @@ jQuery(document).ready(function() {
 		var shirt = jQuery('select[name="prm_shirt_size"]');
 		var value = shirt.val();
 		
-		PheidippidesService.getShirts(racePK, {
-			callback: function(shirtSizes) {
+		PheidippidesService.getLocalizedShirts(racePK, language, {
+			callback: function(shirts) {
 				var firstOption = shirt.children('option:first').detach();
 				dwr.util.removeAllOptions(shirt.attr('id'));
 				
+				dwr.util.addOptions(
+					shirt.attr('id'),
+					shirts,
+					function(shirt) {
+						return shirt.id;
+					},
+					function(shirt) {
+						return shirt.value;
+					}
+				);
+				
 				firstOption.prependTo(shirt);
-				for (var i = 0; i < shirtSizes.length; i++) {
-					PheidippidesService.getLocalizedShirtName(shirtSizes[i], language, {
-						callback: function(property) {
-							shirt.append('<option value="' + property.id + '">' + property.value + '</option>');
-						}
-					});
-				}
 				dwr.util.setValue(shirt.attr('id'), value);
 			}
 		});

@@ -11,6 +11,7 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class PheidippidesBean {
 	public List<Distance> distances;
 	
 	public Race race;
-	public List<Race> races;
+	public Collection<Race> races;
 	
 	public ShirtSize shirtSize;
 	public List<ShirtSize> shirtSizes;
@@ -116,11 +117,11 @@ public class PheidippidesBean {
 		this.race = race;
 	}
 
-	public List<Race> getRaces() {
+	public Collection<Race> getRaces() {
 		return races;
 	}
 
-	public void setRaces(List<Race> races) {
+	public void setRaces(Collection<Race> races) {
 		this.races = races;
 	}
 

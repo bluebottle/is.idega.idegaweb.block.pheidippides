@@ -148,7 +148,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
 			Date openRegistrationDate, Date closeRegistrationDate,
-			boolean familyDiscount, int relayLegs) {
+			boolean familyDiscount, int relayLegs, boolean charityRun,
+			int currentParticipantNumber, int maxParticipantNumber, int orderNumber) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -163,6 +164,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		race.setCloseRegistrationDate(closeRegistrationDate);
 		race.setFamilyDiscount(familyDiscount);
 		race.setNumberOfRelayLegs(relayLegs);
+		race.setCharityRun(charityRun);
+		race.setCurrentParticipantNumber(currentParticipantNumber);
+		race.setMaxParticipantNumber(maxParticipantNumber);
+		race.setOrderNumber(orderNumber);
 
 		getEntityManager().persist(race);
 

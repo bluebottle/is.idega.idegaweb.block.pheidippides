@@ -19,17 +19,21 @@ jQuery(document).ready(function() {
 		var race = jQuery('select[name="prm_race_pk"]');
 		var value = race.val();
 		
-		PheidippidesService.getRaces(eventPK, year, {
+		PheidippidesService.getLocalizedRaces(eventPK, year, language, {
 			callback: function(races) {
 				dwr.util.removeAllOptions(race.attr('id'));
 				
-				for (var i = 0; i < races.length; i++) {
-					PheidippidesService.getLocalizedRaceName(races[i], language, {
-						callback: function(property) {
-							race.append('<option value="' + property.id + '">' + property.value + '</option>');
-						}
-					});
-				}
+				dwr.util.addOptions(
+					race.attr('id'),
+					races,
+					function(property) {
+						return property.id;
+					},
+					function(property) {
+						return property.value;
+					}
+				);
+
 				dwr.util.setValue(race.attr('id'), value);
 			}
 		});

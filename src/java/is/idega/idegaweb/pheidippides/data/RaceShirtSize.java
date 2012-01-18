@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "raceShirtSize.findAll", query = "select r from RaceShirtSize r"),
 	@NamedQuery(name = "raceShirtSize.findAllByRace", query = "select r from RaceShirtSize r where r.race = :race order by r.orderNumber")
 })
-public class RaceShirtSize implements Serializable {
+public class RaceShirtSize implements Serializable, Comparable<RaceShirtSize> {
 	private static final long serialVersionUID = -6362144793780058939L;
 
 	public static final String ENTITY_NAME = "ph_race_shirt_size";
@@ -103,5 +103,9 @@ public class RaceShirtSize implements Serializable {
 
 	public void setOrderNumber(int orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+
+	public int compareTo(RaceShirtSize shirtSize) {
+		return this.getOrderNumber() - shirtSize.getOrderNumber();
 	}
 }

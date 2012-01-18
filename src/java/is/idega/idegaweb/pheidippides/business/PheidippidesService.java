@@ -753,16 +753,40 @@ public class PheidippidesService {
 		return null;
 	}
 	
+	public List<AdvancedProperty> getLocalizedRaces(Long eventPK, int year, String language) {
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+
+		List<Race> races = getRaces(eventPK, year);
+		for (Race race : races) {
+			properties.add(getLocalizedRaceName(race, language));
+		}
+		
+		return properties;
+	}
+	
 	public AdvancedProperty getLocalizedRaceName(Race race, String language) {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
+
 		Event event = race.getEvent();
 		Distance distance = race.getDistance();
 		
 		return new AdvancedProperty(String.valueOf(race.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + distance.getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), distance.getName())));
 	}
 	
+	public List<AdvancedProperty> getLocalizedShirts(Long racePK, String language) {
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+
+		List<RaceShirtSize> shirts = getShirts(racePK);
+		for (RaceShirtSize shirt : shirts) {
+			properties.add(getLocalizedShirtName(shirt, language));
+		}
+		
+		return properties;
+	}
+	
 	public AdvancedProperty getLocalizedShirtName(RaceShirtSize raceShirt, String language) {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
+		
 		ShirtSize size = raceShirt.getSize();
 		Event event = raceShirt.getRace().getEvent();
 		
@@ -817,13 +841,13 @@ public class PheidippidesService {
 							user.getName(),
 							user.getPersonalID() != null ? user.getPersonalID() : "",
 							new IWTimestamp(user.getDateOfBirth()).getDateString("dd.MM.yyyy"),
-							iwrb.getLocalizedString(registration.getShirtSize().getLocalizedKey(), ""),
-							iwrb.getLocalizedString(registration.getRace().getDistance().getLocalizedKey(), ""),
+							iwrb.getLocalizedString(registration.getRace().getEvent() + "." + registration.getShirtSize().getLocalizedKey(), ""),
+							getLocalizedRaceName(registration.getRace(), header.getLocale()),
 							userNameString, passwordString };
-					String subject = iwrb.getLocalizedString("registration_received_subject_mail",
+					String subject = iwrb.getLocalizedString(registration.getRace().getEvent() + "." + "registration_received_subject_mail",
 							"Your registration has been received.");
 					String body = MessageFormat
-							.format(iwrb.getLocalizedString("registration_received_body_mail",
+							.format(iwrb.getLocalizedString(registration.getRace().getEvent() + "." + "registration_received_body_mail",
 									"Your registration has been received."),
 									args);
 					sendMessage(email.getEmailAddress(), subject, body);

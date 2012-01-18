@@ -45,7 +45,11 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 	private static final String PARAMETER_OPEN_REGISTRATION = "prm_open_registration";
 	private static final String PARAMETER_CLOSE_REGISTRATION = "prm_close_registration";
 	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
+	private static final String PARAMETER_CHARITY_RUN = "prm_charity_run";
 	private static final String PARAMETER_RELAY_LEGS = "prm_relay_legs";
+	private static final String PARAMETER_NEXT_PARTICIPANT_NUMBER = "prm_next_participant_number";
+	private static final String PARAMETER_MAX_PARTICIPANT_NUMBER = "prm_maximum_participant_number";
+	private static final String PARAMETER_ORDER_NUMBER = "prm_order_number";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -174,7 +178,11 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), iwc.getCurrentLocale()) : null,
 			iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
 			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT),
-			iwc.isParameterSet(PARAMETER_RELAY_LEGS) ? Integer.parseInt(iwc.getParameter(PARAMETER_RELAY_LEGS)) : 0
+			iwc.isParameterSet(PARAMETER_RELAY_LEGS) ? Integer.parseInt(iwc.getParameter(PARAMETER_RELAY_LEGS)) : 0,
+			iwc.isParameterSet(PARAMETER_CHARITY_RUN),
+			iwc.isParameterSet(PARAMETER_NEXT_PARTICIPANT_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_NEXT_PARTICIPANT_NUMBER)) : 0,
+			iwc.isParameterSet(PARAMETER_MAX_PARTICIPANT_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_MAX_PARTICIPANT_NUMBER)) : 0,
+			iwc.isParameterSet(PARAMETER_ORDER_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_ORDER_NUMBER)) : 0
 		);
 		
 		return true;

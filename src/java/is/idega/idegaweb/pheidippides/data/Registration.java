@@ -102,8 +102,7 @@ public class Registration implements Serializable {
 		return id;
 	}
 	
-	@SuppressWarnings("unused")
-	private void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

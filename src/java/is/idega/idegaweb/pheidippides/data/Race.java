@@ -21,11 +21,11 @@ import javax.persistence.TemporalType;
 @Table(name = Race.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "race.findAll", query = "select r from Race r"),
-	@NamedQuery(name = "race.findByEvent", query = "select r from Race r where r.event = :event"),
-	@NamedQuery(name = "race.findByYear", query = "select r from Race r where r.year = :year"),
-	@NamedQuery(name = "race.findByEventAndYear", query = "select r from Race r where r.event = :event and r.year = :year")
+	@NamedQuery(name = "race.findByEvent", query = "select r from Race r where r.event = :event order by r.orderNumber"),
+	@NamedQuery(name = "race.findByYear", query = "select r from Race r where r.year = :year order by r.orderNumber"),
+	@NamedQuery(name = "race.findByEventAndYear", query = "select r from Race r where r.event = :event and r.year = :year order by r.orderNumber")
 })
-public class Race implements Serializable {
+public class Race implements Serializable, Comparable<Race> {
 	private static final long serialVersionUID = 7926415194738887757L;
 
 	public static final String ENTITY_NAME = "ph_race";
@@ -44,6 +44,7 @@ public class Race implements Serializable {
 	private static final String COLUMN_CREATED_DATE = "created";
 	private static final String COLUMN_CURRENT_PARTICIPANT_NUMBER = "current_participant_number";
 	private static final String COLUMN_MAX_PARTICIPANT_NUMBER = "max_participant_number";
+	private static final String COLUMN_ORDER_NUMBER = "order_number";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -94,6 +95,9 @@ public class Race implements Serializable {
 
 	@Column(name = Race.COLUMN_MAX_PARTICIPANT_NUMBER)
 	private int maxParticipantNumber;
+	
+	@Column(name = Race.COLUMN_ORDER_NUMBER)
+	private int orderNumber;
 
 	public Long getId() {
 		return id;
@@ -205,5 +209,17 @@ public class Race implements Serializable {
 
 	public void setMaxParticipantNumber(int maxParticipantNumber) {
 		this.maxParticipantNumber = maxParticipantNumber;
+	}
+
+	public int getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(int orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public int compareTo(Race race) {
+		return this.getOrderNumber() - race.getOrderNumber();
 	}
 }

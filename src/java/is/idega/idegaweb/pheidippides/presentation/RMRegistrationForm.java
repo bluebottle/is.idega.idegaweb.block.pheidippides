@@ -123,6 +123,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 					if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
 						Participant participant = null;
 						if (getSession().getCurrentParticipant() == null) {
+							ParticipantHolder holder = new ParticipantHolder();
+							getSession().setCurrentParticipant(holder);
+							
 							participant = new Participant();
 							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
 							participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), iwc.getCurrentLocale()));

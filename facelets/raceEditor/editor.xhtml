@@ -56,6 +56,10 @@
 				<label for="prm_maximum_participant_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['maximum_participant_number']}" /></label>
 				<input type="text" class="required digits" name="prm_maximum_participant_number" value="#{pheidippidesBean.race.maxParticipantNumber}" />
 			</div>
+			<div class="formItem required">
+				<label for="prm_order_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['order_number']}" /></label>
+				<input type="text" class="required digits" name="prm_order_number" value="#{pheidippidesBean.race.orderNumber}" />
+			</div>
 			<div class="formItem">
 				<label for="prm_relay_legs"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_legs']}" /></label>
 				<input type="text" class="digits" name="prm_relay_legs" value="#{pheidippidesBean.race.numberOfRelayLegs}" />
