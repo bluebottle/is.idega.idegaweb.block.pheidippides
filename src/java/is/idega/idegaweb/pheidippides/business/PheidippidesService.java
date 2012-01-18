@@ -395,7 +395,7 @@ public class PheidippidesService {
 									participant.getAddress(),
 									participant.getPostalCode(),
 									participant.getCity(),
-									getCountryHome().findByCountryName(
+									getCountryHome().findByPrimaryKey(
 											participant.getCountry()));
 						}
 					} catch (Exception e) {
@@ -510,32 +510,15 @@ public class PheidippidesService {
 
 								try {
 									if (user == null) {
-										Gender gender = null;
-										if (participant2.getGender().equals(
-												getGenderHome().getMaleGender()
-														.getName())) {
-											gender = getGenderHome()
-													.getMaleGender();
-										} else {
-											gender = getGenderHome()
-													.getFemaleGender();
-										}
-										Name fullName = new Name(
-												participant2.getFirstName(),
-												participant2.getMiddleName(),
-												participant2.getLastName());
 										user = saveUser(
-												fullName,
+												new Name(participant2.getFullName()),
 												new IWTimestamp(participant2
 														.getDateOfBirth()),
-												gender,
-												participant2.getAddress(),
-												participant2.getPostalCode(),
-												participant2.getCity(),
-												getCountryHome()
-														.findByCountryName(
-																participant2
-																		.getCountry()));
+												null,
+												null,
+												null,
+												null,
+												null);
 									}
 								} catch (Exception e) {
 									e.printStackTrace();

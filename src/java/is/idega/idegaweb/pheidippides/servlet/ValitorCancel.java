@@ -28,15 +28,20 @@ public class ValitorCancel extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setStatus(200);
 		resp.setContentType("text/plain");
+		PrintWriter out = resp.getWriter();
 
 		IWContext iwc = new IWContext(req, resp, req.getSession().getServletContext());
-		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
-		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
-
-		service.markRegistrationAsPaymentCancelled(iwc.getParameter("uniqueID"));
+		if (iwc.isParameterSet("uniqueID")) {
+			WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
+			PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
+	
+			service.markRegistrationAsPaymentCancelled(iwc.getParameter("uniqueID"));
+			out.println("The Valitor cancellation response has been processed...");
+		}
+		else {
+			out.println("The Valitor cancellation standard response...");
+		}
 		
-		PrintWriter out = resp.getWriter();
-		out.println("The Valitor cancellation response has been processed...");
 		out.close();
 	}
 }
