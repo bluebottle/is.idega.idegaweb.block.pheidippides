@@ -343,6 +343,9 @@ public class PheidippidesService {
 			}
 			holder.setHeader(header);
 
+			valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
+			valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
+			
 			if (isBankTransfer) {
 				BankReference reference = dao.storeBankReference(header);
 				holder.setBankReference(reference);

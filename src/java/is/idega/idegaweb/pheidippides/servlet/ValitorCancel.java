@@ -33,7 +33,7 @@ public class ValitorCancel extends HttpServlet {
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 
-		service.markRegistrationAsPaymentCancelled(iwc.getParameter(""));
+		service.markRegistrationAsPaymentCancelled(iwc.getParameter("uniqueID"));
 		
 		PrintWriter out = resp.getWriter();
 		out.println("The Valitor cancellation response has been processed...");
