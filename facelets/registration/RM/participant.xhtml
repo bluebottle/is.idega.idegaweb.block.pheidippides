@@ -24,7 +24,7 @@
 				</div>
 				<div class="formItem required">
 					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></label>
-					<c:datePicker styleClass="required" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{participant.dateOfBirth}" />
+					<c:datePicker styleClass="required" useCurrent="#{false}" yearRange="-100:-3" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{participant.dateOfBirth}" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_address"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></label>
@@ -85,7 +85,7 @@
 			<ui:fragment rendered="#{not empty pheidippidesRegistrationSession.currentParticipant}">
 				<div class="formItem required">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
-					<input type="text" name="prm_name" value="#{p:getFullName(participant.firstName, participant.middleName, participant.lastName, pheidippidesBean.locale)}" disabled="disabled" />
+					<input type="text" name="prm_name" value="#{participant.fullName}" disabled="disabled" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>

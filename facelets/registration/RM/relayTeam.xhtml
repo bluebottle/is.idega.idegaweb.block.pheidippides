@@ -56,25 +56,26 @@
 					</tr>
 					
 					<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
+						<ui:param value="#{pheidippidesBean.relayPartnerMap[leg.value]}" name="partner" />
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
 							<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
-								<td><input type="text" name="prm_personalId" /></td>
+								<td><input type="text" name="prm_personalId" value="#{partner.personalId}" /></td>
 							</ui:fragment>
 							<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
-								<td><c:datePicker inputName="prm_date_of_birth" /></td>
+								<td><c:datePicker useCurrent="#{false}" yearRange="-100:-3" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{partner.dateOfBirth}" /></td>
 							</ui:fragment>
-							<td><input type="text" name="prm_name" /></td>
-							<td><input type="text" name="prm_email" /></td>
+							<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
+							<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
 							<td>
 								<c:selectOne name="prm_shirt_size">
 									<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
 									<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
-										<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq participant.shirtSize.id}" />
+										<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq partner.shirtSize.id}" />
 									</ui:repeat>
 								</c:selectOne>
 							</td>
-							<td><input type="text" name="prm_relay_leg" value="#{participant.leg}" /></td>
+							<td><input type="text" name="prm_relay_leg" value="#{partner.relayLeg}" /></td>
 						</tr>
 					</ui:repeat>
 				</tbody>

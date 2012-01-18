@@ -60,6 +60,7 @@ public class PheidippidesBean {
 	public List<AdvancedProperty> properties;
 	
 	public RegistrationAnswerHolder answer;
+	private Map<String, Participant> relayPartnerMap;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -251,5 +252,13 @@ public class PheidippidesBean {
 
 	public void setAnswer(RegistrationAnswerHolder answer) {
 		this.answer = answer;
+	}
+	
+	public Map<String, Participant> getRelayPartnerMap() {
+		return relayPartnerMap;
+	}
+
+	public void setRelayPartnerMap(Map<String, Participant> partnerMap) {
+		this.relayPartnerMap = partnerMap;
 	}
 }
