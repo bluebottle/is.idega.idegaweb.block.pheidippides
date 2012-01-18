@@ -12,7 +12,9 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
@@ -180,6 +182,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 						team.setName(teamName);
 						team.setRelayTeam(true);
 						team.setCreatedDate(IWTimestamp.getTimestampRightNow());
+						holder.setTeam(team);
 						
 						List<Participant> relayPartners = new ArrayList<Participant>();
 						String[] personalIDs = iwc.getParameterValues(PARAMETER_PERSONAL_ID_RELAY);
@@ -187,6 +190,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 						String[] names = iwc.getParameterValues(PARAMETER_NAME);
 						String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
 						String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
+						String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
 						
 						for (int i = 0; i < names.length; i++) {
 							if (names[i] != null && names[i].length() > 0) {
@@ -200,6 +204,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 								}
 								participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
 								participant.setRelayLeg(relayLegs[i]);
+								participant.setEmail(emails[i]);
 								relayPartners.add(participant);
 							}
 						}
@@ -296,6 +301,16 @@ public class RMRegistrationForm extends IWBaseComponent {
 		for (int i = 0; i < getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() - 1; i++) {
 			properties.add(new AdvancedProperty(String.valueOf(i + 2), String.valueOf(i + 2)));
 		}
+		
+		Map<String, Participant> partnerMap = new HashMap<String, Participant>();
+		List<Participant> relayPartners = getSession().getCurrentParticipant().getRelayPartners();
+		if (relayPartners != null) {
+			int index = 2;
+			for (Participant participant : relayPartners) {
+				partnerMap.put(String.valueOf(index++), participant);
+			}
+		}
+		bean.setRelayPartnerMap(partnerMap);
 		
 		bean.setProperties(properties);
 		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(getSession().getCurrentParticipant().getRace()));
