@@ -122,4 +122,8 @@ public interface PheidippidesDao {
 	public BankReference storeBankReference(RegistrationHeader header);
 	
 	public BankReference findBankReference(RegistrationHeader header);
+	
+	public Team getTeam(Long teamID);
+	
+	public Team storeTeam(Long teamID, String name);
 }

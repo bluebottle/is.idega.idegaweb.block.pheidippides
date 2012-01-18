@@ -13,6 +13,7 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -428,11 +429,17 @@ public class PheidippidesService {
 						}
 					}
 
+					List<Participant> relayPartners = participantHolder.getRelayPartners();
+					Team team = participantHolder.getTeam();
+					if (relayPartners != null && !relayPartners.isEmpty()) {
+						team = dao.storeTeam(team.getId(), team.getName());
+					}
+					
 					dao.storeRegistration(null, header,
 							RegistrationStatus.Unconfirmed,
 							participantHolder.getRace(),
 							participantHolder.getShirtSize(),
-							participantHolder.getTeam(),
+							team,
 							participantHolder.getLeg(),
 							participantHolder.getAmount(),
 							participantHolder.getCharity(),
@@ -476,6 +483,81 @@ public class PheidippidesService {
 					url.append(VARA_AFSLATTUR);
 					url.append("=");
 					url.append(participantHolder.getDiscount());
+					
+					if (relayPartners != null && !relayPartners.isEmpty()) {
+						for (Participant participant2 : relayPartners) {
+							if (createUsers) {
+								if (participant2.getUuid() != null) {
+									try {
+										user = getUserBusiness().getUserByUniqueId(
+												participant2.getUuid());
+									} catch (RemoteException e) {
+									} catch (FinderException e) {
+									}
+								}
+
+								try {
+									if (user == null) {
+										Gender gender = null;
+										if (participant2.getGender().equals(
+												getGenderHome().getMaleGender().getName())) {
+											gender = getGenderHome().getMaleGender();
+										} else {
+											gender = getGenderHome().getFemaleGender();
+										}
+										Name fullName = new Name(
+												participant2.getFirstName(),
+												participant2.getMiddleName(),
+												participant2.getLastName());
+										user = saveUser(
+												fullName,
+												new IWTimestamp(participant2
+														.getDateOfBirth()),
+												gender,
+												participant2.getAddress(),
+												participant2.getPostalCode(),
+												participant2.getCity(),
+												getCountryHome().findByCountryName(
+														participant2.getCountry()));
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									user = null; // Something got fucked up
+								}
+							} else {
+								try {
+									user = getUserBusiness().getUserByUniqueId(
+											participant2.getUuid());
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
+							if (user != null) {
+								if (participant2.getEmail() != null
+										&& !"".equals(participant2.getEmail())) {
+									try {
+										getUserBusiness().updateUserMail(user,
+												participant2.getEmail());
+									} catch (Exception e) {
+									}
+								}
+
+								
+								dao.storeRegistration(null, header,
+										RegistrationStatus.RelayPartner,
+										participantHolder.getRace(),
+										participantHolder.getShirtSize(),
+										team,
+										participantHolder.getLeg(),
+										participantHolder.getAmount(),
+										participantHolder.getCharity(),
+										participant.getNationality(),
+										participant.getUuid(),
+										participantHolder.getDiscount());
+							}
+						}
+					}
 				}
 			}
 
@@ -772,7 +854,6 @@ public class PheidippidesService {
 		
 		return new AdvancedProperty(String.valueOf(race.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + distance.getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), distance.getName())));
 	}
-	
 	public List<AdvancedProperty> getLocalizedShirts(Long racePK, String language) {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 
