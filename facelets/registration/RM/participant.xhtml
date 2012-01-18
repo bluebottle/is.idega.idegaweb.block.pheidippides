@@ -17,14 +17,14 @@
 
 		<fieldset class="formSection">
 			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant.participant}" name="participant" />
-			<ui:fragment rendered="#{not empty param['prm_no_personal_id']}">
+			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
 				<div class="formItem required">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
 					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></label>
-					<c:datePicker styleClass="required" useCurrent="#{false}" yearRange="-100:-3" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{participant.dateOfBirth}" />
+					<c:datePicker styleClass="required" useCurrent="#{false}" yearRange="1900:2012" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{participant.dateOfBirth}" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_address"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></label>
@@ -43,7 +43,7 @@
 					<c:selectOne styleClass="required" name="prm_country">
 						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_country']}" content="" />
 						<ui:repeat value="#{pheidippidesBean.properties}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.value eq participant.country}" />
+							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.country}" />
 						</ui:repeat>
 					</c:selectOne>
 				</div>
@@ -82,7 +82,7 @@
 				</div>
 			</ui:fragment>
 			
-			<ui:fragment rendered="#{not empty pheidippidesRegistrationSession.currentParticipant}">
+			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and not empty pheidippidesRegistrationSession.currentParticipant}">
 				<div class="formItem required">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
 					<input type="text" name="prm_name" value="#{participant.fullName}" disabled="disabled" />

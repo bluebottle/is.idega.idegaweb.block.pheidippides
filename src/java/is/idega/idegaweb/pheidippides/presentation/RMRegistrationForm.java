@@ -30,6 +30,7 @@ import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -106,6 +107,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 
 			switch (parseAction(iwc)) {
 				case ACTION_PERSON_SELECT:
+					if (bean.getLocale().equals(LocaleUtil.getIcelandicLocale())) {
+						getSession().setRegistrationWithPersonalId(true);
+					}
 					showPersonSelect(iwc, bean);
 					break;
 		
@@ -118,6 +122,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 						getSession().setCurrentParticipant(holder);
 						getSession().setRegistrationWithPersonalId(true);
 					}
+					else {
+						getSession().setRegistrationWithPersonalId(false);
+					}
 					showParticipant(iwc, bean);
 					break;
 		
@@ -129,15 +136,18 @@ public class RMRegistrationForm extends IWBaseComponent {
 							getSession().setCurrentParticipant(holder);
 							
 							participant = new Participant();
+						}
+						else {
+							participant = getSession().getCurrentParticipant().getParticipant();
+						}
+
+						if (!getSession().isRegistrationWithPersonalId()) {
 							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
 							participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), iwc.getCurrentLocale()));
 							participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
 							participant.setCity(iwc.getParameter(PARAMETER_CITY));
 							participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
 							participant.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
-						}
-						else {
-							participant = getSession().getCurrentParticipant().getParticipant();
 						}
 						participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
 						participant.setGender(iwc.getParameter(PARAMETER_GENDER));

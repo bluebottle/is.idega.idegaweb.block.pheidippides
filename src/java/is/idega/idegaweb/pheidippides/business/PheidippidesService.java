@@ -399,7 +399,7 @@ public class PheidippidesService {
 									participant.getPostalCode(),
 									participant.getCity(),
 									getCountryHome().findByPrimaryKey(
-											participant.getCountry()));
+											new Integer(participant.getCountry())));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -500,12 +500,14 @@ public class PheidippidesService {
 
 					if (relayPartners != null && !relayPartners.isEmpty()) {
 						for (Participant participant2 : relayPartners) {
+							user = null;
+							
 							if (createUsers) {
-								if (participant2.getUuid() != null) {
+								if (participant2.getPersonalId() != null) {
 									try {
 										user = getUserBusiness()
-												.getUserByUniqueId(
-														participant2.getUuid());
+												.getUser(
+														participant2.getPersonalId());
 									} catch (RemoteException e) {
 									} catch (FinderException e) {
 									}
@@ -529,8 +531,8 @@ public class PheidippidesService {
 								}
 							} else {
 								try {
-									user = getUserBusiness().getUserByUniqueId(
-											participant2.getUuid());
+									user = getUserBusiness().getUser(
+											participant2.getPersonalId());
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -1026,6 +1028,11 @@ public class PheidippidesService {
 							registration.getRace().getEvent().getLocalizedKey() + "."
 									+ "registration_received_body_mail",
 							"Your registration has been received.")), args);
+					
+					body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
+					body = body.replaceAll("</p>", "\r\n\r\n");
+					body = body.replaceAll("<br />", "\r\n");
+
 					sendMessage(email.getEmailAddress(), subject, body);
 				} catch (RemoteException e) {
 					e.printStackTrace();
@@ -1058,6 +1065,11 @@ public class PheidippidesService {
 					holder.getRace().getEvent().getLocalizedKey() + "."
 							+ "receipt_body",
 					"Your registration has been received.")), args);
+			
+			body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
+			body = body.replaceAll("</p>", "\r\n\r\n");
+			body = body.replaceAll("<br />", "\r\n");
+			
 			sendMessage(email.getEmailAddress(), subject, body);
 		} catch (RemoteException e) {
 			e.printStackTrace();

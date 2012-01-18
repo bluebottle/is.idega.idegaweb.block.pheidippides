@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Scope("session")
 @Service("pheidippidesRegistrationSession")
 public class PheidippidesRegistrationSession {
-	private boolean registrationWithPersonalId = false;
+	private Boolean registrationWithPersonalId = false;
 	private String registrantUUID = null;
 	private List<ParticipantHolder> holders = null;
 	private ParticipantHolder currentParticipant;
