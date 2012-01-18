@@ -785,10 +785,14 @@ public class PheidippidesService {
 	}
 	
 	public AdvancedProperty getLocalizedShirtName(RaceShirtSize raceShirt, String language) {
-		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
-		
 		ShirtSize size = raceShirt.getSize();
 		Event event = raceShirt.getRace().getEvent();
+		
+		return getLocalizedShirtName(event, size, language);
+	}
+	
+	public AdvancedProperty getLocalizedShirtName(Event event, ShirtSize size, String language) {
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(LocaleUtil.getLocale(language));
 		
 		return new AdvancedProperty(String.valueOf(size.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getSize().toString() + " - " +size.getGender().toString())));
 	}
@@ -841,8 +845,8 @@ public class PheidippidesService {
 							user.getName(),
 							user.getPersonalID() != null ? user.getPersonalID() : "",
 							new IWTimestamp(user.getDateOfBirth()).getDateString("dd.MM.yyyy"),
-							iwrb.getLocalizedString(registration.getRace().getEvent() + "." + registration.getShirtSize().getLocalizedKey(), ""),
-							getLocalizedRaceName(registration.getRace(), header.getLocale()),
+							getLocalizedShirtName(registration.getRace().getEvent(), registration.getShirtSize(), header.getLocale()).getValue(),
+							getLocalizedRaceName(registration.getRace(), header.getLocale()).getValue(),
 							userNameString, passwordString };
 					String subject = iwrb.getLocalizedString(registration.getRace().getEvent() + "." + "registration_received_subject_mail",
 							"Your registration has been received.");
