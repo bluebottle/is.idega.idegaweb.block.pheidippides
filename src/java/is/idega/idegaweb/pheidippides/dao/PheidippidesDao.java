@@ -90,8 +90,12 @@ public interface PheidippidesDao {
 
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID, String paymentGroup, String locale);
-
+			String registrantUUID, String paymentGroup, String locale,
+			Currency currency, String securityString, String cardType,
+			String cardNumber, String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId);
+	
 	public Registration getRegistration(Long registrationID);
 
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);

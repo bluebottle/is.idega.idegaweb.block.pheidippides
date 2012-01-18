@@ -22,6 +22,8 @@ import is.idega.idegaweb.pheidippides.data.Team;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -149,7 +151,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Distance distance, int minimumAge, int maximumAge,
 			Date openRegistrationDate, Date closeRegistrationDate,
 			boolean familyDiscount, int relayLegs, boolean charityRun,
-			int currentParticipantNumber, int maxParticipantNumber, int orderNumber) {
+			int currentParticipantNumber, int maxParticipantNumber,
+			int orderNumber) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -243,9 +246,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public RacePrice getCurrentRacePrice(Race race, Currency currency) {
-		return getSingleResult("racePrice.findByRaceAndDate", RacePrice.class, new Param("race", race), new Param("date", IWTimestamp.getTimestampRightNow()), new Param("currency", currency));
+		return getSingleResult("racePrice.findByRaceAndDate", RacePrice.class,
+				new Param("race", race),
+				new Param("date", IWTimestamp.getTimestampRightNow()),
+				new Param("currency", currency));
 	}
-	
+
 	@Transactional(readOnly = false)
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
@@ -306,13 +312,18 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public RegistrationHeader getRegistrationHeader(String uniqueID) {
-		return getSingleResult("registrationHeader.findByUUID", RegistrationHeader.class, new Param("uuid", uniqueID));
+		return getSingleResult("registrationHeader.findByUUID",
+				RegistrationHeader.class, new Param("uuid", uniqueID));
 	}
 
 	@Transactional(readOnly = false)
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID, String paymentGroup, String locale) {
+			String registrantUUID, String paymentGroup, String locale,
+			Currency currency, String securityString, String cardType,
+			String cardNumber, String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId) {
 		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID)
 				: null;
 		if (header == null) {
@@ -324,7 +335,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (registrantUUID != null) {
 			header.setRegistrantUUID(registrantUUID);
 		}
-		
+
 		if (paymentGroup != null) {
 			header.setPaymentGroup(paymentGroup);
 		}
@@ -333,6 +344,46 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			header.setLocale(locale);
 		}
 		
+		if (currency != null) {
+			header.setCurrency(currency);
+		}
+		
+		if (securityString != null) {
+			header.setSecurityString(securityString);
+		}
+		
+		if (cardType != null) {
+			header.setCardType(cardType);
+		}
+		
+		if (cardNumber != null) {
+			header.setCardNumber(cardNumber);
+		}
+		
+		if (paymentDate != null) {
+			header.setPaymentDate(paymentDate);
+		}
+		
+		if (authorizationNumber != null) {
+			header.setAuthorizationNumber(authorizationNumber);
+		}
+		
+		if (transactionNumber != null) {
+			header.setTransactionNumber(transactionNumber);
+		}
+		
+		if (referenceNumber != null) {
+			header.setReferenceNumber(referenceNumber);
+		}
+		
+		if (comment != null) {
+			header.setComment(comment);
+		}
+		
+		if (saleId != null) {
+			header.setSaleId(saleId);
+		}
+
 		getEntityManager().persist(header);
 
 		return header;
@@ -341,18 +392,22 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Registration getRegistration(Long registrationID) {
 		return find(Registration.class, registrationID);
 	}
-	
-	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
+
+	public List<Registration> getRegistrations(Race race,
+			RegistrationStatus status) {
 		if (status != null) {
-			return getResultList("registration.findByRaceAndStatus", Registration.class, new Param("race", race), new Param("status", status));
-		}
-		else {
-			return getResultList("registration.findByRace", Registration.class, new Param("race", race));
+			return getResultList("registration.findByRaceAndStatus",
+					Registration.class, new Param("race", race), new Param(
+							"status", status));
+		} else {
+			return getResultList("registration.findByRace", Registration.class,
+					new Param("race", race));
 		}
 	}
 
 	public List<Registration> getRegistrations(RegistrationHeader header) {
-		return getResultList("registration.findByHeader", Registration.class, new Param("header", header));
+		return getResultList("registration.findByHeader", Registration.class,
+				new Param("header", header));
 	}
 
 	@Transactional(readOnly = false)
@@ -411,7 +466,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (leg != null) {
 			registration.setLeg(leg);
 		}
-		
+
 		if (amount > 0) {
 			registration.setAmountPaid(amount);
 		}
@@ -427,7 +482,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (userUUID != null) {
 			registration.setUserUUID(userUUID);
 		}
-		
+
 		if (discount > 0) {
 			registration.setAmountDiscount(discount);
 		}
@@ -441,12 +496,15 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public List<RaceShirtSize> getRaceShirtSizes(Race race) {
-		return getResultList("raceShirtSize.findAllByRace", RaceShirtSize.class, new Param("race", race));
+		return getResultList("raceShirtSize.findAllByRace",
+				RaceShirtSize.class, new Param("race", race));
 	}
 
 	@Transactional(readOnly = false)
-	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race, ShirtSize shirtSize, String localizedKey, int orderNumber) {
-		RaceShirtSize raceShirtSize = raceShirtSizePK != null ? getRaceShirtSize(raceShirtSizePK) : null;
+	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race,
+			ShirtSize shirtSize, String localizedKey, int orderNumber) {
+		RaceShirtSize raceShirtSize = raceShirtSizePK != null ? getRaceShirtSize(raceShirtSizePK)
+				: null;
 		if (raceShirtSize == null) {
 			raceShirtSize = new RaceShirtSize();
 			raceShirtSize.setCreatedDate(IWTimestamp.getTimestampRightNow());
@@ -455,20 +513,20 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		raceShirtSize.setSize(shirtSize);
 		raceShirtSize.setLocalizedKey(localizedKey);
 		raceShirtSize.setOrderNumber(orderNumber);
-		
+
 		getEntityManager().persist(raceShirtSize);
-		
+
 		return raceShirtSize;
 	}
 
 	@Transactional(readOnly = false)
 	public boolean removeRaceShirtSize(Long raceShirtSizePK) {
 		RaceShirtSize raceShirtSize = getRaceShirtSize(raceShirtSizePK);
-		if (raceShirtSize != null){
+		if (raceShirtSize != null) {
 			getEntityManager().remove(raceShirtSize);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -481,7 +539,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Transactional(readOnly = false)
-	public Charity storeCharity(Long charityPK, String name, String personalID, String description) {
+	public Charity storeCharity(Long charityPK, String name, String personalID,
+			String description) {
 		Charity charity = charityPK != null ? getCharity(charityPK) : null;
 		if (charity == null) {
 			charity = new Charity();
@@ -490,9 +549,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		charity.setName(name);
 		charity.setPersonalId(personalID);
 		charity.setDescription(description);
-		
+
 		getEntityManager().persist(charity);
-		
+
 		return charity;
 	}
 
@@ -511,32 +570,33 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		BankReference reference = new BankReference();
 		reference.setHeader(header);
 		getEntityManager().persist(reference);
-		
+
 		return reference;
 	}
-	
+
 	public BankReference findBankReference(RegistrationHeader header) {
-		return getSingleResult("bankReference.findByHeader", BankReference.class, new Param("header", header));
+		return getSingleResult("bankReference.findByHeader",
+				BankReference.class, new Param("header", header));
 	}
-	
+
 	public Team getTeam(Long teamID) {
 		return find(Team.class, teamID);
 	}
-	
+
 	public Team storeTeam(Long teamID, String name) {
 		Team team = teamID != null ? getTeam(teamID) : null;
 		if (team == null) {
 			team = new Team();
 			team.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}
-		
+
 		if (name != null) {
 			team.setName(name);
 		}
-		
+
 		getEntityManager().persist(team);
-		
+
 		return team;
-		
+
 	}
 }
