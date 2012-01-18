@@ -581,7 +581,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(Team.class, teamID);
 	}
 
-	public Team storeTeam(Long teamID, String name) {
+	public Team storeTeam(Long teamID, String name, boolean isRelayTeam) {
 		Team team = teamID != null ? getTeam(teamID) : null;
 		if (team == null) {
 			team = new Team();
@@ -592,6 +592,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			team.setName(name);
 		}
 
+		team.setRelayTeam(isRelayTeam);
+		
 		getEntityManager().persist(team);
 
 		return team;

@@ -446,7 +446,7 @@ public class PheidippidesService {
 							.getRelayPartners();
 					Team team = participantHolder.getTeam();
 					if (relayPartners != null && !relayPartners.isEmpty()) {
-						team = dao.storeTeam(team.getId(), team.getName());
+						team = dao.storeTeam(team.getId(), team.getName(), team.isRelayTeam());
 					}
 
 					dao.storeRegistration(null, header,
