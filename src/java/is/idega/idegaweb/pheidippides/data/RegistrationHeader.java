@@ -25,7 +25,8 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @Table(name = RegistrationHeader.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "registrationHeader.findAll", query = "select r from RegistrationHeader r"),
-	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID")
+	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID"),
+	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid")
 })
 public class RegistrationHeader implements Serializable {
 	private static final long serialVersionUID = -8531574945301832059L;
@@ -36,6 +37,7 @@ public class RegistrationHeader implements Serializable {
 	private static final String COLUMN_STATUS = "status";
 	private static final String COLUMN_REGISTRANT_UUID = "registrant_uuid";
 	private static final String COLUMN_PAYMENT_GROUP = "payment_group";
+	private static final String COLUMN_LOCALE = "locale";
 	private static final String COLUMN_CREATED_DATE = "created";
 	
 	@PrePersist
@@ -64,6 +66,8 @@ public class RegistrationHeader implements Serializable {
 	@Column(name = RegistrationHeader.COLUMN_PAYMENT_GROUP)
 	private String paymentGroup;	
 	
+	@Column(name = RegistrationHeader.COLUMN_LOCALE)
+	private String locale;	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
@@ -116,5 +120,13 @@ public class RegistrationHeader implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

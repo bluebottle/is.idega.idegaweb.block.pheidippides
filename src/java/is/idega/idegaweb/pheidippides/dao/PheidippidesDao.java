@@ -84,14 +84,18 @@ public interface PheidippidesDao {
 	public Race increaseRaceParticipantNumber(Long raceID);
 
 	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID);
+	
+	public RegistrationHeader getRegistrationHeader(String uniqueID);
 
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID, String paymentGroup);
+			String registrantUUID, String paymentGroup, String locale);
 
 	public Registration getRegistration(Long registrationID);
 
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
+	
+	public List<Registration> getRegistrations(RegistrationHeader header);
 	
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,

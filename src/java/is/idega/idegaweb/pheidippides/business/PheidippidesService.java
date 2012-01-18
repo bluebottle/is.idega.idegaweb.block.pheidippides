@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -39,6 +40,8 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.core.accesscontrol.business.LoginDBHandler;
+import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.location.data.Address;
@@ -47,6 +50,7 @@ import com.idega.core.location.data.Country;
 import com.idega.core.location.data.CountryHome;
 import com.idega.core.location.data.PostalCode;
 import com.idega.core.location.data.PostalCodeHome;
+import com.idega.core.messaging.MessagingSettings;
 import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
@@ -90,6 +94,10 @@ public class PheidippidesService {
 	private static final String VARA_VERD = "_Verd";
 	private static final String VARA_AFSLATTUR = "_Afslattur";
 
+	private static String DEFAULT_SMTP_MAILSERVER = "mail.idega.is";
+	private static String DEFAULT_MESSAGEBOX_FROM_ADDRESS = "marathon@marathon.is";
+	private static String DEFAULT_CC_ADDRESS = "marathon@marathon.is";
+	
 	@Autowired
 	private PheidippidesDao dao;
 
@@ -326,11 +334,11 @@ public class PheidippidesService {
 			if (doPayment) {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.WaitingForPayment,
-						registrantUUID, paymentGroup);
+						registrantUUID, paymentGroup, locale.toString());
 			} else {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
-						registrantUUID, paymentGroup);
+						registrantUUID, paymentGroup, locale.toString());
 			}
 			holder.setHeader(header);
 
@@ -760,4 +768,104 @@ public class PheidippidesService {
 		
 		return new AdvancedProperty(String.valueOf(size.getId()), PheidippidesUtil.escapeXML(iwrb.getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getSize().toString() + " - " +size.getGender().toString())));
 	}
+
+	public RegistrationHeader markRegistrationAsPaid(String uniqueID, boolean manualPayment) {
+		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
+		
+		return markRegistrationAsPaid(header, manualPayment);
+	}
+	
+	public RegistrationHeader markRegistrationAsPaid(RegistrationHeader header, boolean manualPayment) {
+		List<Registration> registrations = dao.getRegistrations(header);
+		dao.storeRegistrationHeader(header.getId(), manualPayment ? RegistrationHeaderStatus.ManualPayment : RegistrationHeaderStatus.Paid, null, null, null);
+		for (Registration registration : registrations) {
+			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
+				registration = dao.storeRegistration(registration.getId(), header, RegistrationStatus.OK, null, null, null, null, 0, null, null, null, 0);
+				try {
+					User user = getUserBusiness().getUserByUniqueId(registration.getUserUUID());
+					String userNameString = "";
+					String passwordString = "";
+					if (getUserBusiness().hasUserLogin(user)) {
+						try {
+							LoginTable login = LoginDBHandler.getUserLogin(user);
+							userNameString = login.getUserLogin();
+							passwordString = LoginDBHandler
+									.getGeneratedPasswordForUser();
+							LoginDBHandler.changePassword(login, passwordString);
+						} catch (Exception e) {
+							System.out
+									.println("Error re-generating password for user: "
+											+ user.getName());
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							LoginTable login = getUserBusiness().generateUserLogin(user);
+							userNameString = login.getUserLogin();
+							passwordString = login.getUnencryptedUserPassword();
+						} catch (Exception e) {
+							System.out.println("Error creating login for user: "
+									+ user.getName());
+							e.printStackTrace();
+						}
+					}
+
+					Email email = getUserBusiness().getUserMail(user);
+					Locale locale = LocaleUtil.getLocale(header.getLocale());
+					IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(locale);
+					Object[] args = {
+							user.getName(),
+							user.getPersonalID() != null ? user.getPersonalID() : "",
+							new IWTimestamp(user.getDateOfBirth()).getDateString("dd.MM.yyyy"),
+							iwrb.getLocalizedString(registration.getShirtSize().getLocalizedKey(), ""),
+							iwrb.getLocalizedString(registration.getRace().getDistance().getLocalizedKey(), ""),
+							userNameString, passwordString };
+					String subject = iwrb.getLocalizedString("registration_received_subject_mail",
+							"Your registration has been received.");
+					String body = MessageFormat
+							.format(iwrb.getLocalizedString("registration_received_body_mail",
+									"Your registration has been received."),
+									args);
+					sendMessage(email.getEmailAddress(), subject, body);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				} catch (FinderException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return header;
+	}
+	
+	private void sendMessage(String email, String subject, String body) {
+		String mailServer = DEFAULT_SMTP_MAILSERVER;
+		String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
+		String cc = DEFAULT_CC_ADDRESS;
+		try {
+			MessagingSettings messagingSetting = IWMainApplication.getDefaultIWMainApplication().getMessagingSettings();
+			mailServer = messagingSetting.getSMTPMailServer();
+			fromAddress = messagingSetting.getFromMailAddress();
+			cc = IWMainApplication.getDefaultIWMainApplication()
+					.getSettings()
+					.getProperty("messagebox_cc_receiver_address", "");
+		} catch (Exception e) {
+			System.err
+					.println("MessageBusinessBean: Error getting mail property from bundle");
+			e.printStackTrace();
+		}
+
+		try {
+			com.idega.util.SendMail.send(fromAddress, email.trim(), cc, "",
+					mailServer, subject, body);
+		} catch (javax.mail.MessagingException me) {
+			System.err
+					.println("MessagingException when sending mail to address: "
+							+ email + " Message was: " + me.getMessage());
+		} catch (Exception e) {
+			System.err.println("Exception when sending mail to address: "
+					+ email + " Message was: " + e.getMessage());
+		}
+	}
+
 }

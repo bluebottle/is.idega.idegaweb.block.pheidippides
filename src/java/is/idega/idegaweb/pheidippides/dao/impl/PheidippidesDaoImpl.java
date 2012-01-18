@@ -300,10 +300,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(RegistrationHeader.class, registrationHeaderID);
 	}
 
+	public RegistrationHeader getRegistrationHeader(String uniqueID) {
+		return getSingleResult("registrationHeader.findByUUID", RegistrationHeader.class, new Param("uuid", uniqueID));
+	}
+
 	@Transactional(readOnly = false)
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
-			String registrantUUID, String paymentGroup) {
+			String registrantUUID, String paymentGroup, String locale) {
 		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID)
 				: null;
 		if (header == null) {
@@ -320,6 +324,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			header.setPaymentGroup(paymentGroup);
 		}
 
+		if (locale != null) {
+			header.setLocale(locale);
+		}
+		
 		getEntityManager().persist(header);
 
 		return header;
@@ -336,6 +344,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		else {
 			return getResultList("registration.findByRace", Registration.class, new Param("race", race));
 		}
+	}
+
+	public List<Registration> getRegistrations(RegistrationHeader header) {
+		return getResultList("registration.findByHeader", Registration.class, new Param("header", header));
 	}
 
 	@Transactional(readOnly = false)

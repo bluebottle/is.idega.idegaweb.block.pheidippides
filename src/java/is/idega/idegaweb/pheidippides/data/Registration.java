@@ -25,7 +25,8 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 	@NamedQuery(name = "registration.findAll", query = "select r from Registration r"),
 	@NamedQuery(name = "registration.findByRace", query = "select r from Registration r where r.race = :race"),
-	@NamedQuery(name = "registration.findByRaceAndStatus", query = "select r from Registration r where r.race = :race and r.status = :status")
+	@NamedQuery(name = "registration.findByRaceAndStatus", query = "select r from Registration r where r.race = :race and r.status = :status"),
+	@NamedQuery(name = "registration.findByHeader", query = "select r from Registration r where r.header = :header")
 })
 public class Registration implements Serializable {
 	private static final long serialVersionUID = -1263634010602700985L;
