@@ -32,7 +32,7 @@
 					<ui:repeat value="#{pheidippidesRegistrationSession.participantHolders}" var="holder">
 						<ui:fragment rendered="#{current ne holder}">
 							<tr>
-								<td class="firstColumn"><h:outputText value="#{p:getFullName(holder.participant.firstName, holder.participant.middleName, holder.participant.lastName, pheidippidesBean.locale)}" /></td>
+								<td class="firstColumn"><h:outputText value="#{holder.participant.fullName}" /></td>
 								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
 								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
 								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
@@ -70,7 +70,9 @@
 			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
 			<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-			<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
+			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
+				<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
+			</ui:fragment>
 		</fieldset>
 	</form>
 </ui:component>

@@ -401,3 +401,7 @@ form.registrationForm fieldset.submit a.next, form.registrationForm fieldset.sub
 	float: right;
 	margin-left: 4px;
 }
+
+form.registrationForm fieldset.formSection div.formItem input[name="prm_name"], form.registrationForm fieldset.formSection div.formItem input[name="prm_address"] {
+	width: 350px;
+}
