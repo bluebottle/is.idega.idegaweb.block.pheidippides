@@ -240,7 +240,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 				case ACTION_OVERVIEW:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
-						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()));
+						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
 						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
 					}
 					else {
