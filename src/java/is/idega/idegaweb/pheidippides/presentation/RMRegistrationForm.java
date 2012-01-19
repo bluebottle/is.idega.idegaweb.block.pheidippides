@@ -122,7 +122,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 						getSession().setCurrentParticipant(holder);
 						getSession().setRegistrationWithPersonalId(true);
 					}
-					else {
+					else if (getSession().getCurrentParticipant() == null) {
 						getSession().setRegistrationWithPersonalId(false);
 					}
 					showParticipant(iwc, bean);
