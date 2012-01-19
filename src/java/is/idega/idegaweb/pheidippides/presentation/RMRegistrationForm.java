@@ -122,7 +122,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 						getSession().setCurrentParticipant(holder);
 						getSession().setRegistrationWithPersonalId(true);
 					}
-					else if (getSession().getCurrentParticipant() == null) {
+					else if (!bean.getLocale().equals(LocaleUtil.getIcelandicLocale())) {
 						getSession().setRegistrationWithPersonalId(false);
 					}
 					showParticipant(iwc, bean);
