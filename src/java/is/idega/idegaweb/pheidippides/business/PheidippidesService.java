@@ -589,6 +589,26 @@ public class PheidippidesService {
 				url.append("1");
 			}
 			url.append("&");
+			url.append("FelaHeimilisfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaPostnumer");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaStadur");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaLand");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaNetfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
 			url.append(TILVISUNARNUMER);
 			url.append("=");
 			url.append(header.getUuid());
