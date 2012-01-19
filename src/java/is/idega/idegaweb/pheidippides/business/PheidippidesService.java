@@ -1050,7 +1050,7 @@ public class PheidippidesService {
 							"Your registration has been received.")), args);
 					
 					body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
-					body = body.replaceAll("</p>", "\r\n\r\n");
+					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
 
 					sendMessage(email.getEmailAddress(), subject, body);
@@ -1087,7 +1087,7 @@ public class PheidippidesService {
 					"Your registration has been received.")), args);
 			
 			body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
-			body = body.replaceAll("</p>", "\r\n\r\n");
+			body = body.replaceAll("</p>", "\r\n");
 			body = body.replaceAll("<br />", "\r\n");
 			
 			sendMessage(email.getEmailAddress(), subject, body);

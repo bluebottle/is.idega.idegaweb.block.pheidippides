@@ -315,6 +315,7 @@ form.registrationForm fieldset.formSection div.formItem {
 	width: auto;
 	overflow: hidden;
 	margin-bottom: 8px;
+	clear: both;
 }
 
 form.registrationForm fieldset.formSection div.formItem label {

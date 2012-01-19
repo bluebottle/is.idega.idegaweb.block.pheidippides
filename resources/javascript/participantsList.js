@@ -23,17 +23,10 @@ jQuery(document).ready(function() {
 			callback: function(races) {
 				dwr.util.removeAllOptions(race.attr('id'));
 				
-				dwr.util.addOptions(
-					race.attr('id'),
-					races,
-					function(property) {
-						return property.id;
-					},
-					function(property) {
-						return property.value;
-					}
-				);
-
+				for (var i = 1; i < races.length; i++) {
+					race.append('<option value="' + races[i].id + '">' + races[i].value + '</option>')
+				}
+				
 				dwr.util.setValue(race.attr('id'), value);
 			}
 		});

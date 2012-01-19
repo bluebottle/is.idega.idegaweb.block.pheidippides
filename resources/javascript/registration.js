@@ -66,19 +66,14 @@ jQuery(document).ready(function() {
 				var firstOption = shirt.children('option:first').detach();
 				dwr.util.removeAllOptions(shirt.attr('id'));
 				
-				dwr.util.addOptions(
-					shirt.attr('id'),
-					shirts,
-					function(shirt) {
-						return shirt.id;
-					},
-					function(shirt) {
-						return shirt.value;
-					}
-				);
+				for (var i = 1; i < shirts.length; i++) {
+					shirt.append('<option value="' + shirts[i].id + '">' + shirts[i].value + '</option>')
+				}
 				
 				firstOption.prependTo(shirt);
-				dwr.util.setValue(shirt.attr('id'), value);
+				if (value != null) {
+					dwr.util.setValue(shirt.attr('id'), value);
+				}
 			}
 		});
 	});
