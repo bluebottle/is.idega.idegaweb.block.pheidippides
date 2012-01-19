@@ -129,14 +129,16 @@ public class PheidippidesService {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
 
-		Age age = new Age(dateOfBirth);
-		for (Race race : races) {
-			if (race.getMinimumAge() <= age.getYears()
-					&& race.getMaximumAge() >= age.getYears()) {
-				availableRaces.add(race);
+		if (dateOfBirth != null) {
+			Age age = new Age(dateOfBirth);
+			for (Race race : races) {
+				if (race.getMinimumAge() <= age.getYears()
+						&& race.getMaximumAge() >= age.getYears()) {
+					availableRaces.add(race);
+				}
 			}
 		}
-
+		
 		return availableRaces;
 	}
 
@@ -386,10 +388,7 @@ public class PheidippidesService {
 							} else {
 								gender = getGenderHome().getFemaleGender();
 							}
-							Name fullName = new Name(
-									participant.getFirstName(),
-									participant.getMiddleName(),
-									participant.getLastName());
+							Name fullName = new Name(participant.getFullName());
 							user = saveUser(
 									fullName,
 									new IWTimestamp(participant
@@ -457,7 +456,7 @@ public class PheidippidesService {
 							participantHolder.getAmount(),
 							participantHolder.getCharity(),
 							participant.getNationality(),
-							participant.getUuid(),
+							user.getUniqueId(),
 							participantHolder.getDiscount());
 
 					amount += participantHolder.getAmount()
