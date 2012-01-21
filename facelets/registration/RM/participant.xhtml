@@ -19,7 +19,7 @@
 			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant.participant}" name="participant" />
 			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
 				<div class="formItem required">
-					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['full_name']}" /></label>
 					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
 				</div>
 				<div class="formItem required">

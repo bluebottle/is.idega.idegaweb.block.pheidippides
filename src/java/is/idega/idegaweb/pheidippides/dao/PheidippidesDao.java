@@ -88,6 +88,8 @@ public interface PheidippidesDao {
 	
 	public RegistrationHeader getRegistrationHeader(String uniqueID);
 
+	public List<RegistrationHeader> getRegistrationHeaders(RegistrationHeaderStatus status);
+	
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
 			String registrantUUID, String paymentGroup, String locale,

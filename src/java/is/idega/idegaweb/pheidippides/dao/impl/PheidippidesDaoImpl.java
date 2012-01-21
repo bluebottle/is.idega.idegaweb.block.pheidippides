@@ -313,6 +313,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return getSingleResult("registrationHeader.findByUUID",
 				RegistrationHeader.class, new Param("uuid", uniqueID));
 	}
+	
+	public List<RegistrationHeader> getRegistrationHeaders(RegistrationHeaderStatus status) {
+		return getResultList("registrationHeader.findByStatus", RegistrationHeader.class, new Param("status", status));
+	}
 
 	@Transactional(readOnly = false)
 	public RegistrationHeader storeRegistrationHeader(

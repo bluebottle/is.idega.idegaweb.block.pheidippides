@@ -96,23 +96,21 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI(getFaceletURI()));
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
+				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
 				showView(iwc, bean);
 				break;
 
 			case ACTION_EDIT:
+				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
 				showEdit(iwc, bean, facelet);
 				break;
 				
 			case ACTION_DELETE:
+				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
 				handleDelete(iwc, bean);
 				break;
-		}
-		if (bean.getRace() != null) {
-			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
-			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 		}
 
 		add(facelet);
@@ -122,10 +120,6 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		return RegistrationStatus.OK;
 	}
 	
-	protected String getFaceletURI() {
-		return "participantsList/view.xhtml";
-	}
-
 	private int parseAction(IWContext iwc) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
 		return action;
@@ -136,7 +130,10 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 	
 	protected void showView(IWContext iwc, PheidippidesBean bean) {
-		/* Does nothing... */
+		if (bean.getRace() != null) {
+			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
+			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
+		}
 	}
 	
 	protected void showEdit(IWContext iwc, PheidippidesBean bean, FaceletComponent facelet) {
@@ -144,6 +141,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 	
 	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
+		showView(iwc, bean);
 	}
 	
 	private PheidippidesService getService() {

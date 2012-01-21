@@ -9,6 +9,7 @@ import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Collection;
@@ -53,6 +54,9 @@ public class PheidippidesBean {
 	public List<Registration> registrations;
 	public Map<Registration, Participant> participantsMap;
 	
+	public RegistrationHeader registrationHeader;
+	public List<RegistrationHeader> registrationHeaders;
+	
 	public Locale locale;
 	public List<AdvancedProperty> locales;
 
@@ -60,7 +64,7 @@ public class PheidippidesBean {
 	public List<AdvancedProperty> properties;
 	
 	public RegistrationAnswerHolder answer;
-	private Map<String, Participant> relayPartnerMap;
+	private Map<String, Participant> participantMap;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -214,6 +218,22 @@ public class PheidippidesBean {
 		this.participantsMap = participantsMap;
 	}
 
+	public RegistrationHeader getRegistrationHeader() {
+		return registrationHeader;
+	}
+
+	public void setRegistrationHeader(RegistrationHeader registrationHeader) {
+		this.registrationHeader = registrationHeader;
+	}
+
+	public List<RegistrationHeader> getRegistrationHeaders() {
+		return registrationHeaders;
+	}
+
+	public void setRegistrationHeaders(List<RegistrationHeader> registrationHeaders) {
+		this.registrationHeaders = registrationHeaders;
+	}
+
 	public Locale getLocale() {
 		return locale;
 	}
@@ -254,11 +274,11 @@ public class PheidippidesBean {
 		this.answer = answer;
 	}
 	
-	public Map<String, Participant> getRelayPartnerMap() {
-		return relayPartnerMap;
+	public Map<String, Participant> getParticipantMap() {
+		return participantMap;
 	}
 
-	public void setRelayPartnerMap(Map<String, Participant> partnerMap) {
-		this.relayPartnerMap = partnerMap;
+	public void setParticipantMap(Map<String, Participant> participantMap) {
+		this.participantMap = participantMap;
 	}
 }

@@ -1,0 +1,46 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+>
+<ui:component>
+	<form class="smallAdminForm" id="transferPaymentDetails" action="" method="post">
+
+		<fieldset class="formSection">
+			<table class="smallTable" cellpadding="0" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+					</tr>
+				</thead>
+				
+				<tbody>				
+					<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
+						<ui:param value="#{pheidippidesBean.participantsMap[registration]}" name="participant" />
+						<ui:param value="#{registration.race.distance}" name="distance" />
+						<ui:param value="#{registration.race.event}" name="event" />
+						<ui:param value="#{registration.race}" name="race" />
+						<ui:param value="#{registration.shirtSize}" name="shirtSize" />
+						
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', p:concat(distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', shirtSize.localizedKey))]}" /></td>
+							<td class="lastColumn"><h:outputText value="#{registration.amountPaid - registration.amountDiscount}" /></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

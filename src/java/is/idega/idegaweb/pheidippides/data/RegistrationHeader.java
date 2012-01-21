@@ -5,16 +5,19 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,7 +30,8 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @NamedQueries({
 	@NamedQuery(name = "registrationHeader.findAll", query = "select r from RegistrationHeader r"),
 	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID"),
-	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid")
+	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid"),
+	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status")
 })
 public class RegistrationHeader implements Serializable {
 	private static final long serialVersionUID = -8531574945301832059L;
@@ -117,6 +121,12 @@ public class RegistrationHeader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
 	private Date createdDate;
+	
+	@OneToMany(targetEntity = Registration.class, mappedBy="header", fetch = FetchType.EAGER)
+	private List<Registration> registrations;
+	
+	@OneToMany(targetEntity = BankReference.class, mappedBy="header", fetch = FetchType.EAGER)
+	private List<BankReference> bankReferences;
 	
 	public Long getId() {
 		return id;
@@ -253,5 +263,13 @@ public class RegistrationHeader implements Serializable {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public List<BankReference> getBankReferences() {
+		return bankReferences;
 	}
 }

@@ -7,7 +7,8 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<form class="adminForm" action="" method="post">
+	<form id="transferPaymentForm" class="adminForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="4" />
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
 
 		<fieldset class="navigation">
@@ -29,20 +30,12 @@
 					</ui:repeat>
 				</c:selectOne>
 			</div>
-			<div class="formItem">
-				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
-				<c:selectOne name="prm_race_pk">
-					<ui:repeat value="#{pheidippidesBean.races}" var="race">
-						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq param['prm_race_pk']}" />
-					</ui:repeat>
-				</c:selectOne>
-			</div>
 			<div class="submit">
 				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
 			</div>
 		</fieldset>
 
-		<ui:fragment rendered="#{not empty pheidippidesBean.registrations}">
+		<ui:fragment rendered="#{not empty pheidippidesBean.registrationHeaders}">
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 					<thead>
@@ -51,18 +44,17 @@
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['postal_code']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['uuid']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
+							<th class="action"></th>
 							<th class="action"></th>
 							<th class="action lastColumn"></th>
 						</tr>
 					</thead>
 					
 					<tbody>
-						<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
-							<ui:param value="#{pheidippidesBean.participantsMap[registration]}" name="participant" />
+						<ui:repeat value="#{pheidippidesBean.registrationHeaders}" var="header">
+							<ui:param value="#{pheidippidesBean.participantMap[header.registrantUUID]}" name="participant" />
 							
 							<tr>
 								<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
@@ -74,34 +66,37 @@
 									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 								</ui:fragment>
 								<td><h:outputText value="#{participant.email}" /></td>
-								<td><h:outputText value="#{participant.address}" /></td>
-								<td><h:outputText value="#{participant.postalAddress}" /></td>
-								<td><h:outputText value="#{participant.phoneHome}" /></td>
-								<td><h:outputText value="#{participant.phoneMobile}" /></td>
+								<td><h:outputText value="#{header.uuid}" /></td>
+								<td><h:outputText value="#{header.created}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" styleClass="editItem">
-										<f:param name="prm_registration_pk" value="#{registration.id}" />
+									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['view_details']}" styleClass="editItem">
+										<f:param name="prm_registration_header" value="#{header.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
-										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
 										<f:param name="prm_action" value="2" />
 										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 									</h:outputLink>
 								</td>
-								<td class="action lastColumn">
-									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_registration_delete']}">
-										<f:param name="prm_registration_pk" value="#{registration.id}" />
+								<td class="action">
+									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_registration_header_delete']}">
+										<f:param name="prm_registration_header" value="#{header.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
-										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
 										<f:param name="prm_action" value="3" />
 										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
 									</h:outputLink>
 								</td>
+								<td class="action lastColumn">
+									<input type="checkbox" name="prm_registration_header" value="header.uuid" />
+								</td>
 							</tr>
 						</ui:repeat>
 					</tbody>
 				</table>
+			</fieldset>
+			
+			<fieldset class="submit">
+				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 			</fieldset>
 		</ui:fragment>
 	</form>

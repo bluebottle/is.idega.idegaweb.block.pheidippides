@@ -56,7 +56,7 @@
 					</tr>
 					
 					<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
-						<ui:param value="#{pheidippidesBean.relayPartnerMap[leg.value]}" name="partner" />
+						<ui:param value="#{pheidippidesBean.participantMap[leg.value]}" name="partner" />
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
 							<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">

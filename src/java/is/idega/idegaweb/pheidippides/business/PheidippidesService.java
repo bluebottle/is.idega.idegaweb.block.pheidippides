@@ -193,6 +193,27 @@ public class PheidippidesService {
 		return participants;
 	}
 
+	public Map<String, Participant> getRegistratorMap(
+			List<RegistrationHeader> headers) {
+		Map<String, Participant> participants = new HashMap<String, Participant>();
+
+		for (RegistrationHeader header : headers) {
+			try {
+				User user = getUserBusiness().getUserByUniqueId(header.getRegistrantUUID());
+				Participant participant = getParticipant(user);
+				if (participant != null) {
+					participants.put(header.getRegistrantUUID(), participant);
+				}
+			} catch (RemoteException re) {
+				throw new IBORuntimeException(re);
+			} catch (FinderException fe) {
+				// No user found...
+			}
+		}
+
+		return participants;
+	}
+
 	public boolean isValidPersonalID(String personalID) {
 		if (personalID != null && personalID.length() == 10) {
 			return getParticipant(personalID) != null;
@@ -952,7 +973,7 @@ public class PheidippidesService {
 
 		return header;
 	}
-
+	
 	public RegistrationHeader markRegistrationAsPaid(String uniqueID,
 			boolean manualPayment, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,

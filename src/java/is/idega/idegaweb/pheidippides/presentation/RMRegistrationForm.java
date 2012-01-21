@@ -323,7 +323,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 				partnerMap.put(String.valueOf(index++), participant);
 			}
 		}
-		bean.setRelayPartnerMap(partnerMap);
+		bean.setParticipantMap(partnerMap);
 		
 		bean.setProperties(properties);
 		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(getSession().getCurrentParticipant().getRace()));
