@@ -416,7 +416,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String nationality, String userUUID, int discount) {
+			Charity charity, String nationality, String userUUID, int discount, boolean hasDoneMarathonBefore, boolean hasDoneLVBefore) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {
@@ -488,6 +488,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (discount > 0) {
 			registration.setAmountDiscount(discount);
 		}
+		
+		registration.setHasDoneLVBefore(hasDoneLVBefore);
+		registration.setHasDoneMarathonBefore(hasDoneMarathonBefore);
+		
 		getEntityManager().persist(registration);
 
 		return registration;

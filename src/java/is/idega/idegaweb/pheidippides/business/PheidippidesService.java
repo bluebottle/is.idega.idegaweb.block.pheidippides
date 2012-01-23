@@ -478,7 +478,9 @@ public class PheidippidesService {
 							participantHolder.getCharity(),
 							participant.getNationality(),
 							user.getUniqueId(),
-							participantHolder.getDiscount());
+							participantHolder.getDiscount(),
+							participantHolder.isHasDoneMarathonBefore(),
+							participantHolder.isHasDoneLVBefore());
 
 					amount += participantHolder.getAmount()
 							- participantHolder.getDiscount();
@@ -577,7 +579,9 @@ public class PheidippidesService {
 										participantHolder.getCharity(),
 										participant.getNationality(),
 										participant.getUuid(),
-										participantHolder.getDiscount());
+										participantHolder.getDiscount(),
+										false,
+										false);
 							}
 						}
 					}
@@ -967,7 +971,7 @@ public class PheidippidesService {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				dao.storeRegistration(registration.getId(), header,
 						RegistrationStatus.Cancelled, null, null, null, null,
-						0, null, null, null, 0);
+						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore());
 			}
 		}
 
@@ -1002,7 +1006,7 @@ public class PheidippidesService {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				registration = dao.storeRegistration(registration.getId(),
 						header, RegistrationStatus.OK, null, null, null, null,
-						0, null, null, null, 0);
+						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore());
 				try {
 					User user = getUserBusiness().getUserByUniqueId(
 							registration.getUserUUID());

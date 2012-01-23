@@ -3,11 +3,14 @@ package is.idega.idegaweb.pheidippides.business;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Column;
 
 public class ParticipantHolder {
 	private Participant participant;
@@ -19,6 +22,9 @@ public class ParticipantHolder {
 	private int amount;
 	private int discount;
 	private boolean acceptsWaiver;
+	private boolean hasDoneMarathonBefore = false;	
+	private boolean hasDoneLVBefore = false;	
+
 	
 	private List<Participant> relayPartners;
 	
@@ -135,5 +141,17 @@ public class ParticipantHolder {
 		} else if (!participant.equals(other.participant))
 			return false;
 		return true;
+	}
+	public boolean isHasDoneMarathonBefore() {
+		return hasDoneMarathonBefore;
+	}
+	public void setHasDoneMarathonBefore(boolean hasDoneMarathonBefore) {
+		this.hasDoneMarathonBefore = hasDoneMarathonBefore;
+	}
+	public boolean isHasDoneLVBefore() {
+		return hasDoneLVBefore;
+	}
+	public void setHasDoneLVBefore(boolean hasDoneLVBefore) {
+		this.hasDoneLVBefore = hasDoneLVBefore;
 	}
 }

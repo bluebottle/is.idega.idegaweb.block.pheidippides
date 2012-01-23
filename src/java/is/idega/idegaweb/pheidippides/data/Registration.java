@@ -45,6 +45,10 @@ public class Registration implements Serializable {
 	private static final String COLUMN_AMOUNT_DISCOUNT = "amount_discount";
 	private static final String COLUMN_CHARITY = "charity";
 	private static final String COLUMN_STATUS = "status";
+	
+	private static final String COLUMN_HAS_DONE_MARATHON_BEFORE = "done_marathon_before";
+	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_marathon_before";
+	
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
@@ -93,6 +97,12 @@ public class Registration implements Serializable {
 	@Column(name = Registration.COLUMN_STATUS)
 	@Enumerated(EnumType.STRING)
 	private RegistrationStatus status;
+
+	@Column(name = Registration.COLUMN_HAS_DONE_MARATHON_BEFORE)
+	private boolean hasDoneMarathonBefore;	
+
+	@Column(name = Registration.COLUMN_HAS_DONE_LV_BEFORE)
+	private boolean hasDoneLVBefore;	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
@@ -208,5 +218,21 @@ public class Registration implements Serializable {
 
 	public void setAmountDiscount(int amountDiscount) {
 		this.amountDiscount = amountDiscount;
+	}
+
+	public boolean isHasDoneMarathonBefore() {
+		return hasDoneMarathonBefore;
+	}
+
+	public void setHasDoneMarathonBefore(boolean hasDoneMarathonBefore) {
+		this.hasDoneMarathonBefore = hasDoneMarathonBefore;
+	}
+
+	public boolean isHasDoneLVBefore() {
+		return hasDoneLVBefore;
+	}
+
+	public void setHasDoneLVBefore(boolean hasDoneLVBefore) {
+		this.hasDoneLVBefore = hasDoneLVBefore;
 	}
 }
