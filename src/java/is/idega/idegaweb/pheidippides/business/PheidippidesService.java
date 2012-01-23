@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -409,9 +410,8 @@ public class PheidippidesService {
 							} else {
 								gender = getGenderHome().getFemaleGender();
 							}
-							Name fullName = new Name(participant.getFullName());
 							user = saveUser(
-									fullName,
+									new Name(participant.getFullName()),
 									new IWTimestamp(participant
 											.getDateOfBirth()),
 									gender,
@@ -1189,5 +1189,76 @@ public class PheidippidesService {
 
 	public RegistrationHeader getRegistrationHeader(String uniqueID) {
 		return dao.getRegistrationHeader(uniqueID);
+	}
+	
+	public List<Participant> searchForParticipants(SearchParameter parameter) {
+		List<Participant> ret = new ArrayList<Participant>();
+		
+		if (parameter.getPersonalId() != null) {
+			try {
+				User user = getUserBusiness().getUser(parameter.getPersonalId());
+				ret.add(dao.getParticipant(user.getUniqueId()));
+				
+				return ret;
+			} catch (RemoteException e) {
+			} catch (FinderException e) {
+			}
+		}
+		
+		if (parameter.getDateOfBirth() != null) {
+			Name name = null;
+			if (parameter.getFirstName() != null || parameter.getMiddleName() != null || parameter.getLastName() != null) {
+				name = new Name(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
+			}
+			
+			if (parameter.getFullName() != null) {
+				name = new Name(parameter.getFullName());
+			}
+			
+			try {
+				User user = getUserBusiness().getUserHome().findByDateOfBirthAndName(new IWTimestamp(parameter.getDateOfBirth()).getSQLDate(), name.getName());
+				ret.add(dao.getParticipant(user.getUniqueId()));
+				
+				return ret;
+			} catch (RemoteException e) {
+			} catch (FinderException e) {
+			}
+		}
+		
+		if (parameter.getFirstName() != null || parameter.getMiddleName() != null || parameter.getLastName() != null) {
+			try {
+				Collection col = getUserBusiness().getUserHome().findByNames(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
+				if (col != null && !col.isEmpty()) {
+					Iterator it = col.iterator();
+					while (it.hasNext()) {
+						ret.add(dao.getParticipant(((User)it.next()).getUniqueId()));
+					}
+					
+					return ret;
+				}
+			} catch (RemoteException e) {
+			} catch (FinderException e) {
+			}
+		}
+		
+		if (parameter.getFullName() != null) {
+			Name name = new Name(parameter.getFullName());
+			try {
+				Collection col = getUserBusiness().getUserHome().findByNames(name.getFirstName(), name.getMiddleName(), name.getLastName());
+				if (col != null && !col.isEmpty()) {
+					Iterator it = col.iterator();
+					while (it.hasNext()) {
+						ret.add(dao.getParticipant(((User)it.next()).getUniqueId()));
+					}
+					
+					return ret;
+				}
+			} catch (RemoteException e) {
+			} catch (FinderException e) {
+			}
+		}
+		
+		//@TODO Add search by email and address..
+		return ret;
 	}
 }

@@ -131,5 +131,5 @@ public interface PheidippidesDao {
 	
 	public Team getTeam(Long teamID);
 	
-	public Team storeTeam(Long teamID, String name, boolean isRelayTeam);
+	public Team storeTeam(Long teamID, String name, boolean isRelayTeam);	
 }
