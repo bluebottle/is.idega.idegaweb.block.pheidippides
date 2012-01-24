@@ -90,7 +90,7 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 		bean.setProperties(years);
 		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
 
-		bean.setRegistrationHeader(iwc.isParameterSet(PARAMETER_REGISTRATION_HEADER) ? getDao().getRegistrationHeader(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_HEADER))) : null);
+		bean.setRegistrationHeader(iwc.isParameterSet(PARAMETER_REGISTRATION_HEADER) ? getDao().getRegistrationHeader(iwc.getParameter(PARAMETER_REGISTRATION_HEADER)) : null);
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
@@ -120,7 +120,7 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 	}
 	
 	private RegistrationHeaderStatus getStatus() {
-		return RegistrationHeaderStatus.ManualPayment;
+		return RegistrationHeaderStatus.WaitingForPayment;
 	}
 	
 	private int parseAction(IWContext iwc) {
@@ -135,10 +135,11 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 	protected void showView(IWContext iwc, PheidippidesBean bean) {
 		bean.setRegistrationHeaders(getDao().getRegistrationHeaders(getStatus()));
 		bean.setParticipantMap(getService().getRegistratorMap(bean.getRegistrationHeaders()));
+		bean.setBankReferencesMap(getService().getBankReferencesMap(bean.getRegistrationHeaders()));
 	}
 	
 	protected void showViewDetails(IWContext iwc, PheidippidesBean bean) {
-		bean.setRegistrations(bean.getRegistrationHeader().getRegistrations());
+		bean.setRegistrations(getDao().getRegistrations(bean.getRegistrationHeader()));
 		bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 	}
 	
@@ -151,7 +152,7 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 		String[] uniqueIDs = iwc.getParameterValues(PARAMETER_REGISTRATION_HEADER);
 		if (uniqueIDs != null) {
 			for (String id : uniqueIDs) {
-				getService().markRegistrationAsPaid(id, false, null, null, null, null, null, null, null, null, null);
+				getService().markRegistrationAsPaid(id, true, null, null, null, null, null, null, null, null, null);
 			}
 		}
 		

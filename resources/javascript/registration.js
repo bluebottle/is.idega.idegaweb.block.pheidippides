@@ -63,14 +63,12 @@ jQuery(document).ready(function() {
 		
 		PheidippidesService.getLocalizedShirts(racePK, language, {
 			callback: function(shirts) {
-				var firstOption = shirt.children('option:first').detach();
 				dwr.util.removeAllOptions(shirt.attr('id'));
 				
-				for (var i = 1; i < shirts.length; i++) {
+				for (var i = 0; i < shirts.length; i++) {
 					shirt.append('<option value="' + shirts[i].id + '">' + shirts[i].value + '</option>')
 				}
 				
-				firstOption.prependTo(shirt);
 				if (value != null) {
 					dwr.util.setValue(shirt.attr('id'), value);
 				}

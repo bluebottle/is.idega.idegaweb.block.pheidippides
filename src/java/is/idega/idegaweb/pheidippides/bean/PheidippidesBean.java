@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.bean;
 
 import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
+import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -65,6 +66,7 @@ public class PheidippidesBean {
 	
 	public RegistrationAnswerHolder answer;
 	private Map<String, Participant> participantMap;
+	private Map<RegistrationHeader, BankReference> bankReferencesMap;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -280,5 +282,13 @@ public class PheidippidesBean {
 
 	public void setParticipantMap(Map<String, Participant> participantMap) {
 		this.participantMap = participantMap;
+	}
+
+	public Map<RegistrationHeader, BankReference> getBankReferencesMap() {
+		return bankReferencesMap;
+	}
+
+	public void setBankReferencesMap(Map<RegistrationHeader, BankReference> bankReferencesMap) {
+		this.bankReferencesMap = bankReferencesMap;
 	}
 }

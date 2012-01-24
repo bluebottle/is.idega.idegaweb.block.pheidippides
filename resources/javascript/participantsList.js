@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
 			callback: function(races) {
 				dwr.util.removeAllOptions(race.attr('id'));
 				
-				for (var i = 1; i < races.length; i++) {
+				for (var i = 0; i < races.length; i++) {
 					race.append('<option value="' + races[i].id + '">' + races[i].value + '</option>')
 				}
 				

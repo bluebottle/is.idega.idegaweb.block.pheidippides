@@ -3,20 +3,19 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
-            8: { 
+            5: { 
                 sorter: false 
             }, 
-            9: { 
+            6: { 
+                sorter: false 
+            }, 
+            7: { 
                 sorter: false 
             } 
         } 
 	}); 
 	
-	jQuery('a.editItem').fancybox({
-		'onComplete': function() {
-			jQuery('#registrationEditorForm').validate();
-		}
-	});
+	jQuery('a.viewItem').fancybox();
 	
 	jQuery('a.deleteItem').click(function() {
 		var link = jQuery(this);

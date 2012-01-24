@@ -1,0 +1,35 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="4" />
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 4" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_help')]}" /></div>
+
+		<fieldset class="formSection">
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_has_run_marathon" checked="#{pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" />
+				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['has_run_marathon']}" /></label>
+			</div>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_has_run_ultra_marathon" checked="#{pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" />
+				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['has_run_ultra_marathon']}" /></label>
+			</div>
+		</fieldset>
+		
+		<fieldset class="submit">
+			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="next" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>

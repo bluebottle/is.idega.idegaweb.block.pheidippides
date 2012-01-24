@@ -112,6 +112,7 @@ store=Store
 string_localizer=Localizer
 team_name=Team name
 transfer_payment=Pay w/bank transfer
+transfer_payment_list=Transfer payment list
 use_charity=Yes, I want to receive pledges from <a href\="http\://www.hlaupastyrkur.is" target\="_blank">hlaupastyrkur.is</a>.
 valid_from=Valid from
 valid_to=Valid to

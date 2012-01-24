@@ -3,14 +3,11 @@ package is.idega.idegaweb.pheidippides.business;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
 
 public class ParticipantHolder {
 	private Participant participant;

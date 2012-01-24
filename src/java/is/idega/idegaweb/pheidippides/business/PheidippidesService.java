@@ -200,10 +200,23 @@ public class PheidippidesService {
 
 		for (RegistrationHeader header : headers) {
 			try {
-				User user = getUserBusiness().getUserByUniqueId(header.getRegistrantUUID());
-				Participant participant = getParticipant(user);
-				if (participant != null) {
-					participants.put(header.getRegistrantUUID(), participant);
+				User user = null;
+				
+				if (header.getRegistrantUUID() != null) {
+					user = getUserBusiness().getUserByUniqueId(header.getRegistrantUUID());
+				}
+				else {
+					List<Registration> registrations = dao.getRegistrations(header);
+					if (registrations != null && !registrations.isEmpty()) {
+						user = getUserBusiness().getUserByUniqueId(registrations.iterator().next().getUserUUID());
+					}
+				}
+				
+				if (user != null) {
+					Participant participant = getParticipant(user);
+					if (participant != null) {
+						participants.put(header.getUuid(), participant);
+					}
 				}
 			} catch (RemoteException re) {
 				throw new IBORuntimeException(re);
@@ -213,6 +226,19 @@ public class PheidippidesService {
 		}
 
 		return participants;
+	}
+	
+	public Map<RegistrationHeader, BankReference> getBankReferencesMap(List<RegistrationHeader> headers) {
+		Map<RegistrationHeader, BankReference> references = new HashMap<RegistrationHeader, BankReference>();
+		
+		for (RegistrationHeader header : headers) {
+			BankReference reference = dao.findBankReference(header);
+			if (reference != null) {
+				references.put(header, reference);
+			}
+		}
+		
+		return references;
 	}
 
 	public boolean isValidPersonalID(String personalID) {
@@ -925,6 +951,12 @@ public class PheidippidesService {
 			String language) {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+				.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+				.getResourceBundle(LocaleUtil.getLocale(language));
+		
+		properties.add(new AdvancedProperty("", iwrb.getLocalizedString("select_shirt_size", "Select shirt size")));
+		
 		List<RaceShirtSize> shirts = getShirts(racePK);
 		for (RaceShirtSize shirt : shirts) {
 			properties.add(getLocalizedShirtName(shirt, language));
@@ -1231,11 +1263,11 @@ public class PheidippidesService {
 		
 		if (parameter.getFirstName() != null || parameter.getMiddleName() != null || parameter.getLastName() != null) {
 			try {
-				Collection col = getUserBusiness().getUserHome().findByNames(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
+				Collection<User> col = getUserBusiness().getUserHome().findByNames(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
 				if (col != null && !col.isEmpty()) {
-					Iterator it = col.iterator();
+					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(dao.getParticipant(((User)it.next()).getUniqueId()));
+						ret.add(dao.getParticipant(it.next().getUniqueId()));
 					}
 					
 					return ret;

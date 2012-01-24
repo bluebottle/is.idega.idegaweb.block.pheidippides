@@ -5,19 +5,16 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -121,12 +118,6 @@ public class RegistrationHeader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
 	private Date createdDate;
-	
-	@OneToMany(targetEntity = Registration.class, mappedBy="header", fetch = FetchType.EAGER)
-	private List<Registration> registrations;
-	
-	@OneToMany(targetEntity = BankReference.class, mappedBy="header", fetch = FetchType.EAGER)
-	private List<BankReference> bankReferences;
 	
 	public Long getId() {
 		return id;
@@ -263,13 +254,5 @@ public class RegistrationHeader implements Serializable {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
-	}
-
-	public List<Registration> getRegistrations() {
-		return registrations;
-	}
-
-	public List<BankReference> getBankReferences() {
-		return bankReferences;
 	}
 }

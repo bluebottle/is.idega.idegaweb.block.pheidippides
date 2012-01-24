@@ -12,7 +12,7 @@
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
 
 		<fieldset class="navigation">
-			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_list']}" /></legend>
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment_list']}" /></legend>
 			
 			<div class="formItem">
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
@@ -42,9 +42,8 @@
 						<tr>
 							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['id']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['uuid']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['bank_reference']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
 							<th class="action"></th>
 							<th class="action"></th>
@@ -53,24 +52,19 @@
 					</thead>
 					
 					<tbody>
-						<ui:repeat value="#{pheidippidesBean.registrationHeaders}" var="header">
-							<ui:param value="#{pheidippidesBean.participantMap[header.registrantUUID]}" name="participant" />
+						<ui:repeat value="#{pheidippidesBean.registrationHeaders}" var="registrationHeader">
+							<ui:param value="#{pheidippidesBean.participantMap[registrationHeader.uuid]}" name="participant" />
+							<ui:param value="#{pheidippidesBean.bankReferencesMap[registrationHeader]}" name="bankReference" />
 							
 							<tr>
-								<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
+								<td class="firstColumn"><h:outputText value="#{registrationHeader.id}" /></td>
 								<td><h:outputText value="#{participant.fullName}" /></td>
-								<ui:fragment rendered="#{not empty participant.personalId}">
-									<td><h:outputText value="#{participant.personalId}" /></td>
-								</ui:fragment>
-								<ui:fragment rendered="#{empty participant.personalId}">
-									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
-								</ui:fragment>
-								<td><h:outputText value="#{participant.email}" /></td>
-								<td><h:outputText value="#{header.uuid}" /></td>
-								<td><h:outputText value="#{header.created}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
+								<td><h:outputText value="#{registrationHeader.uuid}" /></td>
+								<td><h:outputText value="#{bankReference.referenceNumber}" /></td>
+								<td><h:outputText value="#{registrationHeader.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['view_details']}" styleClass="editItem">
-										<f:param name="prm_registration_header" value="#{header.id}" />
+									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['view_details']}" styleClass="viewItem">
+										<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
 										<f:param name="prm_action" value="2" />
@@ -79,7 +73,7 @@
 								</td>
 								<td class="action">
 									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_registration_header_delete']}">
-										<f:param name="prm_registration_header" value="#{header.id}" />
+										<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
 										<f:param name="prm_action" value="3" />
@@ -87,7 +81,7 @@
 									</h:outputLink>
 								</td>
 								<td class="action lastColumn">
-									<input type="checkbox" name="prm_registration_header" value="header.uuid" />
+									<input type="checkbox" name="prm_registration_header" value="#{registrationHeader.uuid}" />
 								</td>
 							</tr>
 						</ui:repeat>

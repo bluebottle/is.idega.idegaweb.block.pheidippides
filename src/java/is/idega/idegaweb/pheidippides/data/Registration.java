@@ -47,7 +47,7 @@ public class Registration implements Serializable {
 	private static final String COLUMN_STATUS = "status";
 	
 	private static final String COLUMN_HAS_DONE_MARATHON_BEFORE = "done_marathon_before";
-	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_marathon_before";
+	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_ultra_marathon_before";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 
