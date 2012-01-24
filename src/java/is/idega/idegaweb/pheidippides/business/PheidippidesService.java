@@ -606,7 +606,7 @@ public class PheidippidesService {
 										participantHolder.getAmount(),
 										participantHolder.getCharity(),
 										participant.getNationality(),
-										participant.getUuid(),
+										user.getUniqueId(),
 										participantHolder.getDiscount(),
 										false,
 										false,
