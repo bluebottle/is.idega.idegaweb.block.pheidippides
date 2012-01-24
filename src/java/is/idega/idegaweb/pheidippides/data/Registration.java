@@ -47,7 +47,9 @@ public class Registration implements Serializable {
 	private static final String COLUMN_STATUS = "status";
 	
 	private static final String COLUMN_HAS_DONE_MARATHON_BEFORE = "done_marathon_before";
+	private static final String COLUMN_BEST_MARATHON_TIME = "best_marathon_time";
 	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_ultra_marathon_before";
+	private static final String COLUMN_BEST_ULTRA_MARATHON_TIME = "best_ultra_marathon_time";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -99,10 +101,18 @@ public class Registration implements Serializable {
 	private RegistrationStatus status;
 
 	@Column(name = Registration.COLUMN_HAS_DONE_MARATHON_BEFORE)
-	private boolean hasDoneMarathonBefore;	
+	private boolean hasDoneMarathonBefore;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = Registration.COLUMN_BEST_MARATHON_TIME)
+	private Date bestMarathonTime;
 
 	@Column(name = Registration.COLUMN_HAS_DONE_LV_BEFORE)
-	private boolean hasDoneLVBefore;	
+	private boolean hasDoneLVBefore;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = Registration.COLUMN_BEST_ULTRA_MARATHON_TIME)
+	private Date bestUltraMarathonTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
@@ -228,11 +238,27 @@ public class Registration implements Serializable {
 		this.hasDoneMarathonBefore = hasDoneMarathonBefore;
 	}
 
+	public Date getBestMarathonTime() {
+		return bestMarathonTime;
+	}
+
+	public void setBestMarathonTime(Date bestMarathonTime) {
+		this.bestMarathonTime = bestMarathonTime;
+	}
+
 	public boolean isHasDoneLVBefore() {
 		return hasDoneLVBefore;
 	}
 
 	public void setHasDoneLVBefore(boolean hasDoneLVBefore) {
 		this.hasDoneLVBefore = hasDoneLVBefore;
+	}
+
+	public Date getBestUltraMarathonTime() {
+		return bestUltraMarathonTime;
+	}
+
+	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
+		this.bestUltraMarathonTime = bestUltraMarathonTime;
 	}
 }

@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
 			valid = false;
 		}
 		return valid;
-	}, "No participant found with entered personal ID.");	
+	}, "No participant found with entered personal ID.");
 	
 	jQuery('form.registrationForm').validate({
 		onkeyup: false,
@@ -28,9 +28,24 @@ jQuery(document).ready(function() {
 		    },
 		    prm_charity: {
 		    	required: "#prm_use_charity:checked"
+		    },
+		    prm_best_marathon_time: {
+		    	required: "#prm_has_not_run_marathon:unchecked"
+		    },
+		    prm_best_marathon_year: {
+		    	required: "#prm_has_not_run_marathon:unchecked"
+		    },
+		    prm_best_ultra_marathon_time: {
+		    	required: "#prm_has_not_run_ultra_marathon:unchecked"
+		    },
+		    prm_best_ultra_marathon_year: {
+		    	required: "#prm_has_not_run_ultra_marathon:unchecked"
 		    }
 		}
 	});
+	
+	jQuery('input.bestTime').mask("99:99");
+	jQuery('input.bestYear').mask("9999");
 	
 	jQuery('input[name="prm_personalId"]').keyup(function() {
 		var input = jQuery(this);

@@ -340,11 +340,11 @@ form.registrationForm fieldset {
 form.registrationForm fieldset.formSection {
 	border-top: 1px #ccc solid;
 	padding-top: 18px;
+	padding-bottom: 10px;
 }
 
 form.registrationForm fieldset.formSection div.formItem {
 	width: auto;
-	overflow: hidden;
 	margin-bottom: 8px;
 	clear: both;
 }
@@ -353,7 +353,8 @@ form.registrationForm fieldset.formSection div.formItem label {
 	float: left;
 	font-weight: bold;
 	width: 185px;
-	line-height: 29px;
+	line-height: 1.15em;
+	margin-bottom: 8px;
 }
 
 form.registrationForm fieldset.formSection div.formItem label.error {
@@ -375,12 +376,13 @@ form.registrationForm fieldset.formSection div.formItem input, form.registration
 
 form.registrationForm fieldset.formSection div.formItem.checkbox input {
 	float: left;
-	margin-top: 8px;
 	margin-right: 8px;
+	margin-left: 0;
 }
 
 form.registrationForm fieldset.formSection div.formItem.checkbox label {
 	width: auto;
+	margin-bottom: 0;
 }
 
 form.registrationForm fieldset.formSection div.formItem .error {

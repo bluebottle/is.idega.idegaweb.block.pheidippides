@@ -506,7 +506,9 @@ public class PheidippidesService {
 							user.getUniqueId(),
 							participantHolder.getDiscount(),
 							participantHolder.isHasDoneMarathonBefore(),
-							participantHolder.isHasDoneLVBefore());
+							participantHolder.isHasDoneLVBefore(),
+							participantHolder.getBestMarathonTime(),
+							participantHolder.getBestUltraMarathonTime());
 
 					amount += participantHolder.getAmount()
 							- participantHolder.getDiscount();
@@ -607,7 +609,9 @@ public class PheidippidesService {
 										participant.getUuid(),
 										participantHolder.getDiscount(),
 										false,
-										false);
+										false,
+										null,
+										null);
 							}
 						}
 					}
@@ -1003,7 +1007,7 @@ public class PheidippidesService {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				dao.storeRegistration(registration.getId(), header,
 						RegistrationStatus.Cancelled, null, null, null, null,
-						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore());
+						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
 			}
 		}
 
@@ -1038,7 +1042,7 @@ public class PheidippidesService {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				registration = dao.storeRegistration(registration.getId(),
 						header, RegistrationStatus.OK, null, null, null, null,
-						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore());
+						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
 				try {
 					User user = getUserBusiness().getUserByUniqueId(
 							registration.getUserUUID());

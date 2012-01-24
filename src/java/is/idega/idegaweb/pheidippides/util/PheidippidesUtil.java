@@ -46,6 +46,20 @@ public class PheidippidesUtil {
 		return "";
 	}
 	
+	public static String formatTime(Date date) {
+		if (date != null) {
+			return new IWTimestamp(date).getDateString("HH:mm");
+		}
+		return "";
+	}
+	
+	public static String formatYear(Date date) {
+		if (date != null) {
+			return new IWTimestamp(date).getDateString("yyyy");
+		}
+		return "";
+	}
+	
 	public static String getFullName(String firstName, String middleName, String lastName, Locale locale) {
 		return new Name(firstName, middleName, lastName).getName(locale, true);
 	}

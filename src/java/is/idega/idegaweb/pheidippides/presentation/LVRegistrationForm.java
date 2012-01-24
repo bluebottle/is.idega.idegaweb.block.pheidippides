@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
+import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -54,8 +55,13 @@ public class LVRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
-	private static final String PARAMETER_HAS_RUN_MARATHON = "prm_has_run_marathon";
-	private static final String PARAMETER_HAS_RUN_ULTRA_MARATHON = "prm_has_run_ultra_marathon";
+	
+	private static final String PARAMETER_HAS_NOT_RUN_MARATHON = "prm_has_not_run_marathon";
+	private static final String PARAMETER_HAS_NOT_RUN_ULTRA_MARATHON = "prm_has_not_run_ultra_marathon";
+	private static final String PARAMETER_BEST_MARATHON_TIME = "prm_best_marathon_time";
+	private static final String PARAMETER_BEST_ULTRA_MARATHON_TIME = "prm_best_ultra_marathon_time";
+	private static final String PARAMETER_BEST_MARATHON_YEAR = "prm_best_marathon_year";
+	private static final String PARAMETER_BEST_ULTRA_MARATHON_YEAR = "prm_best_ultra_marathon_year";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -82,6 +88,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 		if (event != null) {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
@@ -161,8 +168,18 @@ public class LVRegistrationForm extends IWBaseComponent {
 					break;
 		
 				case ACTION_WAIVER:
-					getSession().getCurrentParticipant().setHasDoneMarathonBefore(iwc.isParameterSet(PARAMETER_HAS_RUN_MARATHON));
-					getSession().getCurrentParticipant().setHasDoneLVBefore(iwc.isParameterSet(PARAMETER_HAS_RUN_ULTRA_MARATHON));
+					getSession().getCurrentParticipant().setHasDoneMarathonBefore(!iwc.isParameterSet(PARAMETER_HAS_NOT_RUN_MARATHON));
+					if (getSession().getCurrentParticipant().isHasDoneMarathonBefore()) {
+						IWTimestamp stamp = new IWTimestamp(iwc.getParameter(PARAMETER_BEST_MARATHON_TIME) + ":00");
+						stamp.setYear(Integer.parseInt(iwc.getParameter(PARAMETER_BEST_MARATHON_YEAR)));
+						getSession().getCurrentParticipant().setBestMarathonTime(stamp.getDate());
+					}
+					getSession().getCurrentParticipant().setHasDoneLVBefore(!iwc.isParameterSet(PARAMETER_HAS_NOT_RUN_ULTRA_MARATHON));
+					if (getSession().getCurrentParticipant().isHasDoneLVBefore()) {
+						IWTimestamp stamp = new IWTimestamp(iwc.getParameter(PARAMETER_BEST_ULTRA_MARATHON_TIME) + ":00");
+						stamp.setYear(Integer.parseInt(iwc.getParameter(PARAMETER_BEST_ULTRA_MARATHON_YEAR)));
+						getSession().getCurrentParticipant().setBestUltraMarathonTime(stamp.getDate());
+					}
 
 					showWaiver(iwc, bean);
 					break;
@@ -214,8 +231,6 @@ public class LVRegistrationForm extends IWBaseComponent {
 	}
 	
 	private void showPersonSelect(IWContext iwc, PheidippidesBean bean) {
-		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
-		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/LV/personSelect.xhtml"));
 		add(facelet);
@@ -232,6 +247,10 @@ public class LVRegistrationForm extends IWBaseComponent {
 
 	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant().getDateOfBirth()));
+		if (bean.getRaces() != null && bean.getRaces().size() == 1) {
+			getSession().getCurrentParticipant().setRace(bean.getRaces().iterator().next());
+			bean.setRaces(null);
+		}
 		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : (getSession().getCurrentParticipant().getRace() != null ? getDao().getRaceShirtSizes(getDao().getRace(getSession().getCurrentParticipant().getRace().getId())) : null));
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);

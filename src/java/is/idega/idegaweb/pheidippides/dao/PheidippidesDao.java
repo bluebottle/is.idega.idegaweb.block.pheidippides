@@ -107,7 +107,9 @@ public interface PheidippidesDao {
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String nationality, String userUUID, int discount, boolean hasDoneMarathonBefore, boolean hasDoneLVBefore);
+			Charity charity, String nationality, String userUUID, int discount,
+			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
+			Date bestMarathonTime, Date bestUltraMarathonTime);
 	
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
 	

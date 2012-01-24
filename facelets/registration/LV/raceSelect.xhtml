@@ -18,15 +18,17 @@
 
 		<fieldset class="formSection">
 			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="participant" />
-			<div class="formItem required">
-				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
-				<c:selectOne styleClass="required" name="prm_race_pk">
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
-					<ui:repeat value="#{pheidippidesBean.races}" var="race">
-						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq participant.race.id}" />
-					</ui:repeat>
-				</c:selectOne>
-			</div>
+			<ui:fragment rendered="#{not empty pheidippidesBean.races}">
+				<div class="formItem required">
+					<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
+					<c:selectOne styleClass="required" name="prm_race_pk">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.races}" var="race">
+							<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq participant.race.id}" />
+						</ui:repeat>
+					</c:selectOne>
+				</div>
+			</ui:fragment>
 			<div class="formItem required">
 				<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></label>
 				<c:selectOne styleClass="required" name="prm_shirt_size">

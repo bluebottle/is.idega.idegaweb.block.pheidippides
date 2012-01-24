@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ParticipantHolder {
@@ -21,6 +22,8 @@ public class ParticipantHolder {
 	private boolean acceptsWaiver;
 	private boolean hasDoneMarathonBefore = false;	
 	private boolean hasDoneLVBefore = false;	
+	private Date bestMarathonTime;
+	private Date bestUltraMarathonTime;
 
 	
 	private List<Participant> relayPartners;
@@ -150,5 +153,17 @@ public class ParticipantHolder {
 	}
 	public void setHasDoneLVBefore(boolean hasDoneLVBefore) {
 		this.hasDoneLVBefore = hasDoneLVBefore;
+	}
+	public Date getBestMarathonTime() {
+		return bestMarathonTime;
+	}
+	public void setBestMarathonTime(Date bestMarathonTime) {
+		this.bestMarathonTime = bestMarathonTime;
+	}
+	public Date getBestUltraMarathonTime() {
+		return bestUltraMarathonTime;
+	}
+	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
+		this.bestUltraMarathonTime = bestUltraMarathonTime;
 	}
 }
