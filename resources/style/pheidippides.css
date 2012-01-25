@@ -439,3 +439,7 @@ form.registrationForm fieldset.submit a.next, form.registrationForm fieldset.sub
 form.registrationForm fieldset.formSection div.formItem input[name="prm_name"], form.registrationForm fieldset.formSection div.formItem input[name="prm_address"] {
 	width: 350px;
 }
+
+div.ui-datepicker {
+	overflow: visible !important;
+}
