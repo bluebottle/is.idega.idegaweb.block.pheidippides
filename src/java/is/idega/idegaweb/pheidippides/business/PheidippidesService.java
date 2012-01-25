@@ -641,6 +641,11 @@ public class PheidippidesService {
 				url.append("KennitalaSkylda");
 				url.append("=");
 				url.append("1");
+			} else {
+				url.append("&");
+				url.append("FelaKennitala");
+				url.append("=");
+				url.append("1");				
 			}
 			url.append("&");
 			url.append("FelaHeimilisfang");
@@ -660,6 +665,10 @@ public class PheidippidesService {
 			url.append("1");
 			url.append("&");
 			url.append("FelaNetfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaAthugasemdir");
 			url.append("=");
 			url.append("1");
 			url.append("&");
