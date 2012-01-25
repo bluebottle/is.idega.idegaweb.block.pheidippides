@@ -1,23 +1,15 @@
 jQuery.noConflict();
+var validUser = null;
 
 jQuery(document).ready(function() {
 	jQuery.validator.addMethod("validUser", function( value, element ) {
-		var valid = true;
-		if (value.length == 10) {
-			PheidippidesService.isValidPersonalID(value, {
-				callback: function(validUser) {
-					valid = validUser;
-				}
-			});
-		}
-		else if (value.length != 0) {
-			valid = false;
-		}
-		return valid;
+		return validUser == value;
 	}, "No participant found with entered personal ID.");
 	
 	jQuery('form.registrationForm').validate({
 		onkeyup: false,
+		onfocusout: false,
+		
 		rules: {
 			prm_email_repeat: {
 		    	equalTo: "#prm_email"
@@ -46,6 +38,21 @@ jQuery(document).ready(function() {
 	
 	jQuery('input.bestTime').mask("99:99");
 	jQuery('input.bestYear').mask("9999");
+
+	jQuery('input[name="prm_personal_id"]').keyup(function() {
+		var input = jQuery(this);
+		var value = input.val();
+
+		if (value.length == 10) {
+			PheidippidesService.getParticipant(value, {
+				callback: function(participant) {
+					if (participant != null) {
+						validUser = participant.personalId;
+					}
+				}
+			});
+		}
+	});
 	
 	jQuery('input[name="prm_personalId"]').keyup(function() {
 		var input = jQuery(this);
