@@ -194,6 +194,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Participant getParticipant(String uuid) {
 		return null;
 	}
+	
+	public long getNumberOfParticipants(Race race, RegistrationStatus status) {
+		return getSingleResult("registration.countByRaceAndStatus", Long.class, new Param("race", race), new Param("status", status)).longValue();
+	}
 
 	/* ShirtSize methods */
 	public ShirtSize getShirtSize(Long shirtSizeID) {

@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Registration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
+	private static final String PARAMETER_REGISTRATION_PK = "prm_registration_pk";
 
 	@Autowired
 	private PheidippidesService service;
@@ -141,6 +143,9 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 	
 	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
+		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+		// TODO Handle registration cancel...
+		
 		showView(iwc, bean);
 	}
 	

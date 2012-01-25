@@ -37,6 +37,8 @@ public interface PheidippidesDao {
 	public List<Participant> getParticipants(Event event, int year);
 
 	public Participant getParticipant(String uuid);
+	
+	public long getNumberOfParticipants(Race race, RegistrationStatus status);
 
 	public Distance getDistance(Long distanceID);
 

@@ -1,0 +1,32 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<ui:fragment rendered="#{not empty pheidippidesBean.events}">
+		<div class="participantCounter">
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_counter']}" /></h2>
+		
+			<ui:repeat value="#{pheidippidesBean.events}" var="event">
+				<ui:fragment rendered="#{not empty pheidippidesBean.eventRacesMap[event]}">
+					<fieldset class="formSection">
+						<h3><h:outputText value="#{event.name}" /></h3>
+						<dl>
+							<ui:repeat value="#{pheidippidesBean.eventRacesMap[event]}" var="race">
+								<ui:param value="#{pheidippidesBean.participantCountMap[race]}" name="count" />
+							
+								<dt><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(race.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></dt>
+								<dd><h:outputText value="#{count}" /></dd>
+							</ui:repeat>
+						</dl>
+					</fieldset>
+				</ui:fragment>
+			</ui:repeat>
+		</div>
+	</ui:fragment>
+</ui:component>
+</html>

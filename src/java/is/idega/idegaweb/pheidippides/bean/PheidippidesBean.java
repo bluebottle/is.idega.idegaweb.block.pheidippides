@@ -67,6 +67,9 @@ public class PheidippidesBean {
 	public RegistrationAnswerHolder answer;
 	private Map<String, Participant> participantMap;
 	private Map<RegistrationHeader, BankReference> bankReferencesMap;
+	
+	private Map<Event, List<Race>> eventRacesMap;
+	private Map<Race, Long> participantCountMap;
 
 	public String getEventHandler() {
 		return eventHandler;
@@ -290,5 +293,21 @@ public class PheidippidesBean {
 
 	public void setBankReferencesMap(Map<RegistrationHeader, BankReference> bankReferencesMap) {
 		this.bankReferencesMap = bankReferencesMap;
+	}
+
+	public Map<Event, List<Race>> getEventRacesMap() {
+		return eventRacesMap;
+	}
+
+	public void setEventRacesMap(Map<Event, List<Race>> eventRacesMap) {
+		this.eventRacesMap = eventRacesMap;
+	}
+
+	public Map<Race, Long> getParticipantCountMap() {
+		return participantCountMap;
+	}
+
+	public void setParticipantCountMap(Map<Race, Long> participantCountMap) {
+		this.participantCountMap = participantCountMap;
 	}
 }

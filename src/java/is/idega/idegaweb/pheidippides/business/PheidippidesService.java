@@ -266,7 +266,9 @@ public class PheidippidesService {
 			if (address != null) {
 				p.setAddress(address.getStreetAddress());
 				p.setPostalAddress(address.getPostalAddress());
-				p.setPostalCode(address.getPostalCode().getPostalCode());
+				if (address.getPostalCode() != null) {
+					p.setPostalCode(address.getPostalCode().getPostalCode());
+				}
 				p.setCity(address.getCity());
 				p.setCountry(address.getCountry().getName());
 			}

@@ -56,34 +56,36 @@
 							<ui:param value="#{pheidippidesBean.participantMap[registrationHeader.uuid]}" name="participant" />
 							<ui:param value="#{pheidippidesBean.bankReferencesMap[registrationHeader]}" name="bankReference" />
 							
-							<tr>
-								<td class="firstColumn"><h:outputText value="#{registrationHeader.id}" /></td>
-								<td><h:outputText value="#{participant.fullName}" /></td>
-								<td><h:outputText value="#{registrationHeader.uuid}" /></td>
-								<td><h:outputText value="#{bankReference.referenceNumber}" /></td>
-								<td><h:outputText value="#{registrationHeader.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
-								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['view_details']}" styleClass="viewItem">
-										<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
-										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
-										<f:param name="prm_year" value="#{param['prm_year']}" />
-										<f:param name="prm_action" value="2" />
-										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
-									</h:outputLink>
-								</td>
-								<td class="action">
-									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_registration_header_delete']}">
-										<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
-										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
-										<f:param name="prm_year" value="#{param['prm_year']}" />
-										<f:param name="prm_action" value="3" />
-										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
-									</h:outputLink>
-								</td>
-								<td class="action lastColumn">
-									<input type="checkbox" name="prm_registration_header" value="#{registrationHeader.uuid}" />
-								</td>
-							</tr>
+							<ui:fragment rendered="#{not empty participant}">
+								<tr>
+									<td class="firstColumn"><h:outputText value="#{registrationHeader.id}" /></td>
+									<td><h:outputText value="#{participant.fullName}" /></td>
+									<td><h:outputText value="#{registrationHeader.uuid}" /></td>
+									<td><h:outputText value="#{bankReference.referenceNumber}" /></td>
+									<td><h:outputText value="#{registrationHeader.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
+									<td class="action">
+										<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['view_details']}" styleClass="viewItem">
+											<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
+											<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
+											<f:param name="prm_year" value="#{param['prm_year']}" />
+											<f:param name="prm_action" value="2" />
+											<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+										</h:outputLink>
+									</td>
+									<td class="action">
+										<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_registration_header_delete']}">
+											<f:param name="prm_registration_header" value="#{registrationHeader.uuid}" />
+											<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
+											<f:param name="prm_year" value="#{param['prm_year']}" />
+											<f:param name="prm_action" value="3" />
+											<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
+										</h:outputLink>
+									</td>
+									<td class="action lastColumn">
+										<input type="checkbox" name="prm_registration_header" value="#{registrationHeader.uuid}" />
+									</td>
+								</tr>
+							</ui:fragment>
 						</ui:repeat>
 					</tbody>
 				</table>
