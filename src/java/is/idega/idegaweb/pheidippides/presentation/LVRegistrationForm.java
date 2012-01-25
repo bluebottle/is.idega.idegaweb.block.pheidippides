@@ -87,7 +87,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
+			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
@@ -197,16 +197,21 @@ public class LVRegistrationForm extends IWBaseComponent {
 					break;
 					
 				case ACTION_RECEIPT:
-					getSession().addParticipantHolder(getSession().getCurrentParticipant());
-					ParticipantHolder holder = getSession().getParticipantHolders().get(0);
-					
-					RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
-					bean.setAnswer(answer);
-					getSession().empty();
-					
-					getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
-					
-					showReceipt(iwc, bean);
+					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
+						getSession().addParticipantHolder(getSession().getCurrentParticipant());
+						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
+						
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+						bean.setAnswer(answer);
+						getSession().empty();
+						
+						getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
+						
+						showReceipt(iwc, bean);
+					}
+					else {
+						showPersonSelect(iwc, bean);
+					}
 					break;
 
 				case ACTION_REGISTER_ANOTHER:
@@ -216,7 +221,12 @@ public class LVRegistrationForm extends IWBaseComponent {
 						}
 						getSession().setCurrentParticipant(null);
 					}
-					showPersonSelect(iwc, bean);
+					if (getSession().isRegistrationWithPersonalId()) {
+						showPersonSelect(iwc, bean);
+					}
+					else {
+						showParticipant(iwc, bean);
+					}
 					break;
 			}
 		}

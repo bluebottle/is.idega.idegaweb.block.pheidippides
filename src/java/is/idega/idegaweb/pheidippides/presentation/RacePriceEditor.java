@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
+import com.idega.block.web2.business.JQueryUIType;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
@@ -81,16 +83,19 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		List<String> scripts = new ArrayList<String>();
 		JQuery jQuery = getJQuery();
 		scripts.add(jQuery.getBundleURIToJQueryLib());
-		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5", "ui.datepicker.js"));
-		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5/datepicker/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
+		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_CORE));
+		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_DATEPICKER));
+		if (!iwc.getCurrentLocale().equals(Locale.ENGLISH)) {
+			scripts.add(jQuery.getBundleURIToJQueryUILib("1.8.17/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
+		}
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/racePriceEditor.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.core.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.theme.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.6rc5/themes/base", "ui.datepicker.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.theme.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.datepicker.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();

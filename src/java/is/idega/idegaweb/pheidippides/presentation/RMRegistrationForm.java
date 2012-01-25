@@ -93,7 +93,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
+			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
@@ -163,16 +163,73 @@ public class RMRegistrationForm extends IWBaseComponent {
 					break;
 		
 				case ACTION_RELAY_TEAM:
-					if (iwc.isParameterSet(PARAMETER_RACE)) {
-						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
-					}
-					if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
-						getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
-					}
-					if (getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() > 1) {
-						showRelayTeam(iwc, bean);
+					if (getSession().getCurrentParticipant() != null) {
+						if (iwc.isParameterSet(PARAMETER_RACE)) {
+							getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
+						}
+						if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
+							getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
+						}
+						if (getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() > 1) {
+							showRelayTeam(iwc, bean);
+						}
+						else {
+							if (getSession().getCurrentParticipant().getRace().isCharityRun()) {
+								showCharitySelect(iwc, bean);
+							}
+							else {
+								showWaiver(iwc, bean);
+							}
+						}
 					}
 					else {
+						showPersonSelect(iwc, bean);
+					}
+					break;
+		
+				case ACTION_CHARITY_SELECT:
+					if (getSession().getCurrentParticipant() != null) {
+						if (iwc.isParameterSet(PARAMETER_TEAM_NAME)) {
+							ParticipantHolder holder = getSession().getCurrentParticipant();
+	
+							String relayLeg = iwc.getParameter(PARAMETER_RELAY_LEG_FIRST);
+							holder.setLeg(relayLeg);
+	
+							String teamName = iwc.getParameter(PARAMETER_TEAM_NAME);
+							Team team = new Team();
+							team.setName(teamName);
+							team.setRelayTeam(true);
+							team.setCreatedDate(IWTimestamp.getTimestampRightNow());
+							holder.setTeam(team);
+							
+							List<Participant> relayPartners = new ArrayList<Participant>();
+							String[] personalIDs = iwc.getParameterValues(PARAMETER_PERSONAL_ID_RELAY);
+							String[] datesOfBirth = iwc.getParameterValues(PARAMETER_DATE_OF_BIRTH);
+							String[] names = iwc.getParameterValues(PARAMETER_NAME);
+							String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
+							String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
+							String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
+							
+							for (int i = 0; i < names.length; i++) {
+								if (names[i] != null && names[i].length() > 0) {
+									Participant participant = new Participant();
+									participant.setFullName(names[i]);
+									if (getSession().isRegistrationWithPersonalId()) {
+										participant.setPersonalId(personalIDs[i]);
+									}
+									else {
+										participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(datesOfBirth[i], iwc.getCurrentLocale()));
+									}
+									participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
+									participant.setRelayLeg(relayLegs[i]);
+									participant.setEmail(emails[i]);
+									relayPartners.add(participant);
+								}
+							}
+							holder.setRelayPartners(relayPartners);
+							getSession().setCurrentParticipant(holder);
+						}
+						
 						if (getSession().getCurrentParticipant().getRace().isCharityRun()) {
 							showCharitySelect(iwc, bean);
 						}
@@ -180,63 +237,21 @@ public class RMRegistrationForm extends IWBaseComponent {
 							showWaiver(iwc, bean);
 						}
 					}
-					break;
-		
-				case ACTION_CHARITY_SELECT:
-					if (iwc.isParameterSet(PARAMETER_TEAM_NAME)) {
-						ParticipantHolder holder = getSession().getCurrentParticipant();
-
-						String relayLeg = iwc.getParameter(PARAMETER_RELAY_LEG_FIRST);
-						holder.setLeg(relayLeg);
-
-						String teamName = iwc.getParameter(PARAMETER_TEAM_NAME);
-						Team team = new Team();
-						team.setName(teamName);
-						team.setRelayTeam(true);
-						team.setCreatedDate(IWTimestamp.getTimestampRightNow());
-						holder.setTeam(team);
-						
-						List<Participant> relayPartners = new ArrayList<Participant>();
-						String[] personalIDs = iwc.getParameterValues(PARAMETER_PERSONAL_ID_RELAY);
-						String[] datesOfBirth = iwc.getParameterValues(PARAMETER_DATE_OF_BIRTH);
-						String[] names = iwc.getParameterValues(PARAMETER_NAME);
-						String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
-						String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
-						String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
-						
-						for (int i = 0; i < names.length; i++) {
-							if (names[i] != null && names[i].length() > 0) {
-								Participant participant = new Participant();
-								participant.setFullName(names[i]);
-								if (getSession().isRegistrationWithPersonalId()) {
-									participant.setPersonalId(personalIDs[i]);
-								}
-								else {
-									participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(datesOfBirth[i], iwc.getCurrentLocale()));
-								}
-								participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
-								participant.setRelayLeg(relayLegs[i]);
-								participant.setEmail(emails[i]);
-								relayPartners.add(participant);
-							}
-						}
-						holder.setRelayPartners(relayPartners);
-						getSession().setCurrentParticipant(holder);
-					}
-					
-					if (getSession().getCurrentParticipant().getRace().isCharityRun()) {
-						showCharitySelect(iwc, bean);
-					}
 					else {
-						showWaiver(iwc, bean);
+						showPersonSelect(iwc, bean);
 					}
 					break;
 		
 				case ACTION_WAIVER:
-					if (iwc.isParameterSet(PARAMETER_USE_CHARITY)) {
-						getSession().getCurrentParticipant().setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY))));
+					if (getSession().getCurrentParticipant() != null) {
+						if (iwc.isParameterSet(PARAMETER_USE_CHARITY)) {
+							getSession().getCurrentParticipant().setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY))));
+						}
+						showWaiver(iwc, bean);
 					}
-					showWaiver(iwc, bean);
+					else {
+						showPersonSelect(iwc, bean);
+					}
 					break;
 					
 				case ACTION_OVERVIEW:
@@ -252,16 +267,21 @@ public class RMRegistrationForm extends IWBaseComponent {
 					break;
 					
 				case ACTION_RECEIPT:
-					getSession().addParticipantHolder(getSession().getCurrentParticipant());
-					ParticipantHolder holder = getSession().getParticipantHolders().get(0);
-					
-					RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
-					bean.setAnswer(answer);
-					getSession().empty();
-					
-					getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
-					
-					showReceipt(iwc, bean);
+					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
+						getSession().addParticipantHolder(getSession().getCurrentParticipant());
+						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
+						
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+						bean.setAnswer(answer);
+						getSession().empty();
+						
+						getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
+						
+						showReceipt(iwc, bean);
+					}
+					else {
+						showPersonSelect(iwc, bean);
+					}
 					break;
 
 				case ACTION_REGISTER_ANOTHER:
@@ -271,7 +291,12 @@ public class RMRegistrationForm extends IWBaseComponent {
 						}
 						getSession().setCurrentParticipant(null);
 					}
-					showPersonSelect(iwc, bean);
+					if (getSession().isRegistrationWithPersonalId()) {
+						showPersonSelect(iwc, bean);
+					}
+					else {
+						showParticipant(iwc, bean);
+					}
 					break;
 			}
 		}

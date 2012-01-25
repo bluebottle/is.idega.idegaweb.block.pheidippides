@@ -32,12 +32,13 @@ jQuery(document).ready(function() {
 		});
 	}).trigger('change');
 	
+	jQuery('input.datePicker').live('click', function () {
+        jQuery(this).datepicker('destroy').datepicker({regional: ['is'], dateFormat: 'd.m.yy'}).focus();
+	});
+	
 	jQuery('a.addItem, a.editItem').fancybox({
-		'onComplete': function() {
+		afterLoad: function() {
 			jQuery('#racePriceEditorForm').validate();
-			jQuery('input.datePicker').datepicker({
-				regional: ['is']
-			});
 		}
 	});
 	

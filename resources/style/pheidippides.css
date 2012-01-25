@@ -442,6 +442,7 @@ form.registrationForm fieldset.formSection div.formItem input[name="prm_name"], 
 
 div.ui-datepicker {
 	overflow: visible !important;
+    z-index: 1102 !important;
 }
 
 /* Participant counter */

@@ -39,9 +39,16 @@ public class PheidippidesUtil {
 		return Arrays.asList(Currency.values());
 	}
 
+	public static String formatTimestamp(Date date) {
+		if (date != null) {
+			return new IWTimestamp(date).getDateString("dd.MM.yyyy HH:mm");
+		}
+		return "";
+	}
+	
 	public static String formatDate(Date date) {
 		if (date != null) {
-			return new IWTimestamp(date).getDateString("d.M.yyyy H:mm");
+			return new IWTimestamp(date).getDateString("dd.MM.yyyy");
 		}
 		return "";
 	}

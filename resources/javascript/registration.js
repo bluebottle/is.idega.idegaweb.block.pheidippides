@@ -103,6 +103,18 @@ jQuery(document).ready(function() {
 		});
 	});
 	
+	jQuery('input.extraCheckbox').click(function() {
+		var input = jQuery(this);
+		var parent = input.parents('fieldset.formSection');
+		
+		if (input.is(':checked')) {
+			jQuery('input:text', parent).attr('disabled', 'disabled');
+		}
+		else {
+			jQuery('input:text', parent).removeAttr('disabled');
+		}
+	});
+	
 	jQuery('a.next').click(function(event) {
 		event.preventDefault();
 		

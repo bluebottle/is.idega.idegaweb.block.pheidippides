@@ -30,6 +30,12 @@
 	</function>
 
 	<function>
+		<function-name>formatTimestamp</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.lang.String formatTimestamp(java.util.Date)</function-signature>
+	</function>
+
+	<function>
 		<function-name>formatDate</function-name>
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
 		<function-signature>java.lang.String formatDate(java.util.Date)</function-signature>

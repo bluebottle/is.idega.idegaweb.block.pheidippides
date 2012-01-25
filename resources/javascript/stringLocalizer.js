@@ -2,7 +2,7 @@ jQuery.noConflict();
 
 jQuery(document).ready(function() {
 	jQuery('a.editItem').fancybox({
-		'onComplete': function() {
+		afterLoad: function() {
 			jQuery('textarea.tinymce').tinymce({
                 // Location of TinyMCE script
                 script_url : '/idegaweb/bundles/com.idega.block.web2.0.bundle/resources/javascript/tinymce/3.2.6/tiny_mce.js',

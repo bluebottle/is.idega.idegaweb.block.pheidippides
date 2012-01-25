@@ -10,7 +10,7 @@
 	<fieldset class="formSection noNavigation">
 		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size_editor']}" /></legend>
 
-		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_shirt_size']}" styleClass="addItem">
+		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_shirt_size']}" styleClass="addItem fancybox.ajax">
 			<f:param name="prm_action" value="2" />
 			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_shirt_size']}" /></span>
 		</h:outputLink>
@@ -40,7 +40,7 @@
 							<td><h:outputText value="#{shirtSize.reportSign}" /></td>
 							<td><h:outputText value="#{shirtSize.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td class="action">
-								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_shirt_size']}">
+								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem fancybox.ajax" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_shirt_size']}">
 									<f:param name="prm_shirt_size_pk" value="#{shirtSize.id}" />
 									<f:param name="prm_action" value="2" />
 									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>

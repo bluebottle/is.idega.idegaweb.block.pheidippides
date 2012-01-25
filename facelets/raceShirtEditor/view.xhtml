@@ -14,7 +14,7 @@
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_shirt_editor']}" /></legend>
 			
 			<ui:fragment rendered="#{not empty param['prm_event_pk'] and not empty param['prm_year'] and not empty param['prm_race_pk']}">
-				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_shirt']}" styleClass="addItem">
+				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_shirt']}" styleClass="addItem fancybox.ajax">
 					<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 					<f:param name="prm_year" value="#{param['prm_year']}" />
 					<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
@@ -76,7 +76,7 @@
 								<td><h:outputText value="#{raceShirt.orderNumber}" /></td>
 								<td><h:outputText value="#{raceShirt.createdDate}"><f:convertDateTime type="date" pattern="d.M.yyyy"/></h:outputText></td>
 								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race_shirt']}" styleClass="editItem">
+									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race_shirt']}" styleClass="editItem fancybox.ajax">
 										<f:param name="prm_race_shirt_pk" value="#{raceShirt.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />

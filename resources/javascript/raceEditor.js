@@ -15,13 +15,13 @@ jQuery(document).ready(function() {
         } 
 	});
 	
+	jQuery('input.datePicker').live('click', function () {
+        jQuery(this).datepicker('destroy').datepicker({regional: ['is'], dateFormat: 'd.m.yy', showTime: true}).focus();
+	});
+	
 	jQuery('a.addItem, a.editItem').fancybox({
-		'onComplete': function() {
+		afterLoad: function() {
 			jQuery('#raceEditorForm').validate();
-			jQuery('input.datePicker').datepicker({
-				showTime: true,
-				regional: ['is']
-			});
 		}
 	});
 	

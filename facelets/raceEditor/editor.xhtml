@@ -42,11 +42,11 @@
 			</div>
 			<div class="formItem required">
 				<label for="prm_open_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['open_registration']}" /></label>
-				<input class="datePicker required" name="prm_open_registration" value="#{p:formatDate(pheidippidesBean.race.openRegistrationDate)}" />
+				<input class="datePicker required" name="prm_open_registration" value="#{p:formatTimestamp(pheidippidesBean.race.openRegistrationDate)}" />
 			</div>
 			<div class="formItem required">
 				<label for="prm_close_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close_registration']}" /></label>
-				<input class="datePicker required" name="prm_close_registration" value="#{p:formatDate(pheidippidesBean.race.closeRegistrationDate)}" />
+				<input class="datePicker required" name="prm_close_registration" value="#{p:formatTimestamp(pheidippidesBean.race.closeRegistrationDate)}" />
 			</div>
 			<div class="formItem required">
 				<label for="prm_current_participant_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['current_participant_number']}" /></label>

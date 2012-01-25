@@ -9,7 +9,7 @@
 	<fieldset class="formSection noNavigation">
 		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['charity_editor']}" /></legend>
 
-		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_charity']}" styleClass="addItem">
+		<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_charity']}" styleClass="addItem fancybox.ajax">
 			<f:param name="prm_action" value="2" />
 			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_charity']}" /></span>
 		</h:outputLink>
@@ -37,7 +37,7 @@
 							<td><h:outputText escape="false" value="#{charity.description}" /></td>
 							<td><h:outputText value="#{charity.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td class="action">
-								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_charity']}">
+								<h:outputLink value="#{pheidippidesBean.responseURL}" styleClass="editItem fancybox.ajax" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_charity']}">
 									<f:param name="prm_charity_pk" value="#{charity.id}" />
 									<f:param name="prm_action" value="2" />
 									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>

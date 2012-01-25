@@ -79,7 +79,7 @@
 								<td><h:outputText value="#{participant.phoneHome}" /></td>
 								<td><h:outputText value="#{participant.phoneMobile}" /></td>
 								<td class="action">
-									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" styleClass="editItem">
+									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" styleClass="editItem fancybox.ajax">
 										<f:param name="prm_registration_pk" value="#{registration.id}" />
 										<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
 										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
