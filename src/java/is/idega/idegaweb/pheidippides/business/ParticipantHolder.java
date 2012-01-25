@@ -20,8 +20,8 @@ public class ParticipantHolder {
 	private int amount;
 	private int discount;
 	private boolean acceptsWaiver;
-	private boolean hasDoneMarathonBefore = false;	
-	private boolean hasDoneLVBefore = false;	
+	private boolean hasDoneMarathonBefore = true;	
+	private boolean hasDoneLVBefore = true;	
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
 

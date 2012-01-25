@@ -3,7 +3,12 @@ var validUser = null;
 
 jQuery(document).ready(function() {
 	jQuery.validator.addMethod("validUser", function( value, element ) {
-		return validUser == value;
+		if (value.length == 0) {
+			return true;
+		}
+		else {
+			return validUser == value;
+		}
 	}, "No participant found with entered personal ID.");
 	
 	jQuery('form.registrationForm').validate({
