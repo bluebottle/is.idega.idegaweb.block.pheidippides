@@ -479,3 +479,18 @@ div.participantCounter dl dt {
 div.participantCounter dl dd {
 	float: left;
 }
+
+/* Printout */
+div.printout {
+	width: auto;
+	overflow: hidden;
+}
+
+div.printout a {
+	text-indent: -1999px;
+	width: 40px;
+	height: 40px;
+	float: right;
+	display: block;
+	background: url(images/excel_icon.gif) no-repeat;
+}

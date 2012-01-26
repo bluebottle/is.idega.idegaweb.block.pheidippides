@@ -43,6 +43,12 @@
 		</fieldset>
 
 		<ui:fragment rendered="#{not empty pheidippidesBean.registrations}">
+			<div class="printout">
+				<c:DownloadLink downloadWriter="#{pheidippidesBean.downloadWriter}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_xls']}">
+					<f:param name="prm_race_pk" value="#{not empty param['prm_race_pk'] ? param['prm_race_pk'] : ''}" />
+				</c:DownloadLink>
+			</div>
+		
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 					<thead>

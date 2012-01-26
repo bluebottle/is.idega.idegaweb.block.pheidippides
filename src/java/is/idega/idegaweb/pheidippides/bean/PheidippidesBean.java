@@ -29,6 +29,7 @@ public class PheidippidesBean {
 
 	public String eventHandler;
 	public String responseURL;
+	public Class<?> downloadWriter;
 	
 	public Event event;
 	public List<Event> events;
@@ -85,6 +86,14 @@ public class PheidippidesBean {
 
 	public void setResponseURL(String responseURL) {
 		this.responseURL = responseURL;
+	}
+
+	public Class<?> getDownloadWriter() {
+		return downloadWriter;
+	}
+
+	public void setDownloadWriter(Class<?> downloadWriter) {
+		this.downloadWriter = downloadWriter;
 	}
 
 	public Event getEvent() {
