@@ -185,7 +185,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getCharity() != null ? registration.getCharity().getName() : "");
-			row.createCell(iCell++).setCellValue(new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:m"));
+			row.createCell(iCell++).setCellValue(new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm"));
 		}
 		
 		wb.write(mos);
