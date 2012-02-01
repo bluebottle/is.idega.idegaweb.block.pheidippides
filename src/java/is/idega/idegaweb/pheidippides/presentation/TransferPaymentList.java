@@ -34,12 +34,16 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_VIEW_DETAILS = 2;
-	private static final int ACTION_DELETE = 3;
-	private static final int ACTION_MARK_AS_PAID = 4;
+	private static final int ACTION_HANDLE = 3;
 	
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_REGISTRATION_HEADER = "prm_registration_header";
 	private static final String PARAMETER_YEAR = "prm_year";
+	
+	private static final int HEADER_ACTION_NONE = 1;
+	private static final int HEADER_ACTION_PAID = 2;
+	private static final int HEADER_ACTION_FREE = 3;
+	private static final int HEADER_ACTION_DELETE = 4;
 
 	@Autowired
 	private PheidippidesService service;
@@ -104,14 +108,9 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 				showViewDetails(iwc, bean);
 				break;
 				
-			case ACTION_DELETE:
+			case ACTION_HANDLE:
 				facelet.setFaceletURI(iwb.getFaceletURI("transferPaymentList/view.xhtml"));
-				handleDelete(iwc, bean);
-				break;
-				
-			case ACTION_MARK_AS_PAID:
-				facelet.setFaceletURI(iwb.getFaceletURI("transferPaymentList/view.xhtml"));
-				handleMarkAsPaid(iwc, bean);
+				handleAction(iwc, bean);
 				break;
 		}
 		
@@ -143,16 +142,29 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 		bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 	}
 	
-	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
-		getService().markRegistrationAsPaymentCancelled(bean.getRegistrationHeader());
-		showView(iwc, bean);
-	}
-	
-	private void handleMarkAsPaid(IWContext iwc, PheidippidesBean bean) {
+	private void handleAction(IWContext iwc, PheidippidesBean bean) {
 		String[] uniqueIDs = iwc.getParameterValues(PARAMETER_REGISTRATION_HEADER);
+		String[] actions = iwc.getParameterValues(PARAMETER_REGISTRATION_HEADER + "_action");
 		if (uniqueIDs != null) {
-			for (String id : uniqueIDs) {
-				getService().markRegistrationAsPaid(id, true, null, null, null, null, null, null, null, null, null);
+			for (int i = 0; i < uniqueIDs.length; i++) {
+				String id = uniqueIDs[i];
+				int action = Integer.parseInt(actions[i]);
+				
+				switch (action) {
+					case HEADER_ACTION_DELETE:
+						getService().markRegistrationAsPaymentCancelled(id);
+						break;
+					
+					case HEADER_ACTION_PAID:
+						getService().markRegistrationAsPaid(id, true, false, null, null, null, null, null, null, null, null, null);
+						break;
+						
+					case HEADER_ACTION_FREE:
+						getService().markRegistrationAsPaid(id, true, true, null, null, null, null, null, null, null, null, null);
+	
+					case HEADER_ACTION_NONE:
+						break;
+				}
 			}
 		}
 		

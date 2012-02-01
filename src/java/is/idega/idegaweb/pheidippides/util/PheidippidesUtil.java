@@ -39,30 +39,9 @@ public class PheidippidesUtil {
 		return Arrays.asList(Currency.values());
 	}
 
-	public static String formatTimestamp(Date date) {
+	public static String formatDate(Date date, String pattern) {
 		if (date != null) {
-			return new IWTimestamp(date).getDateString("dd.MM.yyyy HH:mm");
-		}
-		return "";
-	}
-	
-	public static String formatDate(Date date) {
-		if (date != null) {
-			return new IWTimestamp(date).getDateString("dd.MM.yyyy");
-		}
-		return "";
-	}
-	
-	public static String formatTime(Date date) {
-		if (date != null) {
-			return new IWTimestamp(date).getDateString("HH:mm");
-		}
-		return "";
-	}
-	
-	public static String formatYear(Date date) {
-		if (date != null) {
-			return new IWTimestamp(date).getDateString("yyyy");
+			return new IWTimestamp(date).getDateString(pattern);
 		}
 		return "";
 	}

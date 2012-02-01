@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
 	}).trigger('change');
 	
 	jQuery('a.addItem, a.editItem').fancybox({
-		afterLoad: function() {
+		afterShow: function() {
 			jQuery('#raceShirtEditorForm').validate();
 		}
 	});

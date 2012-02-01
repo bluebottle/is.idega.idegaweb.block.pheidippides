@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
 	});
 	
 	jQuery('a.addItem, a.editItem').fancybox({
-		afterLoad: function() {
+		afterShow: function() {
 			jQuery('#raceEditorForm').validate();
 		}
 	});

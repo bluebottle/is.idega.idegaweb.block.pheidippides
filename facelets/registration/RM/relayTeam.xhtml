@@ -31,7 +31,7 @@
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 						</ui:fragment>
 						<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></th>
 						</ui:fragment>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
@@ -63,7 +63,7 @@
 								<td><input type="text" name="prm_personalId" value="#{partner.personalId}" /></td>
 							</ui:fragment>
 							<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
-								<td><c:datePicker useCurrent="#{false}" yearRange="1900:2012" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{partner.dateOfBirth}" /></td>
+								<td><input type="text" name="prm_date_of_birth" value="#{p:formatDate(partner.dateOfBirth, 'dd.MM.yyyy')}" /></td>
 							</ui:fragment>
 							<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
 							<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>

@@ -2,7 +2,7 @@ jQuery.noConflict();
 
 jQuery(document).ready(function() {
 	jQuery('a.editItem').fancybox({
-		afterLoad: function() {
+		afterShow: function() {
 			jQuery('textarea.tinymce').tinymce({
                 // Location of TinyMCE script
                 script_url : '/idegaweb/bundles/com.idega.block.web2.0.bundle/resources/javascript/tinymce/3.2.6/tiny_mce.js',
@@ -21,11 +21,13 @@ jQuery(document).ready(function() {
                 theme_advanced_resizing : true,
 
                 // Drop lists for link/image/media/template dialogs
-                template_external_list_url : "lists/template_list.js",
+                /*template_external_list_url : "lists/template_list.js",
                 external_link_list_url : "lists/link_list.js",
                 external_image_list_url : "lists/image_list.js",
-                media_external_list_url : "lists/media_list.js",
+                media_external_list_url : "lists/media_list.js",*/
 			});
+			
+			return true;
 		}
 	});
 	

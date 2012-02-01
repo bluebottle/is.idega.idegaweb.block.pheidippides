@@ -31,11 +31,11 @@
 			</div>
 			<div class="formItem required">
 				<label for="prm_valid_from"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></label>
-				<input class="datePicker required" name="prm_valid_from" value="#{p:formatDate(pheidippidesBean.racePrice.validFrom)}" />
+				<input class="datePicker required" name="prm_valid_from" value="#{p:formatDate(pheidippidesBean.racePrice.validFrom, 'dd.MM.yyyy')}" />
 			</div>
 			<div class="formItem required">
 				<label for="prm_valid_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></label>
-				<input class="datePicker required" name="prm_valid_to" value="#{p:formatDate(pheidippidesBean.racePrice.validTo)}" />
+				<input class="datePicker required" name="prm_valid_to" value="#{p:formatDate(pheidippidesBean.racePrice.validTo, 'dd.MM.yyyy')}" />
 			</div>
 			<div class="formItem">
 				<label for="prm_price"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['price']}" /></label>

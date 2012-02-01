@@ -18,11 +18,11 @@
 		<fieldset class="formSection">
 			<div class="formItem">
 				<label for="prm_best_marathon_time"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['best_marathon_time']}" /></label>
-				<c:textInput name="prm_best_marathon_time" styleClass="bestTime" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" content="#{p:formatTime(pheidippidesRegistrationSession.currentParticipant.bestMarathonTime)}" />
+				<c:textInput name="prm_best_marathon_time" styleClass="bestTime" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" content="#{p:formatDate(pheidippidesRegistrationSession.currentParticipant.bestMarathonTime, 'HH:mm')}" />
 			</div>
 			<div class="formItem">
 				<label for="prm_best_marathon_year"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['best_marathon_year']}" /></label>
-				<c:textInput name="prm_best_marathon_year" styleClass="bestYear" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" content="#{p:formatYear(pheidippidesRegistrationSession.currentParticipant.bestMarathonTime)}" />
+				<c:textInput name="prm_best_marathon_year" styleClass="bestYear" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" content="#{p:formatDate(pheidippidesRegistrationSession.currentParticipant.bestMarathonTime, 'yyyy')}" />
 			</div>
 			<div class="formItem checkbox">
 				<c:checkBox id="prm_has_not_run_marathon" styleClass="extraCheckbox" name="prm_has_not_run_marathon" checked="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneMarathonBefore}" />
@@ -33,11 +33,11 @@
 		<fieldset class="formSection">
 			<div class="formItem">
 				<label for="prm_best_ultra_marathon_time"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['best_ultra_marathon_time']}" /></label>
-				<c:textInput name="prm_best_ultra_marathon_time" styleClass="bestTime" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" content="#{p:formatTime(pheidippidesRegistrationSession.currentParticipant.bestUltraMarathonTime)}" />
+				<c:textInput name="prm_best_ultra_marathon_time" styleClass="bestTime" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" content="#{p:formatDate(pheidippidesRegistrationSession.currentParticipant.bestUltraMarathonTime, 'HH:mm')}" />
 			</div>
 			<div class="formItem">
 				<label for="prm_best_ultra_marathon_year"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['best_ultra_marathon_year']}" /></label>
-				<c:textInput type="text" name="prm_best_ultra_marathon_year" styleClass="bestYear" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" content="#{p:formatYear(pheidippidesRegistrationSession.currentParticipant.bestUltraMarathonTime)}" />
+				<c:textInput type="text" name="prm_best_ultra_marathon_year" styleClass="bestYear" disabled="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" content="#{p:formatDate(pheidippidesRegistrationSession.currentParticipant.bestUltraMarathonTime, 'yyyy')}" />
 			</div>
 			<div class="formItem checkbox">
 				<c:checkBox id="prm_has_not_run_ultra_marathon" styleClass="extraCheckbox" name="prm_has_not_run_ultra_marathon" checked="#{!pheidippidesRegistrationSession.currentParticipant.hasDoneLVBefore}" />

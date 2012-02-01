@@ -23,8 +23,8 @@
 					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
 				</div>
 				<div class="formItem required">
-					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></label>
-					<c:datePicker styleClass="required" showCalendarImage="#{false}" useCurrent="#{false}" yearRange="1900:2012" showYear="#{true}" showMonth="#{true}" inputName="prm_date_of_birth" initialDate="#{participant.dateOfBirth}" />
+					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></label>
+					<input type="text" class="required" name="prm_date_of_birth" value="#{p:formatDate(participant.dateOfBirth, 'dd.MM.yyyy')}" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_address"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></label>

@@ -41,8 +41,12 @@ jQuery(document).ready(function() {
 		}
 	});
 	
+	jQuery.mask.definitions['M']='[01]';	
+	jQuery.mask.definitions['D']='[0123]';	
+	
 	jQuery('input.bestTime').mask("99:99");
 	jQuery('input.bestYear').mask("9999");
+	jQuery('input[name="prm_date_of_birth"]').mask('D9.M9.9999');
 
 	jQuery('input[name="prm_personal_id"]').keyup(function() {
 		var input = jQuery(this);

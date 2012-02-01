@@ -28,7 +28,8 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 	@NamedQuery(name = "registrationHeader.findAll", query = "select r from RegistrationHeader r"),
 	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID"),
 	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid"),
-	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status")
+	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status"),
+	@NamedQuery(name = "registrationHeader.findByEventAndYearAndStatus", query = "select r from RegistrationHeader r where r.status = :status")
 })
 public class RegistrationHeader implements Serializable {
 	private static final long serialVersionUID = -8531574945301832059L;

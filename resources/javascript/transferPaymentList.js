@@ -13,7 +13,30 @@ jQuery(document).ready(function() {
                 sorter: false 
             } 
         } 
-	}); 
+	});
+	
+	jQuery('span.action').click(function() {
+		var span = jQuery(this);
+		var action = span.attr('rel');
+		var input = span.siblings('input[name="prm_registration_header_action"]');
+		
+		if (action == 'none') {
+			span.attr('rel', 'paid');
+			input.val('2');
+		}
+		else if (action == 'paid') {
+			span.attr('rel', 'free');
+			input.val('3');
+		}
+		else if (action == 'free') {
+			span.attr('rel', 'delete');
+			input.val('4');
+		}
+		else if (action == 'delete') {
+			span.attr('rel', 'none');
+			input.val('1');
+		}
+	});
 	
 	jQuery('a.viewItem').fancybox();
 	

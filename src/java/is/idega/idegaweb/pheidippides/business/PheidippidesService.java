@@ -1026,26 +1026,26 @@ public class PheidippidesService {
 	}
 	
 	public RegistrationHeader markRegistrationAsPaid(String uniqueID,
-			boolean manualPayment, String securityString, String cardType,
+			boolean manualPayment, boolean withoutPayment, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
-		return markRegistrationAsPaid(header, manualPayment, securityString,
+		return markRegistrationAsPaid(header, manualPayment, withoutPayment, securityString,
 				cardType, cardNumber, paymentDate, authorizationNumber,
 				transactionNumber, referenceNumber, comment, saleId);
 	}
 
 	public RegistrationHeader markRegistrationAsPaid(RegistrationHeader header,
-			boolean manualPayment, String securityString, String cardType,
+			boolean manualPayment, boolean withoutPayment, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		List<Registration> registrations = dao.getRegistrations(header);
 		dao.storeRegistrationHeader(header.getId(),
-				manualPayment ? RegistrationHeaderStatus.ManualPayment
-						: RegistrationHeaderStatus.Paid, null, null, null,
+				withoutPayment ? RegistrationHeaderStatus.RegisteredWithoutPayment : (manualPayment ? RegistrationHeaderStatus.ManualPayment
+						: RegistrationHeaderStatus.Paid), null, null, null,
 				null, securityString, cardType, cardNumber, paymentDate,
 				authorizationNumber, transactionNumber, referenceNumber,
 				comment, saleId);

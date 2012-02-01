@@ -11,6 +11,9 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Team;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +31,6 @@ import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
-import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.LocaleUtil;
@@ -144,8 +146,14 @@ public class RMRegistrationForm extends IWBaseComponent {
 						}
 
 						if (!getSession().isRegistrationWithPersonalId()) {
+							DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+							
 							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
-							participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), iwc.getCurrentLocale()));
+							try {
+								participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
 							participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
 							participant.setCity(iwc.getParameter(PARAMETER_CITY));
 							participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
@@ -210,6 +218,8 @@ public class RMRegistrationForm extends IWBaseComponent {
 							String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
 							String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
 							
+							DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+							
 							for (int i = 0; i < names.length; i++) {
 								if (names[i] != null && names[i].length() > 0) {
 									Participant participant = new Participant();
@@ -218,7 +228,11 @@ public class RMRegistrationForm extends IWBaseComponent {
 										participant.setPersonalId(personalIDs[i]);
 									}
 									else {
-										participant.setDateOfBirth(IWDatePickerHandler.getParsedDate(datesOfBirth[i], iwc.getCurrentLocale()));
+										try {
+											participant.setDateOfBirth(format.parse(datesOfBirth[i]));
+										} catch (ParseException e) {
+											e.printStackTrace();
+										}
 									}
 									participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
 									participant.setRelayLeg(relayLegs[i]);

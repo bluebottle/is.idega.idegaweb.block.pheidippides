@@ -14,6 +14,7 @@
 				<thead>
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
@@ -30,6 +31,7 @@
 						
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
+							<td><h:outputText value="#{participant.email}" /></td>
 							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', p:concat(distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
 							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', shirtSize.localizedKey))]}" /></td>
 							<td class="lastColumn"><h:outputText value="#{registration.amountPaid - registration.amountDiscount}" /></td>

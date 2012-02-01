@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
 	}); 
 	
 	jQuery('a.addItem, a.editItem').fancybox({
-		'onComplete': function() {
+		afterShow: function() {
 			jQuery('#charityEditorForm').validate();
 		}
 	});

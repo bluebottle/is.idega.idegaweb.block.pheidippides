@@ -53,6 +53,7 @@ public class PheidippidesBean {
 	public List<Charity> charities;
 	
 	public Registration registration;
+	public Participant participant;
 	public List<Registration> registrations;
 	public Map<Registration, Participant> participantsMap;
 	
@@ -214,6 +215,14 @@ public class PheidippidesBean {
 
 	public void setRegistration(Registration registration) {
 		this.registration = registration;
+	}
+
+	public Participant getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(Participant participant) {
+		this.participant = participant;
 	}
 
 	public List<Registration> getRegistrations() {

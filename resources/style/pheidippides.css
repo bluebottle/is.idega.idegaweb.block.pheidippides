@@ -494,3 +494,23 @@ div.printout a {
 	display: block;
 	background: url(images/excel_icon.gif) no-repeat;
 }
+
+/* Transfer payment form */
+form#transferPaymentForm span.action {
+	display: block;
+	height: 16px;
+	width: 16px;
+	background: url(images/none.png) no-repeat;
+}
+
+form#transferPaymentForm span.action[rel="paid"] {
+	background-image: url(images/paid.png);
+}
+
+form#transferPaymentForm span.action[rel="free"] {
+	background-image: url(images/free.png);
+}
+
+form#transferPaymentForm span.action[rel="delete"] {
+	background-image: url(images/remove.png);
+}
