@@ -85,6 +85,14 @@ table.adminTable th.headerSortUp {
 	background-color: #eee;
 }
 
+table.adminTable tbody tr:nth-child(odd) td {
+	background-color: #f4f4f4;
+}
+
+table.adminTable tbody tr:hover td {
+	background-color: #ddd;
+}
+
 table.adminTable tbody tr td.discount_true span {
 	display: inline;
 	padding-left: 16px;
