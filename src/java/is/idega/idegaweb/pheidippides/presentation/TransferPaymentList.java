@@ -132,9 +132,11 @@ public class TransferPaymentList extends IWBaseComponent implements IWPageEventL
 	}
 	
 	protected void showView(IWContext iwc, PheidippidesBean bean) {
-		bean.setRegistrationHeaders(getDao().getRegistrationHeaders(getStatus()));
-		bean.setParticipantMap(getService().getRegistratorMap(bean.getRegistrationHeaders()));
-		bean.setBankReferencesMap(getService().getBankReferencesMap(bean.getRegistrationHeaders()));
+		if (bean.getEvent() != null) {
+			bean.setRegistrationHeaders(getDao().getRegistrationHeaders(bean.getEvent(), new Integer(bean.getProperty().getValue()), getStatus()));
+			bean.setParticipantMap(getService().getRegistratorMap(bean.getRegistrationHeaders()));
+			bean.setBankReferencesMap(getService().getBankReferencesMap(bean.getRegistrationHeaders()));
+		}
 	}
 	
 	protected void showViewDetails(IWContext iwc, PheidippidesBean bean) {

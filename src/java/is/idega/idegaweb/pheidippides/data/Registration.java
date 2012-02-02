@@ -27,6 +27,7 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "registration.findByRace", query = "select r from Registration r where r.race = :race"),
 	@NamedQuery(name = "registration.findByRaceAndStatus", query = "select r from Registration r where r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByRaceAndStatus", query = "select count(r) from Registration r where r.race = :race and r.status = :status"),
+	@NamedQuery(name = "registration.countByParticipantAndRaceAndStatus", query = "select count(r) from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.findByHeader", query = "select r from Registration r where r.header = :header")
 })
 public class Registration implements Serializable {

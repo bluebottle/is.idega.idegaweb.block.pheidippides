@@ -40,6 +40,8 @@ public interface PheidippidesDao {
 	
 	public long getNumberOfParticipants(Race race, RegistrationStatus status);
 
+	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status);
+	
 	public Distance getDistance(Long distanceID);
 
 	public Distance getDistance(String name);
@@ -90,7 +92,7 @@ public interface PheidippidesDao {
 	
 	public RegistrationHeader getRegistrationHeader(String uniqueID);
 
-	public List<RegistrationHeader> getRegistrationHeaders(RegistrationHeaderStatus status);
+	public List<RegistrationHeader> getRegistrationHeaders(Event event, Integer year, RegistrationHeaderStatus status);
 	
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,

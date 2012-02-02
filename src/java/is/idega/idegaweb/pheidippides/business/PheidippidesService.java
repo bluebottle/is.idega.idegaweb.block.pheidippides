@@ -126,6 +126,30 @@ public class PheidippidesService {
 		return openRaces;
 	}
 
+	public List<Race> getAvailableRaces(Long eventPK, int year, Participant participant) {
+		List<Race> races = getOpenRaces(eventPK, year);
+		List<Race> availableRaces = new ArrayList<Race>();
+
+		Date dateOfBirth = participant.getDateOfBirth();
+		if (dateOfBirth != null) {
+			Age age = new Age(dateOfBirth);
+			for (Race race : races) {
+				if (race.getMinimumAge() <= age.getYears() && race.getMaximumAge() >= age.getYears()) {
+					boolean addRace = true;
+					if (participant.getUuid() != null && dao.getNumberOfRegistrations(participant.getUuid(), race, RegistrationStatus.OK) > 0) {
+						addRace = false;
+					}
+					
+					if (addRace) {
+						availableRaces.add(race);
+					}
+				}
+			}
+		}
+		
+		return availableRaces;
+	}
+	
 	public List<Race> getAvailableRaces(Long eventPK, int year, Date dateOfBirth) {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
@@ -141,6 +165,23 @@ public class PheidippidesService {
 		}
 		
 		return availableRaces;
+	}
+	
+	public boolean hasAvailableRaces(String personalID, Long eventPK, int year) {
+		Participant participant = getParticipant(personalID);
+		
+		boolean hasRaces = false;
+		if (participant != null) {
+			
+			List<Race> races = getAvailableRaces(eventPK, year, participant.getDateOfBirth());
+			for (Race race : races) {
+				if (dao.getNumberOfRegistrations(participant.getUuid(), race, RegistrationStatus.OK) == 0) {
+					hasRaces = true;
+				}
+			}
+		}
+		
+		return hasRaces;
 	}
 
 	public List<RaceShirtSize> getShirts(Long racePK) {

@@ -198,6 +198,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public long getNumberOfParticipants(Race race, RegistrationStatus status) {
 		return getSingleResult("registration.countByRaceAndStatus", Long.class, new Param("race", race), new Param("status", status)).longValue();
 	}
+	
+	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status) {
+		return getSingleResult("registration.countByParticipantAndRaceAndStatus", Long.class, new Param("uuid", uuid), new Param("race", race), new Param("status", status)).longValue();
+	}
 
 	/* ShirtSize methods */
 	public ShirtSize getShirtSize(Long shirtSizeID) {
@@ -318,8 +322,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				RegistrationHeader.class, new Param("uuid", uniqueID));
 	}
 	
-	public List<RegistrationHeader> getRegistrationHeaders(RegistrationHeaderStatus status) {
-		return getResultList("registrationHeader.findByStatus", RegistrationHeader.class, new Param("status", status));
+	public List<RegistrationHeader> getRegistrationHeaders(Event event, Integer year, RegistrationHeaderStatus status) {
+		if (event != null && year != null) {
+			return getResultList("registrationHeader.findByEventAndYearAndStatus", RegistrationHeader.class, new Param("event", event), new Param("year", year), new Param("status", status));
+		}
+		else {
+			return getResultList("registrationHeader.findByStatus", RegistrationHeader.class, new Param("status", status));
+		}
 	}
 
 	@Transactional(readOnly = false)

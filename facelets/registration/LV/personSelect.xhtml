@@ -9,6 +9,8 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="1" />
+		<input type="hidden" name="prm_event_pk" value="#{pheidippidesBean.event.id}" />
+		<input type="hidden" name="prm_year" value="#{pheidippidesBean.property.value}" />
 	
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 1" /></h2>
@@ -20,7 +22,7 @@
 		<fieldset class="formSection">
 			<div class="formItem required">
 				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
-				<input type="text" class="required digits validUser" name="prm_personal_id" value="#{param['prm_personal_id']}" />
+				<input type="text" class="required digits validUser hasRaces" name="prm_personal_id" value="#{param['prm_personal_id']}" />
 			</div>
 			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
 				<div class="formItem checkbox">

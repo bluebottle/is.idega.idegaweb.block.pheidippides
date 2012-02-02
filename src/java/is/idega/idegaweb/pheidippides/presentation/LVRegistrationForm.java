@@ -103,6 +103,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setEvent(event);
 			bean.setLocale(iwc.getCurrentLocale());
+			bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow().getYear())));
 
 			switch (parseAction(iwc)) {
 				case ACTION_PERSON_SELECT:
@@ -265,7 +266,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
-		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant().getDateOfBirth()));
+		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant()));
 		if (bean.getRaces() != null && bean.getRaces().size() == 1) {
 			getSession().getCurrentParticipant().setRace(bean.getRaces().iterator().next());
 			bean.setRaces(null);

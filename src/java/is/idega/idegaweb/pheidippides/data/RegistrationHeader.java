@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,7 +31,7 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID"),
 	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid"),
 	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status"),
-	@NamedQuery(name = "registrationHeader.findByEventAndYearAndStatus", query = "select r from RegistrationHeader r where r.status = :status")
+	@NamedQuery(name = "registrationHeader.findByEventAndYearAndStatus", query = "select distinct r from RegistrationHeader r join r.registrations re where r.status = :status and re.race.event = :event and re.race.year = :year")
 })
 public class RegistrationHeader implements Serializable {
 	private static final long serialVersionUID = -8531574945301832059L;
@@ -119,6 +121,9 @@ public class RegistrationHeader implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
 	private Date createdDate;
+	
+	@OneToMany(mappedBy = "header")
+	private List<Registration> registrations;
 	
 	public Long getId() {
 		return id;
@@ -255,5 +260,13 @@ public class RegistrationHeader implements Serializable {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
 	}
 }

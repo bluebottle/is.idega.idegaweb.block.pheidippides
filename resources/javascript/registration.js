@@ -1,5 +1,6 @@
 jQuery.noConflict();
 var validUser = null;
+var availableRaces = false;
 
 jQuery(document).ready(function() {
 	jQuery.validator.addMethod("validUser", function( value, element ) {
@@ -10,6 +11,15 @@ jQuery(document).ready(function() {
 			return validUser == value;
 		}
 	}, "No participant found with entered personal ID.");
+	
+	jQuery.validator.addMethod("hasRaces", function( value, element ) {
+		if (value.length == 10) {
+			return availableRaces;
+		}
+		else {
+			return true;
+		}
+	}, "No races available for participant.");
 	
 	jQuery('form.registrationForm').validate({
 		onkeyup: false,
@@ -58,6 +68,15 @@ jQuery(document).ready(function() {
 					if (participant != null) {
 						validUser = participant.personalId;
 					}
+				}
+			});
+			
+			var event = jQuery('input[name="prm_event_pk"]').val();
+			var year = jQuery('input[name="prm_year"]').val();
+			
+			PheidippidesService.hasAvailableRaces(value, event, year, {
+				callback: function(hasAvailableRaces) {
+					availableRaces = hasAvailableRaces;
 				}
 			});
 		}
