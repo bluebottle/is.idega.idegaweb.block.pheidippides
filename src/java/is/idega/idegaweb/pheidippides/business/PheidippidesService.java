@@ -1353,4 +1353,25 @@ public class PheidippidesService {
 		//@TODO Add search by email and address..
 		return ret;
 	}
+	
+	public Registration cancelRegistration(Registration registration) {
+		registration = dao.storeRegistration(registration.getId(), null, RegistrationStatus.Cancelled, null, null, null, null, 0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
+		
+		RegistrationHeader header = registration.getHeader();
+		boolean cancelHeader = true;
+		
+		List<Registration> registrations = dao.getRegistrations(header);
+		for (Registration registration2 : registrations) {
+			if (registration2.getStatus() == RegistrationStatus.Unconfirmed || registration2.getStatus() == RegistrationStatus.OK) { //Should RelayPartner also stop us from cancelling the header?
+				cancelHeader = false;
+				break;
+			}
+		}
+		
+		if (cancelHeader) {
+			dao.storeRegistrationHeader(header.getId(), RegistrationHeaderStatus.Cancelled, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		}
+		
+		return registration;
+	}
 }
