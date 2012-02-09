@@ -42,11 +42,11 @@ form.adminForm div.submit a {
 }
 
 /* Admin table */
-table.adminTable {
+table.adminTable, table.userTable {
 	text-align: left;
 }
 
-table.adminTable thead tr th {
+table.adminTable thead tr th, table.userTable thead tr th {
 	border-top: 1px #ccc solid;
 	border-bottom: 1px #ccc solid;
 	font-weight: bold;
@@ -55,14 +55,14 @@ table.adminTable thead tr th {
 	border-right: 1px #eee solid;
 }
 
-table.adminTable tbody tr td {
+table.adminTable tbody tr td, table.userTable tbody tr td {
 	border-bottom: 1px #efefef solid;
 	line-height: 1.25em;
 	padding: 4px 5px;
 	border-right: 1px #eee solid;
 }
 
-table.adminTable tr .lastColumn {
+table.adminTable tr .lastColumn, table.userTable tr .lastColumn {
 	border-right: 0;
 }
 
@@ -85,15 +85,15 @@ table.adminTable th.headerSortUp {
 	background-color: #eee;
 }
 
-table.adminTable tbody tr:nth-child(odd) td {
+table.adminTable tbody tr:nth-child(odd) td, table.userTable tbody tr:nth-child(odd) td {
 	background-color: #f4f4f4;
 }
 
-table.adminTable tbody tr:hover td {
+table.adminTable tbody tr:hover td, table.userTable tbody tr:hover td {
 	background-color: #ddd;
 }
 
-table.adminTable tbody tr td.discount_true span {
+table.adminTable tbody tr td.discount_true span, table.userTable tbody tr td.OK span, table.userTable tbody tr td.Unconfirmed span {
 	display: inline;
 	padding-left: 16px;
 	height: 16px;
@@ -111,12 +111,12 @@ table.adminTable tbody tr td a.editItem span, table.adminTable tbody tr td a.del
 	display: none;
 }
 
-table.adminTable tbody tr td a.deleteItem {
-	background: url(images/delete.png);
+table.adminTable tbody tr td a.deleteItem, table.userTable tbody tr td.Unconfirmed span {
+	background-image: url(images/delete.png);
 }
 
 table.adminTable tbody tr td a.viewItem {
-	background: url(images/view.png);
+	background-image: url(images/view.png);
 }
 
 a.addItem {
@@ -366,10 +366,13 @@ form.registrationForm fieldset.formSection div.formItem label {
 }
 
 form.registrationForm fieldset.formSection div.formItem label.error {
+	float: none;
+	padding-left: 8px;
+	font-style: italic;
 	display: none !important;
 }
 
-form.registrationForm fieldset.formSection div.formItem.required label:after {
+form.registrationForm fieldset.formSection div.formItem.required label:not(.error):after {
 	content: '*';
 	color: #a00;
 	padding-left: 4px;

@@ -16,7 +16,7 @@
 		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.waiver_help')]}" /></div>
 
 		<fieldset class="formSection">
-			<div class="formItem checkbox">
+			<div class="formItem required checkbox">
 				<c:checkBox name="prm_waiver" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
 				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
 			</div>

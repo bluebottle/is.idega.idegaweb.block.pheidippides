@@ -153,7 +153,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	
 	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
-		// TODO Handle registration cancel...
+		getService().cancelRegistration(registration);
 		
 		showView(iwc, bean);
 	}
