@@ -301,6 +301,7 @@ public class PheidippidesService {
 		if (user.getGender() != null) {
 			p.setGender(user.getGender().getName());
 		}
+		p.setForeigner(p.getPersonalId() == null);
 
 		try {
 			Address address = user.getUsersMainAddress();

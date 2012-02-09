@@ -24,6 +24,7 @@ public class Participant implements Serializable {
 	private String phoneHome;
 	private String phoneMobile;
 	private String gender;
+	private boolean foreigner;
 	
 	private String relayLeg;
 	private ShirtSize shirtSize;
@@ -180,6 +181,14 @@ public class Participant implements Serializable {
 		this.shirtSize = shirtSize;
 	}
 	
+	public boolean isForeigner() {
+		return foreigner;
+	}
+
+	public void setForeigner(boolean foreigner) {
+		this.foreigner = foreigner;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

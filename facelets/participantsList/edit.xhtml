@@ -1,0 +1,64 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="participantEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_registration_pk" value="#{pheidippidesBean.registration.id}" />
+
+		<ui:param value="#{pheidippidesBean.participant}" name="participant" />
+		<ui:param value="#{pheidippidesBean.registration}" name="registration" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_information']}" /></legend>
+			
+			<ui:fragment rendered="#{not empty participant.personalId}">
+				<div class="formItem">
+					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+					<span><h:outputText value="#{participant.fullName}" /></span>
+				</div>
+				<div class="formItem">
+					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}"><c:personalIDConverter /></h:outputText></label>
+					<span><h:outputText value="#{participant.personalId}"><c:personalIDConverter /></h:outputText></span>
+				</div>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{empty participant.personalId}">
+				<div class="formItem required">
+					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
+				</div>
+				<div class="formItem required">
+					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></label>
+					<input type="text" class="required" name="prm_date_of_birth" value="#{p:formatDate(participant.dateOfBirth, 'dd.MM.yyyy')}" />
+				</div>
+			</ui:fragment>
+
+			<div class="formItem required">
+				<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
+				<input type="text" class="required" name="prm_email" value="#{participant.email}" />
+			</div>
+			
+			<div class="formItem required">
+				<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></label>
+				<c:selectOne styleClass="required" name="prm_shirt_size">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
+					<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
+						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq registration.shirtSize.id}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

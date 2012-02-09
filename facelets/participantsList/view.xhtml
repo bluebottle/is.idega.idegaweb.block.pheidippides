@@ -70,7 +70,7 @@
 								<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
 								<td><h:outputText value="#{participant.fullName}" /></td>
 								<ui:fragment rendered="#{not empty participant.personalId}">
-									<td><h:outputText value="#{participant.personalId}" /></td>
+									<td><h:outputText value="#{participant.personalId}"><c:personalIDConverter /></h:outputText></td>
 								</ui:fragment>
 								<ui:fragment rendered="#{empty participant.personalId}">
 									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>

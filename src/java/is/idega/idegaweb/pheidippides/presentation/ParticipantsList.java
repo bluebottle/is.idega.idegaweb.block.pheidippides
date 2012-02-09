@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
@@ -115,7 +116,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 			case ACTION_EDIT:
 				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
-				showEdit(iwc, bean, facelet);
+				showEdit(iwc, bean);
 				break;
 				
 			case ACTION_DELETE:
@@ -140,18 +141,23 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
 	
-	protected void showView(IWContext iwc, PheidippidesBean bean) {
+	private void showView(IWContext iwc, PheidippidesBean bean) {
 		if (bean.getRace() != null) {
 			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
 			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 		}
 	}
 	
-	protected void showEdit(IWContext iwc, PheidippidesBean bean, FaceletComponent facelet) {
-		/* Does nothing... */
+	private void showEdit(IWContext iwc, PheidippidesBean bean) {
+		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+		Participant participant = getService().getParticipant(registration);
+		
+		bean.setRegistration(registration);
+		bean.setParticipant(participant);
+		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
 	}
 	
-	protected void handleDelete(IWContext iwc, PheidippidesBean bean) {
+	private void handleDelete(IWContext iwc, PheidippidesBean bean) {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		getService().cancelRegistration(registration);
 		

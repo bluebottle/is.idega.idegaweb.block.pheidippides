@@ -3,10 +3,10 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
-            8: { 
+            4: { 
                 sorter: false 
             }, 
-            9: { 
+            5: { 
                 sorter: false 
             } 
         } 
@@ -34,7 +34,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.addItem, a.editItem').fancybox({
 		afterShow: function() {
-			jQuery('#registrationEditorForm').validate();
+			jQuery('#participantEditorForm').validate();
 		}
 	});
 	
@@ -52,7 +52,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		var form = jQuery('form#registrationEditorForm');
+		var form = jQuery('form#participantEditorForm');
 		if (form.valid()) {
 			form.submit();
 			jQuery.fancybox.close();
