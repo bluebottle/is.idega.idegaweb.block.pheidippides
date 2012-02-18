@@ -17,7 +17,7 @@
       <parameter name="wsdlServiceElement" value="CharityServiceService"/>
       <parameter name="schemaUnqualified" value="http://illuminati.is"/>
       <parameter name="wsdlServicePort" value="CharityService"/>
-      <parameter name="className" value="is.idega.idegaweb.marathon.webservice.server.CharityServiceSoapBindingSkeleton"/>
+      <parameter name="className" value="is.idega.idegaweb.pheidippides.webservice.server.CharityServiceSoapBindingSkeleton"/>
       <parameter name="wsdlPortType" value="CharityService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
       <parameter name="allowedMethods" value="*"/>
@@ -25,7 +25,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:CharityInformation"
-        type="java:is.idega.idegaweb.marathon.webservice.server.CharityInformation"
+        type="java:is.idega.idegaweb.pheidippides.webservice.server.CharityInformation"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -33,14 +33,14 @@
       <arrayMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:ArrayOfCharity"
-        type="java:is.idega.idegaweb.marathon.webservice.server.Charity[]"
+        type="java:is.idega.idegaweb.pheidippides.webservice.server.Charity[]"
         innerType="cmp-ns:Charity" xmlns:cmp-ns="http://illuminati.is"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:Charity"
-        type="java:is.idega.idegaweb.marathon.webservice.server.Charity"
+        type="java:is.idega.idegaweb.pheidippides.webservice.server.Charity"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -48,7 +48,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:SessionTimedOutException"
-        type="java:is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException"
+        type="java:is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -56,7 +56,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:Session"
-        type="java:is.idega.idegaweb.marathon.webservice.server.Session"
+        type="java:is.idega.idegaweb.pheidippides.webservice.server.Session"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

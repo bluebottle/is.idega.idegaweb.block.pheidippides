@@ -72,7 +72,7 @@ public class CharityServiceSoapBindingSkeleton implements is.idega.idegaweb.phei
         _fault = new org.apache.axis.description.FaultDesc();
         _fault.setName("SessionTimedOutException");
         _fault.setQName(new javax.xml.namespace.QName("http://illuminati.is", "fault"));
-        _fault.setClassName("is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException");
+        _fault.setClassName("is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException");
         _fault.setXmlType(new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"));
         _oper.addFault(_fault);
         _params = new org.apache.axis.description.ParameterDesc [] {
@@ -92,7 +92,7 @@ public class CharityServiceSoapBindingSkeleton implements is.idega.idegaweb.phei
         _fault = new org.apache.axis.description.FaultDesc();
         _fault.setName("SessionTimedOutException");
         _fault.setQName(new javax.xml.namespace.QName("http://illuminati.is", "fault"));
-        _fault.setClassName("is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException");
+        _fault.setClassName("is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException");
         _fault.setXmlType(new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"));
         _oper.addFault(_fault);
         _params = new org.apache.axis.description.ParameterDesc [] {
@@ -112,7 +112,7 @@ public class CharityServiceSoapBindingSkeleton implements is.idega.idegaweb.phei
         _fault = new org.apache.axis.description.FaultDesc();
         _fault.setName("SessionTimedOutException");
         _fault.setQName(new javax.xml.namespace.QName("http://illuminati.is", "fault"));
-        _fault.setClassName("is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException");
+        _fault.setClassName("is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException");
         _fault.setXmlType(new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"));
         _oper.addFault(_fault);
         _params = new org.apache.axis.description.ParameterDesc [] {

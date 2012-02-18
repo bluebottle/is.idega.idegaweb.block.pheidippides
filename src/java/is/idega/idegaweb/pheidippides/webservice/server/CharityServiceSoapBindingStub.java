@@ -62,7 +62,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://illuminati.is", "fault"),
-                      "is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException",
+                      "is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException",
                       new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"), 
                       true
                      ));
@@ -83,7 +83,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://illuminati.is", "fault"),
-                      "is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException",
+                      "is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException",
                       new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"), 
                       true
                      ));
@@ -104,7 +104,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://illuminati.is", "fault"),
-                      "is.idega.idegaweb.marathon.webservice.server.SessionTimedOutException",
+                      "is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException",
                       new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"), 
                       true
                      ));

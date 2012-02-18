@@ -45,7 +45,7 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://illuminati.is", "fault"),
-                      "is.idega.idegaweb.marathon.webservice.hlaupastyrkurISB.client.SessionTimedOutException",
+                      "is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.SessionTimedOutException",
                       new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"), 
                       true
                      ));

@@ -34,7 +34,7 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"),
-                      "is.idega.idegaweb.marathon.webservice.hlaupastyrkur.client.ServiceFault",
+                      "is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ServiceFault",
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"), 
                       true
                      ));
@@ -51,7 +51,7 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"),
-                      "is.idega.idegaweb.marathon.webservice.hlaupastyrkur.client.ServiceFault",
+                      "is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ServiceFault",
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"), 
                       true
                      ));
@@ -68,7 +68,7 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"),
-                      "is.idega.idegaweb.marathon.webservice.hlaupastyrkur.client.ServiceFault",
+                      "is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ServiceFault",
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"), 
                       true
                      ));
@@ -85,7 +85,7 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"),
-                      "is.idega.idegaweb.marathon.webservice.hlaupastyrkur.client.ServiceFault",
+                      "is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ServiceFault",
                       new javax.xml.namespace.QName("http://tmsoftware.is/Service/Faults/", "ServiceFault"), 
                       true
                      ));

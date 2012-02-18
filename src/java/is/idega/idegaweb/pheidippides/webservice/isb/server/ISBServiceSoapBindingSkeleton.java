@@ -57,7 +57,7 @@ public class ISBServiceSoapBindingSkeleton implements is.idega.idegaweb.pheidipp
         _fault = new org.apache.axis.description.FaultDesc();
         _fault.setName("SessionTimedOutException");
         _fault.setQName(new javax.xml.namespace.QName("http://illuminati.is", "fault"));
-        _fault.setClassName("is.idega.idegaweb.marathon.webservice.isb.server.SessionTimedOutException");
+        _fault.setClassName("is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException");
         _fault.setXmlType(new javax.xml.namespace.QName("http://illuminati.is", "SessionTimedOutException"));
         _oper.addFault(_fault);
     }

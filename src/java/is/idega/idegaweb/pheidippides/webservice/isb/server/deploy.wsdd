@@ -17,7 +17,7 @@
       <parameter name="wsdlServiceElement" value="ISBServiceService"/>
       <parameter name="schemaQualified" value="http://illuminati.is"/>
       <parameter name="wsdlServicePort" value="ISBService"/>
-      <parameter name="className" value="is.idega.idegaweb.marathon.webservice.isb.server.ISBServiceSoapBindingSkeleton"/>
+      <parameter name="className" value="is.idega.idegaweb.pheidippides.webservice.isb.server.ISBServiceSoapBindingSkeleton"/>
       <parameter name="wsdlPortType" value="ISBService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
       <parameter name="allowedMethods" value="*"/>
@@ -25,7 +25,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:RunnerInfo"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.RunnerInfo"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
@@ -33,14 +33,14 @@
       <arrayMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:ArrayOfRelayPartnerInfo"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.RelayPartnerInfo[]"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.RelayPartnerInfo[]"
         innerType="cmp-ns:RelayPartnerInfo" xmlns:cmp-ns="http://illuminati.is"
         encodingStyle=""
       />
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:SessionTimedOutException"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.SessionTimedOutException"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
@@ -48,7 +48,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:RelayPartnerInfo"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.RelayPartnerInfo"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.RelayPartnerInfo"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
@@ -56,7 +56,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:Login"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.Login"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.Login"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
@@ -64,7 +64,7 @@
       <typeMapping
         xmlns:ns="http://illuminati.is"
         qname="ns:Session"
-        type="java:is.idega.idegaweb.marathon.webservice.isb.server.Session"
+        type="java:is.idega.idegaweb.pheidippides.webservice.isb.server.Session"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""
