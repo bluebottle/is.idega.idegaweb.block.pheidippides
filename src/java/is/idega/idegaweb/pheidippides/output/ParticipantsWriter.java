@@ -45,6 +45,8 @@ import com.idega.util.expression.ELUtil;
 public class ParticipantsWriter extends DownloadWriter implements MediaWritable {
 
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
+	private static final String PARAMETER_YEAR_FROM = "prm_year_from";
+	private static final String PARAMETER_YEAR_TO = "prm_year_to";
 
 	private MemoryFileBuffer buffer = null;
 	private Locale locale;
@@ -95,6 +97,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 	}
 
 	public MemoryFileBuffer writeXLS(IWContext iwc, Race race, List<Registration> registrations, Map<Registration, Participant> participantsMap) throws Exception {
+		IWTimestamp dateFrom = iwc.isParameterSet(PARAMETER_YEAR_FROM) ? new IWTimestamp(1, 1, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_FROM))) : null;
+		IWTimestamp dateTo = iwc.isParameterSet(PARAMETER_YEAR_TO) ? new IWTimestamp(31, 12, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_TO))) : null;
+		
 		MemoryFileBuffer buffer = new MemoryFileBuffer();
 		MemoryOutputStream mos = new MemoryOutputStream(buffer);
 
@@ -167,12 +172,20 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			Participant participant = participantsMap.get(registration);
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
 			
+			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
+			if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
+				continue;
+			}
+			if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
+				continue;
+			}
+			
 			row = sheet.createRow(cellRow++);
 			iCell = 0;
 			
 			row.createCell(iCell++).setCellValue(participant.getFullName());
 			row.createCell(iCell++).setCellValue(participant.getPersonalId());
-			row.createCell(iCell++).setCellValue(new IWTimestamp(participant.getDateOfBirth()).getDateString("d.M.yyyy"));
+			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
 			row.createCell(iCell++).setCellValue(participant.getEmail());
 			row.createCell(iCell++).setCellValue(participant.getAddress());
 			row.createCell(iCell++).setCellValue(participant.getPostalAddress());

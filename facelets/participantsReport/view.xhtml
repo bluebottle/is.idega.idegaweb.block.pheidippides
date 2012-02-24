@@ -1,0 +1,55 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="adminForm" action="/servlet/MediaServlet/" method="post">
+		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
+		<input type="hidden" name="wrcls" value="#{pheidippidesBean.responseURL}" />
+
+		<fieldset class="navigation">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_report']}" /></legend>
+			
+			<div class="formItem">
+				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
+					<ui:repeat value="#{pheidippidesBean.events}" var="event">
+						<c:selectOption name="#{event.name}" content="#{event.id}" selected="#{event.id eq param['prm_event_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<c:selectOne styleClass="dwrEnabled" name="prm_year">
+					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
+				<c:selectOne name="prm_race_pk">
+					<ui:repeat value="#{pheidippidesBean.races}" var="race">
+						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq param['prm_race_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_year_from"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year_from']}" /></label>
+				<input name="prm_year_from" class="maskedYear" value="#{param['prm_year_from']}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_year_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year_to']}" /></label>
+				<input name="prm_year_to" class="maskedYear" value="#{param['prm_year_to']}" />
+			</div>
+			<div class="submit">
+				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
+			</div>
+		</fieldset>
+	</form>
+</ui:component>
+</html>
