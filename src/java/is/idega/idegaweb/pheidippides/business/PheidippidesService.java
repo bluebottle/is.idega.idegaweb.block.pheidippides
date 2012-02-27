@@ -289,7 +289,7 @@ public class PheidippidesService {
 		return true;
 	}
 
-	private Participant getParticipant(User user) {
+	public Participant getParticipant(User user) {
 		Participant p = new Participant();
 		p.setFirstName(user.getFirstName());
 		p.setMiddleName(user.getMiddleName());

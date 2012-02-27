@@ -23,11 +23,11 @@
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_information']}" /></legend>
 			
 			<t:div rendered="#{hasPersonalID}">
-				<div class="formItem required">
+				<div class="formItem">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
 					<span><h:outputText value="#{participant.fullName}" /></span>
 				</div>
-				<div class="formItem required">
+				<div class="formItem">
 					<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
 					<span><h:outputText value="#{participant.personalId}" /></span>
 				</div>
@@ -37,10 +37,6 @@
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
 					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
 				</div>
-				<!-- <div class="formItem required">
-					<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
-					<input type="text" class="required" name="prm_personal_id" value="#{participant.personalId}" />
-				</div> -->
 				<div class="formItem required">
 					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /></label>
 					<input type="text" class="datePicker required" name="prm_date_of_birth" value="#{p:formatDate(participant.dateOfBirth, 'dd.MM.yyyy')}" />

@@ -8,6 +8,7 @@
 >
 <ui:component>
 	<form id="changePassword" class="userForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
 		<input type="hidden" name="prm_action" value="store" />
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_password']}" /></h1>
 	
