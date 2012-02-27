@@ -816,27 +816,33 @@ public class PheidippidesService {
 		return user;
 	}
 	
-	public void updateUser(String uuid, String fullName, String personalID, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile) {
+	public void updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile) {
 		try {
 			Gender userGender = null;
-			if (gender.equals(getGenderHome().getMaleGender().getName())) {
+			if (gender != null && gender.equals(getGenderHome().getMaleGender().getName())) {
 				userGender = getGenderHome().getMaleGender();
 			}
-			else {
+			else if (gender != null) {
 				userGender = getGenderHome().getFemaleGender();
 			}
 			
-			Country country = getCountryHome().findByPrimaryKey(countryPK);
-			
 			User user = getUserBusiness().getUserByUniqueId(uuid);
-			user.setFullName(fullName);
-			user.setPersonalID(personalID);
-			user.setDateOfBirth(dateOfBirth);
-			user.setGender((Integer) userGender.getPrimaryKey());
+			if (fullName != null) {
+				user.setFullName(fullName);
+			}
+			if (dateOfBirth != null) {
+				user.setDateOfBirth(dateOfBirth);
+			}
+			if (userGender != null) {
+				user.setGender((Integer) userGender.getPrimaryKey());
+			}
 			user.store();
 			
-			PostalCode postal = getUserBusiness().getAddressBusiness().getPostalCodeAndCreateIfDoesNotExist(postalCode, city);
-			getUserBusiness().updateUsersMainAddressOrCreateIfDoesNotExist(user, address, postal, country, city, null, null, null);
+			if (postalCode != null && countryPK != null) {
+				Country country = getCountryHome().findByPrimaryKey(countryPK);
+				PostalCode postal = getUserBusiness().getAddressBusiness().getPostalCodeAndCreateIfDoesNotExist(postalCode, city);
+				getUserBusiness().updateUsersMainAddressOrCreateIfDoesNotExist(user, address, postal, country, city, null, null, null);
+			}
 			
 			getUserBusiness().updateUserMail(user, email);
 			getUserBusiness().updateUserHomePhone(user, phone);

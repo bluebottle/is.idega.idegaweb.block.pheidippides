@@ -1,0 +1,32 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form id="changePassword" class="userForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="store" />
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_password']}" /></h1>
+	
+		<ui:fragment rendered="#{not empty param['prm_action']}">
+			<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_password_stored']}" /></div>
+		</ui:fragment>
+	
+		<div class="formItem">
+			<label for="prm_password"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['password']}" /></label>
+			<input id="prm_password" type="password" name="prm_password" class="required" />
+		</div>
+		<div class="formItem">
+			<label for="prm_password_repeat"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['password_repeat']}" /></label>
+			<input id="prm_password_repeat" type="password" name="prm_password_repeat" class="required" />
+		</div>
+		
+		<div class="submit">
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

@@ -51,7 +51,6 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_SHIRT_SIZE_PK = "prm_shirt_size";
 	private static final String PARAMETER_NATIONALITY = "prm_nationality";
 	private static final String PARAMETER_NAME = "prm_name";
-	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
 	private static final String PARAMETER_ADDRESS = "prm_address";
 	private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
@@ -247,19 +246,18 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
 		
 		String fullName = iwc.getParameter(PARAMETER_NAME);
-		String personalID = iwc.getParameter(PARAMETER_PERSONAL_ID);
 		@SuppressWarnings("deprecation")
-		Date dateOfBirth = new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH))).getSQLDate();
+		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH))).getSQLDate() : null;
 		String address = iwc.getParameter(PARAMETER_ADDRESS);
 		String postalCode = iwc.getParameter(PARAMETER_POSTAL_CODE);
 		String city = iwc.getParameter(PARAMETER_CITY);
-		Integer countryPK = Integer.parseInt(iwc.getParameter(PARAMETER_COUNTRY_PK));
+		Integer countryPK = iwc.isParameterSet(PARAMETER_COUNTRY_PK) ? Integer.parseInt(iwc.getParameter(PARAMETER_COUNTRY_PK)) : null;
 		String gender = iwc.getParameter(PARAMETER_GENDER);
 		String email = iwc.getParameter(PARAMETER_EMAIL);
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
 		
-		getService().updateUser(registration.getUserUUID(), fullName, personalID, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile);
+		getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile);
 		
 		return true;
 	}

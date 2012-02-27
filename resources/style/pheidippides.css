@@ -4,26 +4,49 @@ form.adminForm {
 	margin-bottom: 20px;
 }
 
-form.adminForm div.formItem {
+form.adminForm div.formItem, form.userForm div.formItem {
 	width: auto;
 	overflow: hidden;
 	margin-bottom: 8px;
 	clear: both;
 }
 
-form.adminForm div.formItem label {
+form.adminForm div.formItem label, form.userForm div.formItem label {
 	float: left;
 	line-height: 20px;
 	font-weight: bold;
 	width: 120px;
 }
 
-form.adminForm div.formItem input, form.adminForm div.formItem select {
+form.userForm div.formItem label {
+	width: 160px;
+	font-weight: bold;
+	line-height: 1.75em;
+}
+
+form.adminForm div.formItem input, form.adminForm div.formItem select, form.userForm div.formItem input {
 	border: 1px #ccc solid;
 	float: left;
 }
 
-form.adminForm div.submit {
+form.userForm div.formItem input {
+	border: 1px #ccc solid;
+	font-size: 1em;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 3px 4px;
+}
+
+form.userForm div.success {
+	border: 2px #0a0 solid;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	padding: 12px 12px 12px 36px;
+	margin-bottom: 12px;
+	background: url(images/paid.png) 12px center no-repeat #cfc;
+}
+
+form.adminForm div.submit, form.userForm div.submit {
 	width: auto;
 	overflow: hidden;
 }
@@ -39,6 +62,21 @@ form.adminForm div.submit a {
 	border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
+}
+
+form.userForm div.submit a {
+	float: left;
+	border: 2px solid #666;
+	padding: 8px 12px;
+	text-decoration: none;
+	background-color: #EFEFEF;
+	font-weight: bold;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	font-size: 14px;
+	line-height: 14px;
+	color: #a00;
 }
 
 /* Admin table */
@@ -100,11 +138,16 @@ table.adminTable tbody tr td.discount_true span, table.userTable tbody tr td.OK 
 	background: url(images/check.png);
 }
 
-table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem, table.adminTable tbody tr td a.viewItem {
+table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem, table.adminTable tbody tr td a.viewItem, table.userTable tbody tr td.action.pdf a {
 	display: block;
 	width: 16px;
 	height: 16px;
 	background: url(images/edit.png);
+}
+
+table.userTable tbody tr td.action.pdf a {
+	text-indent: -9999;
+	background-image: url(images/pdf.png);
 }
 
 table.adminTable tbody tr td a.editItem span, table.adminTable tbody tr td a.deleteItem span, table.adminTable tbody tr td a.viewItem span {
@@ -365,7 +408,7 @@ form.registrationForm fieldset.formSection div.formItem label {
 	margin-bottom: 8px;
 }
 
-form.registrationForm fieldset.formSection div.formItem label.error {
+form.registrationForm fieldset.formSection div.formItem label.error, form.userForm label.error {
 	float: none;
 	padding-left: 8px;
 	font-style: italic;
@@ -396,7 +439,7 @@ form.registrationForm fieldset.formSection div.formItem.checkbox label {
 	margin-bottom: 0;
 }
 
-form.registrationForm fieldset.formSection div.formItem .error {
+form.registrationForm fieldset.formSection div.formItem .error, form.userForm div.formItem .error {
 	border-color: #a00;
 	color: #a00;
 	background: url(images/close.png) right center no-repeat;
