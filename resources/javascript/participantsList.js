@@ -32,6 +32,31 @@ jQuery(document).ready(function() {
 		});
 	}).trigger('change');
 	
+	jQuery('select[name="prm_race_pk"]').change(function() {
+		var racePK = jQuery(this).val();
+		var language = jQuery('input[name="prm_language"]').val();
+		var shirt = jQuery('select[name="prm_shirt_size"]');
+		var value = shirt.val();
+		
+		PheidippidesService.getLocalizedShirts(racePK, language, {
+			callback: function(shirts) {
+				dwr.util.removeAllOptions(shirt.attr('id'));
+				
+				for (var i = 0; i < shirts.length; i++) {
+					shirt.append('<option value="' + shirts[i].id + '">' + shirts[i].value + '</option>')
+				}
+				
+				if (value != null) {
+					dwr.util.setValue(shirt.attr('id'), value);
+				}
+			}
+		});
+	});
+	
+	jQuery('input.datePicker').live('click', function () {
+        jQuery(this).datepicker('destroy').datepicker({regional: ['is'], dateFormat: 'd.m.yy', showTime: true}).focus();
+	});
+	
 	jQuery('a.addItem, a.editItem').fancybox({
 		afterShow: function() {
 			jQuery('#participantEditorForm').validate();

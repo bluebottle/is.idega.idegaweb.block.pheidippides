@@ -116,6 +116,8 @@ public interface PheidippidesDao {
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime);
 	
+	public void updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK);
+	
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
 	
 	public List<RaceShirtSize> getRaceShirtSizes(Race race);

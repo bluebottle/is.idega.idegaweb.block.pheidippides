@@ -527,6 +527,15 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		return registration;
 	}
+	
+	public void updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK) {
+		Registration registration = getRegistration(registrationPK);
+		registration.setRace(getRace(racePK));
+		registration.setShirtSize(getShirtSize(shirtSizePK));
+		registration.setNationality(nationalityPK);
+		
+		getEntityManager().persist(registration);
+	}
 
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK) {
 		return find(RaceShirtSize.class, raceShirtSizePK);

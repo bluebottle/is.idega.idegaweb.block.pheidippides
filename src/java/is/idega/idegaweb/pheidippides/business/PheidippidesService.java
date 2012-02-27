@@ -312,7 +312,7 @@ public class PheidippidesService {
 					p.setPostalCode(address.getPostalCode().getPostalCode());
 				}
 				p.setCity(address.getCity());
-				p.setCountry(address.getCountry().getName());
+				p.setCountry(address.getCountry().getPrimaryKey().toString());
 			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
@@ -815,7 +815,44 @@ public class PheidippidesService {
 		}
 		return user;
 	}
-
+	
+	public void updateUser(String uuid, String fullName, String personalID, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile) {
+		try {
+			Gender userGender = null;
+			if (gender.equals(getGenderHome().getMaleGender().getName())) {
+				userGender = getGenderHome().getMaleGender();
+			}
+			else {
+				userGender = getGenderHome().getFemaleGender();
+			}
+			
+			Country country = getCountryHome().findByPrimaryKey(countryPK);
+			
+			User user = getUserBusiness().getUserByUniqueId(uuid);
+			user.setFullName(fullName);
+			user.setPersonalID(personalID);
+			user.setDateOfBirth(dateOfBirth);
+			user.setGender((Integer) userGender.getPrimaryKey());
+			user.store();
+			
+			PostalCode postal = getUserBusiness().getAddressBusiness().getPostalCodeAndCreateIfDoesNotExist(postalCode, city);
+			getUserBusiness().updateUsersMainAddressOrCreateIfDoesNotExist(user, address, postal, country, city, null, null, null);
+			
+			getUserBusiness().updateUserMail(user, email);
+			getUserBusiness().updateUserHomePhone(user, phone);
+			getUserBusiness().updateUserMobilePhone(user, mobile);
+		}
+		catch (RemoteException re) {
+			re.printStackTrace();
+		}
+		catch (FinderException fe) {
+			fe.printStackTrace();
+		}
+		catch (CreateException ce) {
+			ce.printStackTrace();
+		}
+	}
+	
 	public void updateRegistrationStatus() {
 
 	}

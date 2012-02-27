@@ -9,8 +9,10 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
+import com.idega.block.web2.business.JQueryUIType;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
@@ -28,6 +31,7 @@ import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
+import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
@@ -44,6 +48,19 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_REGISTRATION_PK = "prm_registration_pk";
+	private static final String PARAMETER_SHIRT_SIZE_PK = "prm_shirt_size";
+	private static final String PARAMETER_NATIONALITY = "prm_nationality";
+	private static final String PARAMETER_NAME = "prm_name";
+	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
+	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
+	private static final String PARAMETER_ADDRESS = "prm_address";
+	private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
+	private static final String PARAMETER_CITY = "prm_city";
+	private static final String PARAMETER_COUNTRY_PK = "prm_country";
+	private static final String PARAMETER_GENDER = "prm_gender";
+	private static final String PARAMETER_EMAIL = "prm_email";
+	private static final String PARAMETER_PHONE = "prm_phone";
+	private static final String PARAMETER_MOBILE = "prm_mobile";
 
 	@Autowired
 	private PheidippidesService service;
@@ -76,9 +93,22 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
 
+		List<String> scripts = new ArrayList<String>();
+		JQuery jQuery = getJQuery();
+		scripts.add(jQuery.getBundleURIToJQueryLib());
+		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_CORE));
+		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_DATEPICKER));
+		if (!iwc.getCurrentLocale().equals(Locale.ENGLISH)) {
+			scripts.add(jQuery.getBundleURIToJQueryUILib("1.8.17/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
+		}
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
+
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
 	
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.theme.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.datepicker.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
@@ -152,6 +182,10 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Participant participant = getService().getParticipant(registration);
 		
+		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
+		bean.setProperties(getService().getCountries());
+		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+
 		bean.setRegistration(registration);
 		bean.setParticipant(participant);
 		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
@@ -205,6 +239,28 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
+		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+		Long racePK = Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK));
+		Long shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
+		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
+		
+		getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
+		
+		String fullName = iwc.getParameter(PARAMETER_NAME);
+		String personalID = iwc.getParameter(PARAMETER_PERSONAL_ID);
+		@SuppressWarnings("deprecation")
+		Date dateOfBirth = new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH))).getSQLDate();
+		String address = iwc.getParameter(PARAMETER_ADDRESS);
+		String postalCode = iwc.getParameter(PARAMETER_POSTAL_CODE);
+		String city = iwc.getParameter(PARAMETER_CITY);
+		Integer countryPK = Integer.parseInt(iwc.getParameter(PARAMETER_COUNTRY_PK));
+		String gender = iwc.getParameter(PARAMETER_GENDER);
+		String email = iwc.getParameter(PARAMETER_EMAIL);
+		String phone = iwc.getParameter(PARAMETER_PHONE);
+		String mobile = iwc.getParameter(PARAMETER_MOBILE);
+		
+		getService().updateUser(registration.getUserUUID(), fullName, personalID, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile);
+		
 		return true;
 	}
 }
