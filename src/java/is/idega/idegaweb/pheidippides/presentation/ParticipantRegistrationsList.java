@@ -37,7 +37,6 @@ public class ParticipantRegistrationsList extends IWBaseComponent {
 			
 			List<RegistrationStatus> statuses = new ArrayList<RegistrationStatus>();
 			statuses.add(RegistrationStatus.OK);
-			statuses.add(RegistrationStatus.Unconfirmed);
 	
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 	

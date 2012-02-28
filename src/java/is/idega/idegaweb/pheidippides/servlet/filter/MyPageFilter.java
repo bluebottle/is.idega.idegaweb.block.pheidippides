@@ -28,9 +28,10 @@ public class MyPageFilter extends BaseFilter {
 		IWContext iwc = new IWContext(request, response, request.getSession().getServletContext());
 		
 		String uri = request.getRequestURI().replaceAll("/mypage/", "");
+		String lang = uri.length() > 0 ? uri : "is";
 		
 		String url = iwc.getApplicationSettings().getProperty("mypage.url");
-		url += "?iw_language=" + (uri.equals("is") ? "is_IS" : "en");
+		url += "?iw_language=" + (lang.equals("is") ? "is_IS" : "en");
 				
 		response.sendRedirect(url);
 	}
