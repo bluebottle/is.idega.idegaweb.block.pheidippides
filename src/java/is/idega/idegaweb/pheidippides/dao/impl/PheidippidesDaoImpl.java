@@ -420,6 +420,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 
+	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status) {
+		return getResultList("registration.findByEventAndYearAndStatus", Registration.class, new Param("event", event), new Param("year", year), new Param("status", status));
+	}
+
 	public List<Registration> getRegistrations(RegistrationHeader header) {
 		return getResultList("registration.findByHeader", Registration.class,
 				new Param("header", header));

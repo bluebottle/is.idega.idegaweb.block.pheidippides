@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 		var race = jQuery('select[name="prm_race_pk"]');
 		var value = race.val();
 		
-		PheidippidesService.getLocalizedRaces(eventPK, year, language, {
+		PheidippidesService.getLocalizedRaces(eventPK, year, language, true, {
 			callback: function(races) {
 				dwr.util.removeAllOptions(race.attr('id'));
 				

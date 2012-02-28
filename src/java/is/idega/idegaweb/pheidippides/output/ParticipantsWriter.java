@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.Registration;
@@ -44,7 +45,10 @@ import com.idega.util.expression.ELUtil;
 
 public class ParticipantsWriter extends DownloadWriter implements MediaWritable {
 
+	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
+	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
+	private static final String PARAMETER_GENDER = "prm_gender";
 	private static final String PARAMETER_YEAR_FROM = "prm_year_from";
 	private static final String PARAMETER_YEAR_TO = "prm_year_to";
 
@@ -62,12 +66,21 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		this.locale = iwc.getCurrentLocale();
 		this.iwrb = iwc.getIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(this.locale);
 
-		Race race = getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK)));
-		List<Registration> registrations = getDao().getRegistrations(race, RegistrationStatus.OK);
+		Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
+		Integer year = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
+		Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
+
+		List<Registration> registrations = null;
+		if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
+			registrations = getDao().getRegistrations(race, RegistrationStatus.OK);
+		}
+		else {
+			registrations = getDao().getRegistrations(event, year, RegistrationStatus.OK);
+		}
 		Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
 
 		try {
-			this.buffer = writeXLS(iwc, race, registrations, participantsMap);
+			this.buffer = writeXLS(iwc, event, year, race, registrations, participantsMap);
 			setAsDownload(iwc, "participants.xls", this.buffer.length());
 		}
 		catch (Exception e) {
@@ -96,14 +109,21 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		}
 	}
 
-	public MemoryFileBuffer writeXLS(IWContext iwc, Race race, List<Registration> registrations, Map<Registration, Participant> participantsMap) throws Exception {
+	public MemoryFileBuffer writeXLS(IWContext iwc, Event event, Integer year, Race race, List<Registration> registrations, Map<Registration, Participant> participantsMap) throws Exception {
 		IWTimestamp dateFrom = iwc.isParameterSet(PARAMETER_YEAR_FROM) ? new IWTimestamp(1, 1, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_FROM))) : null;
 		IWTimestamp dateTo = iwc.isParameterSet(PARAMETER_YEAR_TO) ? new IWTimestamp(31, 12, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_TO))) : null;
+		String gender = iwc.isParameterSet(PARAMETER_GENDER) ? iwc.getParameter(PARAMETER_GENDER) : null;
 		
 		MemoryFileBuffer buffer = new MemoryFileBuffer();
 		MemoryOutputStream mos = new MemoryOutputStream(buffer);
 
-		String sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(race.getEvent().getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName()).replaceAll("\\<[^>]*>", ""));
+		String sheetname = null;
+		if (race != null) {
+			sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName()).replaceAll("\\<[^>]*>", ""));
+		}
+		else {
+			sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + ".name", event.getName()) + " - " + year);
+		}
 		
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet(StringHandler.shortenToLength(sheetname, 30));
@@ -119,6 +139,11 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		HSSFRow row = sheet.createRow(cellRow++);
 
 		int iCell = 0;
+		if (race == null) {
+			HSSFCell cell = row.createCell(iCell++);
+			cell.setCellValue(this.iwrb.getLocalizedString("race", "Race"));
+			cell.setCellStyle(style);
+		}
 		HSSFCell cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("name", "Name"));
 		cell.setCellStyle(style);
@@ -179,10 +204,18 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
 				continue;
 			}
+			if (gender != null && !participant.getGender().equals(gender)) {
+				continue;
+			}
+			
 			
 			row = sheet.createRow(cellRow++);
 			iCell = 0;
-			
+
+			if (race == null) {
+				Race participantRace = registration.getRace();
+				row.createCell(iCell++).setCellValue(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + participantRace.getDistance().getLocalizedKey() + (participantRace.getNumberOfRelayLegs() > 1 ? ".relay" : ""), participantRace.getDistance().getName()).replaceAll("\\<[^>]*>", "")));
+			}
 			row.createCell(iCell++).setCellValue(participant.getFullName());
 			row.createCell(iCell++).setCellValue(participant.getPersonalId());
 			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));

@@ -1019,8 +1019,15 @@ public class PheidippidesService {
 	}
 
 	public List<AdvancedProperty> getLocalizedRaces(Long eventPK, int year,
-			String language) {
+			String language, boolean addEmptyValue) {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+		if (addEmptyValue) {
+			IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+					.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+					.getResourceBundle(LocaleUtil.getLocale(language));
+			
+			properties.add(new AdvancedProperty("", iwrb.getLocalizedString("all_races", "All races")));
+		}
 
 		List<Race> races = getRaces(eventPK, year);
 		for (Race race : races) {

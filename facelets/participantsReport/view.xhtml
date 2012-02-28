@@ -23,7 +23,7 @@
 				</c:selectOne>
 			</div>
 			<div class="formItem">
-				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<label for="prm_year"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
 						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
@@ -33,9 +33,18 @@
 			<div class="formItem">
 				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
 				<c:selectOne name="prm_race_pk">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['all_races']}" content="" />
 					<ui:repeat value="#{pheidippidesBean.races}" var="race">
 						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq param['prm_race_pk']}" />
 					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_gender"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
+				<c:selectOne name="prm_gender">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}"  />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"  />
 				</c:selectOne>
 			</div>
 			<div class="formItem">

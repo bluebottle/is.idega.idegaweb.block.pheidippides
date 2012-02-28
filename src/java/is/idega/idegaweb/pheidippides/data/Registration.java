@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "registration.findAll", query = "select r from Registration r"),
 	@NamedQuery(name = "registration.findByRace", query = "select r from Registration r where r.race = :race"),
 	@NamedQuery(name = "registration.findByRaceAndStatus", query = "select r from Registration r where r.race = :race and r.status = :status"),
+	@NamedQuery(name = "registration.findByEventAndYearAndStatus", query = "select r from Registration r where r.race.event = :event and r.race.year = :year and r.status = :status"),
 	@NamedQuery(name = "registration.findByParticipantAndStatuses", query = "select r from Registration r where r.userUUID = :uuid and r.status in (:statuses)"),
 	@NamedQuery(name = "registration.countByRaceAndStatus", query = "select count(r) from Registration r where r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByParticipantAndRaceAndStatus", query = "select count(r) from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
