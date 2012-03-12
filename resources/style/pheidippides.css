@@ -142,7 +142,8 @@ table.adminTable tbody tr td.discount_true span, table.userTable tbody tr td.OK 
 	background: url(images/check.png);
 }
 
-table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem, table.adminTable tbody tr td a.viewItem, table.userTable tbody tr td.action.pdf a {
+table.adminTable tbody tr td a.editItem, table.adminTable tbody tr td a.deleteItem, table.adminTable tbody tr td a.viewItem,
+table.userTable tbody tr td a.editItem, table.userTable tbody tr td a.deleteItem, table.userTable tbody tr td a.viewItem, table.userTable tbody tr td.action.pdf a {
 	display: block;
 	width: 16px;
 	height: 16px;
@@ -154,15 +155,18 @@ table.userTable tbody tr td.action.pdf a {
 	background-image: url(images/pdf.png);
 }
 
-table.adminTable tbody tr td a.editItem span, table.adminTable tbody tr td a.deleteItem span, table.adminTable tbody tr td a.viewItem span {
+table.adminTable tbody tr td a.editItem span, table.adminTable tbody tr td a.deleteItem span, table.adminTable tbody tr td a.viewItem span,
+table.userTable tbody tr td a.editItem span, table.userTable tbody tr td a.deleteItem span, table.userTable tbody tr td a.viewItem span {
 	display: none;
 }
 
-table.adminTable tbody tr td a.deleteItem, table.userTable tbody tr td.Unconfirmed span {
+table.adminTable tbody tr td a.deleteItem, table.userTable tbody tr td.Unconfirmed span,
+table.userTable tbody tr td a.deleteItem {
 	background-image: url(images/delete.png);
 }
 
-table.adminTable tbody tr td a.viewItem {
+table.adminTable tbody tr td a.viewItem,
+table.userTable tbody tr td a.viewItem {
 	background-image: url(images/view.png);
 }
 

@@ -536,7 +536,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		Registration registration = getRegistration(registrationPK);
 		registration.setRace(getRace(racePK));
 		registration.setShirtSize(getShirtSize(shirtSizePK));
-		registration.setNationality(nationalityPK);
+		if (nationalityPK != null) {
+			registration.setNationality(nationalityPK);
+		}
 		
 		getEntityManager().persist(registration);
 	}

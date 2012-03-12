@@ -1359,7 +1359,7 @@ public class PheidippidesService {
 			}
 			
 			try {
-				User user = getUserBusiness().getUserHome().findByDateOfBirthAndName(new IWTimestamp(parameter.getDateOfBirth()).getSQLDate(), name.getName());
+				User user = getUserBusiness().getUserHome().findByDateOfBirthAndName(new IWTimestamp(parameter.getDateOfBirth()).getDate(), name.getName());
 				ret.add(dao.getParticipant(user.getUniqueId()));
 				
 				return ret;
@@ -1387,9 +1387,9 @@ public class PheidippidesService {
 		if (parameter.getFullName() != null) {
 			Name name = new Name(parameter.getFullName());
 			try {
-				Collection col = getUserBusiness().getUserHome().findByNames(name.getFirstName(), name.getMiddleName(), name.getLastName());
+				Collection<User> col = getUserBusiness().getUserHome().findByNames(name.getFirstName(), name.getMiddleName(), name.getLastName());
 				if (col != null && !col.isEmpty()) {
-					Iterator it = col.iterator();
+					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
 						ret.add(dao.getParticipant(((User)it.next()).getUniqueId()));
 					}
