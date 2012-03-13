@@ -264,7 +264,7 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
 		
-		getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile);
+		getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
 		
 		return true;
 	}

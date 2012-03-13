@@ -8,7 +8,7 @@
 		xmlns:t="http://myfaces.apache.org/tomahawk"
 >
 <ui:component>
-	<form id="userPreferences" class="userForm" action="" method="post">
+	<form id="userPreferences" class="userForm" action="" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
 		<input type="hidden" name="prm_action" value="store" />
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_settings']}" /></h1>
@@ -19,6 +19,14 @@
 	
 		<ui:param value="#{pheidippidesBean.participant}" name="participant" />
 		<ui:param value="#{not empty participant.personalId}" name="hasPersonalID" />
+		
+		<div class="formItem">
+			<ui:fragment rendered="#{not empty participant.imageURL}">
+				<img src="#{participant.imageURL}" alt="" />
+			</ui:fragment>
+			<label for="prm_image"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['image']}" /></label>
+			<input type="file" name="prm_image" />
+		</div>
 		
 		<t:div rendered="#{hasPersonalID}">
 			<div class="formItem">

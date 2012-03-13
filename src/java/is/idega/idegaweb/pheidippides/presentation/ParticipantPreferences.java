@@ -1,11 +1,15 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import java.sql.Date;
-
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.rmi.RemoteException;
+import java.sql.Date;
+
+import javax.ejb.CreateException;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
+import com.idega.core.file.data.ICFile;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
+import com.idega.io.UploadFile;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
+import com.idega.util.FileUtil;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
@@ -105,7 +112,43 @@ public class ParticipantPreferences extends IWBaseComponent implements IWPageEve
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
 		
-		getService().updateUser(iwc.getCurrentUser().getUniqueId(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile);
+		ICFile file = null;
+		UploadFile uploadFile = iwc.getUploadedFile();
+		if (uploadFile != null && uploadFile.getName() != null && uploadFile.getName().length() > 0) {
+			try {
+				FileInputStream input = new FileInputStream(uploadFile.getRealPath());
+
+				file = ((com.idega.core.file.data.ICFileHome) com.idega.data.IDOLookup.getHome(ICFile.class)).create();
+				file.setName(uploadFile.getName());
+				file.setMimeType(uploadFile.getMimeType());
+				file.setFileValue(input);
+				file.setFileSize((int) uploadFile.getSize());
+				file.store();
+
+				int fileID = ((Integer) file.getPrimaryKey()).intValue();
+				uploadFile.setId(fileID);
+				try {
+					FileUtil.delete(uploadFile);
+				}
+				catch (Exception ex) {
+					System.err.println("MediaBusiness: deleting the temporary file at " + uploadFile.getRealPath() + " failed.");
+				}
+			}
+			catch (RemoteException e) {
+				e.printStackTrace(System.err);
+				uploadFile.setId(-1);
+			}
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+				uploadFile.setId(-1);
+			}
+			catch (CreateException e) {
+				e.printStackTrace();
+				uploadFile.setId(-1);
+			}
+		}
+		
+		getService().updateUser(iwc.getCurrentUser().getUniqueId(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, file);
 		
 		return true;
 	}

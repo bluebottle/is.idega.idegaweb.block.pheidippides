@@ -49,6 +49,7 @@ import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.file.business.ICFileSystemFactory;
+import com.idega.core.file.data.ICFile;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.AddressHome;
 import com.idega.core.location.data.Country;
@@ -863,7 +864,7 @@ public class PheidippidesService {
 		return user;
 	}
 	
-	public void updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile) {
+	public void updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile, ICFile image) {
 		try {
 			Gender userGender = null;
 			if (gender != null && gender.equals(getGenderHome().getMaleGender().getName())) {
