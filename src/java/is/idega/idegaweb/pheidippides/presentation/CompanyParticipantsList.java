@@ -47,7 +47,6 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 	private static final int ACTION_DELETE = 3;
 	
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
-	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_REGISTRATION_PK = "prm_registration_pk";
 	private static final String PARAMETER_SHIRT_SIZE_PK = "prm_shirt_size";
 	private static final String PARAMETER_NATIONALITY = "prm_nationality";
@@ -126,16 +125,11 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 		/* Events */
 		Company company = getDao().getCompanyByUserUUID(iwc.getCurrentUser().getUniqueId()); 
 		Event event = company.getEvent();
-		List<Event> events = new ArrayList<Event>();
-		events.add(event);
-		
-		bean.setEvents(events);
 		bean.setEvent(event);
 		bean.setCompany(company);
 		
 		/* Years */
-		bean.setProperties(years);
-		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
+		bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow().getYear())));
 
 		/* Races */
 		if (bean.getEvent() != null && bean.getProperty() != null) {
@@ -179,7 +173,7 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 	
 	private void showView(IWContext iwc, PheidippidesCompanyBean bean) {
 		if (bean.getRace() != null) {
-			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
+			bean.setRegistrations(getDao().getRegistrations(bean.getCompany(), bean.getRace(), getStatus()));
 			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 		}
 	}

@@ -125,7 +125,6 @@ public class CompanyEditor extends IWBaseComponent implements
 		}
 		List<Company> companies = getDao().getCompanies();
 		bean.setCompanies(companies);
-		bean.setEvents(getDao().getEvents());
 		bean.setParticipantMap(service.getCompanyParticipantMap(companies));
 
 		add(facelet);

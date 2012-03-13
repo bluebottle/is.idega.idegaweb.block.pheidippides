@@ -28,7 +28,6 @@ public class PheidippidesCompanyBean {
 	private Company company;
 	private List<Company> companies;
 	
-	private List<Event> events;
 	private Event event;
 	
 	private Participant participant;
@@ -80,14 +79,6 @@ public class PheidippidesCompanyBean {
 
 	public void setCompanies(List<Company> companies) {
 		this.companies = companies;
-	}
-
-	public List<Event> getEvents() {
-		return events;
-	}
-
-	public void setEvents(List<Event> events) {
-		this.events = events;
 	}
 
 	public Map<String, Participant> getParticipantMap() {
