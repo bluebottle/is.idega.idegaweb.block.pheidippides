@@ -47,6 +47,7 @@ import com.idega.core.accesscontrol.business.LoginDBHandler;
 import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
+import com.idega.core.file.business.ICFileSystemFactory;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.AddressHome;
 import com.idega.core.location.data.Country;
@@ -343,6 +344,15 @@ public class PheidippidesService {
 			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
+		}
+		
+		if (user.getSystemImageID() != -1) {
+			try {
+				String URI = ICFileSystemFactory.getFileSystem(IWMainApplication.getDefaultIWApplicationContext()).getFileURI(user.getSystemImageID());
+				p.setImageURL(URI);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return p;
@@ -1391,7 +1401,7 @@ public class PheidippidesService {
 				if (col != null && !col.isEmpty()) {
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(dao.getParticipant(((User)it.next()).getUniqueId()));
+						ret.add(dao.getParticipant(it.next().getUniqueId()));
 					}
 					
 					return ret;

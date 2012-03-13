@@ -1,0 +1,23 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<ui:param value="#{pheidippidesBean.participant}" name="participant" />
+
+	<div class="userInformation">
+		<ui:fragment rendered="#{not empty participant.imageURL}">
+			<img src="#{participant.imageURL}" alt="#{participant.fullName}" />
+		</ui:fragment>
+		<h1><h:outputText value="#{participant.fullName}" /></h1>
+		<ui:fragment rendered="#{not empty participant.personalId}">
+			<h2><h:outputText value="#{participant.personalId}" /></h2>
+		</ui:fragment>
+		<h2><h:outputText value="#{participant.email}" /></h2>
+	</div>
+</ui:component>
+</html>

@@ -25,6 +25,7 @@ public class Participant implements Serializable {
 	private String phoneMobile;
 	private String gender;
 	private boolean foreigner;
+	private String imageURL;
 	
 	private String relayLeg;
 	private ShirtSize shirtSize;
@@ -187,6 +188,14 @@ public class Participant implements Serializable {
 
 	public void setForeigner(boolean foreigner) {
 		this.foreigner = foreigner;
+	}
+
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 
 	@Override
