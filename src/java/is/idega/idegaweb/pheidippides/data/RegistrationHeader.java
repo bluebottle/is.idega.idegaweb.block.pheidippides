@@ -11,9 +11,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -31,6 +34,7 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 	@NamedQuery(name = "registrationHeader.findByRegistrantUUID", query = "select r from RegistrationHeader r where r.registrantUUID = :registrantUUID"),
 	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid"),
 	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status"),
+	@NamedQuery(name = "registrationHeader.findByCompany", query = "select r from RegistrationHeader r where r.company = :company"),
 	@NamedQuery(name = "registrationHeader.findByEventAndYearAndStatus", query = "select distinct r from RegistrationHeader r join r.registrations re where r.status = :status and re.race.event = :event and re.race.year = :year")
 })
 public class RegistrationHeader implements Serializable {
@@ -55,6 +59,8 @@ public class RegistrationHeader implements Serializable {
 	private static final String COLUMN_SALE_ID = "sale_id";
 	
 	private static final String COLUMN_CURRENCY = "currency";
+	
+	private static final String COLUMN_COMPANY = "company_id";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 	
@@ -117,6 +123,11 @@ public class RegistrationHeader implements Serializable {
 	@Column(name = RegistrationHeader.COLUMN_CURRENCY)
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = RegistrationHeader.COLUMN_COMPANY)
+	private Company company;
+
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
@@ -268,5 +279,13 @@ public class RegistrationHeader implements Serializable {
 
 	public void setRegistrations(List<Registration> registrations) {
 		this.registrations = registrations;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 }

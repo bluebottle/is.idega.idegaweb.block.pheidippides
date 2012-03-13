@@ -8,6 +8,7 @@ import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -652,5 +653,50 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		return team;
 
+	}
+	
+	
+	/* Company methods */
+	public Company getCompany(Long companyID) {
+		return find(Company.class, companyID);
+	}
+	
+	public Company storeCompany(Long companyID, String name, Event event, int maxNumberOfParticipants, boolean isOpen) {
+		Company company = companyID != null ? getCompany(companyID) : null;
+		if (company == null) {
+			company = new Company();
+		}
+		company.setName(name);
+		company.setEvent(event);
+		company.setMaxNumberOfParticipants(maxNumberOfParticipants);
+		company.setOpen(isOpen);
+
+		getEntityManager().persist(company);
+
+		return company;
+	}
+	
+	public Company storeCompanyUser(Long companyID, String userUUID) {
+		Company company = companyID != null ? getCompany(companyID) : null;
+		if (company == null) {
+			company = new Company();
+		}
+
+		if (userUUID != null) {
+			company.setUserUUID(userUUID);
+		}
+		
+		getEntityManager().persist(company);
+
+		return company;		
+	}
+	
+	public List<Company> getCompanies() {
+		return getResultList("company.findAll", Company.class);
+	}
+	
+	public Company getCompanyByUserUUID(String userUUID) {
+		return getSingleResult("company.findByUserUUID",
+				Company.class, new Param("uuid", userUUID));
 	}
 }

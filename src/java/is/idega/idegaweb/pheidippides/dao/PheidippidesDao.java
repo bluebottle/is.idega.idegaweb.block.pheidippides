@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -142,4 +143,15 @@ public interface PheidippidesDao {
 	public Team getTeam(Long teamID);
 	
 	public Team storeTeam(Long teamID, String name, boolean isRelayTeam);
+	
+	public Company getCompany(Long companyID);
+	
+	public Company storeCompany(Long companyID, String name, Event event, int maxNumberOfParticipants, boolean isOpen);
+	
+	public Company storeCompanyUser(Long companyID, String userUUID);
+	
+	public List<Company> getCompanies();
+	
+	public Company getCompanyByUserUUID(String userUUID);
+
 }

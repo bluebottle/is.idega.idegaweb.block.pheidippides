@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -269,6 +270,34 @@ public class PheidippidesService {
 		return participants;
 	}
 	
+	public Map<String, Participant> getCompanyParticipantMap(
+			List<Company> companies) {
+		Map<String, Participant> participants = new HashMap<String, Participant>();
+
+		for (Company company : companies) {
+			try {
+				User user = null;
+				
+				if (company.getUserUUID() != null) {
+					user = getUserBusiness().getUserByUniqueId(company.getUserUUID());
+				}
+				
+				if (user != null) {
+					Participant participant = getParticipant(user);
+					if (participant != null) {
+						participants.put(company.getUuid(), participant);
+					}
+				}
+			} catch (RemoteException re) {
+				throw new IBORuntimeException(re);
+			} catch (FinderException fe) {
+				// No user found...
+			}
+		}
+
+		return participants;
+	}
+	
 	public Map<RegistrationHeader, BankReference> getBankReferencesMap(List<RegistrationHeader> headers) {
 		Map<RegistrationHeader, BankReference> references = new HashMap<RegistrationHeader, BankReference>();
 		
@@ -345,6 +374,14 @@ public class PheidippidesService {
 		} catch (RemoteException e) {
 		}
 
+		try {
+			LoginTable loginTable = LoginDBHandler.getUserLogin(user);
+			if (loginTable != null) {
+				p.setLogin(loginTable.getUserLogin());
+			}
+		} catch (Exception e) {
+		}
+		
 		return p;
 	}
 

@@ -1,0 +1,57 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="companyEditorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesCompanyBean.eventHandler}" />
+		<input type="hidden" name="prm_company_pk" value="#{pheidippidesCompanyBean.company.id}" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_company']}" /></legend>
+			
+			<div class="formItem required">
+				<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
+				<input type="text" class="required" name="prm_name" value="#{pheidippidesCompanyBean.company.name}" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
+				<c:selectOne name="prm_event_pk" styleClass="required">
+					<ui:repeat value="#{pheidippidesCompanyBean.events}" var="event">
+						<c:selectOption name="#{event.name}" content="#{event.id}" selected="#{event.id eq pheidippidesCompanyBean.company.event.id}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="formItem required">
+				<label for="prm_number_of_participants"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['max_number_of_participants']}" /></label>
+				<input type="text" class="required digits" name="prm_number_of_participants" value="#{pheidippidesCompanyBean.company.maxNumberOfParticipants}" />
+			</div>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_open" content="true" checked="#{pheidippidesCompanyBean.company.open}" />
+				<label for="prm_open"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_open_for_registration']}" /></label>
+			</div>
+			<div class="formItem">
+				<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
+				<input type="text" name="prm_email" value="#{pheidippidesCompanyBean.participant.email}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_username"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['login']}" /></label>
+				<input type="text" name="prm_username" value="#{pheidippidesCompanyBean.participant.login}" />
+			</div>
+			<div class="formItem">
+				<label for="prm_password"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['password']}" /></label>
+				<input type="password" name="prm_password" value="" />
+			</div>			
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>
