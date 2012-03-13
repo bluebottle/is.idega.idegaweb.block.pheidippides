@@ -78,10 +78,10 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 
 		List<Registration> registrations = null;
 		if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-			registrations = getDao().getRegistrations(race, status);
+			registrations = getDao().getRegistrations(company, race, status);
 		}
 		else {
-			registrations = getDao().getRegistrations(event, year, status);
+			registrations = getDao().getRegistrations(company, event, year, status);
 		}
 		Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
 
@@ -203,6 +203,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 
 		for (Registration registration : registrations) {
 			Participant participant = participantsMap.get(registration);
+			if (participant == null) {
+				continue;
+			}
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
 			
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());

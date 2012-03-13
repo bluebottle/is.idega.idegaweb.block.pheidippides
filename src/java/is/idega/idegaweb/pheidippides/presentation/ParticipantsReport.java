@@ -80,7 +80,7 @@ public class ParticipantsReport extends IWBaseComponent {
 		/* Races */
 		if (bean.getEvent() != null && bean.getProperty() != null) {
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
-			cBean.setCompanies(getDao().getCompanies(bean.getEvent()));
+			cBean.setCompanies(getDao().getCompanies());
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
 
