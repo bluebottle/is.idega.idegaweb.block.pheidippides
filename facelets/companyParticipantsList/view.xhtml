@@ -14,20 +14,14 @@
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_list']}" /></legend>
 			
 			<div class="formItem">
+				<ui:param value="#{pheidippidesCompanyBean.event}" name="event" />
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
-				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
-					<ui:repeat value="#{pheidippidesCompanyBean.events}" var="event">
-						<c:selectOption name="#{event.name}" content="#{event.id}" selected="#{event.id eq param['prm_event_pk']}" />
-					</ui:repeat>
-				</c:selectOne>
+				<td><h:outputText value="#{event.name}" /></td>
 			</div>
 			<div class="formItem">
+				<ui:param value="#{pheidippidesCompanyBean.property}" name="year" />
 				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
-				<c:selectOne styleClass="dwrEnabled" name="prm_year">
-					<ui:repeat value="#{pheidippidesCompanyBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
-					</ui:repeat>
-				</c:selectOne>
+				<td><h:outputText value="#{year.value}" /></td>
 			</div>
 			<div class="formItem">
 				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>

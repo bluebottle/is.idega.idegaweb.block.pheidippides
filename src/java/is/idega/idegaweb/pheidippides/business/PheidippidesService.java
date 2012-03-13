@@ -17,11 +17,14 @@ import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 
+import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -36,6 +39,10 @@ import javax.ejb.EJBException;
 import javax.ejb.FinderException;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -62,6 +69,7 @@ import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.idegaweb.IWMainApplicationSettings;
 import com.idega.idegaweb.IWResourceBundle;
+import com.idega.io.UploadFile;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
 import com.idega.user.data.GenderHome;
@@ -129,7 +137,8 @@ public class PheidippidesService {
 		return openRaces;
 	}
 
-	public List<Race> getAvailableRaces(Long eventPK, int year, Participant participant) {
+	public List<Race> getAvailableRaces(Long eventPK, int year,
+			Participant participant) {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
 
@@ -137,22 +146,26 @@ public class PheidippidesService {
 		if (dateOfBirth != null) {
 			Age age = new Age(dateOfBirth);
 			for (Race race : races) {
-				if (race.getMinimumAge() <= age.getYears() && race.getMaximumAge() >= age.getYears()) {
+				if (race.getMinimumAge() <= age.getYears()
+						&& race.getMaximumAge() >= age.getYears()) {
 					boolean addRace = true;
-					if (participant.getUuid() != null && dao.getNumberOfRegistrations(participant.getUuid(), race, RegistrationStatus.OK) > 0) {
+					if (participant.getUuid() != null
+							&& dao.getNumberOfRegistrations(
+									participant.getUuid(), race,
+									RegistrationStatus.OK) > 0) {
 						addRace = false;
 					}
-					
+
 					if (addRace) {
 						availableRaces.add(race);
 					}
 				}
 			}
 		}
-		
+
 		return availableRaces;
 	}
-	
+
 	public List<Race> getAvailableRaces(Long eventPK, int year, Date dateOfBirth) {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
@@ -166,24 +179,26 @@ public class PheidippidesService {
 				}
 			}
 		}
-		
+
 		return availableRaces;
 	}
-	
+
 	public boolean hasAvailableRaces(String personalID, Long eventPK, int year) {
 		Participant participant = getParticipant(personalID);
-		
+
 		boolean hasRaces = false;
 		if (participant != null) {
-			
-			List<Race> races = getAvailableRaces(eventPK, year, participant.getDateOfBirth());
+
+			List<Race> races = getAvailableRaces(eventPK, year,
+					participant.getDateOfBirth());
 			for (Race race : races) {
-				if (dao.getNumberOfRegistrations(participant.getUuid(), race, RegistrationStatus.OK) == 0) {
+				if (dao.getNumberOfRegistrations(participant.getUuid(), race,
+						RegistrationStatus.OK) == 0) {
 					hasRaces = true;
 				}
 			}
 		}
-		
+
 		return hasRaces;
 	}
 
@@ -245,17 +260,19 @@ public class PheidippidesService {
 		for (RegistrationHeader header : headers) {
 			try {
 				User user = null;
-				
+
 				if (header.getRegistrantUUID() != null) {
-					user = getUserBusiness().getUserByUniqueId(header.getRegistrantUUID());
-				}
-				else {
-					List<Registration> registrations = dao.getRegistrations(header);
+					user = getUserBusiness().getUserByUniqueId(
+							header.getRegistrantUUID());
+				} else {
+					List<Registration> registrations = dao
+							.getRegistrations(header);
 					if (registrations != null && !registrations.isEmpty()) {
-						user = getUserBusiness().getUserByUniqueId(registrations.iterator().next().getUserUUID());
+						user = getUserBusiness().getUserByUniqueId(
+								registrations.iterator().next().getUserUUID());
 					}
 				}
-				
+
 				if (user != null) {
 					Participant participant = getParticipant(user);
 					if (participant != null) {
@@ -271,7 +288,7 @@ public class PheidippidesService {
 
 		return participants;
 	}
-	
+
 	public Map<String, Participant> getCompanyParticipantMap(
 			List<Company> companies) {
 		Map<String, Participant> participants = new HashMap<String, Participant>();
@@ -279,11 +296,12 @@ public class PheidippidesService {
 		for (Company company : companies) {
 			try {
 				User user = null;
-				
+
 				if (company.getUserUUID() != null) {
-					user = getUserBusiness().getUserByUniqueId(company.getUserUUID());
+					user = getUserBusiness().getUserByUniqueId(
+							company.getUserUUID());
 				}
-				
+
 				if (user != null) {
 					Participant participant = getParticipant(user);
 					if (participant != null) {
@@ -299,17 +317,18 @@ public class PheidippidesService {
 
 		return participants;
 	}
-	
-	public Map<RegistrationHeader, BankReference> getBankReferencesMap(List<RegistrationHeader> headers) {
+
+	public Map<RegistrationHeader, BankReference> getBankReferencesMap(
+			List<RegistrationHeader> headers) {
 		Map<RegistrationHeader, BankReference> references = new HashMap<RegistrationHeader, BankReference>();
-		
+
 		for (RegistrationHeader header : headers) {
 			BankReference reference = dao.findBankReference(header);
 			if (reference != null) {
 				references.put(header, reference);
 			}
 		}
-		
+
 		return references;
 	}
 
@@ -375,10 +394,12 @@ public class PheidippidesService {
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
 		}
-		
+
 		if (user.getSystemImageID() != -1) {
 			try {
-				String URI = ICFileSystemFactory.getFileSystem(IWMainApplication.getDefaultIWApplicationContext()).getFileURI(user.getSystemImageID());
+				String URI = ICFileSystemFactory.getFileSystem(
+						IWMainApplication.getDefaultIWApplicationContext())
+						.getFileURI(user.getSystemImageID());
 				p.setImageURL(URI);
 			} catch (RemoteException e) {
 				e.printStackTrace();
@@ -392,8 +413,231 @@ public class PheidippidesService {
 			}
 		} catch (Exception e) {
 		}
-		
+
 		return p;
+	}
+
+	public Map<CompanyImportStatus, List<Participant>> importCompanyExcelFile(
+			UploadFile file) {
+		Map<CompanyImportStatus, List<Participant>> map = new HashMap<CompanyImportStatus, List<Participant>>();
+
+		try {
+			FileInputStream input = new FileInputStream(file.getRealPath());
+			HSSFWorkbook wb = new HSSFWorkbook(input);
+			HSSFSheet sheet = wb.getSheetAt(0);
+
+			NumberFormat format = NumberFormat.getNumberInstance();
+			format.setGroupingUsed(false);
+			format.setMinimumIntegerDigits(10);
+
+			List<Participant> ok = new ArrayList<Participant>();
+			List<Participant> missing = new ArrayList<Participant>();
+			List<Participant> errorInPID = new ArrayList<Participant>();
+
+			for (int a = sheet.getFirstRowNum() + 1; a <= sheet.getLastRowNum(); a++) {
+				boolean rowHasError = false;
+				boolean errorInPersonalID = false;
+
+				HSSFRow row = sheet.getRow(a);
+
+				User user = null;
+				Participant participant = new Participant();
+
+				int column = 0;
+				String personalID = getCellValue(row.getCell(column++));
+				String uniqueID = getCellValue(row.getCell(column++));
+				String name = getCellValue(row.getCell(column++));
+				String dateOfBirth = getCellValue(row.getCell(column++));
+				String address = getCellValue(row.getCell(column++));
+				String city = getCellValue(row.getCell(column++));
+				String postalCode = getCellValue(row.getCell(column++));
+				String country = getCellValue(row.getCell(column++));
+				String gender = getCellValue(row.getCell(column++));
+				String email = getCellValue(row.getCell(column++));
+				String phone = getCellValue(row.getCell(column++));
+				String mobile = getCellValue(row.getCell(column++));
+				String nationality = getCellValue(row.getCell(column));
+
+				// Hmmmm, is this correct?
+				if (personalID == null && uniqueID == null
+						&& (name == null || dateOfBirth == null)) {
+					continue;
+				}
+
+				try {
+					personalID = format.format(format.parse(personalID
+							.replaceAll("-", "")));
+				} catch (ParseException e1) {
+					rowHasError = true;
+					errorInPersonalID = true;
+				}
+
+				if (!rowHasError) {
+					try {
+						if (uniqueID != null) {
+							user = getUserBusiness()
+									.getUserByUniqueId(uniqueID);
+						} else if (personalID != null) {
+							user = getUserBusiness().getUser(personalID);
+						}
+					} catch (Exception e) {
+						rowHasError = true;
+						errorInPersonalID = true;
+					}
+
+					if (user == null) {
+						IWTimestamp dateOfBirthTimestamp = null;
+						if (name == null || "".equals(name.trim())) {
+							rowHasError = true;
+						}
+
+						if (dateOfBirth == null
+								|| "".equals(dateOfBirth.trim())) {
+							rowHasError = true;
+						} else {
+							try {
+								dateOfBirthTimestamp = new IWTimestamp(
+										dateOfBirth);
+							} catch (Exception e) {
+								rowHasError = true;
+							}
+						}
+
+						if (address == null || "".equals(address.trim())) {
+							rowHasError = true;
+						}
+
+						if (city == null || "".equals(city.trim())) {
+							rowHasError = true;
+						}
+
+						if (postalCode == null || "".equals(postalCode.trim())) {
+							rowHasError = true;
+						}
+
+						if (country == null || "".equals(country.trim())) {
+							rowHasError = true;
+						}
+
+						if (gender == null || "".equals(gender.trim())) {
+							rowHasError = true;
+						}
+
+						if (email == null || "".equals(email.trim())) {
+							rowHasError = true;
+						}
+
+						if (nationality == null
+								|| "".equals(nationality.trim())) {
+							rowHasError = true;
+						}
+
+						if (!rowHasError) {
+							participant.setFullName(name);
+							participant.setDateOfBirth(dateOfBirthTimestamp
+									.getDate());
+							participant.setAddress(address);
+							participant.setCity(city);
+							participant.setPostalCode(postalCode);
+							participant.setCountry(country);
+							participant.setGender(gender);
+							participant.setEmail(email);
+							participant.setPhoneHome(phone);
+							participant.setPhoneMobile(mobile);
+							participant.setNationality(nationality);
+						}
+					} else {
+						if (email == null || "".equals(email.trim())) {
+							rowHasError = true;
+						} else {
+							participant.setPersonalId(user.getPersonalID());
+							participant.setUuid(user.getUniqueId());
+							participant.setEmail(email);
+							participant.setFullName(user.getName());
+							participant.setPhoneHome(phone);
+							participant.setPhoneMobile(mobile);
+						}
+					}
+				}
+
+				if (rowHasError) {
+					if (errorInPersonalID) {
+						errorInPID.add(createErrorParticipant(personalID,
+								uniqueID, name, dateOfBirth, address, city,
+								postalCode, country, gender, email, phone,
+								mobile, nationality));
+					} else {
+						missing.add(createErrorParticipant(personalID,
+								uniqueID, name, dateOfBirth, address, city,
+								postalCode, country, gender, email, phone,
+								mobile, nationality));
+					}
+				} else {
+					ok.add(participant);
+				}
+			}
+
+			if (!errorInPID.isEmpty()) {
+				map.put(CompanyImportStatus.ERROR_IN_PERSONAL_ID, errorInPID);
+			}
+
+			if (!missing.isEmpty()) {
+				map.put(CompanyImportStatus.MISSING_REQUIRED_FIELD, missing);
+			}
+
+			map.put(CompanyImportStatus.OK, ok);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private String getCellValue(HSSFCell cell) {
+		if (cell == null) {
+			return null;
+		}
+
+		String value = null;
+		if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
+			value = cell.getStringCellValue();
+		} else if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+			value = String.valueOf(new Double(cell.getNumericCellValue())
+					.longValue());
+		} else {
+			value = cell.getStringCellValue();
+		}
+
+		return value;
+	}
+
+	private Participant createErrorParticipant(String personalID,
+			String uniqueID, String name, String dateOfBirth, String address,
+			String city, String postalCode, String country, String gender,
+			String email, String phone, String mobile, String nationality) {
+		Participant errorParticipant = new Participant();
+
+		errorParticipant.setPersonalId(personalID);
+		errorParticipant.setUuid(uniqueID);
+		errorParticipant.setFullName(name);
+		try {
+			if (dateOfBirth != null) {
+				errorParticipant.setDateOfBirth(new IWTimestamp(dateOfBirth)
+						.getDate());
+			}
+		} catch (Exception e) {
+		}
+		errorParticipant.setAddress(address);
+		errorParticipant.setCity(city);
+		errorParticipant.setPostalCode(postalCode);
+		errorParticipant.setCountry(country);
+		errorParticipant.setGender(gender);
+		errorParticipant.setEmail(email);
+		errorParticipant.setPhoneHome(phone);
+		errorParticipant.setPhoneMobile(mobile);
+		errorParticipant.setNationality(nationality);
+
+		return errorParticipant;
 	}
 
 	public RegistrationAnswerHolder storeRegistration(
@@ -537,7 +781,8 @@ public class PheidippidesService {
 									participant.getPostalCode(),
 									participant.getCity(),
 									getCountryHome().findByPrimaryKey(
-											new Integer(participant.getCountry())));
+											new Integer(participant
+													.getCountry())));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -584,7 +829,8 @@ public class PheidippidesService {
 							.getRelayPartners();
 					Team team = participantHolder.getTeam();
 					if (relayPartners != null && !relayPartners.isEmpty()) {
-						team = dao.storeTeam(team.getId(), team.getName(), team.isRelayTeam());
+						team = dao.storeTeam(team.getId(), team.getName(),
+								team.isRelayTeam());
 					}
 
 					dao.storeRegistration(null, header,
@@ -594,8 +840,7 @@ public class PheidippidesService {
 							participantHolder.getLeg(),
 							participantHolder.getAmount(),
 							participantHolder.getCharity(),
-							participant.getNationality(),
-							user.getUniqueId(),
+							participant.getNationality(), user.getUniqueId(),
 							participantHolder.getDiscount(),
 							participantHolder.isHasDoneMarathonBefore(),
 							participantHolder.isHasDoneLVBefore(),
@@ -643,13 +888,12 @@ public class PheidippidesService {
 					if (relayPartners != null && !relayPartners.isEmpty()) {
 						for (Participant participant2 : relayPartners) {
 							user = null;
-							
+
 							if (createUsers) {
 								if (participant2.getPersonalId() != null) {
 									try {
-										user = getUserBusiness()
-												.getUser(
-														participant2.getPersonalId());
+										user = getUserBusiness().getUser(
+												participant2.getPersonalId());
 									} catch (RemoteException e) {
 									} catch (FinderException e) {
 									}
@@ -658,14 +902,11 @@ public class PheidippidesService {
 								try {
 									if (user == null) {
 										user = saveUser(
-												new Name(participant2.getFullName()),
+												new Name(participant2
+														.getFullName()),
 												new IWTimestamp(participant2
 														.getDateOfBirth()),
-												null,
-												null,
-												null,
-												null,
-												null);
+												null, null, null, null, null);
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -699,11 +940,8 @@ public class PheidippidesService {
 										participantHolder.getCharity(),
 										participant.getNationality(),
 										user.getUniqueId(),
-										participantHolder.getDiscount(),
-										false,
-										false,
-										null,
-										null);
+										participantHolder.getDiscount(), false,
+										false, null, null);
 							}
 						}
 					}
@@ -737,7 +975,7 @@ public class PheidippidesService {
 				url.append("&");
 				url.append("FelaKennitala");
 				url.append("=");
-				url.append("1");				
+				url.append("1");
 			}
 			url.append("&");
 			url.append("FelaHeimilisfang");
@@ -863,17 +1101,20 @@ public class PheidippidesService {
 		}
 		return user;
 	}
-	
-	public User updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile, ICFile image) {
+
+	public User updateUser(String uuid, String fullName,
+			java.sql.Date dateOfBirth, String address, String postalCode,
+			String city, Integer countryPK, String gender, String email,
+			String phone, String mobile, ICFile image) {
 		try {
 			Gender userGender = null;
-			if (gender != null && gender.equals(getGenderHome().getMaleGender().getName())) {
+			if (gender != null
+					&& gender.equals(getGenderHome().getMaleGender().getName())) {
 				userGender = getGenderHome().getMaleGender();
-			}
-			else if (gender != null) {
+			} else if (gender != null) {
 				userGender = getGenderHome().getFemaleGender();
 			}
-			
+
 			User user = getUserBusiness().getUserByUniqueId(uuid);
 			if (fullName != null) {
 				user.setFullName(fullName);
@@ -888,32 +1129,31 @@ public class PheidippidesService {
 				user.setSystemImageID((Integer) image.getPrimaryKey());
 			}
 			user.store();
-			
+
 			if (postalCode != null && countryPK != null) {
 				Country country = getCountryHome().findByPrimaryKey(countryPK);
-				PostalCode postal = getUserBusiness().getAddressBusiness().getPostalCodeAndCreateIfDoesNotExist(postalCode, city);
-				getUserBusiness().updateUsersMainAddressOrCreateIfDoesNotExist(user, address, postal, country, city, null, null, null);
+				PostalCode postal = getUserBusiness().getAddressBusiness()
+						.getPostalCodeAndCreateIfDoesNotExist(postalCode, city);
+				getUserBusiness().updateUsersMainAddressOrCreateIfDoesNotExist(
+						user, address, postal, country, city, null, null, null);
 			}
-			
+
 			getUserBusiness().updateUserMail(user, email);
 			getUserBusiness().updateUserHomePhone(user, phone);
 			getUserBusiness().updateUserMobilePhone(user, mobile);
-			
+
 			return user;
-		}
-		catch (RemoteException re) {
+		} catch (RemoteException re) {
 			re.printStackTrace();
-		}
-		catch (FinderException fe) {
+		} catch (FinderException fe) {
 			fe.printStackTrace();
-		}
-		catch (CreateException ce) {
+		} catch (CreateException ce) {
 			ce.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	public void updateRegistrationStatus() {
 
 	}
@@ -1077,11 +1317,13 @@ public class PheidippidesService {
 			String language, boolean addEmptyValue) {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 		if (addEmptyValue) {
-			IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+			IWResourceBundle iwrb = IWMainApplication
+					.getDefaultIWMainApplication()
 					.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
 					.getResourceBundle(LocaleUtil.getLocale(language));
-			
-			properties.add(new AdvancedProperty("", iwrb.getLocalizedString("all_races", "All races")));
+
+			properties.add(new AdvancedProperty("", iwrb.getLocalizedString(
+					"all_races", "All races")));
 		}
 
 		List<Race> races = getRaces(eventPK, year);
@@ -1116,9 +1358,10 @@ public class PheidippidesService {
 		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
 				.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
 				.getResourceBundle(LocaleUtil.getLocale(language));
-		
-		properties.add(new AdvancedProperty("", iwrb.getLocalizedString("select_shirt_size", "Select shirt size")));
-		
+
+		properties.add(new AdvancedProperty("", iwrb.getLocalizedString(
+				"select_shirt_size", "Select shirt size")));
+
 		List<RaceShirtSize> shirts = getShirts(racePK);
 		for (RaceShirtSize shirt : shirts) {
 			properties.add(getLocalizedShirtName(shirt, language));
@@ -1165,42 +1408,51 @@ public class PheidippidesService {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				dao.storeRegistration(registration.getId(), header,
 						RegistrationStatus.Cancelled, null, null, null, null,
-						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
+						0, null, null, null, 0,
+						registration.isHasDoneMarathonBefore(),
+						registration.isHasDoneLVBefore(), null, null);
 			}
 		}
 
 		return header;
 	}
-	
+
 	public RegistrationHeader markRegistrationAsPaid(String uniqueID,
-			boolean manualPayment, boolean withoutPayment, String securityString, String cardType,
-			String cardNumber, String paymentDate, String authorizationNumber,
+			boolean manualPayment, boolean withoutPayment,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
-		return markRegistrationAsPaid(header, manualPayment, withoutPayment, securityString,
-				cardType, cardNumber, paymentDate, authorizationNumber,
-				transactionNumber, referenceNumber, comment, saleId);
+		return markRegistrationAsPaid(header, manualPayment, withoutPayment,
+				securityString, cardType, cardNumber, paymentDate,
+				authorizationNumber, transactionNumber, referenceNumber,
+				comment, saleId);
 	}
 
 	public RegistrationHeader markRegistrationAsPaid(RegistrationHeader header,
-			boolean manualPayment, boolean withoutPayment, String securityString, String cardType,
-			String cardNumber, String paymentDate, String authorizationNumber,
+			boolean manualPayment, boolean withoutPayment,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		List<Registration> registrations = dao.getRegistrations(header);
-		dao.storeRegistrationHeader(header.getId(),
-				withoutPayment ? RegistrationHeaderStatus.RegisteredWithoutPayment : (manualPayment ? RegistrationHeaderStatus.ManualPayment
-						: RegistrationHeaderStatus.Paid), null, null, null,
-				null, securityString, cardType, cardNumber, paymentDate,
+		dao.storeRegistrationHeader(
+				header.getId(),
+				withoutPayment ? RegistrationHeaderStatus.RegisteredWithoutPayment
+						: (manualPayment ? RegistrationHeaderStatus.ManualPayment
+								: RegistrationHeaderStatus.Paid), null, null,
+				null, null, securityString, cardType, cardNumber, paymentDate,
 				authorizationNumber, transactionNumber, referenceNumber,
 				comment, saleId);
 		for (Registration registration : registrations) {
 			if (registration.getStatus().equals(RegistrationStatus.Unconfirmed)) {
 				registration = dao.storeRegistration(registration.getId(),
 						header, RegistrationStatus.OK, null, null, null, null,
-						0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
+						0, null, null, null, 0,
+						registration.isHasDoneMarathonBefore(),
+						registration.isHasDoneLVBefore(), null, null);
 				try {
 					User user = getUserBusiness().getUserByUniqueId(
 							registration.getUserUUID());
@@ -1234,9 +1486,9 @@ public class PheidippidesService {
 							e.printStackTrace();
 						}
 					}
-					
+
 					addUserToRootRunnersGroup(user);
-					
+
 					Email email = getUserBusiness().getUserMail(user);
 					Locale locale = LocaleUtil.getLocale(header.getLocale());
 					IWResourceBundle iwrb = IWMainApplication
@@ -1257,17 +1509,22 @@ public class PheidippidesService {
 							getLocalizedRaceName(registration.getRace(),
 									header.getLocale()).getValue(),
 							userNameString, passwordString };
-					String subject = PheidippidesUtil.escapeXML(iwrb.getLocalizedString(registration
-							.getRace().getEvent().getLocalizedKey()
-							+ "."
-							+ "registration_received_subject_mail",
-							"Your registration has been received."));
-					String body = MessageFormat.format(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(
-							registration.getRace().getEvent().getLocalizedKey() + "."
-									+ "registration_received_body_mail",
-							"Your registration has been received.")), args);
-					
-					body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
+					String subject = PheidippidesUtil.escapeXML(iwrb
+							.getLocalizedString(registration.getRace()
+									.getEvent().getLocalizedKey()
+									+ "."
+									+ "registration_received_subject_mail",
+									"Your registration has been received."));
+					String body = MessageFormat.format(StringEscapeUtils
+							.unescapeHtml(iwrb.getLocalizedString(registration
+									.getRace().getEvent().getLocalizedKey()
+									+ "." + "registration_received_body_mail",
+									"Your registration has been received.")),
+							args);
+
+					body = body.replaceAll("<p>", "")
+							.replaceAll("<strong>", "")
+							.replaceAll("</strong>", "");
 					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
 
@@ -1282,32 +1539,36 @@ public class PheidippidesService {
 
 		return header;
 	}
-	
-	public void sendPaymentTransferEmail(ParticipantHolder holder, RegistrationAnswerHolder answer, Locale locale) {
+
+	public void sendPaymentTransferEmail(ParticipantHolder holder,
+			RegistrationAnswerHolder answer, Locale locale) {
 		try {
-			User user = getUserBusiness().getUserByUniqueId(holder.getParticipant().getUuid());
+			User user = getUserBusiness().getUserByUniqueId(
+					holder.getParticipant().getUuid());
 			Email email = getUserBusiness().getUserMail(user);
-			
+
 			IWResourceBundle iwrb = IWMainApplication
 					.getDefaultIWMainApplication()
-					.getBundle(
-							PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+					.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
 					.getResourceBundle(locale);
-			Object[] args = { String.valueOf(answer.getAmount()), answer.getBankReference().getReferenceNumber() };
-			String subject = PheidippidesUtil.escapeXML(iwrb.getLocalizedString(holder
-					.getRace().getEvent().getLocalizedKey()
-					+ "."
-					+ "receipt_subject",
-					"Your registration has been received."));
-			String body = MessageFormat.format(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(
-					holder.getRace().getEvent().getLocalizedKey() + "."
-							+ "receipt_body",
-					"Your registration has been received.")), args);
-			
-			body = body.replaceAll("<p>", "").replaceAll("<strong>", "").replaceAll("</strong>", "");
+			Object[] args = { String.valueOf(answer.getAmount()),
+					answer.getBankReference().getReferenceNumber() };
+			String subject = PheidippidesUtil.escapeXML(iwrb
+					.getLocalizedString(holder.getRace().getEvent()
+							.getLocalizedKey()
+							+ "." + "receipt_subject",
+							"Your registration has been received."));
+			String body = MessageFormat.format(StringEscapeUtils
+					.unescapeHtml(iwrb.getLocalizedString(holder.getRace()
+							.getEvent().getLocalizedKey()
+							+ "." + "receipt_body",
+							"Your registration has been received.")), args);
+
+			body = body.replaceAll("<p>", "").replaceAll("<strong>", "")
+					.replaceAll("</strong>", "");
 			body = body.replaceAll("</p>", "\r\n");
 			body = body.replaceAll("<br />", "\r\n");
-			
+
 			sendMessage(email.getEmailAddress(), subject, body);
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -1315,38 +1576,45 @@ public class PheidippidesService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void addUserToRootRunnersGroup(User user) throws RemoteException {
 		try {
 			Group runners = getRootRunnersGroup();
-			if (!getUserBusiness().isMemberOfGroup(((Integer) runners.getPrimaryKey()).intValue(), user)) {
+			if (!getUserBusiness().isMemberOfGroup(
+					((Integer) runners.getPrimaryKey()).intValue(), user)) {
 				runners.addGroup(user, IWTimestamp.getTimestampRightNow());
 				if (user.getPrimaryGroup() == null) {
 					user.setPrimaryGroup(runners);
 					user.store();
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private Group getRootRunnersGroup() throws CreateException, FinderException, RemoteException {
-		return getGroupCreateIfNecessaryStoreAsApplicationBinding("root.runners.group", "Runners", "The root group for all runners in Pheidippides");
+	private Group getRootRunnersGroup() throws CreateException,
+			FinderException, RemoteException {
+		return getGroupCreateIfNecessaryStoreAsApplicationBinding(
+				"root.runners.group", "Runners",
+				"The root group for all runners in Pheidippides");
 	}
 
-	private Group getGroupCreateIfNecessaryStoreAsApplicationBinding(String parameter, String createName, String createDescription) throws RemoteException, FinderException, CreateException {
-		IWMainApplicationSettings settings = IWMainApplication.getDefaultIWMainApplication().getSettings();
+	private Group getGroupCreateIfNecessaryStoreAsApplicationBinding(
+			String parameter, String createName, String createDescription)
+			throws RemoteException, FinderException, CreateException {
+		IWMainApplicationSettings settings = IWMainApplication
+				.getDefaultIWMainApplication().getSettings();
 		String groupId = settings.getProperty(parameter);
 
 		Group group = null;
 		if (groupId != null) {
-			group = getUserBusiness().getGroupBusiness().getGroupByGroupID(new Integer(groupId));
-		}
-		else {
+			group = getUserBusiness().getGroupBusiness().getGroupByGroupID(
+					new Integer(groupId));
+		} else {
 			System.err.println("Trying to store " + createName + " group");
-			group = getUserBusiness().getGroupBusiness().createGroup(createName, createDescription);
+			group = getUserBusiness().getGroupBusiness().createGroup(
+					createName, createDescription);
 
 			groupId = group.getPrimaryKey().toString();
 			settings.setProperty(parameter, groupId);
@@ -1388,96 +1656,126 @@ public class PheidippidesService {
 	public RegistrationHeader getRegistrationHeader(String uniqueID) {
 		return dao.getRegistrationHeader(uniqueID);
 	}
-	
+
 	public List<Participant> searchForParticipants(SearchParameter parameter) {
 		List<Participant> ret = new ArrayList<Participant>();
-		
+
 		if (parameter.getPersonalId() != null) {
 			try {
-				User user = getUserBusiness().getUser(parameter.getPersonalId());
+				User user = getUserBusiness()
+						.getUser(parameter.getPersonalId());
 				ret.add(dao.getParticipant(user.getUniqueId()));
-				
+
 				return ret;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
 		}
-		
+
 		if (parameter.getDateOfBirth() != null) {
 			Name name = null;
-			if (parameter.getFirstName() != null || parameter.getMiddleName() != null || parameter.getLastName() != null) {
-				name = new Name(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
+			if (parameter.getFirstName() != null
+					|| parameter.getMiddleName() != null
+					|| parameter.getLastName() != null) {
+				name = new Name(parameter.getFirstName(),
+						parameter.getMiddleName(), parameter.getLastName());
 			}
-			
+
 			if (parameter.getFullName() != null) {
 				name = new Name(parameter.getFullName());
 			}
-			
+
 			try {
-				User user = getUserBusiness().getUserHome().findByDateOfBirthAndName(new IWTimestamp(parameter.getDateOfBirth()).getDate(), name.getName());
+				User user = getUserBusiness()
+						.getUserHome()
+						.findByDateOfBirthAndName(
+								new IWTimestamp(parameter.getDateOfBirth())
+										.getDate(),
+								name.getName());
 				ret.add(dao.getParticipant(user.getUniqueId()));
-				
+
 				return ret;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
 		}
-		
-		if (parameter.getFirstName() != null || parameter.getMiddleName() != null || parameter.getLastName() != null) {
+
+		if (parameter.getFirstName() != null
+				|| parameter.getMiddleName() != null
+				|| parameter.getLastName() != null) {
 			try {
-				Collection<User> col = getUserBusiness().getUserHome().findByNames(parameter.getFirstName(), parameter.getMiddleName(), parameter.getLastName());
+				Collection<User> col = getUserBusiness().getUserHome()
+						.findByNames(parameter.getFirstName(),
+								parameter.getMiddleName(),
+								parameter.getLastName());
 				if (col != null && !col.isEmpty()) {
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
 						ret.add(dao.getParticipant(it.next().getUniqueId()));
 					}
-					
+
 					return ret;
 				}
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
 		}
-		
+
 		if (parameter.getFullName() != null) {
 			Name name = new Name(parameter.getFullName());
 			try {
-				Collection<User> col = getUserBusiness().getUserHome().findByNames(name.getFirstName(), name.getMiddleName(), name.getLastName());
+				Collection<User> col = getUserBusiness().getUserHome()
+						.findByNames(name.getFirstName(), name.getMiddleName(),
+								name.getLastName());
 				if (col != null && !col.isEmpty()) {
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
 						ret.add(dao.getParticipant(it.next().getUniqueId()));
 					}
-					
+
 					return ret;
 				}
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
 		}
-		
-		//@TODO Add search by email and address..
+
+		// @TODO Add search by email and address..
 		return ret;
 	}
-	
+
 	public Registration cancelRegistration(Registration registration) {
-		registration = dao.storeRegistration(registration.getId(), null, RegistrationStatus.Cancelled, null, null, null, null, 0, null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
-		
+		registration = dao.storeRegistration(registration.getId(), null,
+				RegistrationStatus.Cancelled, null, null, null, null, 0, null,
+				null, null, 0, registration.isHasDoneMarathonBefore(),
+				registration.isHasDoneLVBefore(), null, null);
+
 		RegistrationHeader header = registration.getHeader();
 		boolean cancelHeader = true;
-		
+
 		List<Registration> registrations = dao.getRegistrations(header);
 		for (Registration registration2 : registrations) {
-			if (registration2.getStatus() == RegistrationStatus.Unconfirmed || registration2.getStatus() == RegistrationStatus.OK) { //Should RelayPartner also stop us from cancelling the header?
+			if (registration2.getStatus() == RegistrationStatus.Unconfirmed
+					|| registration2.getStatus() == RegistrationStatus.OK) { // Should
+																				// RelayPartner
+																				// also
+																				// stop
+																				// us
+																				// from
+																				// cancelling
+																				// the
+																				// header?
 				cancelHeader = false;
 				break;
 			}
 		}
-		
+
 		if (cancelHeader) {
-			dao.storeRegistrationHeader(header.getId(), RegistrationHeaderStatus.Cancelled, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			dao.storeRegistrationHeader(header.getId(),
+					RegistrationHeaderStatus.Cancelled, null, null, null, null,
+					null, null, null, null, null, null, null, null, null);
 		}
-		
+
 		return registration;
 	}
 
