@@ -580,6 +580,20 @@ form#transferPaymentForm span.action[rel="delete"] {
 /* User information */
 div.userInformation {
 	margin-bottom: 32px;
+	width: auto;
+	overflow: hidden;
+}
+
+div.userInformation img {
+	float: left;
+	max-width: 120px;
+	max-height: 140px;
+	margin-right: 8px;
+	border: 1px #999 solid;
+	
+	-moz-box-shadow: #999 0 0 0 6px;
+	-webkit-box-shadow: #999 0 0 0 6px;
+	box-shadow: #999 0 0 0 6px;
 }
 
 div.userInformation h1 {

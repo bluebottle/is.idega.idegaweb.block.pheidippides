@@ -21,11 +21,8 @@
 		<ui:param value="#{not empty participant.personalId}" name="hasPersonalID" />
 		
 		<div class="formItem">
-			<ui:fragment rendered="#{not empty participant.imageURL}">
-				<img src="#{participant.imageURL}" alt="" />
-			</ui:fragment>
-			<label for="prm_image"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['image']}" /></label>
-			<input type="file" name="prm_image" />
+			<label for="fileupload"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['image']}" /></label>
+			<input type="file" name="fileupload" accept="image/*" />
 		</div>
 		
 		<t:div rendered="#{hasPersonalID}">

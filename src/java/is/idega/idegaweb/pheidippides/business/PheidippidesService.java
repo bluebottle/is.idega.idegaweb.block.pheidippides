@@ -884,6 +884,9 @@ public class PheidippidesService {
 			if (userGender != null) {
 				user.setGender((Integer) userGender.getPrimaryKey());
 			}
+			if (image != null) {
+				user.setSystemImageID((Integer) image.getPrimaryKey());
+			}
 			user.store();
 			
 			if (postalCode != null && countryPK != null) {
