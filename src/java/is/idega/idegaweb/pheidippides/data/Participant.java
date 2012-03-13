@@ -26,6 +26,7 @@ public class Participant implements Serializable {
 	private String gender;
 	private boolean foreigner;
 	private String imageURL;
+	private String login;
 	
 	private String relayLeg;
 	private ShirtSize shirtSize;
@@ -233,5 +234,13 @@ public class Participant implements Serializable {
 		} else if (!personalId.equals(other.personalId))
 			return false;
 		return true;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
 }
