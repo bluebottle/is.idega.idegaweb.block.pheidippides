@@ -15,7 +15,10 @@
 		</ui:fragment>
 		<h1><h:outputText value="#{participant.fullName}" /></h1>
 		<ui:fragment rendered="#{not empty participant.personalId}">
-			<h2><h:outputText value="#{participant.personalId}" /></h2>
+			<h2><h:outputText value="#{participant.personalId}"><c:personalIDConverter /></h:outputText></h2>
+		</ui:fragment>
+		<ui:fragment rendered="#{empty participant.personalId}">
+			<h2><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></h2>
 		</ui:fragment>
 		<h2><h:outputText value="#{participant.email}" /></h2>
 	</div>

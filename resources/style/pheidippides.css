@@ -576,3 +576,17 @@ form#transferPaymentForm span.action[rel="free"] {
 form#transferPaymentForm span.action[rel="delete"] {
 	background-image: url(images/remove.png);
 }
+
+/* User information */
+div.userInformation {
+	margin-bottom: 32px;
+}
+
+div.userInformation h1 {
+	margin-bottom: 4px;
+}
+
+div.userInformation h2 {
+	font-weight: normal;
+	line-height: 1.25em;
+}
