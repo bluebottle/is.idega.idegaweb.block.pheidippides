@@ -117,7 +117,7 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
 		
-		PheidippidesCompanyBean bean = getBeanInstance("PheidippidesCompanyBean");
+		PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
 		bean.setDownloadWriter(ParticipantsWriter.class);
