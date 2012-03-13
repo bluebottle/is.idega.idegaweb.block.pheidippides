@@ -329,6 +329,33 @@ form.smallAdminForm fieldset div.formItem.checkbox label {
 	width: auto;
 }
 
+form.smallAdminForm ul.checkboxItem {
+	float: left;
+	width: 320px;
+	height: 320px;
+	overflow: auto;
+	padding: 4px;
+	border: 1px #ccc solid;
+	font-size: 0.75em;
+}
+
+form.smallAdminForm ul.checkboxItem li {
+	width: auto;
+	overflow: hidden;
+	margin-bottom: 3px;
+}
+
+form.smallAdminForm ul.checkboxItem li input {
+	width: auto;
+	border: 0;
+	float: left;
+}
+
+form.smallAdminForm ul.checkboxItem li label {
+	width: 280px;
+	line-height: 1.6em;
+}
+
 form.smallAdminForm div.submit a {
 	margin-top: 12px;
 	float: left;

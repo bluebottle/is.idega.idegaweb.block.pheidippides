@@ -13,6 +13,7 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
+import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
@@ -86,9 +88,23 @@ public class LVRegistrationForm extends IWBaseComponent {
 	protected void initializeComponent(FacesContext context) {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
-		
+
+		if (iwc.isParameterSet(LocaleSwitcher.languageParameterString)) {
+			getSession().empty();
+		}
+
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
+			List<ParticipantHolder> holders = getSession().getParticipantHolders();
+			if (holders != null && !holders.isEmpty()) {
+				for (ParticipantHolder participantHolder : holders) {
+					if (!participantHolder.getRace().getEvent().equals(event)) {
+						getSession().empty();
+						break;
+					}
+				}
+			}
+			
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
@@ -96,10 +112,10 @@ public class LVRegistrationForm extends IWBaseComponent {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
-			
+
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/registration.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-			
+
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setEvent(event);
 			bean.setLocale(iwc.getCurrentLocale());

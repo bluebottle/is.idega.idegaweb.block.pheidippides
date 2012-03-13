@@ -22,6 +22,10 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_information']}" /></legend>
 			
+			<t:div styleClass="formItem" rendered="#{not empty registration.header.company}">
+				<label for="prm_company"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company']}" /></label>
+				<span><h:outputText value="#{registration.header.company.name}" /></span>
+			</t:div>
 			<t:div rendered="#{hasPersonalID}">
 				<div class="formItem">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
@@ -110,6 +114,15 @@
 						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq registration.shirtSize.id}" />
 					</ui:repeat>
 				</c:selectOne>
+			</div>
+			<hr />
+			<div class="formItem">
+				<label for="prm_login"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['login']}" /></label>
+				<span><h:outputText value="#{participant.login}" /></span>
+			</div>
+			<div class="formItem">
+				<label for="prm_password"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['password']}" /></label>
+				<input type="password" name="prm_password" />
 			</div>
 		</fieldset>
 		

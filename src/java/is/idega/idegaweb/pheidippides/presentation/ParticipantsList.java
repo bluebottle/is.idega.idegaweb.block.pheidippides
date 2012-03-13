@@ -24,6 +24,8 @@ import com.idega.block.web2.business.JQueryUIType;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
+import com.idega.core.accesscontrol.business.LoginDBHandler;
+import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.event.IWPageEventListener;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -32,6 +34,7 @@ import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
+import com.idega.user.data.User;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
@@ -60,6 +63,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
+	private static final String PARAMETER_PASSWORD = "prm_password";
 
 	@Autowired
 	private PheidippidesService service;
@@ -257,7 +261,19 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
 		
-		getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
+		User user = getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
+
+		if (iwc.isParameterSet(PARAMETER_PASSWORD)) {
+			String password = iwc.getParameter(PARAMETER_PASSWORD);
+
+			LoginTable loginEntry = LoginDBHandler.getUserLogin(user);
+			try {
+				LoginDBHandler.changePassword(loginEntry, password);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		
 		return true;
 	}

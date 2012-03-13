@@ -409,25 +409,37 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(Registration.class, registrationID);
 	}
 
-	public List<Registration> getRegistrations(Race race,
-			RegistrationStatus status) {
-		if (status != null) {
-			return getResultList("registration.findByRaceAndStatus",
-					Registration.class, new Param("race", race), new Param(
-							"status", status));
-		} else {
-			return getResultList("registration.findByRace", Registration.class,
-					new Param("race", race));
+	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
+		return getRegistrations(null, race, status);
+	}
+	
+	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status) {
+		if (status != null && company != null) {
+			return getResultList("registration.findByCompanyAndRaceAndStatus", Registration.class, new Param("company", company), new Param("race", race), new Param("status", status));
+		}
+		else if (status != null) {
+			return getResultList("registration.findByRaceAndStatus", Registration.class, new Param("race", race), new Param("status", status));
+		}
+		else {
+			return getResultList("registration.findByRace", Registration.class, new Param("race", race));
 		}
 	}
 
 	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status) {
-		return getResultList("registration.findByEventAndYearAndStatus", Registration.class, new Param("event", event), new Param("year", year), new Param("status", status));
+		return getRegistrations(null, event, year, status);
+	}
+	
+	public List<Registration> getRegistrations(Company company, Event event, Integer year, RegistrationStatus status) {
+		if (company != null) {
+			return getResultList("registration.findByCompanyAndEventAndYearAndStatus", Registration.class, new Param("company", company), new Param("event", event), new Param("year", year), new Param("status", status));
+		}
+		else {
+			return getResultList("registration.findByEventAndYearAndStatus", Registration.class, new Param("event", event), new Param("year", year), new Param("status", status));
+		}
 	}
 
 	public List<Registration> getRegistrations(RegistrationHeader header) {
-		return getResultList("registration.findByHeader", Registration.class,
-				new Param("header", header));
+		return getResultList("registration.findByHeader", Registration.class, new Param("header", header));
 	}
 	
 	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses) {
@@ -693,6 +705,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	
 	public List<Company> getCompanies() {
 		return getResultList("company.findAll", Company.class);
+	}
+	
+	public List<Company> getCompanies(Event event) {
+		return getResultList("company.findByEvent", Company.class, new Param("event", event));
 	}
 	
 	public Company getCompanyByUserUUID(String userUUID) {

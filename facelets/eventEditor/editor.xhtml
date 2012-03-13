@@ -32,11 +32,14 @@
 			</div>
 			<div class="formItem">
 				<label for="prm_charity_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['charities']}" /></label>
-				<c:selectOne styleClass="multiple" name="prm_charity_pk" multiple="#{true}">
+				<ul class="checkboxItem">
 					<ui:repeat value="#{pheidippidesBean.charities}" var="charity">
-						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{not empty pheidippidesBean.event.charities ? p:contains(pheidippidesBean.event.charities, charity) : false}" />
+						<li>
+							<c:checkBox name="prm_charity_pk" content="#{charity.id}" checked="#{not empty pheidippidesBean.event.charities ? p:contains(pheidippidesBean.event.charities, charity) : false}" />
+							<label for="prm_charity_pk"><h:outputText value="#{charity.name}" /></label>
+						</li>
 					</ui:repeat>
-				</c:selectOne>
+				</ul>
 			</div>
 		</fieldset>
 		

@@ -43,8 +43,25 @@
 				<label for="prm_gender"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
 				<c:selectOne name="prm_gender">
 					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}"  />
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"  />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" />
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_status"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['status ']}" /></label>
+				<c:selectOne name="prm_status">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['status.active']}" content="OK" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['status.moved']}" content="Moved" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['status.deleted']}" content="Cancelled" />
+				</c:selectOne>
+			</div>
+			<div class="formItem">
+				<label for="prm_company"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company ']}" /></label>
+				<c:selectOne name="prm_company">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['none']}" content="" />
+					<ui:repeat value="#{pheidippidesCompanyBean.companies}" var="company">
+						<c:selectOption name="#{company.name}" content="#{company.id}" />
+					</ui:repeat>
 				</c:selectOne>
 			</div>
 			<div class="formItem">

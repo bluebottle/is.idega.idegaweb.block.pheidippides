@@ -106,7 +106,9 @@ public interface PheidippidesDao {
 	public Registration getRegistration(Long registrationID);
 
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
+	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status);
 	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status);
+	public List<Registration> getRegistrations(Company company, Event event, Integer year, RegistrationStatus status);
 	
 	public List<Registration> getRegistrations(RegistrationHeader header);
 	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses);
@@ -150,6 +152,7 @@ public interface PheidippidesDao {
 	
 	public Company storeCompanyUser(Long companyID, String userUUID);
 	
+	public List<Company> getCompanies(Event event);
 	public List<Company> getCompanies();
 	
 	public Company getCompanyByUserUUID(String userUUID);

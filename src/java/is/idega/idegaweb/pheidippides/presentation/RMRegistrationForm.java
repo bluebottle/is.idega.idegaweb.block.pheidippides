@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
+import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
@@ -92,8 +93,22 @@ public class RMRegistrationForm extends IWBaseComponent {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
 		
+		if (iwc.isParameterSet(LocaleSwitcher.languageParameterString)) {
+			getSession().empty();
+		}
+
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
+			List<ParticipantHolder> holders = getSession().getParticipantHolders();
+			if (holders != null && !holders.isEmpty()) {
+				for (ParticipantHolder participantHolder : holders) {
+					if (!participantHolder.getRace().getEvent().equals(event)) {
+						getSession().empty();
+						break;
+					}
+				}
+			}
+			
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));

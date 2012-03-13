@@ -864,7 +864,7 @@ public class PheidippidesService {
 		return user;
 	}
 	
-	public void updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile, ICFile image) {
+	public User updateUser(String uuid, String fullName, java.sql.Date dateOfBirth, String address, String postalCode, String city, Integer countryPK, String gender, String email, String phone, String mobile, ICFile image) {
 		try {
 			Gender userGender = null;
 			if (gender != null && gender.equals(getGenderHome().getMaleGender().getName())) {
@@ -898,6 +898,8 @@ public class PheidippidesService {
 			getUserBusiness().updateUserMail(user, email);
 			getUserBusiness().updateUserHomePhone(user, phone);
 			getUserBusiness().updateUserMobilePhone(user, mobile);
+			
+			return user;
 		}
 		catch (RemoteException re) {
 			re.printStackTrace();
@@ -908,6 +910,8 @@ public class PheidippidesService {
 		catch (CreateException ce) {
 			ce.printStackTrace();
 		}
+		
+		return null;
 	}
 	
 	public void updateRegistrationStatus() {

@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
@@ -49,6 +50,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_GENDER = "prm_gender";
+	private static final String PARAMETER_STATUS = "prm_status";
+	private static final String PARAMETER_COMPANY = "prm_company";
 	private static final String PARAMETER_YEAR_FROM = "prm_year_from";
 	private static final String PARAMETER_YEAR_TO = "prm_year_to";
 
@@ -62,6 +65,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 	@Autowired
 	private PheidippidesDao dao;
 	
+	@Override
 	public void init(HttpServletRequest req, IWContext iwc) {
 		this.locale = iwc.getCurrentLocale();
 		this.iwrb = iwc.getIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(this.locale);
@@ -69,13 +73,15 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
 		Integer year = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
 		Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
+		RegistrationStatus status = RegistrationStatus.valueOf(iwc.getParameter(PARAMETER_STATUS));
+		Company company = iwc.isParameterSet(PARAMETER_COMPANY) ? getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY))) : null;
 
 		List<Registration> registrations = null;
 		if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-			registrations = getDao().getRegistrations(race, RegistrationStatus.OK);
+			registrations = getDao().getRegistrations(race, status);
 		}
 		else {
-			registrations = getDao().getRegistrations(event, year, RegistrationStatus.OK);
+			registrations = getDao().getRegistrations(event, year, status);
 		}
 		Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
 
@@ -88,6 +94,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		}
 	}
 
+	@Override
 	public String getMimeType() {
 		if (this.buffer != null) {
 			return this.buffer.getMimeType();
@@ -95,6 +102,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		return super.getMimeType();
 	}
 
+	@Override
 	public void writeTo(OutputStream out) throws IOException {
 		if (this.buffer != null) {
 			MemoryInputStream mis = new MemoryInputStream(this.buffer);
@@ -198,11 +206,13 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
 			
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
-			if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
-				continue;
-			}
-			if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
-				continue;
+			if (dateOfBirth != null) {
+				if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
+					continue;
+				}
+				if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
+					continue;
+				}
 			}
 			if (gender != null && !participant.getGender().equals(gender)) {
 				continue;

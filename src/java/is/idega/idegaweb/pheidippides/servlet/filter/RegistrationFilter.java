@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.presentation.IWContext;
 import com.idega.servlet.filter.BaseFilter;
 
@@ -32,7 +33,7 @@ public class RegistrationFilter extends BaseFilter {
 		String lang = uri.length() > event.length() + 1 ? uri.substring(uri.indexOf("/") + 1) : "is";
 		
 		String url = iwc.getApplicationSettings().getProperty("registration.url." + event);
-		url += "?iw_language=" + (lang.equals("is") ? "is_IS" : "en");
+		url += "?" + LocaleSwitcher.languageParameterString + "=" + (lang.equals("is") ? "is_IS" : "en");
 				
 		response.sendRedirect(url);
 	}

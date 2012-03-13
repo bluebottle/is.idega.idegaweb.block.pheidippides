@@ -21,6 +21,7 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @Table(name = Company.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "company.findAll", query = "select c from Company c"),
+	@NamedQuery(name = "company.findByEvent", query = "select c from Company c where c.event = :event"),
 	@NamedQuery(name = "company.findByName", query = "select c from Company c where c.name = :name"),
 	@NamedQuery(name = "company.findByUserUUID", query = "select c from Company c where c.userUUID = :uuid")
 })
