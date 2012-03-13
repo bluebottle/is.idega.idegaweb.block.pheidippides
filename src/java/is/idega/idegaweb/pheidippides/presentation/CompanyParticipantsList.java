@@ -103,7 +103,7 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 		}
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
 
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/companyParticipantsList.js"));
 	
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
@@ -146,17 +146,17 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("companyParticipantsList/view.xhtml"));
 				showView(iwc, bean);
 				break;
 
 			case ACTION_EDIT:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("companyParticipantsList/edit.xhtml"));
 				showEdit(iwc, bean);
 				break;
 				
 			case ACTION_DELETE:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
+				facelet.setFaceletURI(iwb.getFaceletURI("companyParticipantsList/view.xhtml"));
 				handleDelete(iwc, bean);
 				break;
 		}
