@@ -2,6 +2,7 @@ package is.idega.idegaweb.pheidippides.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 @Scope("session")
 @Service("pheidippidesRegistrationSession")
 public class PheidippidesRegistrationSession {
+	
 	private Boolean registrationWithPersonalId = false;
 	private String registrantUUID = null;
 	private List<ParticipantHolder> holders = null;
 	private ParticipantHolder currentParticipant;
+	private Locale locale;
 
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
@@ -54,5 +57,13 @@ public class PheidippidesRegistrationSession {
 
 	public void setCurrentParticipant(ParticipantHolder currentParticipant) {
 		this.currentParticipant = currentParticipant;
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 }

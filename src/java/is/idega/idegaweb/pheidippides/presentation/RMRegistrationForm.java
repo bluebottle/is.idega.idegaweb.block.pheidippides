@@ -93,8 +93,12 @@ public class RMRegistrationForm extends IWBaseComponent {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
 		
-		if (iwc.isParameterSet(LocaleSwitcher.languageParameterString)) {
+		if (getSession().getLocale() == null) {
+			getSession().setLocale(iwc.getCurrentLocale());
+		}
+		if (iwc.isParameterSet(LocaleSwitcher.languageParameterString) && !iwc.getCurrentLocale().equals(getSession().getLocale())) {
 			getSession().empty();
+			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
