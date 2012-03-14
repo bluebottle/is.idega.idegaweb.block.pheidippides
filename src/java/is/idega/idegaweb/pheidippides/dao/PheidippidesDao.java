@@ -10,7 +10,6 @@ import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -35,10 +34,6 @@ public interface PheidippidesDao {
 
 	public boolean removeEvent(Long eventID);
 
-	public List<Participant> getParticipants(Event event, int year);
-
-	public Participant getParticipant(String uuid);
-	
 	public long getNumberOfParticipants(Race race, RegistrationStatus status);
 
 	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status);

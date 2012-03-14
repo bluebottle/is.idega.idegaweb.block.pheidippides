@@ -631,3 +631,31 @@ div.userInformation h2 {
 	font-weight: normal;
 	line-height: 1.25em;
 }
+
+table.smallTable {
+	border-spacing: 0;
+}
+
+table.smallTable thead tr th {
+	padding: 5px 8px;
+	border-bottom: 1px #ccc solid;
+}
+
+table.smallTable tbody tr td {
+	padding: 5px 8px;
+	border-bottom: 1px #ddd solid;
+}
+
+table.smallTable tbody tr:nth-child(odd) td {
+	background-color: #eee;
+}
+
+table.smallTable tbody tr:hover td {
+	background-color: #ddd;
+}
+
+table.smallTable tr.Cancelled td, table.smallTable tr.Deregistered td {
+	text-decoration: line-through;
+	color: #777;
+	font-style: italic;
+}

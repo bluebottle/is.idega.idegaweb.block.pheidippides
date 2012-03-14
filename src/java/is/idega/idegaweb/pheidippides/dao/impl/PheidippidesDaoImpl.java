@@ -11,7 +11,6 @@ import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -188,14 +187,6 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	/* Participant methods */
-	public List<Participant> getParticipants(Event event, int year) {
-		return null;
-	}
-
-	public Participant getParticipant(String uuid) {
-		return null;
-	}
-	
 	public long getNumberOfParticipants(Race race, RegistrationStatus status) {
 		return getSingleResult("registration.countByRaceAndStatus", Long.class, new Param("race", race), new Param("status", status)).longValue();
 	}
@@ -443,9 +434,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 	
 	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses) {
-		return getResultList("registration.findByParticipantAndStatuses", Registration.class, new Param("uuid", uuid), new Param("statuses", statuses));
+		if (statuses != null) {
+			return getResultList("registration.findByParticipantAndStatuses", Registration.class, new Param("uuid", uuid), new Param("statuses", statuses));
+		}
+		else {
+			return getResultList("registration.findByParticipant", Registration.class, new Param("uuid", uuid));
+		}
 	}
-
+	
 	@Transactional(readOnly = false)
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,

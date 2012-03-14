@@ -55,7 +55,9 @@ public class PheidippidesBean {
 	public Registration registration;
 	public Participant participant;
 	public List<Registration> registrations;
+	public List<Participant> participants;
 	public Map<Registration, Participant> participantsMap;
+	public Map<Participant, List<Registration>> registrationsMap;
 	
 	public RegistrationHeader registrationHeader;
 	public List<RegistrationHeader> registrationHeaders;
@@ -233,12 +235,29 @@ public class PheidippidesBean {
 		this.registrations = registrations;
 	}
 
+	public List<Participant> getParticipants() {
+		return participants;
+	}
+
+	public void setParticipants(List<Participant> participants) {
+		this.participants = participants;
+	}
+
 	public Map<Registration, Participant> getParticipantsMap() {
 		return participantsMap;
 	}
 
 	public void setParticipantsMap(Map<Registration, Participant> participantsMap) {
 		this.participantsMap = participantsMap;
+	}
+
+	public Map<Participant, List<Registration>> getRegistrationsMap() {
+		return registrationsMap;
+	}
+
+	public void setRegistrationsMap(
+			Map<Participant, List<Registration>> registrationsMap) {
+		this.registrationsMap = registrationsMap;
 	}
 
 	public RegistrationHeader getRegistrationHeader() {

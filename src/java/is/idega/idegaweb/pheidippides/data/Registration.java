@@ -29,7 +29,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "registration.findByCompanyAndRaceAndStatus", query = "select r from Registration r where r.header.company = :company and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.findByEventAndYearAndStatus", query = "select r from Registration r where r.race.event = :event and r.race.year = :year and r.status = :status"),
 	@NamedQuery(name = "registration.findByCompanyAndEventAndYearAndStatus", query = "select r from Registration r where r.header.company = :company and r.race.event = :event and r.race.year = :year and r.status = :status"),
-	@NamedQuery(name = "registration.findByParticipantAndStatuses", query = "select r from Registration r where r.userUUID = :uuid and r.status in (:statuses)"),
+	@NamedQuery(name = "registration.findByParticipantAndStatuses", query = "select r from Registration r where r.userUUID = :uuid and r.status in (:statuses) order by r.createdDate"),
+	@NamedQuery(name = "registration.findByParticipant", query = "select r from Registration r where r.userUUID = :uuid order by r.createdDate"),
 	@NamedQuery(name = "registration.countByRaceAndStatus", query = "select count(r) from Registration r where r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByParticipantAndRaceAndStatus", query = "select count(r) from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.findByHeader", query = "select r from Registration r where r.header = :header")

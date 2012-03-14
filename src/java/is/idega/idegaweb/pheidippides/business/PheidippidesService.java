@@ -362,7 +362,11 @@ public class PheidippidesService {
 					p.setPostalCode(address.getPostalCode().getPostalCode());
 				}
 				p.setCity(address.getCity());
-				p.setCountry(address.getCountry().getPrimaryKey().toString());
+				
+				Country country = address.getCountry();
+				if (country != null) {
+					p.setCountry(country.getPrimaryKey().toString());
+				}
 			}
 		} catch (EJBException e) {
 		} catch (RemoteException e) {
@@ -1664,7 +1668,7 @@ public class PheidippidesService {
 			try {
 				User user = getUserBusiness()
 						.getUser(parameter.getPersonalId());
-				ret.add(dao.getParticipant(user.getUniqueId()));
+				ret.add(getParticipant(user));
 
 				return ret;
 			} catch (RemoteException e) {
@@ -1673,7 +1677,7 @@ public class PheidippidesService {
 		}
 
 		if (parameter.getDateOfBirth() != null) {
-			Name name = null;
+			Name name = new Name();
 			if (parameter.getFirstName() != null
 					|| parameter.getMiddleName() != null
 					|| parameter.getLastName() != null) {
@@ -1692,7 +1696,7 @@ public class PheidippidesService {
 								new IWTimestamp(parameter.getDateOfBirth())
 										.getDate(),
 								name.getName());
-				ret.add(dao.getParticipant(user.getUniqueId()));
+				ret.add(getParticipant(user));
 
 				return ret;
 			} catch (RemoteException e) {
@@ -1711,7 +1715,7 @@ public class PheidippidesService {
 				if (col != null && !col.isEmpty()) {
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(dao.getParticipant(it.next().getUniqueId()));
+						ret.add(getParticipant(it.next()));
 					}
 
 					return ret;
@@ -1730,7 +1734,7 @@ public class PheidippidesService {
 				if (col != null && !col.isEmpty()) {
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(dao.getParticipant(it.next().getUniqueId()));
+						ret.add(getParticipant(it.next()));
 					}
 
 					return ret;

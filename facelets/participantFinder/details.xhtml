@@ -1,0 +1,52 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="participantDetails" action="" method="post">
+
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{pheidippdesBean.participant.fullName}" /></legend>
+		
+			<table class="smallTable">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['status']}" /></th>
+						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created_date']}" /></th>
+					</tr>
+				</thead>
+				
+				<tbody>				
+					<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
+						<ui:param value="#{registration.race.distance}" name="distance" />
+						<ui:param value="#{registration.race.event}" name="event" />
+						<ui:param value="#{registration.race}" name="race" />
+						<ui:param value="#{registration.shirtSize}" name="shirtSize" />
+						
+						<tr class="#{registration.status}">
+							<td class="firstColumn"><h:outputText value="#{event.name}" /></td>
+							<td><h:outputText value="#{race.year}" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', p:concat(distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', shirtSize.localizedKey))]}" /></td>
+							<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat('status.', registration.status)]}" /></td>
+							<td class="lastColumn"><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="d.M.yyyy HH:mm:ss"/></h:outputText></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>
