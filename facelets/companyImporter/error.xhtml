@@ -10,70 +10,8 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="7" />
 	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
-
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.overview_help')]}" /></div>
-
-		<fieldset class="formSection">
-			<table width="100%" cellspacing="0" cellpadding="0">
-				<thead>
-					<tr>
-						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
-						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
-					</tr>
-				</thead>
-			
-				<tbody>
-					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
-
-					<ui:repeat value="#{pheidippidesRegistrationSession.participantHolders}" var="holder">
-						<ui:fragment rendered="#{current ne holder}">
-							<tr>
-								<td class="firstColumn"><h:outputText value="#{holder.participant.fullName}" /></td>
-								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
-								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
-							</tr>
-							<ui:fragment rendered="#{not empty holder.relayPartners}">
-								<ui:repeat value="#{holder.relayPartners}" var="partner">
-									<tr class="relayPartner">
-										<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
-										<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
-									</tr>
-								</ui:repeat>
-							</ui:fragment>
-						</ui:fragment>
-					</ui:repeat>
-					
-					<tr>
-						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td>
-						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
-					</tr>
-					<ui:fragment rendered="#{not empty current.relayPartners}">
-						<ui:repeat value="#{current.relayPartners}" var="partner">
-							<tr class="relayPartner">
-								<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
-								<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
-							</tr>
-						</ui:repeat>
-					</ui:fragment>
-				</tbody>
-			</table>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
-			<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
-				<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
-			</ui:fragment>
-		</fieldset>
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_import_error']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['error']}" /></h2>		
 	</form>
 </ui:component>
 </html>

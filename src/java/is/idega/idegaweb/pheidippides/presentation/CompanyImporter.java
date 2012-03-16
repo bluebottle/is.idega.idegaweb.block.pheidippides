@@ -1,5 +1,7 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
+import java.io.IOException;
+
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
@@ -7,6 +9,7 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
@@ -73,9 +76,9 @@ public class CompanyImporter extends IWBaseComponent {
 				.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow()
 				.getYear())));
 
-		switch (parseAction(iwc)) {
+		switch (parseAction(iwc, bean)) {
 		case ACTION_SELECT_FILE:
-			showPersonSelect(iwc, bean);
+			showImportForm(iwc, bean);
 			break;
 
 		case ACTION_ERROR:
@@ -93,7 +96,7 @@ public class CompanyImporter extends IWBaseComponent {
 		}
 	}
 
-	private void showPersonSelect(IWContext iwc, PheidippidesCompanyBean bean) {		
+	private void showImportForm(IWContext iwc, PheidippidesCompanyBean bean) {		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/import.xhtml"));
 		add(facelet);
@@ -145,10 +148,15 @@ public class CompanyImporter extends IWBaseComponent {
 		return jQuery;
 	}
 
-	private int parseAction(IWContext iwc) {
+	private int parseAction(IWContext iwc, PheidippidesCompanyBean bean) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer
 				.parseInt(iwc.getParameter(PARAMETER_ACTION))
 				: ACTION_SELECT_FILE;
+				
+		if (action == ACTION_ERROR) {
+			
+		}
+				
 		return action;
 	}
 }

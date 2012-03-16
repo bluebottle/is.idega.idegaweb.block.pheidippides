@@ -7,11 +7,14 @@ import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -47,8 +50,21 @@ public class PheidippidesCompanyBean {
 	private Registration registration;
 	private List<Registration> registrations;
 	private Map<Registration, Participant> participantsMap;
+	
+	private UploadedFile uploadedFile;
 
+	public void submit() throws IOException {
+        String fileName = FilenameUtils.getName(uploadedFile.getName());
+        String contentType = uploadedFile.getContentType();
+        byte[] bytes = uploadedFile.getBytes();
 
+        
+        System.out.println("File uploaded");
+        System.out.println("filename = " + fileName);
+        System.out.println("contentType = " + contentType);
+
+        // Now you can save bytes in DB (and also content type?)
+    }
 	public String getEventHandler() {
 		return eventHandler;
 	}
@@ -183,5 +199,13 @@ public class PheidippidesCompanyBean {
 
 	public void setRaceShirtSizes(List<RaceShirtSize> raceShirtSizes) {
 		this.raceShirtSizes = raceShirtSizes;
+	}
+
+	public UploadedFile getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(UploadedFile uploadedFile) {
+		this.uploadedFile = uploadedFile;
 	}
 }
