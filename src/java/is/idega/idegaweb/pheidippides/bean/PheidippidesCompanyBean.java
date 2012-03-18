@@ -7,14 +7,11 @@ import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.Registration;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -51,20 +48,13 @@ public class PheidippidesCompanyBean {
 	private List<Registration> registrations;
 	private Map<Registration, Participant> participantsMap;
 	
-	private UploadedFile uploadedFile;
+	private List<Participant> missingRequiredFields;
+	private List<Participant> invalidPersonalID;
+	private List<Participant> alreadyRegistered;
+	private boolean unableToImportFile;
 
-	public void submit() throws IOException {
-        String fileName = FilenameUtils.getName(uploadedFile.getName());
-        String contentType = uploadedFile.getContentType();
-        byte[] bytes = uploadedFile.getBytes();
+	private List<Participant> toImport;
 
-        
-        System.out.println("File uploaded");
-        System.out.println("filename = " + fileName);
-        System.out.println("contentType = " + contentType);
-
-        // Now you can save bytes in DB (and also content type?)
-    }
 	public String getEventHandler() {
 		return eventHandler;
 	}
@@ -201,11 +191,43 @@ public class PheidippidesCompanyBean {
 		this.raceShirtSizes = raceShirtSizes;
 	}
 
-	public UploadedFile getUploadedFile() {
-		return uploadedFile;
+	public List<Participant> getMissingRequiredFields() {
+		return missingRequiredFields;
 	}
 
-	public void setUploadedFile(UploadedFile uploadedFile) {
-		this.uploadedFile = uploadedFile;
+	public void setMissingRequiredFields(List<Participant> missingRequiredFields) {
+		this.missingRequiredFields = missingRequiredFields;
+	}
+
+	public List<Participant> getInvalidPersonalID() {
+		return invalidPersonalID;
+	}
+
+	public void setInvalidPersonalID(List<Participant> invalidPersonalID) {
+		this.invalidPersonalID = invalidPersonalID;
+	}
+
+	public List<Participant> getAlreadyRegistered() {
+		return alreadyRegistered;
+	}
+
+	public void setAlreadyRegistered(List<Participant> alreadyRegistered) {
+		this.alreadyRegistered = alreadyRegistered;
+	}
+
+	public List<Participant> getToImport() {
+		return toImport;
+	}
+
+	public void setToImport(List<Participant> toImport) {
+		this.toImport = toImport;
+	}
+
+	public boolean isUnableToImportFile() {
+		return unableToImportFile;
+	}
+
+	public void setUnableToImportFile(boolean unableToImportFile) {
+		this.unableToImportFile = unableToImportFile;
 	}
 }

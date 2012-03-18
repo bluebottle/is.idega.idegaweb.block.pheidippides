@@ -1,15 +1,21 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import java.io.IOException;
-
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
+import is.idega.idegaweb.pheidippides.business.CompanyImportStatus;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
@@ -17,9 +23,11 @@ import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
+import com.idega.io.UploadFile;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.util.CoreConstants;
+import com.idega.util.FileUtil;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
@@ -27,20 +35,21 @@ import com.idega.util.expression.ELUtil;
 public class CompanyImporter extends IWBaseComponent {
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_SELECT_FILE = 1;
-	private static final int ACTION_ERROR = 2;
-	private static final int ACTION_RACE_SELECT = 3;
-	private static final int ACTION_DONE = 4;
+	private static final int ACTION_RACE_SELECT = 2;
+	private static final int ACTION_DONE = 3;
+	private static final int ACTION_ERROR = 4;
 
 	@Autowired
 	private PheidippidesService service;
 
 	@Autowired
-	private PheidippidesDao dao;
-
-	@Autowired
 	private JQuery jQuery;
 
 	private IWBundle iwb;
+	
+	@Autowired
+	private PheidippidesDao dao;
+
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
@@ -76,47 +85,125 @@ public class CompanyImporter extends IWBaseComponent {
 				.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow()
 				.getYear())));
 
-		switch (parseAction(iwc, bean)) {
+		
+		Company company = getDao().getCompanyByUserUUID(iwc.getCurrentUser().getUniqueId()); 
+		Event event = company.getEvent();
+		bean.setEvent(event);
+		bean.setCompany(company);
+		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), false));
+		bean.setRaceShirtSizes(null);
+		bean.setLocale(iwc.getCurrentLocale());
+
+		switch (parseAction(iwc)) {
 		case ACTION_SELECT_FILE:
-			showImportForm(iwc, bean);
+			showImportForm(iwc);
 			break;
 
 		case ACTION_ERROR:
-			showError(iwc, bean);
+			showError(iwc);
 			break;
 
 		case ACTION_RACE_SELECT:
-			showRaceSelect(iwc, bean);
+			showRaceSelect(iwc);
 			break;
 
 		case ACTION_DONE:
-			showDone(iwc, bean);
+			showDone(iwc);
 			break;
 
 		}
 	}
 
-	private void showImportForm(IWContext iwc, PheidippidesCompanyBean bean) {		
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+	private void showImportForm(IWContext iwc) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/import.xhtml"));
 		add(facelet);
 	}
 
-	private void showError(IWContext iwc, PheidippidesCompanyBean bean) {		
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/error.xhtml"));
+	private void showRaceSelect(IWContext iwc) {
+		UploadFile uploadFile = iwc.getUploadedFile();
+		if (uploadFile != null && uploadFile.getName() != null
+				&& uploadFile.getName().length() > 0) {
+			try {
+				FileInputStream input = new FileInputStream(
+						uploadFile.getRealPath());
+				Map<CompanyImportStatus, List<Participant>> toImport = getService()
+						.importCompanyExcelFile(input);
+
+				PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
+				boolean hasError = false;
+				List<Participant> errors = null;
+				if (toImport != null && !toImport.isEmpty()) {
+					errors = toImport.get(CompanyImportStatus.MISSING_REQUIRED_FIELD);
+					if (errors != null && !errors.isEmpty()) {
+						bean.setMissingRequiredFields(errors);
+						hasError = true;
+					}
+
+					errors = toImport
+							.get(CompanyImportStatus.ERROR_IN_PERSONAL_ID);
+					if (errors != null && !errors.isEmpty()) {
+						bean.setInvalidPersonalID(errors);
+						hasError = true;
+					}
+
+					errors = toImport
+							.get(CompanyImportStatus.ERROR_ALREADY_REGISTERED);
+					if (errors != null && !errors.isEmpty()) {
+						bean.setAlreadyRegistered(errors);
+						hasError = true;
+					}
+					
+					errors = toImport.get(CompanyImportStatus.OK);
+					if (errors != null && !errors.isEmpty()) {
+						bean.setToImport(errors);
+					} else {
+						bean.setUnableToImportFile(true);
+						hasError = true;						
+					}
+				} else {
+					bean.setUnableToImportFile(true);
+					hasError = true;
+				}
+
+				try {
+					FileUtil.delete(uploadFile);
+				} catch (Exception ex) {
+					System.err
+							.println("MediaBusiness: deleting the temporary file at "
+									+ uploadFile.getRealPath() + " failed.");
+				}
+
+				if (hasError) {
+					showError(iwc);
+					return;
+				}
+
+				// bean.set
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				uploadFile.setId(-1);
+			}
+		}
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb
+				.getFaceletURI("companyImporter/raceSelect.xhtml"));
 		add(facelet);
 	}
 
-	private void showRaceSelect(IWContext iwc, PheidippidesCompanyBean bean) {		
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/raceSelect.xhtml"));
-		add(facelet);
-	}
-
-	private void showDone(IWContext iwc, PheidippidesCompanyBean bean) {		
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+	private void showDone(IWContext iwc) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/done.xhtml"));
+		add(facelet);
+	}
+
+	private void showError(IWContext iwc) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/error.xhtml"));
 		add(facelet);
 	}
 
@@ -128,8 +215,16 @@ public class CompanyImporter extends IWBaseComponent {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
+	}
+
+	private JQuery getJQuery() {
+		if (jQuery == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+
+		return jQuery;
 	}
 
 	private PheidippidesDao getDao() {
@@ -140,23 +235,11 @@ public class CompanyImporter extends IWBaseComponent {
 		return dao;
 	}
 
-	private JQuery getJQuery() {
-		if (jQuery == null) {
-			ELUtil.getInstance().autowire(this);
-		}
-		
-		return jQuery;
-	}
-
-	private int parseAction(IWContext iwc, PheidippidesCompanyBean bean) {
+	private int parseAction(IWContext iwc) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer
 				.parseInt(iwc.getParameter(PARAMETER_ACTION))
 				: ACTION_SELECT_FILE;
-				
-		if (action == ACTION_ERROR) {
-			
-		}
-				
+
 		return action;
 	}
 }

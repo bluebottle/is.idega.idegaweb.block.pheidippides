@@ -57,6 +57,7 @@ import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.file.business.ICFileSystemFactory;
 import com.idega.core.file.data.ICFile;
+import com.idega.core.idgenerator.business.UUIDGenerator;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.AddressHome;
 import com.idega.core.location.data.Country;
@@ -69,7 +70,6 @@ import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.idegaweb.IWMainApplicationSettings;
 import com.idega.idegaweb.IWResourceBundle;
-import com.idega.io.UploadFile;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.Gender;
 import com.idega.user.data.GenderHome;
@@ -122,6 +122,10 @@ public class PheidippidesService {
 	}
 
 	public List<Race> getOpenRaces(Long eventPK, int year) {
+		return getOpenRaces(eventPK, year, true);
+	}
+
+	public List<Race> getOpenRaces(Long eventPK, int year, boolean showRelayRaces) {
 		List<Race> races = getRaces(eventPK, year);
 		List<Race> openRaces = new ArrayList<Race>();
 
@@ -130,13 +134,20 @@ public class PheidippidesService {
 			if (stamp.isBetween(
 					new IWTimestamp(race.getOpenRegistrationDate()),
 					new IWTimestamp(race.getCloseRegistrationDate()))) {
-				openRaces.add(race);
+				if (showRelayRaces) {
+					openRaces.add(race);
+				} else {
+					if (race.getNumberOfRelayLegs() < 2) {
+						openRaces.add(race);						
+					}
+				}
 			}
 		}
 
 		return openRaces;
 	}
 
+	
 	public List<Race> getAvailableRaces(Long eventPK, int year,
 			Participant participant) {
 		List<Race> races = getOpenRaces(eventPK, year);
@@ -422,11 +433,10 @@ public class PheidippidesService {
 	}
 
 	public Map<CompanyImportStatus, List<Participant>> importCompanyExcelFile(
-			UploadFile file) {
+			FileInputStream input) {
 		Map<CompanyImportStatus, List<Participant>> map = new HashMap<CompanyImportStatus, List<Participant>>();
 
 		try {
-			FileInputStream input = new FileInputStream(file.getRealPath());
 			HSSFWorkbook wb = new HSSFWorkbook(input);
 			HSSFSheet sheet = wb.getSheetAt(0);
 
@@ -549,6 +559,7 @@ public class PheidippidesService {
 							participant.setPhoneHome(phone);
 							participant.setPhoneMobile(mobile);
 							participant.setNationality(nationality);
+							participant.setDummyUUID(UUIDGenerator.getInstance().generateUUID());
 						}
 					} else {
 						if (email == null || "".equals(email.trim())) {
@@ -560,6 +571,7 @@ public class PheidippidesService {
 							participant.setFullName(user.getName());
 							participant.setPhoneHome(phone);
 							participant.setPhoneMobile(mobile);
+							participant.setDummyUUID(UUIDGenerator.getInstance().generateUUID());
 						}
 					}
 				}
@@ -590,6 +602,8 @@ public class PheidippidesService {
 			}
 
 			map.put(CompanyImportStatus.OK, ok);
+			
+			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

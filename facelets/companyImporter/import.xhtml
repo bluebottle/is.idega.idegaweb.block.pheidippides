@@ -8,16 +8,19 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<h:form class="companyImportForm" action="" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="prm_language" value="#{pheidippidesCompanyBean.locale}" />
-		<input type="hidden" name="prm_action" value="2" />
-		
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_import']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_import_info']}" /></h2>
-		
-		<t:inputFileUpload value="#{pheidippidesCompanyBean.uploadedFile}" />
+	<form class="companyImportForm" action="" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="prm_action" value="1" />
 
-		<h:commandButton value="submit" action="#{pheidippidesCompanyBean.submit}" />		
-	</h:form>
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_import']}" /></h1>
+				
+		<div class="formItem">
+			<label for="fileupload"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['excel']}" /></label>
+			<input type="file" name="fileupload" />
+		</div>
+				
+		<div class="submit">
+			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</div>
+	</form>
 </ui:component>
 </html>

@@ -31,6 +31,8 @@ public class Participant implements Serializable {
 	private String relayLeg;
 	private ShirtSize shirtSize;
 
+	private String dummyUUID;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -242,5 +244,13 @@ public class Participant implements Serializable {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public String getDummyUUID() {
+		return dummyUUID;
+	}
+
+	public void setDummyUUID(String dummyUUID) {
+		this.dummyUUID = dummyUUID;
 	}
 }
