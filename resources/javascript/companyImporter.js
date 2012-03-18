@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 		var link = jQuery(this);
 		jQuery('input[name="prm_action"]').val(link.attr('rel'));
 		
-		var form = jQuery('form.companyImportForm');
+		var form = jQuery('form.adminForm');
 		if (form.valid()) {
 			form.submit();
 		}

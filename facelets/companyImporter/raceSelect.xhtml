@@ -39,7 +39,7 @@
 									<c:selectOne styleClass="required" name="prm_race_pk">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
 										<ui:repeat value="#{pheidippidesCompanyBean.races}" var="race">
-											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" />
+											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', race.distance.localizedKey))])}" content="#{race.id}" />
 										</ui:repeat>
 									</c:selectOne>
 								</td>
@@ -47,7 +47,7 @@
 									<c:selectOne styleClass="required" name="prm_shirt_size">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
 										<ui:repeat value="#{pheidippidesCompanyBean.raceShirtSizes}" var="raceShirt">
-											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" />
+											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" />
 										</ui:repeat>
 									</c:selectOne>
 								</td>
