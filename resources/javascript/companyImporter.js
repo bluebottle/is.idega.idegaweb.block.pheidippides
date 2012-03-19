@@ -1,5 +1,4 @@
 jQuery.noConflict();
-var availableRaces = false;
 
 jQuery(document).ready(function() {
 	jQuery('a.next').click(function(event) {
@@ -15,21 +14,24 @@ jQuery(document).ready(function() {
 	});
 	
 	jQuery('select[name="prm_race_pk"]').change(function() {
-		var racePK = jQuery(this).val();
+		var select = jQuery(this);
+		var tr = select.parent().parent();
+		var racePK = select.val();
 		var language = jQuery('input[name="prm_language"]').val();
-		var shirt = jQuery('select[name="prm_shirt_size"]');
+		var shirt = jQuery('select[name="prm_shirt_size"]', tr);
 		var value = shirt.val();
 		
 		PheidippidesService.getLocalizedShirts(racePK, language, {
 			callback: function(shirts) {
-				dwr.util.removeAllOptions(shirt.attr('id'));
+				shirt.empty();
 				
 				for (var i = 0; i < shirts.length; i++) {
-					shirt.append('<option value="' + shirts[i].id + '">' + shirts[i].value + '</option>')
-				}
-				
-				if (value != null) {
-					dwr.util.setValue(shirt.attr('id'), value);
+					if (value != null && value == shirts[i].value) {
+						shirt.append('<option value="' + shirts[i].id + '" selected="selected">' + shirts[i].value + '</option>')
+					}
+					else {
+						shirt.append('<option value="' + shirts[i].id + '">' + shirts[i].value + '</option>')
+					}
 				}
 			}
 		});

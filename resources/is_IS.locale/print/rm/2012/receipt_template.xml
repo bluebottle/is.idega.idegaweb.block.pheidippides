@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="70" margin-right="70" margin-top="70" margin-bottom="70">
+	
+	<font-def name="small" family="Helvetica" size="8" style="normal"/>
+	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
+	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
+	<font-def name="heading" family="Helvetica" size="16" style="bold"/>
+	
+	<footer font="small">
+		<footer-part>
+			Reykjavíkurmaraþon - Engjavegi 6 - sími 535 3700 - www.marathon.is
+		</footer-part>
+	</footer>
+	
+	<paragraph font="heading" spacing-after="18.0">
+		Kvittun fyrir skráningu í ${raceName}.
+	</paragraph>
+
+	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
+		<cell>Nafn:</cell>
+		<cell font="bold">${name}</cell>
+		<cell>Kennitala:</cell>
+		<cell font="bold">${personalID}</cell>
+		<cell>Bolastærð:</cell>
+		<cell font="bold">${shirtSize}</cell>
+		<cell>Vegalengd:</cell>
+		<cell font="bold">${distance}</cell>
+		<cell>Verð:</cell>
+		<cell font="bold">${price}</cell>
+	</table>
+	
+	<paragraph font="normal" spacing-after="18.0">
+		Afhending gagna fer fram í Laugardalshöll föstudaginn 17.ágúst kl.10:00-19:00.
+	</paragraph>
+	<paragraph font="normal" spacing-after="18.0">
+		Vinsamlegast framvísið þessari kvittun þegar gögnin eru sótt til að flýta fyrir afgreiðslu. Vinsamlegast kynnið ykkur nánari upplýsingar um hlaupið á heimasíðunni www.marathon.is/reykjavikurmaraton.
+	</paragraph>
+	<paragraph font="normal" spacing-after="18.0">
+		Þau sem vilja hlaupa til góðs geta safnað áheitum á vefnum www.hlaupastyrkur.is.
+	</paragraph>
+	
+	<paragraph font="normal">
+		Kveðja,<br />
+		Reykjavíkurmaraþon<br />
+		www.marathon.is
+	</paragraph>
+
+</document>
