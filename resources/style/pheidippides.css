@@ -40,7 +40,7 @@ form.userForm div.formItem input, form.userForm div.formItem select {
 	padding: 3px 4px;
 }
 
-form.userForm div.success {
+form.userForm div.success, form.userForm div.error {
 	border: 2px #0a0 solid;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -48,6 +48,12 @@ form.userForm div.success {
 	padding: 12px 12px 12px 36px;
 	margin-bottom: 12px;
 	background: url(images/paid.png) 12px center no-repeat #cfc;
+}
+
+form.userForm div.error {
+	border-color: #a00;
+	background-image: url(images/remove.png);
+	background-color: #fcc;
 }
 
 form.adminForm div.submit, form.userForm div.submit {

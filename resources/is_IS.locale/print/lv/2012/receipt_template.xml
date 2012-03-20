@@ -3,27 +3,23 @@
 	PUBLIC "-//UJAC.org//Print Document//EN" 
 	"http://ujac.sourceforge.net/ujac-print-document.dtd">
 
-<document size="A4" margin-left="70" margin-right="70" margin-top="70" margin-bottom="70">
+<document size="A4" margin-left="70" margin-right="70" margin-top="40" margin-bottom="70">
 	
 	<font-def name="small" family="Helvetica" size="8" style="normal"/>
 	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
 	<font-def name="heading" family="Helvetica" size="16" style="bold"/>
 	
-	<header padding-bottom="50">
-		<header-part>
-			<table columns="2" widths="60,40" halign="top">
-				<cell><image source="logo.jpg" width="300" scale-to-fit="true" /></cell>
-				<cell align="right">
-					Reykjavíkurmaraþon<br />
-					kt. 590493-2369<br />
-					Engjavegi 6, 104 Reykjavík<br />
-					Sími 535 3700<br />
-					<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
-				</cell>
-			</table>
-		</header-part>
-    </header>
+	<table columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
+		<cell><image source="logo.jpg" width="300" scale-to-fit="true" /></cell>
+		<cell halign="right">
+			Reykjavíkurmaraþon<br />
+			kt. 590493-2369<br />
+			Engjavegi 6, 104 Reykjavík<br />
+			Sími 535 3700<br />
+			<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
+		</cell>
+	</table>
     
 	<paragraph font="heading" spacing-after="18.0">
 		Kvittun fyrir skráningu í Laugavegshlaupið 14.júlí 2012.

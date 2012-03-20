@@ -264,8 +264,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		
 		User user = getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
 
-		if (iwc.isParameterSet(PARAMETER_PASSWORD)) {
-			String password = iwc.getParameter(PARAMETER_PASSWORD);
+		if (iwc.isParameterSet(PARAMETER_PASSWORD) || iwc.isParameterSet(PARAMETER_LOGIN)) {
+			String password = iwc.isParameterSet(PARAMETER_PASSWORD) ? iwc.getParameter(PARAMETER_PASSWORD) : null;
 			String login = iwc.isParameterSet(PARAMETER_LOGIN) ? iwc.getParameter(PARAMETER_LOGIN) : null;
 
 			LoginTable loginEntry = LoginDBHandler.getUserLogin(user);
@@ -273,10 +273,12 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 				loginEntry.setUserLogin(login);
 				loginEntry.store();
 			}
-			try {
-				LoginDBHandler.changePassword(loginEntry, password);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (password != null) {
+				try {
+					LoginDBHandler.changePassword(loginEntry, password);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

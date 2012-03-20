@@ -64,4 +64,8 @@ public class PheidippidesUtil {
 		String[] args = { String.valueOf(answer.getAmount()), answer.getBankReference().getReferenceNumber() };
 		return MessageFormat.format(string, args);
 	}
+	
+	public static boolean isEnglishLocale(Locale locale) {
+		return locale.equals(Locale.ENGLISH);
+	}
 }
