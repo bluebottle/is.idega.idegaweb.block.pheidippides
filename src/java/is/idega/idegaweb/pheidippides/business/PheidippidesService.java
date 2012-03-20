@@ -579,10 +579,8 @@ public class PheidippidesService {
 							errorAlreadyRegistered = true;
 						}
 
-						participant.setPersonalId(user.getPersonalID());
-						participant.setUuid(user.getUniqueId());
+						participant = getParticipant(user);
 						participant.setEmail(email);
-						participant.setFullName(user.getName());
 						participant.setPhoneHome(phone);
 						participant.setPhoneMobile(mobile);
 					}
@@ -2027,8 +2025,7 @@ public class PheidippidesService {
 					try {
 						if (user == null) {
 							Gender gender = null;
-							if (participant.getGender().equals(
-									getGenderHome().getMaleGender().getName())) {
+							if (participant.getGender().equals("Male")) {
 								gender = getGenderHome().getMaleGender();
 							} else {
 								gender = getGenderHome().getFemaleGender();
@@ -2041,9 +2038,8 @@ public class PheidippidesService {
 									participant.getAddress(),
 									participant.getPostalCode(),
 									participant.getCity(),
-									getCountryHome().findByPrimaryKey(
-											new Integer(participant
-													.getCountry())));
+									getCountryHome().findByCountryName(participant
+													.getCountry()));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -2078,20 +2074,27 @@ public class PheidippidesService {
 							}
 						}
 
+						Country country = null;
+						try {
+							country = getCountryHome().findByCountryName(participant.getNationality());
+						} catch(Exception e) {
+							country = getCountryHome().findByIsoAbbreviation(LocaleUtil.getIcelandicLocale().getCountry());
+						}
+						
 						Registration registration = dao.storeRegistration(null,
 								header, RegistrationStatus.OK,
 								participantHolder.getRace(),
 								participantHolder.getShirtSize(), null,
-								participantHolder.getLeg(),
-								participantHolder.getAmount(),
-								participantHolder.getCharity(),
-								participant.getNationality(),
+								null,
+								0,
+								null,
+								country.getPrimaryKey().toString(),
 								user.getUniqueId(),
-								participantHolder.getDiscount(),
-								participantHolder.isHasDoneMarathonBefore(),
-								participantHolder.isHasDoneLVBefore(),
-								participantHolder.getBestMarathonTime(),
-								participantHolder.getBestUltraMarathonTime());
+								0,
+								false,
+								false,
+								null,
+								null);
 
 						String userNameString = "";
 						String passwordString = "";

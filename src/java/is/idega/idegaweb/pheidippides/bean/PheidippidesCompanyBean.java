@@ -29,6 +29,7 @@ public class PheidippidesCompanyBean {
 	private List<Company> companies;
 	
 	private Event event;
+	private List<Event> events;
 	
 	private Participant participant;
 
@@ -238,5 +239,13 @@ public class PheidippidesCompanyBean {
 
 	public void setToManyImported(boolean toManyImported) {
 		this.toManyImported = toManyImported;
+	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
 	}
 }

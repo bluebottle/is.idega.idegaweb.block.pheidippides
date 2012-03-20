@@ -109,6 +109,8 @@ public class CompanyEditor extends IWBaseComponent implements
 				} catch (FinderException e) {
 				}
 			}
+			
+			bean.setEvents(dao.getEvents());
 		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()

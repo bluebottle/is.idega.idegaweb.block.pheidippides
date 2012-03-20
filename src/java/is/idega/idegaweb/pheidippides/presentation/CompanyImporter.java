@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
 import is.idega.idegaweb.pheidippides.business.CompanyImportSession;
 import is.idega.idegaweb.pheidippides.business.CompanyImportStatus;
+import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Company;
@@ -12,6 +13,7 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -211,8 +213,22 @@ public class CompanyImporter extends IWBaseComponent {
 		String races[] = iwc.getParameterValues("prm_race_pk");
 		String shirts[] = iwc.getParameterValues("prm_shirt_size");
 		
-		
-		
+		List<Participant> participants = session.getParticipantsToImport();
+		List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
+		int counter = 0;
+		for (Participant participant : participants) {
+			ParticipantHolder holder = new ParticipantHolder();
+			holder.setParticipant(participant);
+			holder.setRace(dao.getRace(Long.parseLong(races[counter])));
+			holder.setShirtSize(dao.getShirtSize(Long.parseLong(shirts[counter++])));
+			
+			holders.add(holder);
+		}
+
+		if (!holders.isEmpty()) {
+			getService().storeCompanyRegistration(holders, bean.getCompany(), iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
+		}
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/done.xhtml"));
