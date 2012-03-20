@@ -5,11 +5,11 @@
 
 <document size="A4" margin-left="70" margin-right="70" margin-top="40" margin-bottom="70">
 	
+	<font-def name="small" family="Helvetica" size="8" style="normal"/>
 	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
-	<font-def name="heading" family="Helvetica" size="16" style="bold"/>
 	
-	<table columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
+	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
 		<cell><image source="logo.jpg" width="300" scale-to-fit="true" /></cell>
 		<cell halign="right">
 			Reykjavik Marathon<br />
@@ -20,7 +20,7 @@
 		</cell>
 	</table>
     
-	<paragraph font="heading" spacing-after="18.0">
+	<paragraph font="bold" spacing-after="18.0">
 		Receipt for registration for Reykjavik Marathon, August 18th 2012.
 	</paragraph>
 
@@ -48,7 +48,7 @@
 		<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
 	</paragraph>
 
-	<paragraph>
+	<paragraph font="small" halign="right">
 		Receipt number: ${id}
 	</paragraph>
 </document>
