@@ -1864,7 +1864,32 @@ public class PheidippidesService {
 
 		// @TODO Add search by email and address..
 		if (parameter.getEmail() != null) {
-			//getUserBusiness().getEmailHome().finde
+			try {
+				Collection<User> users = getUserBusiness().getUserHome().findUsersByEmail(parameter.getEmail());
+				if (users != null && !users.isEmpty()) {
+					Set<Participant> tmp = new HashSet<Participant>();
+					Iterator<User> it = users.iterator();
+					while (it.hasNext()) {
+						tmp.add(getParticipant(it.next()));
+					}
+
+					if (returnSet.isEmpty()) {
+						if (!doneOneParameter) {
+							returnSet.addAll(tmp);
+						}
+					} else {
+						if (parameter.isMustFulfillAllParameters()) {
+							returnSet.retainAll(tmp);
+						} else {
+							returnSet.addAll(tmp);
+						}
+					}
+				}
+				
+				doneOneParameter = true;
+			} catch (RemoteException e) {
+			} catch (FinderException e) {
+			}
 		}
 
 		List<Participant> ret = new ArrayList<Participant>();
