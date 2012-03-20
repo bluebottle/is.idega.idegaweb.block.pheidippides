@@ -31,10 +31,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -1738,15 +1740,16 @@ public class PheidippidesService {
 	}
 
 	public List<Participant> searchForParticipants(SearchParameter parameter) {
-		List<Participant> ret = new ArrayList<Participant>();
-
+		Set<Participant> returnSet = new HashSet<Participant>();
+		
+		boolean doneOneParameter = false;
+		
 		if (parameter.getPersonalId() != null) {
 			try {
 				User user = getUserBusiness()
 						.getUser(parameter.getPersonalId());
-				ret.add(getParticipant(user));
-
-				return ret;
+				returnSet.add(getParticipant(user));
+				doneOneParameter = true;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
@@ -1772,9 +1775,22 @@ public class PheidippidesService {
 								new IWTimestamp(parameter.getDateOfBirth())
 										.getDate(),
 								name.getName());
-				ret.add(getParticipant(user));
-
-				return ret;
+				
+				if (returnSet.isEmpty()) {
+					if (!doneOneParameter) {
+						returnSet.add(getParticipant(user));
+					}
+				} else {
+					if (parameter.isMustFulfillAllParameters()) {
+						Set<Participant> tmp = new HashSet<Participant>();
+						tmp.add(getParticipant(user));
+						returnSet.retainAll(tmp);
+					} else {
+						returnSet.add(getParticipant(user));
+					}
+				}
+				
+				doneOneParameter = true;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
@@ -1789,13 +1805,26 @@ public class PheidippidesService {
 								parameter.getMiddleName(),
 								parameter.getLastName());
 				if (col != null && !col.isEmpty()) {
+					Set<Participant> tmp = new HashSet<Participant>();
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(getParticipant(it.next()));
+						tmp.add(getParticipant(it.next()));
 					}
 
-					return ret;
+					if (returnSet.isEmpty()) {
+						if (!doneOneParameter) {
+							returnSet.addAll(tmp);
+						}
+					} else {
+						if (parameter.isMustFulfillAllParameters()) {
+							returnSet.retainAll(tmp);
+						} else {
+							returnSet.addAll(tmp);
+						}
+					}
 				}
+				
+				doneOneParameter = true;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
@@ -1808,19 +1837,41 @@ public class PheidippidesService {
 						.findByNames(name.getFirstName(), name.getMiddleName(),
 								name.getLastName());
 				if (col != null && !col.isEmpty()) {
+					Set<Participant> tmp = new HashSet<Participant>();
 					Iterator<User> it = col.iterator();
 					while (it.hasNext()) {
-						ret.add(getParticipant(it.next()));
+						tmp.add(getParticipant(it.next()));
 					}
 
-					return ret;
+					if (returnSet.isEmpty()) {
+						if (!doneOneParameter) {
+							returnSet.addAll(tmp);
+						}
+					} else {
+						if (parameter.isMustFulfillAllParameters()) {
+							returnSet.retainAll(tmp);
+						} else {
+							returnSet.addAll(tmp);
+						}
+					}
 				}
+				
+				doneOneParameter = true;
 			} catch (RemoteException e) {
 			} catch (FinderException e) {
 			}
 		}
 
 		// @TODO Add search by email and address..
+		if (parameter.getEmail() != null) {
+			//getUserBusiness().getEmailHome().finde
+		}
+
+		List<Participant> ret = new ArrayList<Participant>();
+		for (Participant participant : returnSet) {
+			ret.add(participant);
+		}
+
 		return ret;
 	}
 

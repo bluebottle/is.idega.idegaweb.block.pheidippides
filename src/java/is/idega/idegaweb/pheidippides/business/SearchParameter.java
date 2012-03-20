@@ -14,6 +14,8 @@ public class SearchParameter implements Serializable {
 	private String address;
 	private String email;
 	
+	private boolean mustFulfillAllParameters;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -61,5 +63,11 @@ public class SearchParameter implements Serializable {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isMustFulfillAllParameters() {
+		return mustFulfillAllParameters;
+	}
+	public void setMustFulfillAllParameters(boolean mustFulfillAllParameters) {
+		this.mustFulfillAllParameters = mustFulfillAllParameters;
 	}
 }

@@ -96,6 +96,8 @@ public class CompanyEditor extends IWBaseComponent implements
 						new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication
 				.getEncryptedClassName(CompanyEditor.class));
+		bean.setEvents(dao.getEvents());
+
 		if (iwc.isParameterSet(PARAMETER_COMPANY_PK)) {
 			Company company = getDao().getCompany(
 					Long.parseLong(iwc.getParameter(PARAMETER_COMPANY_PK)));
@@ -108,9 +110,7 @@ public class CompanyEditor extends IWBaseComponent implements
 				} catch (RemoteException e) {
 				} catch (FinderException e) {
 				}
-			}
-			
-			bean.setEvents(dao.getEvents());
+			}	
 		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
