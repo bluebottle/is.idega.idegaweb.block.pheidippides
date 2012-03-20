@@ -5,8 +5,11 @@ jQuery(document).ready(function() {
         headers: { 
             4: { 
                 sorter: false 
-            }, 
+            },
             5: { 
+                sorter: false 
+            },
+            6: { 
                 sorter: false 
             } 
         } 

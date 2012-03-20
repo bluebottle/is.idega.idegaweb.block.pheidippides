@@ -1,14 +1,14 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
-	$('form.adminForm').validate();
-	$('[name="prm_race_pk"]').each(function(){
-		$(this).rules("add", {
+	jQuery('form.adminForm').validate();
+	jQuery('[name="prm_race_pk"]').each(function(){
+		jQuery(this).rules("add", {
 			required: true
 		});   
 	});
-	$('[name="prm_shirt_size"]').each(function(){
-		$(this).rules("add", {
+	jQuery('[name="prm_shirt_size"]').each(function(){
+		jQuery(this).rules("add", {
 			required: true
 		});   
 	});

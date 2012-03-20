@@ -176,6 +176,10 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 			bean.setRegistrations(getDao().getRegistrations(bean.getCompany(), bean.getRace(), getStatus()));
 			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
 		}
+		else if (iwc.isParameterSet(PARAMETER_ACTION)) {
+			bean.setRegistrations(getDao().getRegistrations(bean.getCompany(), bean.getEvent(), new Integer(bean.getProperty().getValue()), getStatus()));
+			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
+		}
 	}
 	
 	private void showEdit(IWContext iwc, PheidippidesCompanyBean bean) {
