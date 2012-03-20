@@ -217,6 +217,7 @@ public class Participant implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		Participant other = (Participant) obj;
 		if (dateOfBirth == null) {
 			if (other.dateOfBirth != null)

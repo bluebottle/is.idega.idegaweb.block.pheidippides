@@ -5,6 +5,7 @@
 		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
 		xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+		xmlns:j="http://java.sun.com/jstl/core"
 >
 <ui:component>
 	<ui:fragment rendered="#{not empty pheidippidesBean.registration and pheidippidesBean.registration.race.numberOfRelayLegs > 1}">
@@ -55,7 +56,7 @@
 							<td><input type="text" name="prm_relay_leg_first" value="#{registration.leg}" /></td>
 						</tr>
 						
-						<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
+						<j:forEach items="#{pheidippidesBean.properties}" var="leg">
 							<ui:param value="#{pheidippidesBean.registrationMap[leg.value]}" name="otherRegistration" />
 							<ui:param value="#{pheidippidesBean.participantsMap[otherRegistration]}" name="partner" />
 							<tr>
@@ -66,7 +67,12 @@
 								<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
 									<td><input type="text" name="prm_date_of_birth" value="#{p:formatDate(partner.dateOfBirth, 'dd.MM.yyyy')}" /></td>
 								</ui:fragment>
-								<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
+								<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td><input type="hidden" name="prm_name" value="#{partner.personalId}" /><span class="fullName"><h:outputText value="#{partner.personalId}" /></span></td>
+								</ui:fragment>
+								<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
+								</ui:fragment>
 								<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
 								<td>
 									<c:selectOne name="prm_shirt_size">
@@ -78,7 +84,7 @@
 								</td>
 								<td><input type="text" name="prm_relay_leg" value="#{otherRegistration.leg}" /></td>
 							</tr>
-						</ui:repeat>
+						</j:forEach>
 					</tbody>
 				</table>
 			</fieldset>

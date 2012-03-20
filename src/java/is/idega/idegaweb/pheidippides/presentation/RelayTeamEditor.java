@@ -32,6 +32,7 @@ import com.idega.util.CoreConstants;
 import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+import com.idega.util.text.SocialSecurityNumber;
 
 public class RelayTeamEditor extends IWBaseComponent {
 
@@ -97,6 +98,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 						participant.setFullName(names[i]);
 						if (iwc.getCurrentLocale().equals(LocaleUtil.getIcelandicLocale())) {
 							participant.setPersonalId(personalIDs[i]);
+							participant.setDateOfBirth(SocialSecurityNumber.getDateFromSocialSecurityNumber(participant.getPersonalId()));
 						}
 						else {
 							try {
