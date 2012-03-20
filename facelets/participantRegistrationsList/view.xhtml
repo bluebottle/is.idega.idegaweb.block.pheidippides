@@ -32,11 +32,11 @@
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td>
 						<td><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 						<td class="action">
-							<h:outputLink rendered="#{registration.race.numberOfRelayLegs <= 1}" value="/pages/sidanmin/breytavegalengd/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" styleClass="editItem">
+							<h:outputLink rendered="#{registration.race.numberOfRelayLegs lt 2}" value="/pages/sidanmin/breytavegalengd/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" styleClass="editItem">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 							</h:outputLink>
-							<h:outputLink rendered="#{registration.race.numberOfRelayLegs > 1}" value="/pages/sidanmin/bodhlaupslid/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" styleClass="editItem">
+							<h:outputLink rendered="#{registration.race.numberOfRelayLegs gt 1}" value="/pages/sidanmin/bodhlaupslid/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" styleClass="editItem">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
 							</h:outputLink>
