@@ -961,13 +961,13 @@ public class PheidippidesService {
 								dao.storeRegistration(null, header,
 										RegistrationStatus.RelayPartner,
 										participantHolder.getRace(),
-										participantHolder.getShirtSize(), team,
-										participantHolder.getLeg(),
-										participantHolder.getAmount(),
-										participantHolder.getCharity(),
+										participant2.getShirtSize(), team,
+										participant2.getRelayLeg(),
+										0,
+										null,
 										participant.getNationality(),
 										user.getUniqueId(),
-										participantHolder.getDiscount(), false,
+										0, false,
 										false, null, null);
 							}
 						}

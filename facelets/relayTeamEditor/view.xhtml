@@ -7,84 +7,86 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<form class="userForm" id="relayTeamEditor" action="" method="post">
-		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
-		<input type="hidden" name="prm_action" value="store" />
+	<ui:fragment rendered="#{not empty pheidippidesBean.registration and pheidippidesBean.registration.race.numberOfRelayLegs > 1}">
+		<form class="userForm" id="relayTeamEditor" action="" method="post">
+			<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
+			<input type="hidden" name="prm_action" value="store" />
+		
+			<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_team_editor']}" /></h1>
 	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_team_editor']}" /></h1>
-
-		<fieldset class="formSection">
-			<ui:param value="#{pheidippidesBean.participant}" name="participant" />
-			<ui:param value="#{pheidippidesBean.registration}" name="registration" />
-			
-			<div class="formItem required">
-				<label for="prm_team_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></label>
-				<input type="text" class="required" name="prm_team_name" value="#{participant.team.name}" />
-			</div>
-			
-			<table class="relayTeam" width="100%" cellspacing="0" cellpadding="0">
-				<thead>
-					<tr>
-						<th class="firstColumn">#</th>
-						<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
-						</ui:fragment>
-						<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
-							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></th>
-						</ui:fragment>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
-						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
-					</tr>
-				</thead>
+			<fieldset class="formSection">
+				<ui:param value="#{pheidippidesBean.participant}" name="participant" />
+				<ui:param value="#{pheidippidesBean.registration}" name="registration" />
 				
-				<tbody>
-					<tr>
-						<td class="firstColumn">1</td>
-						<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
-							<td><h:outputText value="#{participant.personalId}" /></td>
-						</ui:fragment>
-						<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
-							<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
-						</ui:fragment>
-						<td><h:outputText value="#{participant.fullName}" /></td>
-						<td><h:outputText value="#{participant.email}" /></td>
-						<td><h:outputText value="#{registration.shirtSize.size}" /></td>
-						<td><input type="text" name="prm_relay_leg_first" value="#{registration.leg}" /></td>
-					</tr>
-					
-					<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
-						<ui:param value="#{pheidippidesBean.registrationMap[leg.value]}" name="registration" />
-						<ui:param value="#{pheidippidesBean.participantsMap[registration]}" name="partner" />
+				<div class="formItem required">
+					<label for="prm_team_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></label>
+					<input type="text" class="required" name="prm_team_name" value="#{registration.team.name}" />
+				</div>
+				
+				<table class="relayTeam" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
 						<tr>
-							<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
+							<th class="firstColumn">#</th>
 							<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
-								<td><input type="text" name="prm_personalId" value="#{partner.personalId}" /></td>
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 							</ui:fragment>
 							<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
-								<td><input type="text" name="prm_date_of_birth" value="#{p:formatDate(partner.dateOfBirth, 'dd.MM.yyyy')}" /></td>
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></th>
 							</ui:fragment>
-							<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
-							<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
-							<td>
-								<c:selectOne name="prm_shirt_size">
-									<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
-									<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
-										<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq registration.shirtSize.id}" />
-									</ui:repeat>
-								</c:selectOne>
-							</td>
-							<td><input type="text" name="prm_relay_leg" value="#{registration.leg}" /></td>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
 						</tr>
-					</ui:repeat>
-				</tbody>
-			</table>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
-		</fieldset>
-	</form>
+					</thead>
+					
+					<tbody>
+						<tr>
+							<td class="firstColumn">1</td>
+							<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+								<td><h:outputText value="#{participant.personalId}" /></td>
+							</ui:fragment>
+							<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+								<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							</ui:fragment>
+							<td><h:outputText value="#{participant.fullName}" /></td>
+							<td><h:outputText value="#{participant.email}" /></td>
+							<td><h:outputText value="#{registration.shirtSize.size}" /></td>
+							<td><input type="text" name="prm_relay_leg_first" value="#{registration.leg}" /></td>
+						</tr>
+						
+						<ui:repeat value="#{pheidippidesBean.properties}" var="leg">
+							<ui:param value="#{pheidippidesBean.registrationMap[leg.value]}" name="otherRegistration" />
+							<ui:param value="#{pheidippidesBean.participantsMap[otherRegistration]}" name="partner" />
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{leg.value}" /></td>
+								<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td><input type="text" name="prm_personalId" value="#{partner.personalId}" /></td>
+								</ui:fragment>
+								<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td><input type="text" name="prm_date_of_birth" value="#{p:formatDate(partner.dateOfBirth, 'dd.MM.yyyy')}" /></td>
+								</ui:fragment>
+								<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
+								<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
+								<td>
+									<c:selectOne name="prm_shirt_size">
+										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
+										<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
+											<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq otherRegistration.shirtSize.id}" />
+										</ui:repeat>
+									</c:selectOne>
+								</td>
+								<td><input type="text" name="prm_relay_leg" value="#{otherRegistration.leg}" /></td>
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</fieldset>
+			
+			<div class="submit">
+				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+			</div>
+		</form>
+	</ui:fragment>
 </ui:component>
 </html>
