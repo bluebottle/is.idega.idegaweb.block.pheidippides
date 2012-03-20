@@ -38,6 +38,8 @@ public interface PheidippidesDao {
 
 	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status);
 	
+	public long getNumberOfParticipantsForCompany(Company company, Event event, Integer year);
+	
 	public Distance getDistance(Long distanceID);
 
 	public Distance getDistance(String name);
@@ -96,11 +98,11 @@ public interface PheidippidesDao {
 			Currency currency, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
-			String saleId);
+			String saleId, Company company);
 	
 	public Registration getRegistration(Long registrationID);
 
-	public Registration getRegistrationForUser(Event event, Integer year, String userUUID);
+	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID);
 
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
 	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status);

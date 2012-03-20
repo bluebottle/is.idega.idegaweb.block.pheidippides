@@ -2,6 +2,7 @@ package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
+import is.idega.idegaweb.pheidippides.business.CompanyImportSession;
 import is.idega.idegaweb.pheidippides.business.CompanyImportStatus;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
@@ -127,6 +128,7 @@ public class CompanyImporter extends IWBaseComponent {
 				&& uploadFile.getName().length() > 0) {
 			try {
 				PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
+				CompanyImportSession session = getBeanInstance("companyImportSession");
 
 				FileInputStream input = new FileInputStream(
 						uploadFile.getRealPath());
@@ -160,8 +162,15 @@ public class CompanyImporter extends IWBaseComponent {
 					if (!hasError) {
 						participantList = toImport.get(CompanyImportStatus.OK);
 						if (participantList != null && !participantList.isEmpty()) {
-							//dao.
-							bean.setToImport(participantList);
+							long count = dao.getNumberOfParticipantsForCompany(bean.getCompany(), bean.getEvent(), IWTimestamp.RightNow().getYear());
+							count += participantList.size();
+							if (count > bean.getCompany().getMaxNumberOfParticipants()) {
+								hasError = true;
+								bean.setToManyImported(true);
+							} else {
+								bean.setToImport(participantList);
+								session.setParticipantsToImport(participantList);
+							}
 						} else {
 							bean.setUnableToImportFile(true);
 							hasError = true;						
@@ -184,8 +193,6 @@ public class CompanyImporter extends IWBaseComponent {
 					showError(iwc);
 					return;
 				}
-
-				// bean.set
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				uploadFile.setId(-1);
@@ -199,6 +206,13 @@ public class CompanyImporter extends IWBaseComponent {
 	}
 
 	private void showDone(IWContext iwc) {
+		CompanyImportSession session = getBeanInstance("companyImportSession");
+		PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
+		String races[] = iwc.getParameterValues("prm_race_pk");
+		String shirts[] = iwc.getParameterValues("prm_shirt_size");
+		
+		
+		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("companyImporter/done.xhtml"));
