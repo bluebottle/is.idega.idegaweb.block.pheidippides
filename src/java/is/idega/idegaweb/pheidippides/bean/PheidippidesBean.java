@@ -71,6 +71,7 @@ public class PheidippidesBean {
 	public List<AdvancedProperty> properties;
 	
 	public RegistrationAnswerHolder answer;
+	public Map<String, Registration> registrationMap;
 	private Map<String, Participant> participantMap;
 	private Map<RegistrationHeader, BankReference> bankReferencesMap;
 	
@@ -334,6 +335,14 @@ public class PheidippidesBean {
 		this.answer = answer;
 	}
 	
+	public Map<String, Registration> getRegistrationMap() {
+		return registrationMap;
+	}
+
+	public void setRegistrationMap(Map<String, Registration> registrationMap) {
+		this.registrationMap = registrationMap;
+	}
+
 	public Map<String, Participant> getParticipantMap() {
 		return participantMap;
 	}

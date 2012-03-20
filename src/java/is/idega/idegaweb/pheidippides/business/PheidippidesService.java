@@ -1844,4 +1844,8 @@ public class PheidippidesService {
 		
 		return registration;
 	}
+	
+	public List<Registration> getRelayPartners(Registration registration) {
+		return dao.getRegistrations(registration.getTeam(), RegistrationStatus.RelayPartner);
+	}
 }

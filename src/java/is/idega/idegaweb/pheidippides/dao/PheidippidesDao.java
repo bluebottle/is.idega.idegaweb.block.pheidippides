@@ -107,6 +107,7 @@ public interface PheidippidesDao {
 	
 	public List<Registration> getRegistrations(RegistrationHeader header);
 	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses);
+	public List<Registration> getRegistrations(Team team, RegistrationStatus status);
 	
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,

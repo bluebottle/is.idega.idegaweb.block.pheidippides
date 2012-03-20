@@ -442,6 +442,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 	
+	public List<Registration> getRegistrations(Team team, RegistrationStatus status) {
+		return getResultList("registration.findByTeamAndStatus", Registration.class, new Param("team", team), new Param("status", status));
+	}
+	
 	@Transactional(readOnly = false)
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
