@@ -64,6 +64,8 @@ public class PheidippidesBean {
 	
 	public Locale locale;
 	public List<AdvancedProperty> locales;
+	public String styleClass;
+	public String response;
 
 	public AdvancedProperty property;
 	public List<AdvancedProperty> properties;
@@ -290,6 +292,22 @@ public class PheidippidesBean {
 
 	public void setLocales(List<AdvancedProperty> locales) {
 		this.locales = locales;
+	}
+
+	public String getStyleClass() {
+		return styleClass;
+	}
+
+	public void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
+
+	public String getResponse() {
+		return response;
+	}
+
+	public void setResponse(String response) {
+		this.response = response;
 	}
 
 	public List<AdvancedProperty> getProperties() {

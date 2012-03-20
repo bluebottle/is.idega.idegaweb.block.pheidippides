@@ -1594,6 +1594,33 @@ public class PheidippidesService {
 			e.printStackTrace();
 		}
 	}
+	
+	public void generateNewPassword(Participant participant, Locale locale) {
+		try {
+			User user = getUserBusiness().getUserByUniqueId(participant.getUuid());
+
+			String password = LoginDBHandler.getGeneratedPasswordForUser();
+			LoginTable loginTable = LoginDBHandler.getUserLogin(((Integer) user.getPrimaryKey()).intValue());
+			LoginDBHandler.changePassword(loginTable, password);
+
+			IWResourceBundle iwrb = IWMainApplication
+					.getDefaultIWMainApplication()
+					.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+					.getResourceBundle(locale);
+
+			String subject = iwrb
+					.getLocalizedString("new_password.subject",
+							"A new password for your account");
+			
+			Object[] arguments = { loginTable.getUserLogin(), password };
+			String body = MessageFormat.format(iwrb.getLocalizedString("new_password.body",
+							"A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"), arguments);
+
+			sendMessage(participant.getEmail(), subject, body);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void addUserToRootRunnersGroup(User user) throws RemoteException {
 		try {

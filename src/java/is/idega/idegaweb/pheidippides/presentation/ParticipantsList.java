@@ -63,6 +63,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
+	private static final String PARAMETER_LOGIN = "prm_login";
 	private static final String PARAMETER_PASSWORD = "prm_password";
 
 	@Autowired
@@ -265,8 +266,13 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		if (iwc.isParameterSet(PARAMETER_PASSWORD)) {
 			String password = iwc.getParameter(PARAMETER_PASSWORD);
+			String login = iwc.isParameterSet(PARAMETER_LOGIN) ? iwc.getParameter(PARAMETER_LOGIN) : null;
 
 			LoginTable loginEntry = LoginDBHandler.getUserLogin(user);
+			if (login != null && !LoginDBHandler.isLoginInUse(login)) {
+				loginEntry.setUserLogin(login);
+				loginEntry.store();
+			}
 			try {
 				LoginDBHandler.changePassword(loginEntry, password);
 			} catch (Exception e) {

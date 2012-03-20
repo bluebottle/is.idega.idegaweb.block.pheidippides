@@ -5,19 +5,27 @@
 
 <document size="A4" margin-left="70" margin-right="70" margin-top="70" margin-bottom="70">
 	
-	<font-def name="small" family="Helvetica" size="8" style="normal"/>
 	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
 	<font-def name="heading" family="Helvetica" size="16" style="bold"/>
 	
-	<footer font="small">
-		<footer-part>
-			Reykjavik Marathon - Engjavegi 6 - tel. 535 3700 - www.marathon.is
-		</footer-part>
-	</footer>
-	
+	<header padding-bottom="50">
+		<header-part>
+			<table columns="2" widths="60,40" halign="top">
+				<cell><image source="logo.jpg" width="300" scale-to-fit="true" /></cell>
+				<cell align="right">
+					Reykjavik Marathon<br />
+					ID number: 590493-2369<br />
+					Engjavegi 6, 104 Reykjavik, Iceland<br />
+					Telephone: +354 535 3700<br />
+					<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
+				</cell>
+			</table>
+		</header-part>
+    </header>
+    
 	<paragraph font="heading" spacing-after="18.0">
-		Receipt for registration for ${raceName}.
+		Receipt for registration for Laugavegur Ultra Marathon, July 14th 2012.
 	</paragraph>
 
 	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
@@ -32,19 +40,19 @@
 	</table>
 	
 	<paragraph font="normal" spacing-after="18.0">
-		Runners must pick up their race material on Friday August 17th 2012 between 10:00 and 19:00. The location is Laugardalsholl, Engjavegur 8, 104 Reykjavik.
+		You will get an email as the event draws closer with information about race material as well as offers for a bus ride etc.
 	</paragraph>
 	<paragraph font="normal" spacing-after="18.0">
-		Please study all race information on the website http://www.marathon.is/reykjavik-marathon.
+		Please study all race information on the website <anchor reference="http://www.marathon.is/ultramarathon">www.marathon.is/reykjavik-marathon</anchor>.
 	</paragraph>
 	
-	<paragraph font="normal">
-		Best wishes!,<br />
+	<paragraph font="normal" spacing-after="18.0">
+		Best wishes!<br />
 		Reykjavík Marathon<br />
-		Engjavegur 6<br />
-		104 Reykjavik<br />
-		Iceland<br />
-		E-mail: marathon@marathon.is
+		<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
 	</paragraph>
 
+	<paragraph>
+		Receipt number: ${id}
+	</paragraph>
 </document>
