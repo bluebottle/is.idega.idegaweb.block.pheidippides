@@ -195,6 +195,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return getSingleResult("registration.countByParticipantAndRaceAndStatus", Long.class, new Param("uuid", uuid), new Param("race", race), new Param("status", status)).longValue();
 	}
 
+	public long getNumberOfParticipantsForCompany(Company company, Event event, Integer year) {
+		return getSingleResult("registration.countByCompanyAndAventAndYear", Long.class, new Param("company", company), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK)).longValue();
+	}
+
 	/* ShirtSize methods */
 	public ShirtSize getShirtSize(Long shirtSizeID) {
 		return find(ShirtSize.class, shirtSizeID);
@@ -330,7 +334,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Currency currency, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
-			String saleId) {
+			String saleId, Company company) {
 		RegistrationHeader header = registrationHeaderID != null ? getRegistrationHeader(registrationHeaderID)
 				: null;
 		if (header == null) {
@@ -391,6 +395,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			header.setSaleId(saleId);
 		}
 
+		if (company != null) {
+			header.setCompany(company);
+		}
+		
 		getEntityManager().persist(header);
 
 		return header;
@@ -400,6 +408,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(Registration.class, registrationID);
 	}
 
+	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID) {
+		return getResultList("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK));
+	}
+	
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
 		return getRegistrations(null, race, status);
 	}
