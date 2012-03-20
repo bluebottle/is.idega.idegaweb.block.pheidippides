@@ -400,6 +400,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(Registration.class, registrationID);
 	}
 
+	public Registration getRegistrationForUser(Event event, Integer year, String userUUID) {
+		return getSingleResult("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK));
+	}
+	
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
 		return getRegistrations(null, race, status);
 	}

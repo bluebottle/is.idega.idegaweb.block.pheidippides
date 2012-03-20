@@ -126,14 +126,16 @@ public class CompanyImporter extends IWBaseComponent {
 		if (uploadFile != null && uploadFile.getName() != null
 				&& uploadFile.getName().length() > 0) {
 			try {
+				PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
+
 				FileInputStream input = new FileInputStream(
 						uploadFile.getRealPath());
 				Map<CompanyImportStatus, List<Participant>> toImport = getService()
-						.importCompanyExcelFile(input);
+						.importCompanyExcelFile(input, bean.getEvent(), IWTimestamp.RightNow().getYear());
 
-				PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
 				boolean hasError = false;
 				List<Participant> errors = null;
+				List<Participant> participantList = null;
 				if (toImport != null && !toImport.isEmpty()) {
 					errors = toImport.get(CompanyImportStatus.MISSING_REQUIRED_FIELD);
 					if (errors != null && !errors.isEmpty()) {
@@ -154,14 +156,17 @@ public class CompanyImporter extends IWBaseComponent {
 						bean.setAlreadyRegistered(errors);
 						hasError = true;
 					}
-					
-					errors = toImport.get(CompanyImportStatus.OK);
-					if (errors != null && !errors.isEmpty()) {
-						bean.setToImport(errors);
-					} else {
-						bean.setUnableToImportFile(true);
-						hasError = true;						
-					}
+
+					if (!hasError) {
+						participantList = toImport.get(CompanyImportStatus.OK);
+						if (participantList != null && !participantList.isEmpty()) {
+							//dao.
+							bean.setToImport(participantList);
+						} else {
+							bean.setUnableToImportFile(true);
+							hasError = true;						
+						}
+					}					
 				} else {
 					bean.setUnableToImportFile(true);
 					hasError = true;

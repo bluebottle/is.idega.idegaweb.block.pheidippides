@@ -435,7 +435,7 @@ public class PheidippidesService {
 	}
 
 	public Map<CompanyImportStatus, List<Participant>> importCompanyExcelFile(
-			FileInputStream input) {
+			FileInputStream input, Event event, int year) {
 		Map<CompanyImportStatus, List<Participant>> map = new HashMap<CompanyImportStatus, List<Participant>>();
 
 		try {
@@ -449,10 +449,12 @@ public class PheidippidesService {
 			List<Participant> ok = new ArrayList<Participant>();
 			List<Participant> missing = new ArrayList<Participant>();
 			List<Participant> errorInPID = new ArrayList<Participant>();
+			List<Participant> errorAlreadyReg = new ArrayList<Participant>();
 
 			for (int a = sheet.getFirstRowNum() + 1; a <= sheet.getLastRowNum(); a++) {
 				boolean rowHasError = false;
 				boolean errorInPersonalID = false;
+				boolean errorAlreadyRegistered = false;
 
 				HSSFRow row = sheet.getRow(a);
 
@@ -571,6 +573,11 @@ public class PheidippidesService {
 							rowHasError = true;
 						} 
 						
+						if (isRegistered(user, event, year)) {
+							rowHasError = true;
+							errorAlreadyRegistered = true;
+						}
+						
 						participant.setPersonalId(user.getPersonalID());
 						participant.setUuid(user.getUniqueId());
 						participant.setEmail(email);
@@ -586,7 +593,10 @@ public class PheidippidesService {
 								uniqueID, name, dateOfBirth, address, city,
 								postalCode, country, gender, email, phone,
 								mobile, nationality));
-					} else {
+					} if (errorAlreadyRegistered) {
+						errorAlreadyReg.add(participant);
+					}
+					else {
 						missing.add(createErrorParticipant(personalID,
 								uniqueID, name, dateOfBirth, address, city,
 								postalCode, country, gender, email, phone,
@@ -599,6 +609,10 @@ public class PheidippidesService {
 
 			if (!errorInPID.isEmpty()) {
 				map.put(CompanyImportStatus.ERROR_IN_PERSONAL_ID, errorInPID);
+			}
+
+			if (!errorAlreadyReg.isEmpty()) {
+				map.put(CompanyImportStatus.ERROR_ALREADY_REGISTERED, errorAlreadyReg);
 			}
 
 			if (!missing.isEmpty()) {
@@ -615,6 +629,16 @@ public class PheidippidesService {
 		return null;
 	}
 
+	public boolean isRegistered(User user, Event event, int year) {
+		Registration reg = dao.getRegistrationForUser(event, year, user.getUniqueId());
+		
+		if (reg == null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	private String getCellValue(HSSFCell cell) {
 		if (cell == null) {
 			return null;

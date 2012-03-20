@@ -100,6 +100,8 @@ public interface PheidippidesDao {
 	
 	public Registration getRegistration(Long registrationID);
 
+	public Registration getRegistrationForUser(Event event, Integer year, String userUUID);
+
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
 	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status);
 	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status);
