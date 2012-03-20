@@ -42,8 +42,10 @@
 			<div class="printout">
 				<c:DownloadLink downloadWriter="#{pheidippidesCompanyBean.downloadWriter}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_xls']}">
 					<f:param name="prm_race_pk" value="#{not empty param['prm_race_pk'] ? param['prm_race_pk'] : ''}" />
-					<f:param name="prm_event_pk" value="#{pheidippidesBean.event.id}" />
-					<f:param name="prm_year" value="#{pheidippidesBean.property.value}" />
+					<f:param name="prm_event_pk" value="#{pheidippidesCompanyBean.event.id}" />
+					<f:param name="prm_year" value="#{pheidippidesCompanyBean.property.value}" />
+					<f:param name="prm_company" value="#{pheidippidesCompanyBean.company.id}" />
+					<f:param name="prm_status" value="OK" />
 				</c:DownloadLink>
 			</div>
 		
