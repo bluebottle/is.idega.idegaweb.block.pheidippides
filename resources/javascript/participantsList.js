@@ -2,6 +2,7 @@ jQuery.noConflict();
 
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
+		cssChildRow: 'childRow',
         headers: { 
             4: { 
                 sorter: false 

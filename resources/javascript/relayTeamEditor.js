@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
 	jQuery('form.userForm').validate();
 	
 	jQuery('[name="prm_email"]').each(function(){
-	     $(this).rules("add", {
+	     jQuery(this).rules("add", {
 	       email: true
 	     });   
 	   });

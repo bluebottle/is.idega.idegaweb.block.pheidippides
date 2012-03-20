@@ -184,6 +184,24 @@ table.userTable tbody tr td a.viewItem {
 	background-image: url(images/view.png);
 }
 
+table.userTable tbody tr td a.editItem.team {
+	background-image: url(images/group.png);
+}
+
+table.adminTable tbody tr.childRow > td {
+	padding: 4px 12px;
+}
+
+table.adminTable tbody tr.childRow tr td {
+	border: 0;
+	background-color: #fff;
+	font-size: 0.85em;
+}
+
+table.adminTable tbody tr.childRow:hover tr td {
+	background-color: #ddd;
+}
+
 a.addItem {
 	position: absolute;
 	top: 0;
@@ -240,18 +258,6 @@ form.adminForm fieldset.submit a {
 	-webkit-border-radius: 8px;
 	font-size: 1em;
 }
-
-
-/*fieldset label {
-	display: block;
-	width: auto;
-	overflow: hidden;
-	margin-bottom: 8px;
-}
-
-fieldset label input {
-	float: right;
-}*/
 
 form.smallAdminForm {
 	padding: 15px;
@@ -495,24 +501,29 @@ form.registrationForm fieldset.formSection div.formItem .error, form.userForm di
 	padding-right: 32px;
 }
 
-form.registrationForm fieldset.formSection table {
+form.registrationForm fieldset.formSection table, table.relayTeam {
 	font-size: 0.85em;
 }
 
-form.registrationForm fieldset.formSection table tr.relayPartner {
+table.relayTeam {
+	margin-top: 18px;
+	margin-bottom: 18px;
+}
+
+form.registrationForm fieldset.formSection table tr.relayPartner, table.relayTeam tr.relayPartner {
 	font-size: 0.9em;
 }
 
-form.registrationForm fieldset.formSection table tr.relayPartner td.firstColumn {
+form.registrationForm fieldset.formSection table tr.relayPartner td.firstColumn, table.relayTeam tr.relayPartner td.firstColumn {
 	padding-left: 14px;
 }
 
-form.registrationForm fieldset.formSection thead tr th {
+form.registrationForm fieldset.formSection thead tr th, table.relayTeam thead tr th {
 	text-align: left;
 	padding: 2px 3px;
 }
 
-form.registrationForm fieldset.formSection tbody tr td {
+form.registrationForm fieldset.formSection tbody tr td, table.relayTeam tbody tr td {
 	padding: 2px 3px;
 }
 
@@ -631,10 +642,6 @@ div.userInformation img {
 	max-height: 140px;
 	margin-right: 8px;
 	border: 1px #999 solid;
-	
-	-moz-box-shadow: #999 0 0 0 6px;
-	-webkit-box-shadow: #999 0 0 0 6px;
-	box-shadow: #999 0 0 0 6px;
 }
 
 div.userInformation h1 {

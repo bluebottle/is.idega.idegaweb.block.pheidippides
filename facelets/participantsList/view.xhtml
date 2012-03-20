@@ -60,6 +60,10 @@
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+							<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></th>
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+							</ui:fragment>
 							<th class="action"></th>
 							<th class="action lastColumn"></th>
 						</tr>
@@ -79,6 +83,10 @@
 									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 								</ui:fragment>
 								<td><h:outputText value="#{participant.email}" /></td>
+								<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
+									<td><h:outputText value="#{registration.team.name}" /></td>
+									<td><h:outputText value="#{registration.leg}" /></td>
+								</ui:fragment>
 								<td class="action">
 									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" styleClass="editItem fancybox.ajax">
 										<f:param name="prm_registration_pk" value="#{registration.id}" />
@@ -100,6 +108,32 @@
 									</h:outputLink>
 								</td>
 							</tr>
+							
+							<ui:fragment rendered="#{registration.race.numberOfRelayLegs > 1}">
+								<tr class="childRow">
+									<td class="childCell" colspan="8">
+										<table class="subTable" width="100%" cellpadding="0" cellspacing="0">
+											<tbody>
+												<ui:repeat value="#{pheidippidesBean.relayPartnersMap[registration]}" var="relayRegistration">
+													<ui:param value="#{pheidippidesBean.participantsMap[relayRegistration]}" name="relayPartner" />
+													<tr>
+														<td><h:outputText value="#{relayPartner.fullName}" /></td>
+														<ui:fragment rendered="#{not empty relayPartner.personalId}">
+															<td><h:outputText value="#{relayPartner.personalId}"><c:personalIDConverter /></h:outputText></td>
+														</ui:fragment>
+														<ui:fragment rendered="#{empty relayPartner.personalId}">
+															<td><h:outputText value="#{relayPartner.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+														</ui:fragment>
+														<td><h:outputText value="#{relayPartner.email}" /></td>
+														<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', relayRegistration.shirtSize.localizedKey))]}" /></td>
+														<td><h:outputText value="#{relayRegistration.leg}" /></td>
+													</tr>
+												</ui:repeat>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</ui:fragment>
 						</ui:repeat>
 					</tbody>
 				</table>

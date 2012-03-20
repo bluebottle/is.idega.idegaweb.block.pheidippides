@@ -58,6 +58,7 @@ public class PheidippidesBean {
 	public List<Participant> participants;
 	public Map<Registration, Participant> participantsMap;
 	public Map<Participant, List<Registration>> registrationsMap;
+	public Map<Registration, List<Registration>> relayPartnersMap;
 	
 	public RegistrationHeader registrationHeader;
 	public List<RegistrationHeader> registrationHeaders;
@@ -261,6 +262,15 @@ public class PheidippidesBean {
 	public void setRegistrationsMap(
 			Map<Participant, List<Registration>> registrationsMap) {
 		this.registrationsMap = registrationsMap;
+	}
+
+	public Map<Registration, List<Registration>> getRelayPartnersMap() {
+		return relayPartnersMap;
+	}
+
+	public void setRelayPartnersMap(
+			Map<Registration, List<Registration>> relayPartnersMap) {
+		this.relayPartnersMap = relayPartnersMap;
 	}
 
 	public RegistrationHeader getRegistrationHeader() {

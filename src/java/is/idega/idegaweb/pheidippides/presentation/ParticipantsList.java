@@ -11,8 +11,10 @@ import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
@@ -179,6 +181,24 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		if (bean.getRace() != null) {
 			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
 			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
+			
+			if (bean.getRace().getNumberOfRelayLegs() > 1) {
+				Map<Registration, Participant> participantsMap = bean.getParticipantsMap();
+				Map<Registration, List<Registration>> relayPartnersMap = new HashMap<Registration, List<Registration>>();
+				
+				for (Registration registration : bean.getRegistrations()) {
+					List<Registration> relayRegistrations = getService().getRelayPartners(registration);
+					relayPartnersMap.put(registration, relayRegistrations);
+					
+					for (Registration relayRegistration : relayRegistrations) {
+						Participant participant = getService().getParticipant(relayRegistration);
+						participantsMap.put(relayRegistration, participant);
+					}
+				}
+				
+				bean.setParticipantsMap(participantsMap);
+				bean.setRelayPartnersMap(relayPartnersMap);
+			}
 		}
 	}
 	
