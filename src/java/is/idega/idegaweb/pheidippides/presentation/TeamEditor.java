@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
-import com.idega.builder.bean.AdvancedProperty;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
@@ -29,7 +28,7 @@ import com.idega.util.CoreConstants;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class RelayTeamEditor extends IWBaseComponent {
+public class TeamEditor extends IWBaseComponent {
 
 	private static final String PARAMETER_REGISTRATION = "prm_registration_pk";
 	
@@ -70,7 +69,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
-			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/relayTeamEditor.js"));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/teamEditor.js"));
 
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
@@ -79,32 +78,15 @@ public class RelayTeamEditor extends IWBaseComponent {
 			bean.setRegistration(registration);
 
 			if (registration != null) {
-				bean.setParticipant(getService().getParticipant(registration));
-
-				List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-				for (int i = 0; i < registration.getRace().getNumberOfRelayLegs() - 1; i++) {
-					properties.add(new AdvancedProperty(String.valueOf(i + 2), String.valueOf(i + 2)));
-				}
-				bean.setProperties(properties);
-			
-				Map<String, Registration> partnerMap = new HashMap<String, Registration>();
 				Map<Registration, Participant> participantsMap = new HashMap<Registration, Participant>();
-				List<Registration> relayPartners = getService().getRelayPartners(registration);
-				if (relayPartners != null) {
-					int index = 2;
-					for (Registration partnerRegistration : relayPartners) {
-						partnerMap.put(String.valueOf(index++), partnerRegistration);
-						participantsMap.put(partnerRegistration, getService().getParticipant(partnerRegistration));
-					}
-				}
-				bean.setRegistrationMap(partnerMap);
-				bean.setParticipantsMap(participantsMap);
+				List<Registration> teamMembers = getService().getOtherTeamMembers(registration);
 
-				bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
+				bean.setRegistrations(teamMembers);
+				bean.setParticipantsMap(participantsMap);
 			}
 			
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-			facelet.setFaceletURI(iwb.getFaceletURI("relayTeamEditor/view.xhtml"));
+			facelet.setFaceletURI(iwb.getFaceletURI("teamEditor/view.xhtml"));
 			add(facelet);
 		}
 	}
