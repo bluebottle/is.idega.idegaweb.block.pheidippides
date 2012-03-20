@@ -555,6 +555,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		
 		getEntityManager().persist(registration);
 	}
+	
+	public void updateRegistrationStatus(Long registrationPK, String relayLeg, RegistrationStatus status) {
+		Registration registration = getRegistration(registrationPK);
+		registration.setLeg(relayLeg);
+		registration.setStatus(status);
+		
+		getEntityManager().persist(registration);
+	}
 
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK) {
 		return find(RaceShirtSize.class, raceShirtSizePK);

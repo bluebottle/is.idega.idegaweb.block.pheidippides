@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 			PheidippidesService.getParticipant(value, {
 				callback: function(participant) {
 					if (participant != null) {
-						jQuery('input[name="prm_name"]', parent).val(participant.fullName);
+						jQuery('input[name="prm_name"]', parent).text(participant.fullName);
 						jQuery('input[name="prm_email"]', parent).val(participant.email);
 						empty = false;
 					}
@@ -26,6 +26,7 @@ jQuery(document).ready(function() {
 			});
 		}
 		if (empty) {
+			jQuery('select[name="prm_shirt_size"]', parent).val('');
 			jQuery('input[name="prm_name"]', parent).val('');
 			jQuery('input[name="prm_email"]', parent).val('');
 		}

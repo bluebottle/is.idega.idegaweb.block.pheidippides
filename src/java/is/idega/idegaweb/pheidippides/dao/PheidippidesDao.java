@@ -117,6 +117,7 @@ public interface PheidippidesDao {
 			Date bestMarathonTime, Date bestUltraMarathonTime);
 	
 	public void updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK);
+	public void updateRegistrationStatus(Long registrationPK, String relayLeg, RegistrationStatus status);
 	
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
 	

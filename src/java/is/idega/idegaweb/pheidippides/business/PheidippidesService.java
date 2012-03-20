@@ -1864,4 +1864,93 @@ public class PheidippidesService {
 		
 		return registrations;
 	}
+	
+	public void updateRelayTeam(Registration registration, String relayLeg, String teamName, List<Participant> relayPartners) {
+		dao.updateRegistrationStatus(registration.getId(), relayLeg, registration.getStatus());
+		
+		List<Registration> relayPartnerRegistrations = getRelayPartners(registration);
+		List<Participant> participants = new ArrayList<Participant>();
+		
+		for (Registration relayRegistration : relayPartnerRegistrations) {
+			Participant participant = getParticipant(relayRegistration);
+			if (relayPartners.contains(participant)) {
+				participants.add(participant);
+				Participant relayPartner = null;
+				for (Participant participant2 : relayPartners) {
+					if (participant2.equals(participant)) {
+						relayPartner = participant2;
+					}
+				}
+				
+				try {
+					User user = getUserBusiness().getUserByUniqueId(participant.getUuid());
+					if (participant.getPersonalId() == null || participant.getPersonalId().length() == 0) {
+						user.setFullName(relayPartner.getFullName());
+					}
+					getUserBusiness().updateUserMail(user, relayPartner.getEmail());
+					dao.updateRegistrationStatus(relayRegistration.getId(), relayPartner.getRelayLeg(), RegistrationStatus.RelayPartner);
+				}
+				catch (RemoteException re) {
+					throw new IBORuntimeException(re);
+				}
+				catch (FinderException fe) {
+					fe.printStackTrace();
+				}
+				catch (CreateException ce) {
+					ce.printStackTrace();
+				}
+			}
+			else {
+				dao.updateRegistrationStatus(relayRegistration.getId(), null, RegistrationStatus.Deregistered);
+			}
+		}
+		
+		relayPartners.removeAll(participants);
+		
+		try {
+			for (Participant participant : relayPartners) {
+				User user = null;
+				if (participant.getPersonalId() != null && participant.getPersonalId().length() > 0) {
+					try {
+						user = getUserBusiness().getUser(participant.getPersonalId());
+					}
+					catch (RemoteException re) {
+						throw new IBORuntimeException(re);
+					}
+					catch (FinderException fe) {
+						fe.printStackTrace();
+					}
+				}
+				else {
+					SearchParameter parameter = new SearchParameter();
+					parameter.setFullName(participant.getFullName());
+					parameter.setDateOfBirth(participant.getDateOfBirth());
+					
+					List<Participant> searchResults = searchForParticipants(parameter);
+					if (searchResults != null && !searchResults.isEmpty()) {
+						try {
+							user = getUserBusiness().getUserByUniqueId(searchResults.iterator().next().getUuid());
+						}
+						catch (FinderException fe) {
+							fe.printStackTrace();
+						}
+					}
+					else {
+						user = saveUser(new Name(participant.getFullName()), new IWTimestamp(participant.getDateOfBirth()), null, null, null, null, null);					
+					}
+				}
+	
+				if (user != null) {
+					getUserBusiness().updateUserMail(user, participant.getEmail());
+					dao.storeRegistration(null, registration.getHeader(), RegistrationStatus.RelayPartner, registration.getRace(), participant.getShirtSize(), registration.getTeam(), participant.getRelayLeg(), 0, null, participant.getNationality(), user.getUniqueId(), 0, false, false, null, null);
+				}
+			}
+		}
+		catch (RemoteException re) {
+			throw new IBORuntimeException(re);
+		}
+		catch (CreateException ce) {
+			ce.printStackTrace();
+		}
+	}
 }

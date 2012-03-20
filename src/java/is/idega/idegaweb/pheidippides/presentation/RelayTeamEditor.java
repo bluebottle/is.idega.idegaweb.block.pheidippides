@@ -8,6 +8,9 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Registration;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +29,23 @@ import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.user.data.User;
 import com.idega.util.CoreConstants;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
 public class RelayTeamEditor extends IWBaseComponent {
 
+	private static final String PARAMETER_ACTION = "prm_action";
+
 	private static final String PARAMETER_REGISTRATION = "prm_registration_pk";
+	private static final String PARAMETER_TEAM_NAME = "prm_team_name";
+	private static final String PARAMETER_PERSONAL_ID_RELAY = "prm_personalId";
+	private static final String PARAMETER_RELAY_LEG = "prm_relay_leg";
+	private static final String PARAMETER_RELAY_LEG_FIRST = "prm_relay_leg_first";
+	private static final String PARAMETER_EMAIL = "prm_email";
+	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
+	private static final String PARAMETER_NAME = "prm_name";
+	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -61,6 +75,44 @@ public class RelayTeamEditor extends IWBaseComponent {
 				if (registrationPK != null && reg.getId().equals(registrationPK)) {
 					registration = reg;
 				}
+			}
+			
+			if (iwc.isParameterSet(PARAMETER_ACTION)) {
+				String relayLeg = iwc.getParameter(PARAMETER_RELAY_LEG_FIRST);
+				String teamName = iwc.getParameter(PARAMETER_TEAM_NAME);
+				
+				List<Participant> relayPartners = new ArrayList<Participant>();
+				String[] personalIDs = iwc.getParameterValues(PARAMETER_PERSONAL_ID_RELAY);
+				String[] datesOfBirth = iwc.getParameterValues(PARAMETER_DATE_OF_BIRTH);
+				String[] names = iwc.getParameterValues(PARAMETER_NAME);
+				String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
+				String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
+				String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
+				
+				DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+				
+				for (int i = 0; i < names.length; i++) {
+					if (names[i] != null && names[i].length() > 0) {
+						Participant participant = new Participant();
+						participant.setFullName(names[i]);
+						if (iwc.getCurrentLocale().equals(LocaleUtil.getIcelandicLocale())) {
+							participant.setPersonalId(personalIDs[i]);
+						}
+						else {
+							try {
+								participant.setDateOfBirth(format.parse(datesOfBirth[i]));
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}
+						participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
+						participant.setRelayLeg(relayLegs[i]);
+						participant.setEmail(emails[i]);
+						relayPartners.add(participant);
+					}
+				}
+				
+				getService().updateRelayTeam(registration, relayLeg, teamName, relayPartners);
 			}
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
