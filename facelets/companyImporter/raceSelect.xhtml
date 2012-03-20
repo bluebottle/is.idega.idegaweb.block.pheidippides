@@ -36,7 +36,7 @@
 								</ui:fragment>
 								<td><h:outputText value="#{participant.email}" /></td>
 								<td>
-									<c:selectOne styleClass="required" name="prm_race_pk">
+									<c:selectOne name="prm_race_pk">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
 										<ui:repeat value="#{pheidippidesCompanyBean.races}" var="race">
 											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', race.distance.localizedKey))])}" content="#{race.id}" />
@@ -44,7 +44,7 @@
 									</c:selectOne>
 								</td>
 								<td class="lastColumn">
-									<c:selectOne styleClass="required" name="prm_shirt_size">
+									<c:selectOne name="prm_shirt_size">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
 										<ui:repeat value="#{pheidippidesCompanyBean.raceShirtSizes}" var="raceShirt">
 											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" />

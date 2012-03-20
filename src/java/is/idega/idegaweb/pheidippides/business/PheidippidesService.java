@@ -1769,24 +1769,29 @@ public class PheidippidesService {
 			}
 
 			try {
-				User user = getUserBusiness()
+				Collection<User> col = getUserBusiness()
 						.getUserHome()
-						.findByDateOfBirthAndName(
+						.findByDateOfBirth(
 								new IWTimestamp(parameter.getDateOfBirth())
-										.getDate(),
-								name.getName());
+										.getDate());
 				
-				if (returnSet.isEmpty()) {
-					if (!doneOneParameter) {
-						returnSet.add(getParticipant(user));
+				if (col != null && !col.isEmpty()) {
+					Set<Participant> tmp = new HashSet<Participant>();
+					Iterator<User> it = col.iterator();
+					while (it.hasNext()) {
+						tmp.add(getParticipant(it.next()));
 					}
-				} else {
-					if (parameter.isMustFulfillAllParameters()) {
-						Set<Participant> tmp = new HashSet<Participant>();
-						tmp.add(getParticipant(user));
-						returnSet.retainAll(tmp);
+
+					if (returnSet.isEmpty()) {
+						if (!doneOneParameter) {
+							returnSet.addAll(tmp);
+						}
 					} else {
-						returnSet.add(getParticipant(user));
+						if (parameter.isMustFulfillAllParameters()) {
+							returnSet.retainAll(tmp);
+						} else {
+							returnSet.addAll(tmp);
+						}
 					}
 				}
 				

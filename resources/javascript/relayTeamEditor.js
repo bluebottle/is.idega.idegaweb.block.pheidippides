@@ -3,6 +3,12 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery('form.userForm').validate();
 	
+	jQuery('[name="prm_email"]').each(function(){
+	     $(this).rules("add", {
+	       email: true
+	     });   
+	   });
+	
 	jQuery.mask.definitions['M']='[01]';	
 	jQuery.mask.definitions['D']='[0123]';	
 	

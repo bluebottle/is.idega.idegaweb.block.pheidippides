@@ -59,6 +59,7 @@ public class ParticipantLostPassword extends IWBaseComponent {
 
 		if (iwc.isParameterSet(PARAMETER_ACTION)) {
 			SearchParameter parameter = new SearchParameter();
+			parameter.setMustFulfillAllParameters(true);
 			
 			if (iwc.getCurrentLocale().equals(LocaleUtil.getIcelandicLocale())) {
 				String personalID = iwc.getParameter(PARAMETER_PERSONAL_ID);

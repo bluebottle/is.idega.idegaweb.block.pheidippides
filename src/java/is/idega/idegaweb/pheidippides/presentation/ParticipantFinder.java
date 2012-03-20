@@ -45,6 +45,7 @@ public class ParticipantFinder extends IWBaseComponent {
 	private static final String PARAMETER_FIRST_NAME = "prm_first_name";
 	private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
 	private static final String PARAMETER_LAST_NAME = "prm_last_name";
+	private static final String PARAMETER_EMAIL = "prm_email";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -114,6 +115,7 @@ public class ParticipantFinder extends IWBaseComponent {
 		parameter.setFirstName(iwc.isParameterSet(PARAMETER_FIRST_NAME) ? iwc.getParameter(PARAMETER_FIRST_NAME) : null);
 		parameter.setMiddleName(iwc.isParameterSet(PARAMETER_MIDDLE_NAME) ? iwc.getParameter(PARAMETER_MIDDLE_NAME) : null);
 		parameter.setLastName(iwc.isParameterSet(PARAMETER_LAST_NAME) ? iwc.getParameter(PARAMETER_LAST_NAME) : null);
+		parameter.setEmail(iwc.isParameterSet(PARAMETER_EMAIL) ? iwc.getParameter(PARAMETER_EMAIL) : null);
 		
 		bean.setParticipants(getService().searchForParticipants(parameter));
 

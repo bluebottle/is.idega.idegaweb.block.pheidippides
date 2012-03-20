@@ -68,12 +68,12 @@
 									<td><input type="text" name="prm_date_of_birth" value="#{p:formatDate(partner.dateOfBirth, 'dd.MM.yyyy')}" /></td>
 								</ui:fragment>
 								<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
-									<td><input type="hidden" name="prm_name" value="#{partner.personalId}" /><span class="fullName"><h:outputText value="#{partner.personalId}" /></span></td>
+									<td><input type="hidden" name="prm_name" value="#{partner.fullName}" /><span class="fullName"><h:outputText value="#{partner.fullName}" /></span></td>
 								</ui:fragment>
 								<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
 									<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
 								</ui:fragment>
-								<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
+								<td><input type="text" name="prm_email" value="#{partner.email}" /></td>
 								<td>
 									<c:selectOne name="prm_shirt_size">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
