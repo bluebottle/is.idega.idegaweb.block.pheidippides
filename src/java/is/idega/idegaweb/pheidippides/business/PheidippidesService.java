@@ -519,6 +519,7 @@ public class PheidippidesService {
 								DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 								dob = dateFormat.parse(dateOfBirth);
 							} catch (Exception e) {
+								e.printStackTrace();
 								rowHasError = true;
 							}
 						}
@@ -648,8 +649,8 @@ public class PheidippidesService {
 		errorParticipant.setFullName(name);
 		try {
 			if (dateOfBirth != null) {
-				errorParticipant.setDateOfBirth(new IWTimestamp(dateOfBirth)
-						.getDate());
+				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+				errorParticipant.setDateOfBirth(dateFormat.parse(dateOfBirth));
 			}
 		} catch (Exception e) {
 		}
