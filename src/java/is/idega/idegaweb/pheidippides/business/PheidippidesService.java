@@ -1848,4 +1848,11 @@ public class PheidippidesService {
 	public List<Registration> getRelayPartners(Registration registration) {
 		return dao.getRegistrations(registration.getTeam(), RegistrationStatus.RelayPartner);
 	}
+	
+	public List<Registration> getOtherTeamMembers(Registration registration) {
+		List<Registration> registrations = dao.getRegistrations(registration.getTeam(), RegistrationStatus.OK);
+		registrations.remove(registration);
+		
+		return registrations;
+	}
 }
