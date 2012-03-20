@@ -22,9 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
+import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -43,6 +45,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -57,7 +60,6 @@ import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.file.business.ICFileSystemFactory;
 import com.idega.core.file.data.ICFile;
-import com.idega.core.idgenerator.business.UUIDGenerator;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.AddressHome;
 import com.idega.core.location.data.Country;
@@ -478,29 +480,33 @@ public class PheidippidesService {
 					continue;
 				}
 
-				try {
-					personalID = format.format(format.parse(personalID
-							.replaceAll("-", "")));
-				} catch (ParseException e1) {
-					rowHasError = true;
-					errorInPersonalID = true;
-				}
-
-				if (!rowHasError) {
+				if (personalID != null) {
 					try {
-						if (uniqueID != null) {
-							user = getUserBusiness()
-									.getUserByUniqueId(uniqueID);
-						} else if (personalID != null) {
-							user = getUserBusiness().getUser(personalID);
-						}
-					} catch (Exception e) {
+						personalID = format.format(format.parse(personalID
+								.replaceAll("-", "")));
+					} catch (ParseException e1) {
 						rowHasError = true;
 						errorInPersonalID = true;
 					}
+				}
+				
+				if (!rowHasError) {
+					if (personalID != null || uniqueID != null) {
+						try {
+							if (uniqueID != null) {
+								user = getUserBusiness()
+										.getUserByUniqueId(uniqueID);
+							} else if (personalID != null) {
+								user = getUserBusiness().getUser(personalID);
+							}
+						} catch (Exception e) {
+							rowHasError = true;
+							errorInPersonalID = true;
+						}
+					}
 
 					if (user == null) {
-						IWTimestamp dateOfBirthTimestamp = null;
+						Date dob = null;
 						if (name == null || "".equals(name.trim())) {
 							rowHasError = true;
 						}
@@ -510,8 +516,8 @@ public class PheidippidesService {
 							rowHasError = true;
 						} else {
 							try {
-								dateOfBirthTimestamp = new IWTimestamp(
-										dateOfBirth);
+								DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+								dob = dateFormat.parse(dateOfBirth);
 							} catch (Exception e) {
 								rowHasError = true;
 							}
@@ -548,8 +554,7 @@ public class PheidippidesService {
 
 						if (!rowHasError) {
 							participant.setFullName(name);
-							participant.setDateOfBirth(dateOfBirthTimestamp
-									.getDate());
+							participant.setDateOfBirth(dob);
 							participant.setAddress(address);
 							participant.setCity(city);
 							participant.setPostalCode(postalCode);
@@ -559,20 +564,18 @@ public class PheidippidesService {
 							participant.setPhoneHome(phone);
 							participant.setPhoneMobile(mobile);
 							participant.setNationality(nationality);
-							participant.setDummyUUID(UUIDGenerator.getInstance().generateUUID());
 						}
 					} else {
 						if (email == null || "".equals(email.trim())) {
 							rowHasError = true;
-						} else {
-							participant.setPersonalId(user.getPersonalID());
-							participant.setUuid(user.getUniqueId());
-							participant.setEmail(email);
-							participant.setFullName(user.getName());
-							participant.setPhoneHome(phone);
-							participant.setPhoneMobile(mobile);
-							participant.setDummyUUID(UUIDGenerator.getInstance().generateUUID());
-						}
+						} 
+						
+						participant.setPersonalId(user.getPersonalID());
+						participant.setUuid(user.getUniqueId());
+						participant.setEmail(email);
+						participant.setFullName(user.getName());
+						participant.setPhoneHome(phone);
+						participant.setPhoneMobile(mobile);
 					}
 				}
 
@@ -620,8 +623,13 @@ public class PheidippidesService {
 		if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
 			value = cell.getStringCellValue();
 		} else if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-			value = String.valueOf(new Double(cell.getNumericCellValue())
-					.longValue());
+			if (DateUtil.isCellDateFormatted(cell)) {
+				IWTimestamp stamp = new IWTimestamp(cell.getDateCellValue());
+				value = stamp.getDateString("dd.MM.yyyy");
+            } else {
+    			value = String.valueOf(new Double(cell.getNumericCellValue())
+				.longValue());
+            }
 		} else {
 			value = cell.getStringCellValue();
 		}

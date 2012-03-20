@@ -7,15 +7,8 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<form class="registrationForm" action="" method="post">
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 8" /></h2>
-
-		<div class="receipt"><h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" /></div>
-
-		<fieldset class="submit">
-			<a href="/pages/skraningmottekin/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
-		</fieldset>
+	<form class="adminForm" action="" method="post">
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company_import_completed']}" /></h1>
 	</form>
 </ui:component>
 </html>

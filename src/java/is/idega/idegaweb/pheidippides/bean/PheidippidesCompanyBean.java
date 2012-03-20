@@ -52,6 +52,7 @@ public class PheidippidesCompanyBean {
 	private List<Participant> invalidPersonalID;
 	private List<Participant> alreadyRegistered;
 	private boolean unableToImportFile;
+	private boolean toManyImported;
 
 	private List<Participant> toImport;
 
@@ -229,5 +230,13 @@ public class PheidippidesCompanyBean {
 
 	public void setUnableToImportFile(boolean unableToImportFile) {
 		this.unableToImportFile = unableToImportFile;
+	}
+
+	public boolean isToManyImported() {
+		return toManyImported;
+	}
+
+	public void setToManyImported(boolean toManyImported) {
+		this.toManyImported = toManyImported;
 	}
 }
