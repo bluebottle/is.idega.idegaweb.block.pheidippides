@@ -1867,7 +1867,6 @@ public class PheidippidesService {
 			}
 		}
 
-		// @TODO Add search by email and address..
 		if (parameter.getEmail() != null) {
 			try {
 				Collection<User> users = getUserBusiness().getUserHome().findUsersByEmail(parameter.getEmail());
@@ -1896,6 +1895,8 @@ public class PheidippidesService {
 			} catch (FinderException e) {
 			}
 		}
+
+		// @TODO Add search address..
 
 		List<Participant> ret = new ArrayList<Participant>();
 		for (Participant participant : returnSet) {
