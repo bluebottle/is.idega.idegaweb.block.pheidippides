@@ -84,6 +84,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private JQuery jQuery;
 	
 	private IWBundle iwb;
+	private String responseURL;
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
@@ -128,6 +129,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
 		bean.setDownloadWriter(ParticipantsWriter.class);
 		bean.setLocale(iwc.getCurrentLocale());
+		bean.setResponse(getResponseURL());
 
 		/* Events */
 		bean.setEvents(getDao().getEvents());
@@ -304,5 +306,13 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		
 		return true;
+	}
+
+	public String getResponseURL() {
+		return responseURL;
+	}
+
+	public void setResponseURL(String responseURL) {
+		this.responseURL = responseURL;
 	}
 }

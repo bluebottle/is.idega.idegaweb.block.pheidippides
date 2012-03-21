@@ -9,6 +9,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -147,12 +148,15 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		HSSFRow row = sheet.createRow(cellRow++);
 
 		int iCell = 0;
+		HSSFCell cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("id", "ID"));
+		cell.setCellStyle(style);
 		if (race == null) {
-			HSSFCell cell = row.createCell(iCell++);
+			cell = row.createCell(iCell++);
 			cell.setCellValue(this.iwrb.getLocalizedString("race", "Race"));
 			cell.setCellStyle(style);
 		}
-		HSSFCell cell = row.createCell(iCell++);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("name", "Name"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
@@ -160,6 +164,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("date_of_birth", "Date of birth"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("gender", "Gender"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("email", "Email"));
@@ -181,6 +188,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("nationality", "Nationality"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("company", "Company"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("shirt_size", "Shirt size"));
@@ -206,6 +216,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			if (participant == null) {
 				continue;
 			}
+			Country country = getCountryHome().findByPrimaryKey(participant.getCountry());
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
 			
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
@@ -221,10 +232,14 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 				continue;
 			}
 			
+			RegistrationHeader header = registration.getHeader();
+			Company company = header.getCompany();
+			
 			
 			row = sheet.createRow(cellRow++);
 			iCell = 0;
 
+			row.createCell(iCell++).setCellValue(registration.getId());
 			if (race == null) {
 				Race participantRace = registration.getRace();
 				row.createCell(iCell++).setCellValue(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + participantRace.getDistance().getLocalizedKey() + (participantRace.getNumberOfRelayLegs() > 1 ? ".relay" : ""), participantRace.getDistance().getName()).replaceAll("\\<[^>]*>", "")));
@@ -232,13 +247,15 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(participant.getFullName());
 			row.createCell(iCell++).setCellValue(participant.getPersonalId());
 			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
+			row.createCell(iCell++).setCellValue(participant.getGender().equals("male") ? "M" : "F");
 			row.createCell(iCell++).setCellValue(participant.getEmail());
 			row.createCell(iCell++).setCellValue(participant.getAddress());
 			row.createCell(iCell++).setCellValue(participant.getPostalAddress());
-			row.createCell(iCell++).setCellValue(participant.getCountry());
+			row.createCell(iCell++).setCellValue(country.getName());
 			row.createCell(iCell++).setCellValue(participant.getPhoneHome());
 			row.createCell(iCell++).setCellValue(participant.getPhoneMobile());
-			row.createCell(iCell++).setCellValue(nationality.getIsoAbbreviation());
+			row.createCell(iCell++).setCellValue(nationality.getName());
+			row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
 			row.createCell(iCell++).setCellValue(registration.getShirtSize().getSize() + " - " + registration.getShirtSize().getGender());
 			row.createCell(iCell++).setCellValue(registration.getAmountPaid() - registration.getAmountDiscount());
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");

@@ -27,7 +27,6 @@ import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
-import com.idega.user.data.User;
 import com.idega.util.CoreConstants;
 import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
@@ -58,25 +57,19 @@ public class RelayTeamEditor extends IWBaseComponent {
 	private JQuery jQuery;
 
 	private IWBundle iwb;
+	private String responseURL;
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
 		IWContext iwc = IWContext.getIWContext(context);
 		if (iwc.isLoggedOn()) {
-			User user = iwc.getCurrentUser();
 			iwb = getBundle(context, getBundleIdentifier());
 
 			List<RegistrationStatus> statuses = new ArrayList<RegistrationStatus>();
 			statuses.add(RegistrationStatus.OK);
 
 			Long registrationPK = iwc.isParameterSet(PARAMETER_REGISTRATION) ? Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION)) : null;
-			List<Registration> registrations = getDao().getRegistrations(user.getUniqueId(), statuses);
-			Registration registration = null;
-			for (Registration reg : registrations) {
-				if (registrationPK != null && reg.getId().equals(registrationPK)) {
-					registration = reg;
-				}
-			}
+			Registration registration = getDao().getRegistration(registrationPK);
 			
 			if (iwc.isParameterSet(PARAMETER_ACTION)) {
 				String relayLeg = iwc.getParameter(PARAMETER_RELAY_LEG_FIRST);
@@ -131,6 +124,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistration(registration);
+			bean.setResponseURL(getResponseURL());
 
 			if (registration != null) {
 				bean.setParticipant(getService().getParticipant(registration));
@@ -189,5 +183,13 @@ public class RelayTeamEditor extends IWBaseComponent {
 		}
 
 		return jQuery;
+	}
+
+	public String getResponseURL() {
+		return responseURL;
+	}
+
+	public void setResponseURL(String responseURL) {
+		this.responseURL = responseURL;
 	}
 }

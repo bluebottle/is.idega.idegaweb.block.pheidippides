@@ -9,7 +9,16 @@ jQuery(document).ready(function() {
             }, 
             5: { 
                 sorter: false 
-            } 
+            }, 
+            6: { 
+                sorter: false 
+            }, 
+            7: { 
+                sorter: false 
+            }, 
+            8: { 
+                sorter: false 
+            }
         } 
 	}); 
 	

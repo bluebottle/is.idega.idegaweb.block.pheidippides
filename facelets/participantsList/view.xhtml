@@ -63,6 +63,7 @@
 							<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
 								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></th>
 								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+								<th class="action"></th>
 							</ui:fragment>
 							<th class="action"></th>
 							<th class="action lastColumn"></th>
@@ -86,6 +87,12 @@
 								<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
 									<td><h:outputText value="#{registration.team.name}" /></td>
 									<td><h:outputText value="#{registration.leg}" /></td>
+									<td class="action">
+										<h:outputLink rendered="#{not empty pheidippidesBean.response}" value="#{pheidippidesBean.response}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" styleClass="team">
+											<f:param name="prm_registration_pk" value="#{registration.id}" />
+											<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
+										</h:outputLink>
+									</td>
 								</ui:fragment>
 								<td class="action">
 									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" styleClass="editItem fancybox.ajax">
@@ -94,7 +101,7 @@
 										<f:param name="prm_race_pk" value="#{param['prm_race_pk']}" />
 										<f:param name="prm_year" value="#{param['prm_year']}" />
 										<f:param name="prm_action" value="2" />
-										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_registration']}" /></span>
 									</h:outputLink>
 								</td>
 								<td class="action lastColumn">
@@ -111,8 +118,24 @@
 							
 							<ui:fragment rendered="#{registration.race.numberOfRelayLegs > 1}">
 								<tr class="childRow">
-									<td class="childCell" colspan="8">
-										<table class="subTable" width="100%" cellpadding="0" cellspacing="0">
+									<td class="childCell" colspan="9">
+										<table class="subTable relayPartners" width="100%" cellpadding="0" cellspacing="0">
+											<colgroup>
+												<col span="1" class="firstColumn name" />
+												<col span="1" class="personalID" />
+												<col span="1" class="email" />
+												<col span="1" class="shirtSize" />
+												<col span="1" class="lastColumn leg" />
+											</colgroup>
+											<thead>
+												<tr>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+												</tr>
+											</thead>
 											<tbody>
 												<ui:repeat value="#{pheidippidesBean.relayPartnersMap[registration]}" var="relayRegistration">
 													<ui:param value="#{pheidippidesBean.participantsMap[relayRegistration]}" name="relayPartner" />
