@@ -1991,7 +1991,7 @@ public class PheidippidesService {
 	}
 	
 	public void updateRelayTeam(Registration registration, String relayLeg, String teamName, List<Participant> relayPartners) {
-		dao.updateRegistrationStatus(registration.getId(), relayLeg, registration.getStatus());
+		dao.updateRegistrationStatus(registration.getId(), relayLeg, null, registration.getStatus());
 		
 		List<Registration> relayPartnerRegistrations = getRelayPartners(registration);
 		List<Participant> participants = new ArrayList<Participant>();
@@ -2013,7 +2013,7 @@ public class PheidippidesService {
 						user.setFullName(relayPartner.getFullName());
 					}
 					getUserBusiness().updateUserMail(user, relayPartner.getEmail());
-					dao.updateRegistrationStatus(relayRegistration.getId(), relayPartner.getRelayLeg(), RegistrationStatus.RelayPartner);
+					dao.updateRegistrationStatus(relayRegistration.getId(), relayPartner.getRelayLeg(), relayPartner.getShirtSize(), RegistrationStatus.RelayPartner);
 				}
 				catch (RemoteException re) {
 					throw new IBORuntimeException(re);
@@ -2026,7 +2026,7 @@ public class PheidippidesService {
 				}
 			}
 			else {
-				dao.updateRegistrationStatus(relayRegistration.getId(), null, RegistrationStatus.Deregistered);
+				dao.updateRegistrationStatus(relayRegistration.getId(), null, null, RegistrationStatus.Deregistered);
 			}
 		}
 		
