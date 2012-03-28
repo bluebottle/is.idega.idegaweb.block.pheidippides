@@ -29,6 +29,7 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.FileUtil;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -102,7 +103,7 @@ public class ParticipantPreferences extends IWBaseComponent implements IWPageEve
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")
-		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH))).getSQLDate() : null;
+		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), LocaleUtil.getIcelandicLocale())).getSQLDate() : null;
 		String address = iwc.getParameter(PARAMETER_ADDRESS);
 		String postalCode = iwc.getParameter(PARAMETER_POSTAL_CODE);
 		String city = iwc.getParameter(PARAMETER_CITY);

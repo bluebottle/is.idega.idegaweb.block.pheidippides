@@ -29,6 +29,7 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -194,8 +195,8 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		getDao().storeRacePrice(
 			iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK)) : null,
 			getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))),
-			iwc.isParameterSet(PARAMETER_VALID_FROM) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_FROM), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_VALID_TO) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_TO), iwc.getCurrentLocale()) : null,
+			iwc.isParameterSet(PARAMETER_VALID_FROM) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_FROM), LocaleUtil.getIcelandicLocale()) : null,
+			iwc.isParameterSet(PARAMETER_VALID_TO) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_TO), LocaleUtil.getIcelandicLocale()) : null,
 			iwc.isParameterSet(PARAMETER_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE)) : 0,
 			iwc.isParameterSet(PARAMETER_PRICE_KIDS) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE_KIDS)) : 0,
 			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT) ? Integer.parseInt(iwc.getParameter(PARAMETER_FAMILY_DISCOUNT)) : 0,

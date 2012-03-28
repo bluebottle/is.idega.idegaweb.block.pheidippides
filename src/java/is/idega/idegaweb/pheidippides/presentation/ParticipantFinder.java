@@ -30,6 +30,7 @@ import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -111,7 +112,7 @@ public class ParticipantFinder extends IWBaseComponent {
 	private void showView(IWContext iwc, PheidippidesBean bean) {
 		SearchParameter parameter = new SearchParameter();
 		parameter.setPersonalId(iwc.isParameterSet(PARAMETER_PERSONAL_ID) ? iwc.getParameter(PARAMETER_PERSONAL_ID) : null);
-		parameter.setDateOfBirth(iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), iwc.getCurrentLocale()) : null);
+		parameter.setDateOfBirth(iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), LocaleUtil.getIcelandicLocale()) : null);
 		parameter.setFirstName(iwc.isParameterSet(PARAMETER_FIRST_NAME) ? iwc.getParameter(PARAMETER_FIRST_NAME) : null);
 		parameter.setMiddleName(iwc.isParameterSet(PARAMETER_MIDDLE_NAME) ? iwc.getParameter(PARAMETER_MIDDLE_NAME) : null);
 		parameter.setLastName(iwc.isParameterSet(PARAMETER_LAST_NAME) ? iwc.getParameter(PARAMETER_LAST_NAME) : null);

@@ -27,6 +27,7 @@ import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.ui.handlers.IWDatePickerHandler;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -180,8 +181,8 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 			getDao().getDistance(Long.parseLong(iwc.getParameter(PARAMETER_DISTANCE_PK))),
 			iwc.isParameterSet(PARAMETER_MINIMUM_AGE) ? Integer.parseInt(iwc.getParameter(PARAMETER_MINIMUM_AGE)) : 0,
 			iwc.isParameterSet(PARAMETER_MAXIMUM_AGE) ? Integer.parseInt(iwc.getParameter(PARAMETER_MAXIMUM_AGE)) : 100,
-			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), iwc.getCurrentLocale()) : null,
-			iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), iwc.getCurrentLocale()) : null,
+			iwc.isParameterSet(PARAMETER_OPEN_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_OPEN_REGISTRATION), LocaleUtil.getIcelandicLocale()) : null,
+			iwc.isParameterSet(PARAMETER_CLOSE_REGISTRATION) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_CLOSE_REGISTRATION), LocaleUtil.getIcelandicLocale()) : null,
 			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT),
 			iwc.isParameterSet(PARAMETER_RELAY_LEGS) ? Integer.parseInt(iwc.getParameter(PARAMETER_RELAY_LEGS)) : 0,
 			iwc.isParameterSet(PARAMETER_CHARITY_RUN),
