@@ -20,8 +20,8 @@ import com.idega.builder.bean.AdvancedProperty;
 @Service("pheidippidesCompanyBean")
 @Scope("request")
 public class PheidippidesCompanyBean {
-	public String eventHandler;
-	public String responseURL;
+	private String eventHandler;
+	private String responseURL;
 	private Class<?> downloadWriter;
 
 

@@ -9,6 +9,7 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
@@ -27,52 +28,55 @@ import com.idega.builder.bean.AdvancedProperty;
 @Scope("request")
 public class PheidippidesBean {
 
-	public String eventHandler;
-	public String responseURL;
-	public Class<?> downloadWriter;
+	private String eventHandler;
+	private String responseURL;
+	private Class<?> downloadWriter;
 	
-	public Event event;
-	public List<Event> events;
+	private Event event;
+	private List<Event> events;
 	
-	public Distance distance;
-	public List<Distance> distances;
-	
-	public Race race;
-	public Collection<Race> races;
-	
-	public ShirtSize shirtSize;
-	public List<ShirtSize> shirtSizes;
-	
-	public RaceShirtSize raceShirtSize;
-	public List<RaceShirtSize> raceShirtSizes;
-	
-	public RacePrice racePrice;
-	public List<RacePrice> racePrices;
-	
-	public Charity charity;
-	public List<Charity> charities;
-	
-	public Registration registration;
-	public Participant participant;
-	public List<Registration> registrations;
-	public List<Participant> participants;
-	public Map<Registration, Participant> participantsMap;
-	public Map<Participant, List<Registration>> registrationsMap;
-	public Map<Registration, List<Registration>> relayPartnersMap;
-	
-	public RegistrationHeader registrationHeader;
-	public List<RegistrationHeader> registrationHeaders;
-	
-	public Locale locale;
-	public List<AdvancedProperty> locales;
-	public String styleClass;
-	public String response;
+	private Distance distance;
+	private List<Distance> distances;
 
-	public AdvancedProperty property;
-	public List<AdvancedProperty> properties;
+	private RaceTrinket trinket;
+	private List<RaceTrinket> trinkets;
+
+	private Race race;
+	private Collection<Race> races;
 	
-	public RegistrationAnswerHolder answer;
-	public Map<String, Registration> registrationMap;
+	private ShirtSize shirtSize;
+	private List<ShirtSize> shirtSizes;
+	
+	private RaceShirtSize raceShirtSize;
+	private List<RaceShirtSize> raceShirtSizes;
+	
+	private RacePrice racePrice;
+	private List<RacePrice> racePrices;
+	
+	private Charity charity;
+	private List<Charity> charities;
+	
+	private Registration registration;
+	private Participant participant;
+	private List<Registration> registrations;
+	private List<Participant> participants;
+	private Map<Registration, Participant> participantsMap;
+	private Map<Participant, List<Registration>> registrationsMap;
+	private Map<Registration, List<Registration>> relayPartnersMap;
+	
+	private RegistrationHeader registrationHeader;
+	private List<RegistrationHeader> registrationHeaders;
+	
+	private Locale locale;
+	private List<AdvancedProperty> locales;
+	private String styleClass;
+	private String response;
+
+	private AdvancedProperty property;
+	private List<AdvancedProperty> properties;
+	
+	private RegistrationAnswerHolder answer;
+	private Map<String, Registration> registrationMap;
 	private Map<String, Participant> participantMap;
 	private Map<RegistrationHeader, BankReference> bankReferencesMap;
 	
@@ -383,5 +387,21 @@ public class PheidippidesBean {
 
 	public void setParticipantCountMap(Map<Race, Long> participantCountMap) {
 		this.participantCountMap = participantCountMap;
+	}
+
+	public RaceTrinket getTrinket() {
+		return trinket;
+	}
+
+	public void setTrinket(RaceTrinket trinket) {
+		this.trinket = trinket;
+	}
+
+	public List<RaceTrinket> getTrinkets() {
+		return trinkets;
+	}
+
+	public void setTrinkets(List<RaceTrinket> trinkets) {
+		this.trinkets = trinkets;
 	}
 }

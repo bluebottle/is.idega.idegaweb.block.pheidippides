@@ -14,6 +14,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
@@ -739,5 +740,47 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Company getCompanyByUserUUID(String userUUID) {
 		return getSingleResult("company.findByUserUUID",
 				Company.class, new Param("uuid", userUUID));
+	}
+	
+	/* Trinket methods */
+	public RaceTrinket getTrinket(Long trinketID) {
+		return find(RaceTrinket.class, trinketID);
+	}
+
+	public RaceTrinket getTrinket(String code) {
+		return getSingleResult("raceTrinket.findByCode", RaceTrinket.class,
+				new Param("code", code));
+	}
+
+	public List<RaceTrinket> getTrinkets() {
+		return getResultList("raceTrinket.findAll", RaceTrinket.class);
+	}
+
+	@Transactional(readOnly = false)
+	public RaceTrinket storeTrinket(Long trinketID, String code,
+			String description, String localizedKey) {
+		RaceTrinket trinket = trinketID != null ? getTrinket(trinketID) : null;
+		if (trinket == null) {
+			trinket = new RaceTrinket();
+			trinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		trinket.setCode(code);
+		trinket.setDescription(description);
+		trinket.setLocalizedKey(localizedKey);
+
+		getEntityManager().persist(trinket);
+
+		return trinket;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeTrinket(Long trinketID) {
+		RaceTrinket trinket = getTrinket(trinketID);
+		if (trinket != null) {
+			getEntityManager().remove(trinket);
+			return true;
+		}
+
+		return false;
 	}
 }

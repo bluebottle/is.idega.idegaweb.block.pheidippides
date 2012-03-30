@@ -13,6 +13,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
@@ -157,5 +158,16 @@ public interface PheidippidesDao {
 	public List<Company> getCompanies();
 	
 	public Company getCompanyByUserUUID(String userUUID);
+
+	public RaceTrinket getTrinket(Long trinketID);
+
+	public RaceTrinket getTrinket(String code);
+
+	public List<RaceTrinket> getTrinkets();
+
+	public RaceTrinket storeTrinket(Long trinketID, String code,
+			String description, String localizedKey);
+
+	public boolean removeTrinket(Long trinketID);
 
 }
