@@ -24,7 +24,7 @@ public class ParticipantHolder {
 	private boolean hasDoneLVBefore = true;	
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
-
+	private boolean receiveMedallion = true;
 	
 	private List<Participant> relayPartners;
 	
@@ -165,5 +165,11 @@ public class ParticipantHolder {
 	}
 	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
 		this.bestUltraMarathonTime = bestUltraMarathonTime;
+	}
+	public boolean isReceiveMedallion() {
+		return receiveMedallion;
+	}
+	public void setReceiveMedallion(boolean receiveMedallion) {
+		this.receiveMedallion = receiveMedallion;
 	}
 }

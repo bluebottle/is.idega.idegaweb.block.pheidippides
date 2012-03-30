@@ -1,0 +1,31 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="4" />
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 4" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_medallion_help')]}" /></div>
+
+		<fieldset class="formSection">
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_receive_medallion" checked="#{not empty pheidippidesRegistrationSession.currentParticipant.receiveMedallion}" />
+				<label for="prm_receive_medallion"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receive_medallion')]}" /></label>
+			</div>
+		</fieldset>
+		
+		<fieldset class="submit">
+			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="next" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>
