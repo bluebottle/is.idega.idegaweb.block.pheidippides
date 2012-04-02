@@ -185,7 +185,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_RACE)) {
 							getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
-							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK));
+							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().isRegistrationWithPersonalId() ? Currency.ISK : Currency.EUR));
 						}
 						
 						showTrinketsSelect(iwc, bean);
@@ -197,7 +197,8 @@ public class MHRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
-						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK);
+						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().isRegistrationWithPersonalId() ? Currency.ISK : Currency.EUR);
+						getSession().getCurrentParticipant().clearTrinkets();
 						for (RacePrice racePrice : raceTrinkets) {
 							if (iwc.getBooleanParameter(racePrice.getTrinket().getParamName())) {
 								getSession().getCurrentParticipant().addTrinket(racePrice);

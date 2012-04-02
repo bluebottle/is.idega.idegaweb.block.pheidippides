@@ -181,4 +181,11 @@ public class ParticipantHolder {
 		
 		this.trinkets.add(trinket);
 	}
+	public void clearTrinkets() {
+		if (this.trinkets != null) {
+			this.trinkets.clear();
+		}
+		
+		this.trinkets = null;
+	}
 }
