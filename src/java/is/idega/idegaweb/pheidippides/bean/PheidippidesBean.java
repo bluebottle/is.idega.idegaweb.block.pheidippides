@@ -40,6 +40,8 @@ public class PheidippidesBean {
 
 	private RaceTrinket trinket;
 	private List<RaceTrinket> trinkets;
+	
+	private List<RacePrice> raceTrinkets;
 
 	private Race race;
 	private Collection<Race> races;
@@ -403,5 +405,13 @@ public class PheidippidesBean {
 
 	public void setTrinkets(List<RaceTrinket> trinkets) {
 		this.trinkets = trinkets;
+	}
+
+	public List<RacePrice> getRaceTrinkets() {
+		return raceTrinkets;
+	}
+
+	public void setRaceTrinkets(List<RacePrice> raceTrinkets) {
+		this.raceTrinkets = raceTrinkets;
 	}
 }

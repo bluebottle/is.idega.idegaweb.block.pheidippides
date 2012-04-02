@@ -36,6 +36,15 @@
 								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
 							</tr>
 						</ui:fragment>
+						<ui:fragment rendered="#{not empty holder.trinkets}">
+							<ui:repeat value="#{holder.trinkets}" var="racePrice">
+								<tr class="trinket">
+									<td class="firstColumn" ><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.code))])}" /></td>
+									<td><h:outputText escape="false" value="" /></td>
+									<td class="lastColumn"><h:outputText value="#{racePrice.price}" /></td>
+								</tr>
+							</ui:repeat>
+						</ui:fragment>
 					</ui:repeat>
 					
 					<tr>
@@ -43,6 +52,15 @@
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
 						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
 					</tr>
+					<ui:fragment rendered="#{not empty current.trinkets}">
+							<ui:repeat value="#{current.trinkets}" var="racePrice">
+								<tr class="trinket">
+									<td class="firstColumn" ><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.code))])}" /></td>
+									<td><h:outputText escape="false" value="" /></td>
+									<td class="lastColumn"><h:outputText value="#{racePrice.price}" /></td>
+								</tr>
+							</ui:repeat>
+						</ui:fragment>
 				</tbody>
 			</table>
 		</fieldset>

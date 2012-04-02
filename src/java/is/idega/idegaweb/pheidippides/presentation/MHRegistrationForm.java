@@ -3,12 +3,14 @@ package is.idega.idegaweb.pheidippides.presentation;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,7 +42,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_PERSON_SELECT = 1;
 	private static final int ACTION_PARTICIPANT = 2;
 	private static final int ACTION_RACE_SELECT = 3;
-	private static final int ACTION_MEDALLION_SELECT = 4;
+	private static final int ACTION_TRINKET_SELECT = 4;
 	private static final int ACTION_WAIVER = 5;
 	private static final int ACTION_OVERVIEW = 6;
 	private static final int ACTION_RECEIPT = 7;
@@ -59,7 +61,6 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
-	//private static final String PARAMETER_RECEIVE_MEDALLION = "prm_receive_medallion";
 	private static final String PARAMETER_TRINKET = "prm_trinket";
 	
 	@Autowired
@@ -180,13 +181,14 @@ public class MHRegistrationForm extends IWBaseComponent {
 					showRaceSelect(iwc, bean);
 					break;
 		
-				case ACTION_MEDALLION_SELECT:
+				case ACTION_TRINKET_SELECT:
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_RACE)) {
 							getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
+							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK));
 						}
 						
-						showMedallionSelect(iwc, bean);
+						showTrinketsSelect(iwc, bean);
 					}
 					else {
 						showPersonSelect(iwc, bean);
@@ -195,13 +197,13 @@ public class MHRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
-						if (iwc.isParameterSet(PARAMETER_TRINKET + "_1")) {
-							int counter = 1;
-							while (iwc.isParameterSet(PARAMETER_TRINKET + "_" + counter)) {
-								
+						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK);
+						for (RacePrice racePrice : raceTrinkets) {
+							if (iwc.getBooleanParameter(racePrice.getTrinket().getParamName())) {
+								getSession().getCurrentParticipant().addTrinket(racePrice);
 							}
 						}
-						//getSession().getCurrentParticipant().setReceiveMedallion(iwc.isParameterSet(PARAMETER_RECEIVE_MEDALLION));
+
 						showWaiver(iwc, bean);
 					}
 					else {
@@ -291,7 +293,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void showMedallionSelect(IWContext iwc, PheidippidesBean bean) {
+	private void showTrinketsSelect(IWContext iwc, PheidippidesBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/trinketSelect.xhtml"));
 		add(facelet);

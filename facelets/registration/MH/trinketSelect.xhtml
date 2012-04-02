@@ -13,27 +13,23 @@
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 4" /></h2>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_medallion_help')]}" /></div>
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_trinket_help')]}" /></div>
 
-		<fieldset class="formSection">
-			<div class="formItem checkbox">
-				<c:checkBox name="prm_receive_medallion" checked="#{not empty pheidippidesRegistrationSession.currentParticipant.receiveMedallion}" />
-				<label for="prm_receive_medallion"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receive_medallion')]}" /></label>
-			</div>
-		</fieldset>
-		
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method']}" /></h1>
-		<div id="paymentMethod" class="formSection">
-			<div class="formItem radioButtonItem">
-				<c:radioButton name="prm_payment_method" selected="true" content="true" />
-				<label for="prm_payment_method"><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method.giro']}" /></label>
-			</div>
-			<div class="formItem radioButtonItem">
-				<c:radioButton name="prm_payment_method" content="false" />
-				<label for="prm_payment_method"><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method.card']}" /></label>
-			</div>
-		</div>
-		
+		<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="racePrice">
+			<fieldset class="formSection">
+				<h3><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></h3>
+				<div id="#{racePrice.trinket.code}" class="formSection required">
+					<div class="formItem radioButtonItem">
+						<c:radioButton name="#{racePrice.trinket.paramName}" content="true" />
+						<label for="#{racePrice.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.yes')])}" /></label>
+					</div>
+					<div class="formItem radioButtonItem">
+						<c:radioButton name="#{racePrice.trinket.paramName}" content="false" />
+						<label for="#{racePrice.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.no')])}" /></label>
+					</div>
+				</div>
+			</fieldset>
+		</ui:repeat>
 		
 		<fieldset class="submit">
 			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>

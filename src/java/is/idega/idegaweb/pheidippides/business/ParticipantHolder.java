@@ -25,13 +25,12 @@ public class ParticipantHolder {
 	private boolean hasDoneLVBefore = true;	
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
-	//private boolean receiveMedallion = true;
-	private List<String> trinketCodes;
 	private List<RacePrice> trinkets;
 	
 	private List<Participant> relayPartners;
 	
 	private String valitorDescription = null;
+	
 	
 	public Participant getParticipant() {
 		return participant;
@@ -169,22 +168,17 @@ public class ParticipantHolder {
 	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
 		this.bestUltraMarathonTime = bestUltraMarathonTime;
 	}
-/*	public boolean isReceiveMedallion() {
-		return receiveMedallion;
-	}
-	public void setReceiveMedallion(boolean receiveMedallion) {
-		this.receiveMedallion = receiveMedallion;
-	}*/
-	public List<String> getTrinketCodes() {
-		return trinketCodes;
-	}
-	public void setTrinketCodes(List<String> trinketCodes) {
-		this.trinketCodes = trinketCodes;
-	}
 	public List<RacePrice> getTrinkets() {
 		return trinkets;
 	}
 	public void setTrinkets(List<RacePrice> trinkets) {
 		this.trinkets = trinkets;
+	}
+	public void addTrinket(RacePrice trinket) {
+		if (this.trinkets == null) {
+			this.trinkets = new ArrayList<RacePrice>();
+		}
+		
+		this.trinkets.add(trinket);
 	}
 }
