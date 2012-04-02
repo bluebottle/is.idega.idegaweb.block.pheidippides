@@ -59,7 +59,8 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
-	private static final String PARAMETER_RECEIVE_MEDALLION = "prm_receive_medallion";
+	//private static final String PARAMETER_RECEIVE_MEDALLION = "prm_receive_medallion";
+	private static final String PARAMETER_TRINKET = "prm_trinket";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -194,7 +195,13 @@ public class MHRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
-						getSession().getCurrentParticipant().setReceiveMedallion(iwc.isParameterSet(PARAMETER_RECEIVE_MEDALLION));
+						if (iwc.isParameterSet(PARAMETER_TRINKET + "_1")) {
+							int counter = 1;
+							while (iwc.isParameterSet(PARAMETER_TRINKET + "_" + counter)) {
+								
+							}
+						}
+						//getSession().getCurrentParticipant().setReceiveMedallion(iwc.isParameterSet(PARAMETER_RECEIVE_MEDALLION));
 						showWaiver(iwc, bean);
 					}
 					else {
@@ -286,7 +293,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 
 	private void showMedallionSelect(IWContext iwc, PheidippidesBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/medallionSelect.xhtml"));
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/trinketSelect.xhtml"));
 		add(facelet);
 	}
 

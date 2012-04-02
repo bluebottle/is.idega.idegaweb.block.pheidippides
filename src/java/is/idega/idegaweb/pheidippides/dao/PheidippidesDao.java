@@ -79,9 +79,11 @@ public interface PheidippidesDao {
 	
 	public RacePrice getCurrentRacePrice(Race race, Currency currency);
 
+	public List<RacePrice> getCurrentRaceTrinketPrice(Race race, Currency currency);
+
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
-			int familyDiscount, int shirtPrice, Currency currency);
+			int familyDiscount, int shirtPrice, Currency currency, RaceTrinket trinket);
 
 	public boolean removeRacePrice(Long racePriceID);
 

@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +29,8 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 	@NamedQuery(name = "racePrice.findAll", query = "select r from RacePrice r"),
 	@NamedQuery(name = "racePrice.findByRace", query = "select r from RacePrice r where r.race = :race"),
-	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency")
+	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and r.trinket is null"),
+	@NamedQuery(name = "racePrice.findTrinketsByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null")
 })
 public class RacePrice implements Serializable {
 	private static final long serialVersionUID = -1799532522822250416L;
@@ -46,8 +48,10 @@ public class RacePrice implements Serializable {
 	private static final String COLUMN_FAMILY_DISCOUNT = "family_discount";
 	private static final String COLUMN_SHIRT_PRICE = "shirt_price";
 	private static final String COLUMN_CURRENCY = "currency";
+	private static final String COLUMN_TRINKET = "trinket_id";
 	
 	@PrePersist
+	@PreUpdate
 	public void setDefaultValues() {
 		if (getValidFrom() != null) {
 			Date validFrom = getValidFrom();
@@ -107,6 +111,11 @@ public class RacePrice implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
+	@ManyToOne
+	@JoinColumn(name = RacePrice.COLUMN_TRINKET)
+	private RaceTrinket trinket;
+
+	
 	public Date getValidFrom() {
 		return validFrom;
 	}
@@ -190,5 +199,13 @@ public class RacePrice implements Serializable {
 
 	public void setRace(Race race) {
 		this.race = race;
+	}
+
+	public RaceTrinket getTrinket() {
+		return trinket;
+	}
+
+	public void setTrinket(RaceTrinket trinket) {
+		this.trinket = trinket;
 	}
 }

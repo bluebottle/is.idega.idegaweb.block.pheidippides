@@ -61,6 +61,15 @@
 					</ui:repeat>
 				</c:selectOne>
 			</div>
+			<div class="formItem">
+				<label for="prm_trinket_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['trinket']}" /></label>
+				<c:selectOne name="prm_trinket_pk">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_trinket']}" content="" />
+					<ui:repeat value="#{pheidippidesBean.trinkets}" var="trinket">
+						<c:selectOption name="#{trinket.code}" content="#{trinket.id}" selected="#{trinket.id eq ppheidippidesBean.racePrice.trinket.id}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>			
 		</fieldset>
 		
 		<div class="submit">

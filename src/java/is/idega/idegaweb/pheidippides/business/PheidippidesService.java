@@ -1271,12 +1271,6 @@ public class PheidippidesService {
 				}
 			}
 		}
-
-		/*
-		 * current.setAmount(100); if (holder != null) { for (ParticipantHolder
-		 * participantHolder : holder) { participantHolder.setAmount(100);
-		 * participantHolder.setDiscount(100); } }
-		 */
 	}
 
 	@SuppressWarnings("unchecked")

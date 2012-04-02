@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.business;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
@@ -24,7 +25,9 @@ public class ParticipantHolder {
 	private boolean hasDoneLVBefore = true;	
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
-	private boolean receiveMedallion = true;
+	//private boolean receiveMedallion = true;
+	private List<String> trinketCodes;
+	private List<RacePrice> trinkets;
 	
 	private List<Participant> relayPartners;
 	
@@ -166,10 +169,22 @@ public class ParticipantHolder {
 	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
 		this.bestUltraMarathonTime = bestUltraMarathonTime;
 	}
-	public boolean isReceiveMedallion() {
+/*	public boolean isReceiveMedallion() {
 		return receiveMedallion;
 	}
 	public void setReceiveMedallion(boolean receiveMedallion) {
 		this.receiveMedallion = receiveMedallion;
+	}*/
+	public List<String> getTrinketCodes() {
+		return trinketCodes;
+	}
+	public void setTrinketCodes(List<String> trinketCodes) {
+		this.trinketCodes = trinketCodes;
+	}
+	public List<RacePrice> getTrinkets() {
+		return trinkets;
+	}
+	public void setTrinkets(List<RacePrice> trinkets) {
+		this.trinkets = trinkets;
 	}
 }

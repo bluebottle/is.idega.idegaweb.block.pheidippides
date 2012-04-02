@@ -52,6 +52,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 	private static final String PARAMETER_FAMILY_DISCOUNT = "prm_family_discount";
 	private static final String PARAMETER_SHIRT_PRICE = "prm_shirt_price";
 	private static final String PARAMETER_CURRENCY = "prm_currency";
+	private static final String PARAMETER_TRINKET_PK = "prm_trinket_pk";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -127,6 +128,9 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		/* Race price */
 		bean.setRacePrice(iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? getDao().getRacePrice(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK))) : null);
 		
+		/* Trinkets */
+		bean.setTrinkets(getDao().getTrinkets());
+		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
@@ -201,7 +205,8 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			iwc.isParameterSet(PARAMETER_PRICE_KIDS) ? Integer.parseInt(iwc.getParameter(PARAMETER_PRICE_KIDS)) : 0,
 			iwc.isParameterSet(PARAMETER_FAMILY_DISCOUNT) ? Integer.parseInt(iwc.getParameter(PARAMETER_FAMILY_DISCOUNT)) : 0,
 			iwc.isParameterSet(PARAMETER_SHIRT_PRICE) ? Integer.parseInt(iwc.getParameter(PARAMETER_SHIRT_PRICE)) : 0,
-			Currency.valueOf(iwc.getParameter(PARAMETER_CURRENCY))
+			Currency.valueOf(iwc.getParameter(PARAMETER_CURRENCY)),
+			iwc.getParameter(PARAMETER_TRINKET_PK).equals("") ? null : getDao().getTrinket(Long.parseLong(iwc.getParameter(PARAMETER_TRINKET_PK)))
 		);
 		
 		return true;

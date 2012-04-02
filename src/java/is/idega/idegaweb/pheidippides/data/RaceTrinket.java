@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +30,16 @@ public class RaceTrinket implements Serializable {
 	private static final String COLUMN_DESCRIPTION = "trinket_description";
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
 	private static final String COLUMN_CREATED_DATE = "created";
+	private static final String COLUMN_PARAMETER_NAME = "param_name";
+
+	public static final String PARAM_PREFIX = "prm_trinket_";
+	
+	@PrePersist
+	public void setDefaultValues() {
+		if (getCode() != null) {
+			setParamName(RaceTrinket.PARAM_PREFIX + getCode());
+		}
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,6 +58,9 @@ public class RaceTrinket implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RaceTrinket.COLUMN_CREATED_DATE)
 	private Date createdDate;
+
+	@Column(name = RaceTrinket.COLUMN_PARAMETER_NAME)
+	private String paramName;
 
 	public Long getId() {
 		return id;
@@ -86,5 +100,13 @@ public class RaceTrinket implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getParamName() {
+		return paramName;
+	}
+
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
 	}
 }

@@ -66,6 +66,7 @@
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_amount']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_price']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['currency']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['trinket']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created']}" /></th>
 							<th class="action"></th>
 							<th class="action lastColumn"></th>
@@ -84,6 +85,7 @@
 								<td><h:outputText value="#{racePrice.familyDiscount}" /></td>
 								<td><h:outputText value="#{racePrice.shirtPrice}" /></td>
 								<td><h:outputText value="#{racePrice.currency}" /></td>
+								<td><h:outputText value="#{racePrice.trinket.code}" /></td>
 								<td><h:outputText value="#{racePrice.createdDate}"><f:convertDateTime type="date" pattern="d.M.yyyy"/></h:outputText></td>
 								<td class="action">
 									<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_race_price']}" styleClass="editItem fancybox.ajax">

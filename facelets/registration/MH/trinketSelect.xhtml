@@ -22,6 +22,19 @@
 			</div>
 		</fieldset>
 		
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method']}" /></h1>
+		<div id="paymentMethod" class="formSection">
+			<div class="formItem radioButtonItem">
+				<c:radioButton name="prm_payment_method" selected="true" content="true" />
+				<label for="prm_payment_method"><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method.giro']}" /></label>
+			</div>
+			<div class="formItem radioButtonItem">
+				<c:radioButton name="prm_payment_method" content="false" />
+				<label for="prm_payment_method"><h:outputText value="#{localizedStrings['is.idega.idegaweb.egov.grub']['payment_method.card']}" /></label>
+			</div>
+		</div>
+		
+		
 		<fieldset class="submit">
 			<a href="#" class="back" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>

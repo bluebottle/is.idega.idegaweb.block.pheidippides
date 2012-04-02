@@ -255,10 +255,17 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				new Param("currency", currency));
 	}
 
+	public List<RacePrice> getCurrentRaceTrinketPrice(Race race, Currency currency) {
+		return getResultList("racePrice.findTrinketsByRaceAndDate", RacePrice.class,
+				new Param("race", race),
+				new Param("date", IWTimestamp.getTimestampRightNow()),
+				new Param("currency", currency));
+	}
+	
 	@Transactional(readOnly = false)
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
-			int familyDiscount, int shirtPrice, Currency currency) {
+			int familyDiscount, int shirtPrice, Currency currency, RaceTrinket trinket) {
 		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID)
 				: null;
 		if (racePrice == null) {
@@ -273,6 +280,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		racePrice.setFamilyDiscount(familyDiscount);
 		racePrice.setShirtPrice(shirtPrice);
 		racePrice.setCurrency(currency);
+		racePrice.setTrinket(trinket);
 
 		getEntityManager().persist(racePrice);
 
