@@ -418,6 +418,11 @@ form.registrationForm h2 {
 	float: right;
 }
 
+form.registrationForm fieldset legend {
+	font-size: 1em;
+	margin-bottom: 12px;
+}
+
 form.registrationForm div.helpText, form.registrationForm div.receipt {
 	clear: both;
 	padding-top: 8px;
@@ -483,15 +488,20 @@ form.registrationForm fieldset.formSection div.formItem input, form.registration
 	padding: 3px 4px;
 }
 
-form.registrationForm fieldset.formSection div.formItem.checkbox input {
+form.registrationForm fieldset.formSection div.formItem.checkbox input, form.registrationForm fieldset.formSection div.formItem.radioButtonItem input {
 	float: left;
 	margin-right: 8px;
 	margin-left: 0;
 }
 
-form.registrationForm fieldset.formSection div.formItem.checkbox label {
+form.registrationForm fieldset.formSection div.formItem.checkbox label, form.registrationForm fieldset.formSection div.formItem.radioButtonItem label {
 	width: auto;
 	margin-bottom: 0;
+}
+
+form.registrationForm fieldset.formSection div.formItem.radioButtonItem label {
+	font-weight: normal;
+	margin-bottom: 3px;
 }
 
 form.registrationForm fieldset.formSection div.formItem .error, form.userForm div.formItem .error {

@@ -17,14 +17,14 @@
 
 		<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="racePrice">
 			<fieldset class="formSection">
-				<h3><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></h3>
+				<legend><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></legend>
 				<div id="#{racePrice.trinket.code}" class="formSection required">
 					<div class="formItem radioButtonItem">
-						<c:radioButton name="#{racePrice.trinket.paramName}" content="true" />
+						<c:radioButton styleClass="required" name="#{racePrice.trinket.paramName}" content="true" />
 						<label for="#{racePrice.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.yes')])}" /></label>
 					</div>
 					<div class="formItem radioButtonItem">
-						<c:radioButton name="#{racePrice.trinket.paramName}" content="false" />
+						<c:radioButton styleClass="required" name="#{racePrice.trinket.paramName}" content="false" />
 						<label for="#{racePrice.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.no')])}" /></label>
 					</div>
 				</div>
