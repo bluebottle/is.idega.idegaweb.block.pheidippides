@@ -738,7 +738,14 @@ public class PheidippidesService {
 						"http://skraning.marathon.is/pages/valitor");
 
 		StringBuilder securityString = null;
-		if (createUsers) {
+		if (fixedCurrency != null) {
+			if (fixedCurrency.equals(Currency.ISK)) {
+				securityString = new StringBuilder(valitorSecurityNumber);
+			} else {
+				securityString = new StringBuilder(valitorSecurityNumberEUR);
+			}			
+		}
+		else if (createUsers) {
 			securityString = new StringBuilder(valitorSecurityNumberEUR);
 		} else {
 			securityString = new StringBuilder(valitorSecurityNumber);
