@@ -696,7 +696,7 @@ public class PheidippidesService {
 	public RegistrationAnswerHolder storeRegistration(
 			List<ParticipantHolder> holders, boolean doPayment,
 			String registrantUUID, boolean createUsers, Locale locale,
-			String paymentGroup, boolean isBankTransfer) {
+			String paymentGroup, boolean isBankTransfer, Currency fixedCurrency) {
 
 		RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
@@ -748,7 +748,13 @@ public class PheidippidesService {
 		url.append("?");
 		url.append(VEFVERSLUN_ID);
 		url.append("=");
-		if (createUsers) {
+		if (fixedCurrency != null) {
+			if (fixedCurrency.equals(Currency.ISK)) {
+				url.append(valitorShopID);				
+			} else {
+				url.append(valitorShopIDEUR);				
+			}
+		} else if (createUsers) {
 			url.append(valitorShopIDEUR);
 		} else {
 			url.append(valitorShopID);
@@ -764,6 +770,14 @@ public class PheidippidesService {
 		String currency = "ISK";
 		if (createUsers) {
 			currency = "EUR";
+		}
+		
+		if (fixedCurrency != null) {
+			if (fixedCurrency.equals(Currency.ISK)) {
+				currency = "ISK";
+			} else {
+				currency = "EUR";
+			}			
 		}
 		url.append("&");
 		url.append(GJALDMIDILL);
@@ -781,13 +795,13 @@ public class PheidippidesService {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.WaitingForPayment,
 						registrantUUID, paymentGroup, locale.toString(),
-						createUsers ? Currency.EUR : Currency.ISK, null, null,
+						fixedCurrency != null ? fixedCurrency : createUsers ? Currency.EUR : Currency.ISK, null, null,
 						null, null, null, null, null, null, null, null);
 			} else {
 				header = dao.storeRegistrationHeader(null,
 						RegistrationHeaderStatus.RegisteredWithoutPayment,
 						registrantUUID, paymentGroup, locale.toString(),
-						createUsers ? Currency.EUR : Currency.ISK, null, null,
+						fixedCurrency != null ? fixedCurrency : createUsers ? Currency.EUR : Currency.ISK, null, null,
 						null, null, null, null, null, null, null, null);
 			}
 			holder.setHeader(header);
@@ -886,7 +900,7 @@ public class PheidippidesService {
 								team.isRelayTeam());
 					}
 
-					dao.storeRegistration(null, header,
+					Registration registration = dao.storeRegistration(null, header,
 							RegistrationStatus.Unconfirmed,
 							participantHolder.getRace(),
 							participantHolder.getShirtSize(), team,
@@ -938,6 +952,48 @@ public class PheidippidesService {
 					url.append("=");
 					url.append(participantHolder.getDiscount());
 
+					List<RacePrice> trinkets = participantHolder.getTrinkets();
+					if (trinkets != null && !trinkets.isEmpty()) {
+						for (RacePrice trinket : trinkets) {
+							dao.storeRegistrationTrinket(null, registration, trinket);
+							securityString.append("1");
+							securityString.append(trinket.getPrice());
+							securityString.append("0");
+
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_LYSING);
+							url.append("=");
+							try {
+								url.append(URLEncoder.encode(
+										trinket.getTrinket().getDescription(),
+										"UTF-8"));
+							} catch (UnsupportedEncodingException e) {
+								e.printStackTrace();
+							}
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_FJOLDI);
+							url.append("=");
+							url.append("1");
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_VERD);
+							url.append("=");
+							url.append(trinket.getPrice());
+							url.append("&");
+							url.append(VARA);
+							url.append(counter++);
+							url.append(VARA_AFSLATTUR);
+							url.append("=0");
+							
+							amount += trinket.getPrice();
+						}
+					}
+					
 					if (relayPartners != null && !relayPartners.isEmpty()) {
 						for (Participant participant2 : relayPartners) {
 							user = null;
@@ -1209,13 +1265,13 @@ public class PheidippidesService {
 	}
 
 	public void calculatePrices(ParticipantHolder current,
-			List<ParticipantHolder> holder, boolean isRegistrationWithPersonalID) {
+			List<ParticipantHolder> holder, boolean isRegistrationWithPersonalID, Currency fixedCurrency) {
 		int childCount = 0;
 		if (holder != null && !holder.isEmpty()) {
 			for (ParticipantHolder participantHolder : holder) {
 				Race race = participantHolder.getRace();
 				RacePrice price = dao.getCurrentRacePrice(race,
-						isRegistrationWithPersonalID ? Currency.ISK
+						fixedCurrency != null ? fixedCurrency :isRegistrationWithPersonalID ? Currency.ISK
 								: Currency.EUR);
 				Participant participant = participantHolder.getParticipant();
 
@@ -1246,7 +1302,7 @@ public class PheidippidesService {
 		if (current != null) {
 			Race race = current.getRace();
 			RacePrice price = dao.getCurrentRacePrice(race,
-					isRegistrationWithPersonalID ? Currency.ISK : Currency.EUR);
+					fixedCurrency != null ? fixedCurrency : isRegistrationWithPersonalID ? Currency.ISK : Currency.EUR);
 			Participant participant = current.getParticipant();
 
 			Age age = new Age(participant.getDateOfBirth());

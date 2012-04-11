@@ -89,6 +89,8 @@ public class LVRegistrationForm extends IWBaseComponent {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
 
+		getSession().setCurrency(null);
+		
 		if (getSession().getLocale() == null) {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
@@ -218,7 +220,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
 						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
-						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
+						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), null);
 					}
 					else {
 						getSession().setCurrentParticipant(getSession().getParticipantHolders().get(getSession().getParticipantHolders().size() - 1));
@@ -231,7 +233,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
 						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
 						
-						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null);
 						bean.setAnswer(answer);
 						getSession().empty();
 						

@@ -17,6 +17,7 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
@@ -790,5 +791,26 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 
 		return false;
+	}
+
+	public RegistrationTrinket getRegistrationTrinket(Long registrationTrinketID) {
+		return find(RegistrationTrinket.class, registrationTrinketID);
+	}
+
+	
+	@Transactional(readOnly = false)
+	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket) {
+		RegistrationTrinket registrationTrinket = registrationTrinketID != null ? getRegistrationTrinket(registrationTrinketID) : null;
+		if (registrationTrinket == null) {
+			registrationTrinket = new RegistrationTrinket();
+			registrationTrinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+		registrationTrinket.setRegistration(registration);
+		registrationTrinket.setTrinket(trinket.getTrinket());
+		registrationTrinket.setAmountPaid(trinket.getPrice());
+
+		getEntityManager().persist(registrationTrinket);
+
+		return registrationTrinket;
 	}
 }

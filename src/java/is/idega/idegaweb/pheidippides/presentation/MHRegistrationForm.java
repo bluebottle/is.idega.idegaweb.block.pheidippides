@@ -92,6 +92,8 @@ public class MHRegistrationForm extends IWBaseComponent {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
+		getSession().setCurrency(Currency.ISK);
+
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
 			List<ParticipantHolder> holders = getSession().getParticipantHolders();
@@ -216,7 +218,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
 						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
-						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId());
+						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), Currency.ISK);
 					}
 					else {
 						getSession().setCurrentParticipant(getSession().getParticipantHolders().get(getSession().getParticipantHolders().size() - 1));
@@ -229,7 +231,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
 						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
 						
-						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true);
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, Currency.ISK);
 						bean.setAnswer(answer);
 						getSession().empty();
 						

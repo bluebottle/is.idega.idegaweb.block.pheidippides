@@ -16,6 +16,7 @@ public class PheidippidesRegistrationSession {
 	private List<ParticipantHolder> holders = null;
 	private ParticipantHolder currentParticipant;
 	private Locale locale;
+	private Currency currency;
 
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
@@ -65,5 +66,13 @@ public class PheidippidesRegistrationSession {
 
 	public void setLocale(Locale locale) {
 		this.locale = locale;
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 }
