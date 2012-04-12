@@ -1063,7 +1063,13 @@ public class PheidippidesService {
 				}
 			}
 
-			if (createUsers) {
+			if (fixedCurrency != null) {
+				if (fixedCurrency.equals(Currency.ISK)) {
+					securityString.append(valitorShopID);
+				} else {
+					securityString.append(valitorShopIDEUR);
+				}
+			} else if (createUsers) {
 				securityString.append(valitorShopIDEUR);
 			} else {
 				securityString.append(valitorShopID);
