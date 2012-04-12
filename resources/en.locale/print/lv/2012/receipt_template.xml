@@ -42,12 +42,6 @@
 		Please study all race information on the website <anchor reference="http://www.marathon.is/ultramarathon">www.marathon.is/reykjavik-marathon</anchor>.
 	</paragraph>
 	
-	<paragraph font="normal" spacing-after="18.0">
-		Best wishes!<br />
-		Reykjavík Marathon<br />
-		<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
-	</paragraph>
-
 	<paragraph font="small" halign="right">
 		Receipt number: ${id}
 	</paragraph>
