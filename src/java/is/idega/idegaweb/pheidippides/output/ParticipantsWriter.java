@@ -10,6 +10,7 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -218,6 +219,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			}
 			Country country = getCountryHome().findByPrimaryKey(participant.getCountry());
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
+			ShirtSize shirtSize = registration.getShirtSize();
 			
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
 			if (dateOfBirth != null) {
@@ -256,7 +258,12 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(participant.getPhoneMobile());
 			row.createCell(iCell++).setCellValue(nationality.getName());
 			row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
-			row.createCell(iCell++).setCellValue(registration.getShirtSize().getSize() + " - " + registration.getShirtSize().getGender());
+			if (shirtSize != null) {
+				row.createCell(iCell++).setCellValue(shirtSize.getSize() + " - " + shirtSize.getGender());
+			}
+			else {
+				row.createCell(iCell++).setCellValue("");
+			}
 			row.createCell(iCell++).setCellValue(registration.getAmountPaid() - registration.getAmountDiscount());
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");

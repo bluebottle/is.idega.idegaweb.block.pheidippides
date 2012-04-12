@@ -693,6 +693,10 @@ table.smallTable tr.Cancelled td, table.smallTable tr.Deregistered td {
 	font-style: italic;
 }
 
+table.smallTable tr.trinket td {
+	font-size: 0.85em;
+}
+
 /* User table icons */
 table.userTable td.action {
 	vertical-align: middle;

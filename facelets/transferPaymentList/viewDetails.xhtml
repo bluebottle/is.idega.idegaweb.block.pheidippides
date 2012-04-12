@@ -36,6 +36,15 @@
 							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', shirtSize.localizedKey))]}" /></td>
 							<td class="lastColumn"><h:outputText value="#{registration.amountPaid - registration.amountDiscount}" /></td>
 						</tr>
+						
+						<ui:fragment rendered="#{not empty registration.trinkets}">
+							<ui:repeat value="#{registration.trinkets}" var="trinket">
+								<tr class="trinket">
+									<td class="firstColumn" colspan="4"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(event.localizedKey, p:concat('.', trinket.trinket.code))])}" /></td>
+									<td class="lastColumn"><h:outputText value="#{trinket.amountPaid}" /></td>
+								</tr>
+							</ui:repeat>
+						</ui:fragment>
 					</ui:repeat>
 				</tbody>
 			</table>

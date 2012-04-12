@@ -11,8 +11,10 @@ import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
@@ -1544,6 +1546,14 @@ public class PheidippidesService {
 			String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
+
+		Locale locale = LocaleUtil.getLocale(header.getLocale());
+		IWResourceBundle iwrb = IWMainApplication
+				.getDefaultIWMainApplication()
+				.getBundle(
+						PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+				.getResourceBundle(locale);
+		
 		List<Registration> registrations = dao.getRegistrations(header);
 		dao.storeRegistrationHeader(
 				header.getId(),
@@ -1560,6 +1570,49 @@ public class PheidippidesService {
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
 						registration.isHasDoneLVBefore(), null, null);
+				
+				Race race = registration.getRace();
+				List<RegistrationTrinket> trinkets = registration.getTrinkets();
+				List<RacePrice> trinketPrices = dao.getCurrentRaceTrinketPrice(race, header.getCurrency());
+				
+				List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
+				if (trinkets != null) {
+					for (RegistrationTrinket registrationTrinket : trinkets) {
+						raceTrinkets.add(registrationTrinket.getTrinket());
+					}
+				}
+				
+				StringBuilder trinketString = new StringBuilder();
+				for (RacePrice trinketPrice : trinketPrices) {
+					RaceTrinket trinket = trinketPrice.getTrinket();
+					
+					if (trinketString.length() > 0) {
+						trinketString.append("\n");
+					}
+					
+					trinketString.append(PheidippidesUtil.escapeXML(iwrb
+							.getLocalizedString(registration.getRace()
+									.getEvent().getLocalizedKey()
+									+ "."
+									+ trinket.getCode(),
+									trinket.getCode())));
+					trinketString.append(": ");
+					if (raceTrinkets.contains(trinket)) {
+						trinketString.append(PheidippidesUtil.escapeXML(iwrb
+								.getLocalizedString(registration.getRace()
+										.getEvent().getLocalizedKey()
+										+ ".yes",
+										"yes")));
+					}
+					else {
+						trinketString.append(PheidippidesUtil.escapeXML(iwrb
+								.getLocalizedString(registration.getRace()
+										.getEvent().getLocalizedKey()
+										+ ".no",
+										"no")));
+					}
+				}
+				
 				try {
 					User user = getUserBusiness().getUserByUniqueId(
 							registration.getUserUUID());
@@ -1597,25 +1650,19 @@ public class PheidippidesService {
 					addUserToRootRunnersGroup(user);
 
 					Email email = getUserBusiness().getUserMail(user);
-					Locale locale = LocaleUtil.getLocale(header.getLocale());
-					IWResourceBundle iwrb = IWMainApplication
-							.getDefaultIWMainApplication()
-							.getBundle(
-									PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
-							.getResourceBundle(locale);
 					Object[] args = {
 							user.getName(),
 							user.getPersonalID() != null ? user.getPersonalID()
 									: "",
 							new IWTimestamp(user.getDateOfBirth())
 									.getDateString("dd.MM.yyyy"),
-							getLocalizedShirtName(
+							registration.getShirtSize() != null ? getLocalizedShirtName(
 									registration.getRace().getEvent(),
 									registration.getShirtSize(),
-									header.getLocale()).getValue(),
+									header.getLocale()).getValue() : "",
 							getLocalizedRaceName(registration.getRace(),
 									header.getLocale()).getValue(),
-							userNameString, passwordString };
+							userNameString, passwordString, trinketString.toString() };
 					String subject = PheidippidesUtil.escapeXML(iwrb
 							.getLocalizedString(registration.getRace()
 									.getEvent().getLocalizedKey()

@@ -4,11 +4,13 @@ import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -127,6 +130,9 @@ public class Registration implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
 	private Date createdDate;
+
+	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
+	private List<RegistrationTrinket> trinkets;
 
 	public Long getId() {
 		return id;
@@ -270,5 +276,13 @@ public class Registration implements Serializable {
 
 	public void setBestUltraMarathonTime(Date bestUltraMarathonTime) {
 		this.bestUltraMarathonTime = bestUltraMarathonTime;
+	}
+
+	public List<RegistrationTrinket> getTrinkets() {
+		return trinkets;
+	}
+
+	public void setTrinkets(List<RegistrationTrinket> trinkets) {
+		this.trinkets = trinkets;
 	}
 }
