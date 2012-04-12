@@ -706,6 +706,7 @@ table.userTable td.action {
 table.userTable td.action a {
 	font-family: 'Pictos';
 	text-decoration: none;
+	display: inline-block;
 	color: #a00;
 	font-size: 20px;
 	line-height: 18px;

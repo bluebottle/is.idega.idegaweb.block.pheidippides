@@ -5,6 +5,8 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 
@@ -13,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -52,13 +55,23 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		Participant participant = getService().getParticipant(registration);
 		ShirtSize size = registration.getShirtSize();
 		int price = registration.getAmountPaid() - registration.getAmountDiscount();
+		RegistrationHeader header = registration.getHeader();
 		
 		NumberFormat nf = NumberFormat.getCurrencyInstance(LocaleUtil.getIcelandicLocale()); 
 		nf.setMaximumFractionDigits(0);
 		nf.setMinimumFractionDigits(0);
 		nf.setParseIntegerOnly(true);
-		if (price < 250) {
+		if (header.getCurrency().equals(Currency.EUR)) {
 			nf.setCurrency(java.util.Currency.getInstance("EUR"));
+		}
+		
+		List<RegistrationTrinket> trinkets = registration.getTrinkets();
+		if (trinkets != null && !trinkets.isEmpty()) {
+			for (RegistrationTrinket registrationTrinket : trinkets) {
+				price += registrationTrinket.getAmountPaid();
+			}
+			
+			props.put("trinkets", trinkets);
 		}
 		
 		props.put("raceName", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + ".name", event.getName())));
@@ -66,7 +79,9 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		if (participant.getPersonalId() != null) {
 			props.put("personalID", PersonalIDFormatter.format(participant.getPersonalId(), locale));
 		}
-		props.put("shirtSize", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getGender() + " - " + size.getSize())));
+		if (size != null) {
+			props.put("shirtSize", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getGender() + " - " + size.getSize())));
+		}
 		props.put("distance", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName())));
 		props.put("price", nf.format(price).replaceAll(",", ""));
 		props.put("id", registration.getId());
