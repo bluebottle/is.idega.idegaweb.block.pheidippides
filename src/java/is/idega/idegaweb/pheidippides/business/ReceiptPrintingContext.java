@@ -1,9 +1,12 @@
 package is.idega.idegaweb.pheidippides.business;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
@@ -14,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.pdf.business.PrintingContext;
 import com.idega.block.pdf.business.PrintingContextImpl;
+import com.idega.builder.bean.AdvancedProperty;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWResourceBundle;
@@ -36,6 +41,9 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 
 	@Autowired
 	private PheidippidesService service;
+	
+	@Autowired
+	private PheidippidesDao dao;
 	
 	private IWBundle iwb;
 	private IWResourceBundle iwrb;
@@ -65,13 +73,32 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 			nf.setCurrency(java.util.Currency.getInstance("EUR"));
 		}
 		
+		List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
 		if (trinkets != null && !trinkets.isEmpty()) {
 			for (RegistrationTrinket registrationTrinket : trinkets) {
 				price += registrationTrinket.getAmountPaid();
+				raceTrinkets.add(registrationTrinket.getTrinket());
+			}
+		}
+
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+		List<RacePrice> trinketPrices = getDao().getRaceTrinketPrice(race, header.getCreatedDate(), header.getCurrency());
+		if (trinketPrices != null && !trinketPrices.isEmpty()) {
+			for (RacePrice racePrice : trinketPrices) {
+				RaceTrinket raceTrinket = racePrice.getTrinket();
+				
+				AdvancedProperty property = new AdvancedProperty();
+				property.setId(PheidippidesUtil.escapeXML(iwrb
+						.getLocalizedString(race.getEvent().getLocalizedKey()
+								+ "."
+								+ raceTrinket.getCode(),
+								raceTrinket.getCode())));
+				property.setValue(raceTrinkets.contains(raceTrinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+				properties.add(property);
 			}
 			
-			props.put("trinkets", trinkets);
+			props.put("trinkets", properties);
 		}
 		
 		props.put("raceName", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + ".name", event.getName())));
@@ -115,6 +142,14 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		}
 		
 		return service;
+	}
+
+	private PheidippidesDao getDao() {
+		if (dao == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return dao;
 	}
 
 	private String getBundleIdentifier() {

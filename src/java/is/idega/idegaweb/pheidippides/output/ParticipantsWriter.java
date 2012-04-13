@@ -8,14 +8,17 @@ import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -86,9 +89,11 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			registrations = getDao().getRegistrations(company, event, year, status);
 		}
 		Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
+		
+		List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
 
 		try {
-			this.buffer = writeXLS(iwc, event, year, race, registrations, participantsMap);
+			this.buffer = writeXLS(iwc, event, year, race, trinkets, registrations, participantsMap);
 			setAsDownload(iwc, "participants.xls", this.buffer.length());
 		}
 		catch (Exception e) {
@@ -119,7 +124,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		}
 	}
 
-	public MemoryFileBuffer writeXLS(IWContext iwc, Event event, Integer year, Race race, List<Registration> registrations, Map<Registration, Participant> participantsMap) throws Exception {
+	public MemoryFileBuffer writeXLS(IWContext iwc, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap) throws Exception {
 		IWTimestamp dateFrom = iwc.isParameterSet(PARAMETER_YEAR_FROM) ? new IWTimestamp(1, 1, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_FROM))) : null;
 		IWTimestamp dateTo = iwc.isParameterSet(PARAMETER_YEAR_TO) ? new IWTimestamp(31, 12, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_TO))) : null;
 		String gender = iwc.isParameterSet(PARAMETER_GENDER) ? iwc.getParameter(PARAMETER_GENDER) : null;
@@ -208,6 +213,13 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("charity", "Charity"));
 		cell.setCellStyle(style);
+		
+		for (RaceTrinket trinket : trinkets) {
+			cell = row.createCell(iCell++);
+			cell.setCellValue(this.iwrb.getLocalizedString("trinket." + trinket.getCode(), trinket.getCode()));
+			cell.setCellStyle(style);
+		}
+		
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("created", "Created"));
 		cell.setCellStyle(style);
@@ -220,6 +232,14 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			Country country = getCountryHome().findByPrimaryKey(participant.getCountry());
 			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
 			ShirtSize shirtSize = registration.getShirtSize();
+			
+			List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
+			List<RegistrationTrinket> registrationTrinkets = registration.getTrinkets();
+			if (registrationTrinkets != null && !registrationTrinkets.isEmpty()) {
+				for (RegistrationTrinket registrationTrinket : registrationTrinkets) {
+					raceTrinkets.add(registrationTrinket.getTrinket());
+				}
+			}
 			
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
 			if (dateOfBirth != null) {
@@ -268,6 +288,11 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getCharity() != null ? registration.getCharity().getName() : "");
+			
+			for (RaceTrinket trinket : trinkets) {
+				row.createCell(iCell++).setCellValue(raceTrinkets.contains(trinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+			}
+			
 			row.createCell(iCell++).setCellValue(new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm"));
 		}
 		

@@ -80,7 +80,9 @@ public interface PheidippidesDao {
 	
 	public RacePrice getCurrentRacePrice(Race race, Currency currency);
 
+	public List<RaceTrinket> getRaceTrinkets();
 	public List<RacePrice> getCurrentRaceTrinketPrice(Race race, Currency currency);
+	public List<RacePrice> getRaceTrinketPrice(Race race, Date date, Currency currency);
 
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,

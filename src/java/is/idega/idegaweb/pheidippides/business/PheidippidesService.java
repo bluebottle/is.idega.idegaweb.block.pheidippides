@@ -1579,7 +1579,7 @@ public class PheidippidesService {
 				
 				Race race = registration.getRace();
 				List<RegistrationTrinket> trinkets = registration.getTrinkets();
-				List<RacePrice> trinketPrices = dao.getCurrentRaceTrinketPrice(race, header.getCurrency());
+				List<RacePrice> trinketPrices = dao.getRaceTrinketPrice(race, header.getCreatedDate(), header.getCurrency());
 				
 				List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 				if (trinkets != null) {
