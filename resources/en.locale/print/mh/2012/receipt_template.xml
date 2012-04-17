@@ -31,6 +31,10 @@
 		<cell font="bold">${distance}</cell>
 		<cell>Price:</cell>
 		<cell font="bold">${price}</cell>
+		<foreach sequence="${trinkets}" loop-variable="trinket">
+			<cell>${trinket.id}:</cell>
+			<cell font="bold">${trinket.value}</cell>
+		</foreach>
 	</table>
 	
 	<paragraph font="normal" spacing-after="18.0">

@@ -28,7 +28,7 @@
 						<td class="firstColumn"><h:outputText value="#{registration.race.event.name}" /></td>
 						<td><h:outputText value="#{registration.race.year}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', p:concat(registration.race.distance.localizedKey, registration.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td>
+						<td><h:outputText rendered="#{not empty registration.shirtSize}" escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td>
 						<td><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 						<td class="action lastColumn">
 							<!-- <h:outputLink rendered="#{registration.race.numberOfRelayLegs lt 2}" value="/pages/sidanmin/breytavegalengd/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" styleClass="edit">
