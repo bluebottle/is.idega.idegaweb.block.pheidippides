@@ -38,8 +38,8 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
         oper.setName("registerRunner");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://illuminati.is", "in1"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://illuminati.is", "RunnerInfo"), is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        oper.setReturnClass(boolean.class);
+        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnClass(java.lang.String.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://illuminati.is", "registerRunnerReturn"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
@@ -192,7 +192,7 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
         }
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.isb.server.Session authenticateUser(is.idega.idegaweb.pheidippides.webservice.isb.server.Login in0) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.pheidippides.webservice.isb.server.Session authenticateUser(is.idega.idegaweb.pheidippides.webservice.isb.server.Login login) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -208,7 +208,7 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {in0});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {login});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -226,7 +226,7 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public boolean registerRunner(is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo in0) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException {
+    public java.lang.String registerRunner(is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo runner) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -242,7 +242,7 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {in0});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {runner});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -250,9 +250,9 @@ public class ISBServiceSoapBindingStub extends org.apache.axis.client.Stub imple
         else {
             extractAttachments(_call);
             try {
-                return ((java.lang.Boolean) _resp).booleanValue();
+                return (java.lang.String) _resp;
             } catch (java.lang.Exception _exception) {
-                return ((java.lang.Boolean) org.apache.axis.utils.JavaUtils.convert(_resp, boolean.class)).booleanValue();
+                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

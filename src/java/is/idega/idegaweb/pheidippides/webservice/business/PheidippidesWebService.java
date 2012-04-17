@@ -65,7 +65,7 @@ public class PheidippidesWebService {
 	public static final String SIZE5 = "XL";
 	public static final String SIZE6 = "XXL";
 
-	public boolean registerRunner(
+	public String registerRunner(
 			is.idega.idegaweb.pheidippides.webservice.isb.server.Session session,
 			String personalID, String distance, String shirtSize,
 			String shirtSizeGender, String email, String phone, String mobile,
@@ -73,7 +73,7 @@ public class PheidippidesWebService {
 			String charityPersonalID)
 			throws is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException {
 
-		return false;
+		return "";
 	}
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() {
