@@ -1,5 +1,9 @@
 package is.idega.idegaweb.pheidippides.webservice.business;
 
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSession;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSessionHome;
 import is.idega.idegaweb.pheidippides.webservice.isb.server.RelayPartnerInfo;
@@ -8,45 +12,32 @@ import is.idega.idegaweb.pheidippides.webservice.server.Session;
 import is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
-import com.idega.business.IBOServiceBean;
 import com.idega.core.accesscontrol.business.LoginBusinessBean;
 import com.idega.core.accesscontrol.business.LoginDBHandler;
-import com.idega.core.accesscontrol.data.ICPermission;
-import com.idega.core.accesscontrol.data.ICPermissionHome;
 import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.accesscontrol.data.LoginTableHome;
-import com.idega.core.contact.data.Email;
-import com.idega.core.contact.data.Phone;
 import com.idega.core.location.business.AddressBusiness;
-import com.idega.core.location.data.Address;
-import com.idega.core.location.data.Country;
 import com.idega.data.IDOLookup;
 import com.idega.data.IDOLookupException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.user.business.GroupBusiness;
 import com.idega.user.business.UserBusiness;
-import com.idega.user.data.Group;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
-import com.idega.util.ListUtil;
-import com.idega.util.LocaleUtil;
 
 @Scope("singleton")
 @Service("pheidippidesWebService")
@@ -56,7 +47,7 @@ public class PheidippidesWebService {
 	public static final String DISTANCE2 = "10km";
 	public static final String DISTANCE3 = "21km";
 	public static final String DISTANCE4 = "42km";
-	public static final String DISTANCE5 = "42km_relay";
+	public static final String DISTANCE5 = "Relay";
 
 	public static final String SIZE1 = "XS";
 	public static final String SIZE2 = "S";
@@ -65,7 +56,15 @@ public class PheidippidesWebService {
 	public static final String SIZE5 = "XL";
 	public static final String SIZE6 = "XXL";
 
-	public boolean registerRunner(
+	@Autowired
+	private PheidippidesDao dao;
+
+	@Autowired
+	private PheidippidesService service;
+
+	private static final Long RM_ID = 1L;
+	
+	public String registerRunner(
 			is.idega.idegaweb.pheidippides.webservice.isb.server.Session session,
 			String personalID, String distance, String shirtSize,
 			String shirtSizeGender, String email, String phone, String mobile,
@@ -73,10 +72,31 @@ public class PheidippidesWebService {
 			String charityPersonalID)
 			throws is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException {
 
-		return false;
+		WebServiceLoginSession loginSession = validateAndUpdateLoginSession(new is.idega.idegaweb.pheidippides.webservice.server.Session(session.getSessionID()));
+		if (loginSession != null) {
+		} else {
+			throw new is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException();
+		}
+
+		//return service.storeWebserviceRegistration(holder, company, registrantUUID, locale)
+		return "";
 	}
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() {
+		List<Charity> charities = dao.getEvent(PheidippidesWebService.RM_ID).getCharities();
+		if (charities != null && !charities.isEmpty()) {
+			is.idega.idegaweb.pheidippides.webservice.server.Charity[] ret = new is.idega.idegaweb.pheidippides.webservice.server.Charity[charities.size()];
+			int counter = 0;
+			for (Charity charity : charities) {
+				ret[counter] = new is.idega.idegaweb.pheidippides.webservice.server.Charity();
+				ret[counter].setId(charity.getPersonalId());
+				ret[counter].setName(charity.getName());
+				ret[counter++].setDescription(charity.getDescription());
+			}
+			
+			return ret;
+		}
+		
 		return null;
 	}
 
@@ -124,17 +144,12 @@ public class PheidippidesWebService {
 
 				// verify password and create new ws session
 				if (loginBean.verifyPassword(loginTable, password)) {
-
-					// check if user has the correct role to use the web
-					// services
-					// IWContext iwc = IWContext.getInstance();
+					// check if corresponds to a company that is allowed to use the webservice
 					try {
-						if (!hasPermissionForGroupByRole(RoleHelperObject
-								.getStaticInstance().toString(), loginTable
-								.getUser().getPrimaryGroup(),
-								loginTable.getUser())) {
+						Company company = dao.getCompanyByUserUUID(loginTable.getUser().getUniqueId());
+						if (company == null || !company.getWebserviceUser()) {
 							return new is.idega.idegaweb.pheidippides.webservice.server.Session(
-									"-1");
+									"-1");							
 						}
 					} catch (Exception e) {
 						return new is.idega.idegaweb.pheidippides.webservice.server.Session(
@@ -164,138 +179,7 @@ public class PheidippidesWebService {
 				"-1");
 	}
 
-	private boolean hasPermissionForGroupByRole(String permissionKey,
-			Group group, User user) throws RemoteException {
 
-		// get all the roles of the current users parent groups or permission
-		// controlling groups
-		// use a find method that searches for active and true ICPermissions
-		// with the following
-		// context_value=permissionKey, permission_string=collection of the
-		// current users roles, group_id = group.getPrimaryKey()
-		// If something is found then we return true, otherwise false
-
-		// get the parent groups
-		List permissionControllingGroups = new ArrayList();
-		Collection parents = getGroupBusiness().getParentGroups(user);
-
-		if (parents != null && !parents.isEmpty()) {
-			Map roleMap = new HashMap();
-
-			// get the real permission controlling group if not the parent
-			Iterator iterator = parents.iterator();
-			while (iterator.hasNext()) {
-				Group parent = (Group) iterator.next();
-				if (parent.getPermissionControllingGroupID() > 0) {
-					Group controller = parent.getPermissionControllingGroup();
-					permissionControllingGroups.add(controller);
-				} else {
-					permissionControllingGroups.add(parent);
-				}
-			}
-			// ///
-
-			// create the role map we need
-			Collection permissions = getAllRolesForGroupCollection(permissionControllingGroups);
-
-			if (!permissions.isEmpty()) {
-				Iterator iter = permissions.iterator();
-				while (iter.hasNext()) {
-					ICPermission perm = (ICPermission) iter.next();
-					String roleKey = perm.getPermissionString();
-					if (!roleMap.containsKey(roleKey)) {
-						roleMap.put(roleKey, roleKey);
-					}
-				}
-			} else {
-				return false;
-			}
-			// ///
-
-			// see if we find role with the correct permission key and group
-			// if so we return true
-			// this could be optimized by doing a count sql instead
-			Collection validPerms;
-			try {
-				validPerms = getPermissionHome()
-						.findAllPermissionsByContextTypeAndContextValueAndPermissionStringCollectionAndPermissionGroup(
-								RoleHelperObject.getStaticInstance().toString(),
-								permissionKey, roleMap.values(), group);
-				if (validPerms != null && !validPerms.isEmpty()) {
-					return true;
-				}
-
-			} catch (FinderException e) {
-				return false;
-			}
-
-		}
-
-		// has no roles or does not have the correct role
-		return false;
-	}
-
-	private Collection getAllRolesForGroupCollection(Collection groups) {
-		Collection returnCol = new Vector(); // empty
-		if (groups == null || groups.isEmpty()) {
-			return ListUtil.getEmptyList();
-		}
-		try {
-			Collection permissions = getPermissionHome()
-					.findAllPermissionsByContextTypeAndPermissionGroupCollectionOrderedByContextValue(
-							RoleHelperObject.getStaticInstance().toString(),
-							groups);
-
-			// only return active and only actual roles and not group permission
-			// definitation roles
-			if (permissions != null && !permissions.isEmpty()) {
-				Iterator permissionsIter = permissions.iterator();
-				while (permissionsIter.hasNext()) {
-					ICPermission perm = (ICPermission) permissionsIter.next();
-					// perm.getPermissionString().equals(perm.getContextValue())
-					// is true if it is a marker for an active role for a group
-					// if not it is a role for a permission key
-					if (perm.getPermissionValue()
-							&& perm.getContextValue().equals(
-									perm.getContextType())) {
-						returnCol.add(perm);
-					}
-				}
-			}
-		} catch (FinderException ex) {
-			ex.printStackTrace();
-		} catch (RemoteException x) {
-			x.printStackTrace();
-		}
-
-		return returnCol;
-	}
-
-	static class RoleHelperObject {
-
-		private static RoleHelperObject roleObject = null;
-		private static final String ROLE_STRING = "role_permission";
-
-		public RoleHelperObject() {
-		}
-
-		public static RoleHelperObject getStaticInstance() {
-
-			if (roleObject == null) {
-				roleObject = new RoleHelperObject();
-			}
-
-			return roleObject;
-		}
-
-		public String toString() {
-			return ROLE_STRING;
-		}
-	}
-
-	private ICPermissionHome getPermissionHome() throws RemoteException {
-		return (ICPermissionHome) IDOLookup.getHome(ICPermission.class);
-	}
 
 	private LoginTableHome getLoginTableHome() {
 		try {

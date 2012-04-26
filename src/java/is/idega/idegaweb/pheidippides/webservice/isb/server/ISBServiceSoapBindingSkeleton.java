@@ -46,7 +46,7 @@ public class ISBServiceSoapBindingSkeleton implements is.idega.idegaweb.pheidipp
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://illuminati.is", "in1"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://illuminati.is", "RunnerInfo"), is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo.class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("registerRunner", _params, new javax.xml.namespace.QName("http://illuminati.is", "registerRunnerReturn"));
-        _oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        _oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         _oper.setElementQName(new javax.xml.namespace.QName("", "registerRunner"));
         _oper.setSoapAction("");
         _myOperationsList.add(_oper);
@@ -69,15 +69,15 @@ public class ISBServiceSoapBindingSkeleton implements is.idega.idegaweb.pheidipp
     public ISBServiceSoapBindingSkeleton(is.idega.idegaweb.pheidippides.webservice.isb.server.ISBService_PortType impl) {
         this.impl = impl;
     }
-    public is.idega.idegaweb.pheidippides.webservice.isb.server.Session authenticateUser(is.idega.idegaweb.pheidippides.webservice.isb.server.Login in0) throws java.rmi.RemoteException
+    public is.idega.idegaweb.pheidippides.webservice.isb.server.Session authenticateUser(is.idega.idegaweb.pheidippides.webservice.isb.server.Login login) throws java.rmi.RemoteException
     {
-        is.idega.idegaweb.pheidippides.webservice.isb.server.Session ret = impl.authenticateUser(in0);
+        is.idega.idegaweb.pheidippides.webservice.isb.server.Session ret = impl.authenticateUser(login);
         return ret;
     }
 
-    public boolean registerRunner(is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo in0) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException
+    public java.lang.String registerRunner(is.idega.idegaweb.pheidippides.webservice.isb.server.RunnerInfo runner) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException
     {
-        boolean ret = impl.registerRunner(in0);
+        java.lang.String ret = impl.registerRunner(runner);
         return ret;
     }
 

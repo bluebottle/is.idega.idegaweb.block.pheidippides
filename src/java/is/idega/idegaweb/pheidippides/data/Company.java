@@ -36,6 +36,7 @@ public class Company implements Serializable, Comparable<Company> {
 	private static final String COLUMN_NUMBER_OF_PARTICIPANTS = "max_participants";
 	private static final String COLUMN_USER_UUID = "user_uuid";
 	private static final String COLUMN_OPEN = "is_open";
+	private static final String COLUMN_WEBSERVICE_USER = "webservice_user";
 
 	@PrePersist
 	public void setDefaultValues() {
@@ -68,6 +69,9 @@ public class Company implements Serializable, Comparable<Company> {
 
 	@Column(name = Company.COLUMN_OPEN)
 	private Boolean open;
+
+	@Column(name = Company.COLUMN_WEBSERVICE_USER)
+	private Boolean webserviceUser;
 
 	public Long getId() {
 		return id;
@@ -127,5 +131,13 @@ public class Company implements Serializable, Comparable<Company> {
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public Boolean getWebserviceUser() {
+		return webserviceUser;
+	}
+
+	public void setWebserviceUser(Boolean webserviceUser) {
+		this.webserviceUser = webserviceUser;
 	}
 }
