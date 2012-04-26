@@ -10,7 +10,7 @@ package is.idega.idegaweb.pheidippides.webservice.client;
 public interface CharityServiceService extends javax.xml.rpc.Service {
     public java.lang.String getCharityServiceAddress();
 
-    public is.idega.idegaweb.pheidippides.webservice.client.CharityService_PortType getCharityService() throws javax.xml.rpc.ServiceException;
+    public is.idega.idegaweb.pheidippides.webservice.client.CharityService getCharityService() throws javax.xml.rpc.ServiceException;
 
-    public is.idega.idegaweb.pheidippides.webservice.client.CharityService_PortType getCharityService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+    public is.idega.idegaweb.pheidippides.webservice.client.CharityService getCharityService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

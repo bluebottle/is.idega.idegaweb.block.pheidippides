@@ -22,7 +22,7 @@ public class CharityServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for CharityService
-    private java.lang.String CharityService_address = "http://skraning.marathon.is/services/CharityService";
+    private java.lang.String CharityService_address = "http://pheidippidestest.sidan.is/services/CharityService";
 
     public java.lang.String getCharityServiceAddress() {
         return CharityService_address;
@@ -39,7 +39,7 @@ public class CharityServiceServiceLocator extends org.apache.axis.client.Service
         CharityServiceWSDDServiceName = name;
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.client.CharityService_PortType getCharityService() throws javax.xml.rpc.ServiceException {
+    public is.idega.idegaweb.pheidippides.webservice.client.CharityService getCharityService() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(CharityService_address);
@@ -50,9 +50,9 @@ public class CharityServiceServiceLocator extends org.apache.axis.client.Service
         return getCharityService(endpoint);
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.client.CharityService_PortType getCharityService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public is.idega.idegaweb.pheidippides.webservice.client.CharityService getCharityService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub(portAddress, this);
+        	is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub(portAddress, this);
             _stub.setPortName(getCharityServiceWSDDServiceName());
             return _stub;
         }
@@ -72,8 +72,8 @@ public class CharityServiceServiceLocator extends org.apache.axis.client.Service
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (is.idega.idegaweb.pheidippides.webservice.client.CharityService_PortType.class.isAssignableFrom(serviceEndpointInterface)) {
-                is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub(new java.net.URL(CharityService_address), this);
+            if (is.idega.idegaweb.pheidippides.webservice.client.CharityService.class.isAssignableFrom(serviceEndpointInterface)) {
+            	is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.client.CharityServiceSoapBindingStub(new java.net.URL(CharityService_address), this);
                 _stub.setPortName(getCharityServiceWSDDServiceName());
                 return _stub;
             }
