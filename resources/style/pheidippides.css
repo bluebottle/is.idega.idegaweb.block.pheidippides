@@ -65,7 +65,8 @@ form.userForm div.error {
 }
 
 form.adminForm div.submit, form.userForm div.submit {
-	width: auto;
+	clear: both;
+	width: 100%;
 	overflow: hidden;
 }
 
@@ -701,6 +702,10 @@ table.smallTable tr.trinket td {
 table.userTable td.action {
 	vertical-align: middle;
 	text-align: center;
+}
+
+table.userTable thead th {
+	text-align: left;
 }
 
 table.userTable td.action a {
