@@ -68,6 +68,7 @@ public class ParticipantsReport extends IWBaseComponent {
 		bean.setLocale(iwc.getCurrentLocale());
 		
 		PheidippidesCompanyBean cBean = getBeanInstance("pheidippidesCompanyBean");
+		cBean.setCompanies(getDao().getCompanies());
 
 		/* Events */
 		bean.setEvents(getDao().getEvents());
@@ -80,7 +81,6 @@ public class ParticipantsReport extends IWBaseComponent {
 		/* Races */
 		if (bean.getEvent() != null && bean.getProperty() != null) {
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
-			cBean.setCompanies(getDao().getCompanies());
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
 

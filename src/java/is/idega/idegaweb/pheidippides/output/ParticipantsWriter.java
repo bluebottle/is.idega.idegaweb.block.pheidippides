@@ -172,6 +172,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellValue(this.iwrb.getLocalizedString("date_of_birth", "Date of birth"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("year_of_birth", "Year of birth"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("gender", "Gender"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
@@ -203,6 +206,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("amount", "Amount"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("payment_method", "Payment method"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("best_marathon_time", "Best marathon time"));
@@ -269,6 +275,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(participant.getFullName());
 			row.createCell(iCell++).setCellValue(participant.getPersonalId());
 			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
+			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("yyyy"));
 			row.createCell(iCell++).setCellValue(participant.getGender().equals("male") ? "M" : "F");
 			row.createCell(iCell++).setCellValue(participant.getEmail());
 			row.createCell(iCell++).setCellValue(participant.getAddress());
@@ -285,6 +292,14 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 				row.createCell(iCell++).setCellValue("");
 			}
 			row.createCell(iCell++).setCellValue(registration.getAmountPaid() - registration.getAmountDiscount());
+			
+			if (header.getAuthorizationNumber() != null) {
+				row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.credit_card", "Credit card"));
+			}
+			else {
+				row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.bank_transfer", "Bank transfer"));
+			}
+			
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getCharity() != null ? registration.getCharity().getName() : "");

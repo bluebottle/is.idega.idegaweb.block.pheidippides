@@ -110,7 +110,7 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 			props.put("shirtSize", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + "." + size.getLocalizedKey(), size.getGender() + " - " + size.getSize())));
 		}
 		props.put("distance", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName())));
-		props.put("price", nf.format(price).replaceAll(",", ""));
+		props.put("price", price > 0 ? nf.format(price).replaceAll(",", "") : "0");
 		props.put("id", registration.getId());
 
 		setFileName(getResourceBundle(iwac, locale).getLocalizedString("review_filename", "receipt") + ".pdf");

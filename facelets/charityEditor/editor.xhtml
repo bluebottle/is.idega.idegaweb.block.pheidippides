@@ -21,9 +21,9 @@
 				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
 				<input type="text" class="required" name="prm_personal_id" value="#{pheidippidesBean.charity.personalId}" />
 			</div>
-			<div class="formItem">
+			<div class="formItem tinyMCE">
 				<label for="prm_description"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
-				<textarea name="prm_description"><h:outputText value="#{pheidippidesBean.charity.description}" /></textarea>
+				<textarea class="tinymce" name="prm_description"><h:outputText value="#{pheidippidesBean.charity.description}" /></textarea>
 			</div>
 		</fieldset>
 		

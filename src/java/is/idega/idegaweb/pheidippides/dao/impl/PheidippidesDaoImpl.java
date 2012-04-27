@@ -580,13 +580,45 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	
 	public void updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK) {
 		Registration registration = getRegistration(registrationPK);
-		registration.setRace(getRace(racePK));
-		registration.setShirtSize(getShirtSize(shirtSizePK));
-		if (nationalityPK != null) {
-			registration.setNationality(nationalityPK);
-		}
 		
-		getEntityManager().persist(registration);
+		Race newRace = getRace(racePK);
+		if (!newRace.equals(registration.getRace())) {
+			RegistrationStatus status = registration.getStatus();
+			updateRegistrationStatus(registrationPK, null, null, RegistrationStatus.Moved);
+			
+			Registration newReg = new Registration();
+			newReg.setHeader(registration.getHeader());
+			newReg.setAmountPaid(registration.getAmountPaid());
+			newReg.setCharity(registration.getCharity());
+			newReg.setHeader(registration.getHeader());
+			newReg.setLeg(registration.getLeg());
+			if (nationalityPK != null) {
+				registration.setNationality(nationalityPK);
+			}
+			else {
+				newReg.setNationality(registration.getNationality());
+			}
+			newReg.setShirtSize(getShirtSize(shirtSizePK));
+			newReg.setStatus(status);
+			newReg.setRace(newRace);
+			newReg.setParticipantNumber(newRace.getCurrentParticipantNumber());
+			newReg.setTeam(registration.getTeam());
+			newReg.setUserUUID(registration.getUserUUID());
+			newReg.setHasDoneMarathonBefore(registration.isHasDoneMarathonBefore());
+			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
+			newReg.setBestMarathonTime(registration.getBestMarathonTime());
+			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			
+			getEntityManager().persist(newReg);
+		}
+		else {
+			registration.setShirtSize(getShirtSize(shirtSizePK));
+			if (nationalityPK != null) {
+				registration.setNationality(nationalityPK);
+			}
+
+			getEntityManager().persist(registration);
+		}
 	}
 	
 	public void updateRegistrationStatus(Long registrationPK, String relayLeg, ShirtSize shirtSize, RegistrationStatus status) {

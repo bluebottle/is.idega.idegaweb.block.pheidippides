@@ -21,6 +21,13 @@ jQuery(document).ready(function() {
 		}
 	}, "No races available for participant.");
 	
+	jQuery('input[name="prm_personal_id"]').keypress(function(e) {
+        if(e.which == 13) {
+            jQuery(this).blur();
+            jQuery('a.next').click();
+        }
+    });
+	
 	jQuery('form.registrationForm').validate({
 		onkeyup: false,
 		onfocusout: false,
