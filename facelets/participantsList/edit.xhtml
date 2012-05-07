@@ -109,7 +109,7 @@
 					</ui:repeat>
 				</c:selectOne>
 			</div>
-			<div class="formItem required">
+			<t:div rendered="#{not empty pheidippidesBean.raceShirtSizes}" styleClass="formItem required">
 				<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></label>
 				<c:selectOne styleClass="required" name="prm_shirt_size">
 					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
@@ -117,7 +117,7 @@
 						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq registration.shirtSize.id}" />
 					</ui:repeat>
 				</c:selectOne>
-			</div>
+			</t:div>
 			<hr />
 			<div class="formItem">
 				<label for="prm_login"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['login']}" /></label>
