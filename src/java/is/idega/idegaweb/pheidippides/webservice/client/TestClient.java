@@ -17,13 +17,15 @@ public class TestClient {
 			CharityServiceServiceLocator locator = new CharityServiceServiceLocator();
 			CharityService port = locator.getCharityService();
 			
-			Charity info[] = port.getCharities();//getCharityInformation("0610703899");
+			Session session = port.authenticateUser("isb", "ch4r1tys3rv1c3");//getCharities();//getCharityInformation("0610703899");
 
-			if (info != null) {
+/*			if (info != null) {
 				for (Charity charity : info) {
 					System.out.println(charity.getId() + ", " + charity.getName() + ", " + charity.getDescription());
 				}
-			}
+			}*/
+			
+			System.out.println("session = " + session.getSessionID());
 
 		} catch (Exception e) {
 			e.printStackTrace();

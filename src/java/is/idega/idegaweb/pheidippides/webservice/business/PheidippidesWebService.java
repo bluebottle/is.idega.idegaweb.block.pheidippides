@@ -1,9 +1,13 @@
 package is.idega.idegaweb.pheidippides.webservice.business;
 
+import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSession;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSessionHome;
 import is.idega.idegaweb.pheidippides.webservice.isb.server.RelayPartnerInfo;
@@ -38,6 +42,7 @@ import com.idega.user.business.GroupBusiness;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 
 @Scope("singleton")
 @Service("pheidippidesWebService")
@@ -78,8 +83,43 @@ public class PheidippidesWebService {
 			throw new is.idega.idegaweb.pheidippides.webservice.isb.server.SessionTimedOutException();
 		}
 
-		//return service.storeWebserviceRegistration(holder, company, registrantUUID, locale)
-		return "";
+		Participant participant = new Participant();
+		participant.setPersonalId(personalID);
+		participant.setEmail(email);
+		participant.setPhoneHome(phone);
+		participant.setPhoneMobile(mobile);
+		
+		Charity charity = null;
+		if (charityPersonalID != null) {
+			charity = null; //todo get charity by personal id dao.getc
+		}
+		
+		Race race = dao.getRace(1L); //todo get the correct race
+		ShirtSize shirtSizeEntry = dao.getShirtSize(1L);  //todo get the correct shirt size
+		
+		//Add checks and relay handling
+		
+		ParticipantHolder holder = new ParticipantHolder();
+		holder.setAcceptsWaiver(true);
+		holder.setAmount(0);
+		holder.setBestMarathonTime(null);
+		holder.setBestUltraMarathonTime(null);
+		holder.setCharity(charity);
+		holder.setDiscount(0);
+		holder.setHasDoneLVBefore(false);
+		holder.setHasDoneMarathonBefore(false);
+		holder.setLeg(null);
+		holder.setParticipant(participant);
+		holder.setRace(race);
+		holder.setRelayPartners(null);
+		holder.setShirtSize(shirtSizeEntry);
+		holder.setTeam(null);
+		holder.setTrinkets(null);
+		
+		Company company = dao.getCompanyByUserUUID(loginSession.getUser().getUniqueId());
+		
+		return service.storeWebserviceRegistration(holder, company, loginSession.getUser().getUniqueId(), LocaleUtil.getIcelandicLocale());
+//		return "";
 	}
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() {
