@@ -280,7 +280,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
-						if (iwc.isParameterSet(PARAMETER_USE_CHARITY)) {
+						if (iwc.isParameterSet(PARAMETER_USE_CHARITY) && iwc.isParameterSet(PARAMETER_CHARITY)) {
 							getSession().getCurrentParticipant().setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY))));
 						}
 						showWaiver(iwc, bean);
