@@ -204,7 +204,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 							showRelayTeam(iwc, bean);
 						}
 						else {
-							if (getSession().getCurrentParticipant().getRace().isCharityRun()) {
+							if (getSession().getCurrentParticipant().getRace().isCharityRun() && getSession().isRegistrationWithPersonalId()) {
 								showCharitySelect(iwc, bean);
 							}
 							else {
@@ -282,6 +282,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_USE_CHARITY) && iwc.isParameterSet(PARAMETER_CHARITY)) {
 							getSession().getCurrentParticipant().setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY))));
+						}
+						else {
+							getSession().getCurrentParticipant().setCharity(null);
 						}
 						showWaiver(iwc, bean);
 					}

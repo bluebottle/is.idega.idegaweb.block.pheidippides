@@ -28,6 +28,15 @@ jQuery(document).ready(function() {
         }
     });
 	
+	jQuery('input[name="prm_use_charity"]').click(function(e) {
+		if (this.checked) {
+			jQuery('#prm_charity').removeAttr('disabled');
+		}
+		else {
+			jQuery('#prm_charity').attr('disabled', 'disabled');
+		}
+	});
+	
 	jQuery('form.registrationForm').validate({
 		onkeyup: false,
 		onfocusout: false,

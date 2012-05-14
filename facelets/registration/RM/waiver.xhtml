@@ -23,7 +23,7 @@
 		</fieldset>
 		
 		<fieldset class="submit">
-			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.charityRun ? 5 : pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.charityRun and pheidippidesRegistrationSession.registrationWithPersonalId ? 5 : pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>
