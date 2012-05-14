@@ -235,8 +235,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			if (participant == null) {
 				continue;
 			}
-			Country country = getCountryHome().findByPrimaryKey(participant.getCountry());
-			Country nationality = getCountryHome().findByPrimaryKey(registration.getNationality());
+			Country country = participant.getCountry() != null ? getCountryHome().findByPrimaryKey(participant.getCountry()) : null;
+			Country nationality = registration.getNationality() != null ? getCountryHome().findByPrimaryKey(registration.getNationality()) : null;
 			ShirtSize shirtSize = registration.getShirtSize();
 			
 			List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
@@ -280,10 +280,10 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(participant.getEmail());
 			row.createCell(iCell++).setCellValue(participant.getAddress());
 			row.createCell(iCell++).setCellValue(participant.getPostalAddress());
-			row.createCell(iCell++).setCellValue(country.getName());
+			row.createCell(iCell++).setCellValue(country != null ? country.getName() : "");
 			row.createCell(iCell++).setCellValue(participant.getPhoneHome());
 			row.createCell(iCell++).setCellValue(participant.getPhoneMobile());
-			row.createCell(iCell++).setCellValue(nationality.getName());
+			row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
 			row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
 			if (shirtSize != null) {
 				row.createCell(iCell++).setCellValue(shirtSize.getSize() + " - " + shirtSize.getGender());
