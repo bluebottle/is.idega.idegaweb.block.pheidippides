@@ -12,6 +12,7 @@ import is.idega.idegaweb.pheidippides.webservice.business.PheidippidesWebService
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.business.IBOLookupException;
+import com.idega.util.expression.ELUtil;
 
 public class ISBServiceSoapBindingImpl implements is.idega.idegaweb.pheidippides.webservice.isb.server.ISBService_PortType{	
 	@Autowired
@@ -28,6 +29,10 @@ public class ISBServiceSoapBindingImpl implements is.idega.idegaweb.pheidippides
     }
 
     private PheidippidesWebService getBusiness() throws IBOLookupException {
+    	if (business == null) {
+    		ELUtil.getInstance().autowire(this);
+    	} 
+
 		return business;
 	}
 }

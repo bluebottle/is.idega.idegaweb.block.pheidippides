@@ -22,7 +22,7 @@ public class ISBServiceServiceLocator extends org.apache.axis.client.Service imp
     }
 
     // Use to get a proxy class for ISBService
-    private java.lang.String ISBService_address = "https://skraning.marathon.is/services/ISBService";
+    private java.lang.String ISBService_address = "http://skraning.marathon.is/services/ISBService";
 
     public java.lang.String getISBServiceAddress() {
         return ISBService_address;
