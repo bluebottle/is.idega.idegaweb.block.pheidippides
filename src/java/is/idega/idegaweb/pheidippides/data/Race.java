@@ -23,7 +23,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "race.findAll", query = "select r from Race r"),
 	@NamedQuery(name = "race.findByEvent", query = "select r from Race r where r.event = :event order by r.orderNumber"),
 	@NamedQuery(name = "race.findByYear", query = "select r from Race r where r.year = :year order by r.orderNumber"),
-	@NamedQuery(name = "race.findByEventAndYear", query = "select r from Race r where r.event = :event and r.year = :year order by r.orderNumber")
+	@NamedQuery(name = "race.findByEventAndYear", query = "select r from Race r where r.event = :event and r.year = :year order by r.orderNumber"),
+	@NamedQuery(name = "race.findByEventAndDistanceAndYear", query = "select r from Race r where r.event = :event and r.distance = :distance and r.year = :year")
 })
 public class Race implements Serializable, Comparable<Race> {
 	private static final long serialVersionUID = 7926415194738887757L;

@@ -1,5 +1,5 @@
 /**
- * ISBService_PortType.java
+ * ISBService.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,7 +7,7 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client;
 
-public interface ISBService_PortType extends java.rmi.Remote {
+public interface ISBService extends java.rmi.Remote {
     public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Session authenticateUser(is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Login in0) throws java.rmi.RemoteException;
-    public boolean registerRunner(is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.RunnerInfo in1) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.SessionTimedOutException;
+    public java.lang.String registerRunner(is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.RunnerInfo in1) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.SessionTimedOutException;
 }

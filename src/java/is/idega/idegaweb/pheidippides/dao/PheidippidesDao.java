@@ -56,6 +56,8 @@ public interface PheidippidesDao {
 	public Race getRace(Long raceID);
 
 	public List<Race> getRaces(Event event, Integer year);
+	
+	public Race getRace(Event event, Distance distance, Integer year);
 
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
@@ -68,6 +70,8 @@ public interface PheidippidesDao {
 	public ShirtSize getShirtSize(Long shirtSizeID);
 
 	public List<ShirtSize> getShirtSizes();
+	
+	public ShirtSize getShirtSize(ShirtSizeSizes size, ShirtSizeGender gender);
 
 	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size,
 			ShirtSizeGender gender, String localizedKey, String reportSign);
@@ -133,6 +137,8 @@ public interface PheidippidesDao {
 	
 	public List<RaceShirtSize> getRaceShirtSizes(Race race);
 	
+	public RaceShirtSize getRaceShirtSize(Race race, ShirtSize size);
+	
 	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race, ShirtSize shirtSize, String localizedKey, int orderNumber);
 	
 	public boolean removeRaceShirtSize(Long raceShirtSizePK);
@@ -140,6 +146,8 @@ public interface PheidippidesDao {
 	public Charity getCharity(Long charityPK);
 	
 	public List<Charity> getCharities();
+	
+	public Charity getCharity(String personalId);
 	
 	public Charity storeCharity(Long charityPK, String name, String personalID, String description);
 	

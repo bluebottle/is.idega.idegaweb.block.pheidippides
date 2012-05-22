@@ -17,7 +17,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = Charity.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "charity.findAll", query = "select c from Charity c order by c.name")
+	@NamedQuery(name = "charity.findAll", query = "select c from Charity c order by c.name"),
+	@NamedQuery(name = "charity.findByPersonalID", query = "select c from Charity c where c.personalId = :personalId"),
+
 })
 public class Charity implements Serializable {
 

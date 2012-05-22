@@ -22,7 +22,7 @@ public class ISBServiceServiceLocator extends org.apache.axis.client.Service imp
     }
 
     // Use to get a proxy class for ISBService
-    private java.lang.String ISBService_address = "http://skraning.marathon.is/services/ISBService";
+    private java.lang.String ISBService_address = "http://pheidippidestest.sidan.is/services/ISBService";
 
     public java.lang.String getISBServiceAddress() {
         return ISBService_address;
@@ -39,7 +39,7 @@ public class ISBServiceServiceLocator extends org.apache.axis.client.Service imp
         ISBServiceWSDDServiceName = name;
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType getISBService() throws javax.xml.rpc.ServiceException {
+    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService getISBService() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(ISBService_address);
@@ -50,7 +50,7 @@ public class ISBServiceServiceLocator extends org.apache.axis.client.Service imp
         return getISBService(endpoint);
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType getISBService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService getISBService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBServiceSoapBindingStub(portAddress, this);
             _stub.setPortName(getISBServiceWSDDServiceName());
@@ -72,7 +72,7 @@ public class ISBServiceServiceLocator extends org.apache.axis.client.Service imp
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType.class.isAssignableFrom(serviceEndpointInterface)) {
+            if (is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService.class.isAssignableFrom(serviceEndpointInterface)) {
                 is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBServiceSoapBindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBServiceSoapBindingStub(new java.net.URL(ISBService_address), this);
                 _stub.setPortName(getISBServiceWSDDServiceName());
                 return _stub;

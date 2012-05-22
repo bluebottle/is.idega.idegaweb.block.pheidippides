@@ -22,7 +22,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = ShirtSize.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "shirtSize.findAll", query = "select s from ShirtSize s")
+	@NamedQuery(name = "shirtSize.findAll", query = "select s from ShirtSize s"),
+	@NamedQuery(name = "shirtSize.findBySizeAndGender", query = "select s from ShirtSize s where s.size = :size and s.gender = :gender")
 })
 public class ShirtSize implements Serializable {
 	private static final long serialVersionUID = -7660328203833032232L;

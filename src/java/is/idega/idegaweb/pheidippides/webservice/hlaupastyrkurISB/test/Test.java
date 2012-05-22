@@ -1,12 +1,14 @@
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.test;
 
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBServiceServiceLocator;
-import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Login;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.RunnerInfo;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Session;
 
 import java.net.URL;
+
+import com.idega.util.IWTimestamp;
 
 public class Test {
 	public static void main(String[] args) {
@@ -15,9 +17,9 @@ public class Test {
 		try {
 			System.out.println("loginName = " + loginName);
 			System.out.println("password = " + password);
-			
+						
 			ISBServiceServiceLocator locator = new ISBServiceServiceLocator();
-			ISBService_PortType port = locator.getISBService(new URL("http://pheidippidestest.sidan.is/services/ISBService"));
+			ISBService port = locator.getISBService(new URL("http://pheidippidestest.sidan.is/services/ISBService"));
 			
 			Login login = new Login(loginName, password);
 			
@@ -28,10 +30,10 @@ public class Test {
 			} else {
 				System.out.println("session = " + session.getSessionID());
 				
-//				RunnerInfo in1 = new RunnerInfo("21km", "palli@idega.is", null, "1234557", null, "0610703899", "1234567", "palli", session, "M");
-//				boolean reg = port.registerRunner(in1 );
+				RunnerInfo in1 = new RunnerInfo(null, "21km", "palli@idega.is", null, "1234557", null, "0610703899", "1234567", "palli", session, "M", "Male");
+				String reg = port.registerRunner(in1 );
 				
-//				System.out.println("registered = "+ reg);
+				System.out.println("registered = "+ reg);
 			}
 			
 		} catch (Exception e) {

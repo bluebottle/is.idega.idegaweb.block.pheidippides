@@ -21,7 +21,8 @@ import javax.persistence.TemporalType;
 @Table(name = RaceShirtSize.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "raceShirtSize.findAll", query = "select r from RaceShirtSize r"),
-	@NamedQuery(name = "raceShirtSize.findAllByRace", query = "select r from RaceShirtSize r where r.race = :race order by r.orderNumber")
+	@NamedQuery(name = "raceShirtSize.findAllByRace", query = "select r from RaceShirtSize r where r.race = :race order by r.orderNumber"),
+	@NamedQuery(name = "raceShirtSize.findByRaceAndShirtSize", query = "select r from RaceShirtSize r where r.race = :race and r.size = :size")
 })
 public class RaceShirtSize implements Serializable, Comparable<RaceShirtSize> {
 	private static final long serialVersionUID = -6362144793780058939L;

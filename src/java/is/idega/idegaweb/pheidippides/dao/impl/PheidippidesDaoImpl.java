@@ -146,6 +146,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 
+	public Race getRace(Event event, Distance distance, Integer year) {
+			return getSingleResult("race.findByEventAndDistanceAndYear", Race.class,
+					new Param("event", event), new Param("distance", distance), new Param("year", year));
+	}
+
 	@Transactional(readOnly = false)
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
@@ -208,6 +213,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	public List<ShirtSize> getShirtSizes() {
 		return getResultList("shirtSize.findAll", ShirtSize.class);
+	}
+
+	public ShirtSize getShirtSize(ShirtSizeSizes size, ShirtSizeGender gender) {
+		return getSingleResult("shirtSize.findBySizeAndGender", ShirtSize.class, new Param("size", size), new Param("gender", gender));
 	}
 
 	@Transactional(readOnly = false)
@@ -643,6 +652,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				RaceShirtSize.class, new Param("race", race));
 	}
 
+	public RaceShirtSize getRaceShirtSize(Race race, ShirtSize size) {
+		return getSingleResult("raceShirtSize.findByRaceAndShirtSize",
+				RaceShirtSize.class, new Param("race", race), new Param("size", size));
+	}
+
 	@Transactional(readOnly = false)
 	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race,
 			ShirtSize shirtSize, String localizedKey, int orderNumber) {
@@ -679,6 +693,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	public List<Charity> getCharities() {
 		return getResultList("charity.findAll", Charity.class);
+	}
+
+	public Charity getCharity(String personalId) {
+		return getSingleResult("charity.findByPersonalID", Charity.class, new Param("personalId", personalId));
 	}
 
 	@Transactional(readOnly = false)

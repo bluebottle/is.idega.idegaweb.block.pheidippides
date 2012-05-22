@@ -2410,6 +2410,10 @@ public class PheidippidesService {
 					}
 				}
 
+				if (user == null && participant.getPersonalId() != null) {
+					user = getUserBusiness().getUser(participant.getPersonalId());
+				}
+				
 				if (user != null) {
 					if (participant.getPhoneMobile() != null
 							&& !"".equals(participant.getPhoneMobile())) {
@@ -2535,6 +2539,6 @@ public class PheidippidesService {
 			}
 		}
 		
-		return "";
+		return "No user with personal id found";
 	}
 }

@@ -10,7 +10,7 @@ package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client;
 public interface ISBServiceService extends javax.xml.rpc.Service {
     public java.lang.String getISBServiceAddress();
 
-    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType getISBService() throws javax.xml.rpc.ServiceException;
+    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService getISBService() throws javax.xml.rpc.ServiceException;
 
-    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService_PortType getISBService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+    public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.ISBService getISBService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

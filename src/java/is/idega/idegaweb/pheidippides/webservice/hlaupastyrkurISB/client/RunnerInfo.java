@@ -8,6 +8,8 @@
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client;
 
 public class RunnerInfo  implements java.io.Serializable {
+    private java.lang.String charityPersonalID;
+
     private java.lang.String distance;
 
     private java.lang.String email;
@@ -28,10 +30,13 @@ public class RunnerInfo  implements java.io.Serializable {
 
     private java.lang.String shirtSize;
 
+    private java.lang.String shirtSizeGender;
+
     public RunnerInfo() {
     }
 
     public RunnerInfo(
+           java.lang.String charityPersonalID,
            java.lang.String distance,
            java.lang.String email,
            java.lang.String leg,
@@ -41,7 +46,9 @@ public class RunnerInfo  implements java.io.Serializable {
            java.lang.String phone,
            java.lang.String registeredBy,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Session session,
-           java.lang.String shirtSize) {
+           java.lang.String shirtSize,
+           java.lang.String shirtSizeGender) {
+           this.charityPersonalID = charityPersonalID;
            this.distance = distance;
            this.email = email;
            this.leg = leg;
@@ -52,6 +59,27 @@ public class RunnerInfo  implements java.io.Serializable {
            this.registeredBy = registeredBy;
            this.session = session;
            this.shirtSize = shirtSize;
+           this.shirtSizeGender = shirtSizeGender;
+    }
+
+
+    /**
+     * Gets the charityPersonalID value for this RunnerInfo.
+     * 
+     * @return charityPersonalID
+     */
+    public java.lang.String getCharityPersonalID() {
+        return charityPersonalID;
+    }
+
+
+    /**
+     * Sets the charityPersonalID value for this RunnerInfo.
+     * 
+     * @param charityPersonalID
+     */
+    public void setCharityPersonalID(java.lang.String charityPersonalID) {
+        this.charityPersonalID = charityPersonalID;
     }
 
 
@@ -254,6 +282,26 @@ public class RunnerInfo  implements java.io.Serializable {
         this.shirtSize = shirtSize;
     }
 
+
+    /**
+     * Gets the shirtSizeGender value for this RunnerInfo.
+     * 
+     * @return shirtSizeGender
+     */
+    public java.lang.String getShirtSizeGender() {
+        return shirtSizeGender;
+    }
+
+
+    /**
+     * Sets the shirtSizeGender value for this RunnerInfo.
+     * 
+     * @param shirtSizeGender
+     */
+    public void setShirtSizeGender(java.lang.String shirtSizeGender) {
+        this.shirtSizeGender = shirtSizeGender;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof RunnerInfo)) return false;
@@ -266,6 +314,9 @@ public class RunnerInfo  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.charityPersonalID==null && other.getCharityPersonalID()==null) || 
+             (this.charityPersonalID!=null &&
+              this.charityPersonalID.equals(other.getCharityPersonalID()))) &&
             ((this.distance==null && other.getDistance()==null) || 
              (this.distance!=null &&
               this.distance.equals(other.getDistance()))) &&
@@ -295,7 +346,10 @@ public class RunnerInfo  implements java.io.Serializable {
               this.session.equals(other.getSession()))) &&
             ((this.shirtSize==null && other.getShirtSize()==null) || 
              (this.shirtSize!=null &&
-              this.shirtSize.equals(other.getShirtSize())));
+              this.shirtSize.equals(other.getShirtSize()))) &&
+            ((this.shirtSizeGender==null && other.getShirtSizeGender()==null) || 
+             (this.shirtSizeGender!=null &&
+              this.shirtSizeGender.equals(other.getShirtSizeGender())));
         __equalsCalc = null;
         return _equals;
     }
@@ -307,6 +361,9 @@ public class RunnerInfo  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getCharityPersonalID() != null) {
+            _hashCode += getCharityPersonalID().hashCode();
+        }
         if (getDistance() != null) {
             _hashCode += getDistance().hashCode();
         }
@@ -345,6 +402,9 @@ public class RunnerInfo  implements java.io.Serializable {
         if (getShirtSize() != null) {
             _hashCode += getShirtSize().hashCode();
         }
+        if (getShirtSizeGender() != null) {
+            _hashCode += getShirtSizeGender().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -356,6 +416,12 @@ public class RunnerInfo  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://illuminati.is", "RunnerInfo"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("charityPersonalID");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://illuminati.is", "charityPersonalID"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("distance");
         elemField.setXmlName(new javax.xml.namespace.QName("http://illuminati.is", "distance"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -413,6 +479,12 @@ public class RunnerInfo  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("shirtSize");
         elemField.setXmlName(new javax.xml.namespace.QName("http://illuminati.is", "shirtSize"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("shirtSizeGender");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://illuminati.is", "shirtSizeGender"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

@@ -2,11 +2,15 @@ package is.idega.idegaweb.pheidippides.webservice.business;
 
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSession;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSessionHome;
@@ -91,11 +95,69 @@ public class PheidippidesWebService {
 		
 		Charity charity = null;
 		if (charityPersonalID != null) {
-			charity = null; //todo get charity by personal id dao.getc
+			charity = dao.getCharity(charityPersonalID);
 		}
 		
-		Race race = dao.getRace(1L); //todo get the correct race
-		ShirtSize shirtSizeEntry = dao.getShirtSize(1L);  //todo get the correct shirt size
+		Distance d = dao.getDistance(distance);
+		if (d == null) {
+			return "Could not find distance";
+		}
+		
+		Company company = dao.getCompanyByUserUUID(loginSession.getUser().getUniqueId());
+
+		Race race = dao.getRace(company.getEvent(), d, IWTimestamp.RightNow().getYear()); //todo get the correct year
+		
+		if (race == null) {
+			return "Could not find distance for the event this company can register to for this year";			
+		}
+
+		ShirtSizeGender gender = null;
+		if (shirtSizeGender.equalsIgnoreCase("male")) {
+			gender = ShirtSizeGender.Male;
+		} else if (shirtSizeGender.equalsIgnoreCase("female")) {
+			gender = ShirtSizeGender.Female;
+		} else if (shirtSizeGender.equalsIgnoreCase("child")) {
+			gender = ShirtSizeGender.Child;
+		} 
+ 
+		if (gender == null) {
+			return "Unknown gender";
+		}
+
+		ShirtSizeSizes size = null;
+		if (shirtSize.equalsIgnoreCase("XXXS")) {
+			size = ShirtSizeSizes.XXXS;
+		} else if (shirtSize.equalsIgnoreCase("XXS")) {
+			size = ShirtSizeSizes.XXS;			
+		} else if (shirtSize.equalsIgnoreCase("XS")) {
+			size = ShirtSizeSizes.XS;
+		} else if (shirtSize.equalsIgnoreCase("S")) {
+			size = ShirtSizeSizes.S;
+		} else if (shirtSize.equalsIgnoreCase("M")) {
+			size = ShirtSizeSizes.M;
+		} else if (shirtSize.equalsIgnoreCase("L")) {
+			size = ShirtSizeSizes.L;
+		} else if (shirtSize.equalsIgnoreCase("XL")) {
+			size = ShirtSizeSizes.XL;
+		} else if (shirtSize.equalsIgnoreCase("XXL")) {
+			size = ShirtSizeSizes.XXL;
+		} else if (shirtSize.equalsIgnoreCase("XXXL")) {
+			size = ShirtSizeSizes.XXXL;
+		}
+		
+		if (size == null) {
+			return "Unknown shirt size";
+		}
+		
+		ShirtSize shirtSizeEntry = dao.getShirtSize(size, gender);
+		if (shirtSizeEntry == null) {
+			return "Could not find shirt size for this gender";
+		}
+		
+		RaceShirtSize rss = dao.getRaceShirtSize(race, shirtSizeEntry);
+		if (rss == null) {
+			return "Shirt size not available for this distance";
+		}
 		
 		//Add checks and relay handling
 		
@@ -116,10 +178,8 @@ public class PheidippidesWebService {
 		holder.setTeam(null);
 		holder.setTrinkets(null);
 		
-		Company company = dao.getCompanyByUserUUID(loginSession.getUser().getUniqueId());
 		
 		return service.storeWebserviceRegistration(holder, company, loginSession.getUser().getUniqueId(), LocaleUtil.getIcelandicLocale());
-//		return "";
 	}
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() {
