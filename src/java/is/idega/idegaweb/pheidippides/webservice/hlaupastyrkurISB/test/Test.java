@@ -8,18 +8,16 @@ import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client.Session
 
 import java.net.URL;
 
-import com.idega.util.IWTimestamp;
-
 public class Test {
 	public static void main(String[] args) {
-		String loginName = "isb";//args[0];
-		String password = "ch4r1tys3rv1c3";//args[1];
+		String loginName = args[0];
+		String password = args[1];
 		try {
 			System.out.println("loginName = " + loginName);
 			System.out.println("password = " + password);
 						
 			ISBServiceServiceLocator locator = new ISBServiceServiceLocator();
-			ISBService port = locator.getISBService(new URL("http://pheidippidestest.sidan.is/services/ISBService"));
+			ISBService port = locator.getISBService(new URL("http://skraning.marathon.is/services/ISBService"));
 			
 			Login login = new Login(loginName, password);
 			
@@ -30,7 +28,7 @@ public class Test {
 			} else {
 				System.out.println("session = " + session.getSessionID());
 				
-				RunnerInfo in1 = new RunnerInfo(null, "21km", "palli@idega.is", null, "1234557", null, "0610703899", "1234567", "palli", session, "M", "Male");
+				RunnerInfo in1 = new RunnerInfo(null, "10km", "palli@idega.is", null, "8671374", null, "0610703899", "8671374", "palli", session, "M", "Male");
 				String reg = port.registerRunner(in1 );
 				
 				System.out.println("registered = "+ reg);

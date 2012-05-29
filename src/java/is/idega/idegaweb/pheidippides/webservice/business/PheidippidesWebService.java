@@ -2,15 +2,18 @@ package is.idega.idegaweb.pheidippides.webservice.business;
 
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
+import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSession;
 import is.idega.idegaweb.pheidippides.webservice.data.WebServiceLoginSessionHome;
@@ -38,11 +41,15 @@ import com.idega.core.accesscontrol.business.LoginBusinessBean;
 import com.idega.core.accesscontrol.business.LoginDBHandler;
 import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.accesscontrol.data.LoginTableHome;
+import com.idega.core.contact.data.Email;
+import com.idega.core.contact.data.Phone;
 import com.idega.core.location.business.AddressBusiness;
+import com.idega.core.location.data.Address;
 import com.idega.data.IDOLookup;
 import com.idega.data.IDOLookupException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.user.business.GroupBusiness;
+import com.idega.user.business.NoPhoneFoundException;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
@@ -202,11 +209,101 @@ public class PheidippidesWebService {
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharity(
 			String charityPersonalID) {
-
+		Charity charity = dao.getCharity(charityPersonalID);
+		is.idega.idegaweb.pheidippides.webservice.server.Charity ret = null;
+		if (charity != null) {
+			ret = new is.idega.idegaweb.pheidippides.webservice.server.Charity();
+			ret.setDescription(charity.getDescription());
+			ret.setId(charity.getPersonalId());
+			ret.setName(charity.getName());
+			
+			return ret;
+		}
+		
 		return null;
 	}
 
 	public CharityInformation getCharityInformation(String personalID) {
+		User user = null;
+		try {
+			user = getUserBusiness().getUser(personalID);
+		} catch (IBOLookupException e) {
+		} catch (RemoteException e) {
+		} catch (FinderException e) {
+		}
+
+		if (user == null) {
+			return null;
+		}
+		
+		Event event = dao.getEvent(1L); //TODO get event some other way :D
+		List<Registration> regs = dao.getRegistrationForUser(event, IWTimestamp.RightNow().getYear(), user.getUniqueId());
+		if (regs != null) {
+			for (Registration registration : regs) {
+				if (registration.getStatus().equals(RegistrationStatus.OK)) {
+					CharityInformation info = new CharityInformation();
+					Address address = null;
+					try {
+						address = getUserBusiness().getUsersMainAddress(user);
+					} catch (IBOLookupException e) {
+					} catch (RemoteException e) {
+					}
+					
+					Email email = null;
+					try {
+						email = getUserBusiness().getUserMail(user);
+					} catch (IBOLookupException e) {
+					} catch (RemoteException e) {
+					}
+					
+					Phone phone = null;
+					try {
+						phone = getUserBusiness().getUsersHomePhone(user);
+					} catch (IBOLookupException e) {
+					} catch (RemoteException e) {
+					} catch (NoPhoneFoundException e) {
+					}
+
+					Phone mobile = null;
+					try {
+						mobile = getUserBusiness().getUsersMobilePhone(user);
+					} catch (IBOLookupException e) {
+					} catch (RemoteException e) {
+					} catch (NoPhoneFoundException e) {
+					}
+					
+					info.setAddress(address.getStreetAddress());
+					if (registration.getCharity() != null) {
+						info.setCharityID(registration.getCharity().getPersonalId());
+						info.setCharityName(registration.getCharity().getName());
+					}
+					info.setCity(address.getCity());
+					info.setCountry(address.getCountry().getName());
+					info.setDistance(registration.getRace().getDistance().getName());
+					if (email != null) {
+						info.setEmail(email.getEmailAddress());
+					}
+					info.setEmployee(false);
+					if (user.getGender().isFemaleGender()) {
+						info.setGender("female");
+					} else {
+						info.setGender("male");
+					}
+					if (mobile != null) {
+						info.setMobile(mobile.getNumber());						
+					}
+					info.setName(user.getName());
+					info.setNationality(registration.getNationality());
+					info.setPersonalID(user.getPersonalID());
+					if (phone != null) {
+						info.setPhone(phone.getNumber());
+					}
+					info.setPostalCode(address.getPostalCode().getName());
+					
+					return info;
+				}
+			}
+		}
 		return null;
 	}
 
