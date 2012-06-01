@@ -2454,7 +2454,7 @@ public class PheidippidesService {
 					Registration registration = dao
 							.storeRegistration(null, header,
 									RegistrationStatus.OK, holder.getRace(),
-									holder.getShirtSize(), null, null, 0, null,
+									holder.getShirtSize(), null, null, 0, holder.getCharity(),
 									country.getPrimaryKey().toString(),
 									user.getUniqueId(), 0, false, false, null,
 									null);
