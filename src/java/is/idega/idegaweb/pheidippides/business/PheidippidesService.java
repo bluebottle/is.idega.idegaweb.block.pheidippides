@@ -1517,7 +1517,53 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
-	public RegistrationAnswerHolder createChangeDistanceRegistration(Registration registration, Race newDistance, ShirtSize newShirtSize) {
+	public RegistrationAnswerHolder createChangeDistanceRegistration(
+			Registration registration, Race newDistance, ShirtSize newShirtSize, String descriptionText) {
+		// Add checks to see if we need to pay anything. Otherwise just create
+		// new registration entry in same header and mark the old one as moved
+		RegistrationHeader oldHeader = registration.getHeader();
+
+		if (oldHeader.getStatus()
+				.equals(RegistrationHeaderStatus.RegisteredWithoutPayment) || oldHeader.getCompany() != null) {
+			changeDistance(registration.getHeader(), registration, newDistance,
+					newShirtSize);
+
+			return null;
+		}
+
+		RacePrice price = dao.getCurrentRacePrice(newDistance, registration
+				.getHeader().getCurrency());
+		int amount = price.getPrice() - registration.getAmountPaid(); 
+
+		if (amount > 0) {
+			RegistrationHeader newHeader = dao.storeRegistrationHeader(null,
+					RegistrationHeaderStatus.WaitingForPayment,
+					oldHeader.getRegistrantUUID(), oldHeader.getPaymentGroup(), oldHeader.getLocale().toString(),
+					oldHeader.getCurrency(),
+					null, null, null, null, null, null, null, null, null,
+					oldHeader.getCompany());
+			registration = dao.storeRegistration(registration.getId(), newHeader, RegistrationStatus.InTransition, newDistance, newShirtSize, null, null, price.getPrice(), null, null, null, 0, registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null);
+		} else {
+			changeDistance(registration.getHeader(), registration, newDistance,
+					newShirtSize);
+
+			return null;			
+		}
+		
+		return getValitorURLForChangeDistance(registration, amount, descriptionText);
+	}
+
+	private Registration changeDistance(RegistrationHeader header,
+			Registration oldRegistration, Race newDistance,
+			ShirtSize newShirtSize) {
+		return dao.storeRegistration(oldRegistration.getId(), header, null,
+				newDistance, newShirtSize, null, null, 0, null, null, null, 0,
+				oldRegistration.isHasDoneMarathonBefore(),
+				oldRegistration.isHasDoneLVBefore(), null, null);
+	}
+
+	private RegistrationAnswerHolder getValitorURLForChangeDistance(
+			Registration registration, int amountToPay, String descriptionText) {
 		RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
 		String valitorURL = IWMainApplication
@@ -1544,8 +1590,10 @@ public class PheidippidesService {
 				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE,
 						"http://skraning.marathon.is/pages/valitor");
 		String valitorReturnURLText = IWMainApplication
-				.getDefaultIWApplicationContext().getApplicationSettings()
-				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT, "Halda afram");
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT,
+						"Halda afram");
 		String valitorReturnURLServerSide = IWMainApplication
 				.getDefaultIWApplicationContext()
 				.getApplicationSettings()
@@ -1598,375 +1646,143 @@ public class PheidippidesService {
 		url.append("0");
 		securityString.append("0");
 
-/*		if (holders != null && !holders.isEmpty()) {
-			RegistrationHeader header = null;
-			if (doPayment) {
-				header = dao.storeRegistrationHeader(null,
-						RegistrationHeaderStatus.WaitingForPayment,
-						registrantUUID, paymentGroup, locale.toString(),
-						fixedCurrency != null ? fixedCurrency
-								: createUsers ? Currency.EUR : Currency.ISK,
-						null, null, null, null, null, null, null, null, null,
-						null);
-			} else {
-				header = dao.storeRegistrationHeader(null,
-						RegistrationHeaderStatus.RegisteredWithoutPayment,
-						registrantUUID, paymentGroup, locale.toString(),
-						fixedCurrency != null ? fixedCurrency
-								: createUsers ? Currency.EUR : Currency.ISK,
-						null, null, null, null, null, null, null, null, null,
-						null);
-			}
-			holder.setHeader(header);
+		RegistrationHeader header = registration.getHeader();
+		holder.setHeader(header);
 
-			valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
-			valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
+		valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
+		valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
 
-			if (isBankTransfer) {
-				BankReference reference = dao.storeBankReference(header);
-				holder.setBankReference(reference);
-			}
+		securityString.append("1");
+		securityString.append(amountToPay);
+		securityString.append(0);
 
-			int amount = 0;
-
-			int counter = 1;
-			for (ParticipantHolder participantHolder : holders) {
-				User user = null;
-				Participant participant = participantHolder.getParticipant();
-				if (createUsers) {
-					if (participant.getUuid() != null) {
-						try {
-							user = getUserBusiness().getUserByUniqueId(
-									participant.getUuid());
-						} catch (RemoteException e) {
-						} catch (FinderException e) {
-						}
-					}
-
-					try {
-						if (user == null) {
-							Gender gender = null;
-							if (participant.getGender().equals(
-									getGenderHome().getMaleGender().getName())) {
-								gender = getGenderHome().getMaleGender();
-							} else {
-								gender = getGenderHome().getFemaleGender();
-							}
-							user = saveUser(
-									new Name(participant.getFullName()),
-									new IWTimestamp(participant
-											.getDateOfBirth()),
-									gender,
-									participant.getAddress(),
-									participant.getPostalCode(),
-									participant.getCity(),
-									getCountryHome().findByPrimaryKey(
-											new Integer(participant
-													.getCountry())));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						user = null; // Something got fucked up
-					}
-				} else {
-					try {
-						user = getUserBusiness().getUserByUniqueId(
-								participant.getUuid());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-
-				if (user != null) {
-					if (participant.getPhoneMobile() != null
-							&& !"".equals(participant.getPhoneMobile())) {
-						try {
-							getUserBusiness().updateUserMobilePhone(user,
-									participant.getPhoneMobile());
-						} catch (Exception e) {
-						}
-					}
-
-					if (participant.getPhoneHome() != null
-							&& !"".equals(participant.getPhoneHome())) {
-						try {
-							getUserBusiness().updateUserHomePhone(user,
-									participant.getPhoneHome());
-						} catch (Exception e) {
-						}
-					}
-
-					if (participant.getEmail() != null
-							&& !"".equals(participant.getEmail())) {
-						try {
-							getUserBusiness().updateUserMail(user,
-									participant.getEmail());
-						} catch (Exception e) {
-						}
-					}
-
-					List<Participant> relayPartners = participantHolder
-							.getRelayPartners();
-					Team team = participantHolder.getTeam();
-					if (relayPartners != null && !relayPartners.isEmpty()) {
-						team = dao.storeTeam(team.getId(), team.getName(),
-								team.isRelayTeam());
-					}
-
-					Registration registration = dao.storeRegistration(null,
-							header, RegistrationStatus.Unconfirmed,
-							participantHolder.getRace(),
-							participantHolder.getShirtSize(), team,
-							participantHolder.getLeg(),
-							participantHolder.getAmount(),
-							participantHolder.getCharity(),
-							participant.getNationality(), user.getUniqueId(),
-							participantHolder.getDiscount(),
-							participantHolder.isHasDoneMarathonBefore(),
-							participantHolder.isHasDoneLVBefore(),
-							participantHolder.getBestMarathonTime(),
-							participantHolder.getBestUltraMarathonTime());
-
-					amount += participantHolder.getAmount()
-							- participantHolder.getDiscount();
-
-					securityString.append("1");
-					securityString.append(participantHolder.getAmount());
-					securityString.append(participantHolder.getDiscount());
-
-					url.append("&");
-					url.append(VARA);
-					url.append(counter);
-					url.append(VARA_LYSING);
-					url.append("=");
-					try {
-						url.append(URLEncoder.encode(
-								participantHolder.getValitorDescription(),
-								"UTF-8"));
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-					url.append("&");
-					url.append(VARA);
-					url.append(counter);
-					url.append(VARA_FJOLDI);
-					url.append("=");
-					url.append("1");
-					url.append("&");
-					url.append(VARA);
-					url.append(counter);
-					url.append(VARA_VERD);
-					url.append("=");
-					url.append(participantHolder.getAmount());
-					url.append("&");
-					url.append(VARA);
-					url.append(counter++);
-					url.append(VARA_AFSLATTUR);
-					url.append("=");
-					url.append(participantHolder.getDiscount());
-
-					List<RacePrice> trinkets = participantHolder.getTrinkets();
-					if (trinkets != null && !trinkets.isEmpty()) {
-						for (RacePrice trinket : trinkets) {
-							dao.storeRegistrationTrinket(null, registration,
-									trinket);
-							securityString.append("1");
-							securityString.append(trinket.getPrice());
-							securityString.append("0");
-
-							url.append("&");
-							url.append(VARA);
-							url.append(counter);
-							url.append(VARA_LYSING);
-							url.append("=");
-							try {
-								url.append(URLEncoder
-										.encode(trinket.getTrinket()
-												.getDescription(), "UTF-8"));
-							} catch (UnsupportedEncodingException e) {
-								e.printStackTrace();
-							}
-							url.append("&");
-							url.append(VARA);
-							url.append(counter);
-							url.append(VARA_FJOLDI);
-							url.append("=");
-							url.append("1");
-							url.append("&");
-							url.append(VARA);
-							url.append(counter);
-							url.append(VARA_VERD);
-							url.append("=");
-							url.append(trinket.getPrice());
-							url.append("&");
-							url.append(VARA);
-							url.append(counter++);
-							url.append(VARA_AFSLATTUR);
-							url.append("=0");
-
-							amount += trinket.getPrice();
-						}
-					}
-
-					if (relayPartners != null && !relayPartners.isEmpty()) {
-						for (Participant participant2 : relayPartners) {
-							user = null;
-
-							if (createUsers) {
-								if (participant2.getPersonalId() != null) {
-									try {
-										user = getUserBusiness().getUser(
-												participant2.getPersonalId());
-									} catch (RemoteException e) {
-									} catch (FinderException e) {
-									}
-								}
-
-								try {
-									if (user == null) {
-										user = saveUser(
-												new Name(participant2
-														.getFullName()),
-												new IWTimestamp(participant2
-														.getDateOfBirth()),
-												null, null, null, null, null);
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-									user = null; // Something got fucked up
-								}
-							} else {
-								try {
-									user = getUserBusiness().getUser(
-											participant2.getPersonalId());
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-
-							if (user != null) {
-								if (participant2.getEmail() != null
-										&& !"".equals(participant2.getEmail())) {
-									try {
-										getUserBusiness().updateUserMail(user,
-												participant2.getEmail());
-									} catch (Exception e) {
-									}
-								}
-
-								dao.storeRegistration(null, header,
-										RegistrationStatus.RelayPartner,
-										participantHolder.getRace(),
-										participant2.getShirtSize(), team,
-										participant2.getRelayLeg(), 0, null,
-										participant.getNationality(),
-										user.getUniqueId(), 0, false, false,
-										null, null);
-							}
-						}
-					}
-				}
-			}
-
-			if (fixedCurrency != null) {
-				if (fixedCurrency.equals(Currency.ISK)) {
-					securityString.append(valitorShopID);
-				} else {
-					securityString.append(valitorShopIDEUR);
-				}
-			} else if (createUsers) {
-				securityString.append(valitorShopIDEUR);
-			} else {
-				securityString.append(valitorShopID);
-			}
-			securityString.append(header.getUuid());
-			securityString.append(valitorReturnURL);
-			securityString.append(valitorReturnURLServerSide);
-			securityString.append(currency);
-
-			url.append("&");
-			url.append(KAUPANDA_UPPLYSINGAR);
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("NafnSkylda");
-			url.append("=");
-			url.append("1");
-			if (!createUsers) {
-				url.append("&");
-				url.append("KennitalaSkylda");
-				url.append("=");
-				url.append("1");
-			} else {
-				url.append("&");
-				url.append("FelaKennitala");
-				url.append("=");
-				url.append("1");
-			}
-			url.append("&");
-			url.append("FelaHeimilisfang");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("FelaPostnumer");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("FelaStadur");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("FelaLand");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("FelaNetfang");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append("FelaAthugasemdir");
-			url.append("=");
-			url.append("1");
-			url.append("&");
-			url.append(TILVISUNARNUMER);
-			url.append("=");
-			url.append(header.getUuid());
-			url.append("&");
-			url.append(SLOD_TOKST_AD_GJALDFAERA);
-			url.append("=");
-			url.append(valitorReturnURL);
-			url.append("&");
-			url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI);
-			url.append("=");
-			url.append(valitorReturnURLText);
-			url.append("&");
-			url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE);
-			url.append("=");
-			url.append(valitorReturnURLServerSide);
-			url.append("&");
-			url.append(SLOD_NOTANDI_HAETTIR_VID);
-			url.append("=");
-			url.append(valitorReturnURLCancel);
-			url.append("&");
-			url.append(RAFRAEN_UNDIRSKRIFT);
-			url.append("=");
-			url.append(createValitorSecurityString(securityString.toString()));
-
-			holder.setAmount(amount);
-			holder.setValitorURL(url.toString());
+		url.append("&");
+		url.append(VARA);
+		url.append(1);
+		url.append(VARA_LYSING);
+		url.append("=");
+		try {
+			url.append(URLEncoder.encode(
+					descriptionText,
+					"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-*/
+		url.append("&");
+		url.append(VARA);
+		url.append(1);
+		url.append(VARA_FJOLDI);
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append(VARA);
+		url.append(1);
+		url.append(VARA_VERD);
+		url.append("=");
+		url.append(amountToPay);
+		url.append("&");
+		url.append(VARA);
+		url.append(1);
+		url.append(VARA_AFSLATTUR);
+		url.append("=");
+		url.append(0);
+
+
+		if (header.getCurrency().equals(Currency.ISK)) {
+			securityString.append(valitorShopID);
+		} else {
+			securityString.append(valitorShopIDEUR);
+		}
+		securityString.append(header.getUuid());
+		securityString.append(valitorReturnURL);
+		securityString.append(valitorReturnURLServerSide);
+		securityString.append(currency);
+
+		url.append("&");
+		url.append(KAUPANDA_UPPLYSINGAR);
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("NafnSkylda");
+		url.append("=");
+		url.append("1");
+		if (!header.getCurrency().equals(Currency.ISK)) {
+			url.append("&");
+			url.append("KennitalaSkylda");
+			url.append("=");
+			url.append("1");
+		} else {
+			url.append("&");
+			url.append("FelaKennitala");
+			url.append("=");
+			url.append("1");
+		}
+		url.append("&");
+		url.append("FelaHeimilisfang");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("FelaPostnumer");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("FelaStadur");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("FelaLand");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("FelaNetfang");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append("FelaAthugasemdir");
+		url.append("=");
+		url.append("1");
+		url.append("&");
+		url.append(TILVISUNARNUMER);
+		url.append("=");
+		url.append(header.getUuid());
+		url.append("&");
+		url.append(SLOD_TOKST_AD_GJALDFAERA);
+		url.append("=");
+		url.append(valitorReturnURL);
+		url.append("&");
+		url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI);
+		url.append("=");
+		url.append(valitorReturnURLText);
+		url.append("&");
+		url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE);
+		url.append("=");
+		url.append(valitorReturnURLServerSide);
+		url.append("&");
+		url.append(SLOD_NOTANDI_HAETTIR_VID);
+		url.append("=");
+		url.append(valitorReturnURLCancel);
+		url.append("&");
+		url.append(RAFRAEN_UNDIRSKRIFT);
+		url.append("=");
+		url.append(createValitorSecurityString(securityString.toString()));
+
+		holder.setAmount(amountToPay);
+		holder.setValitorURL(url.toString());
+
 		return holder;
+
 	}
-	
-	public RegistrationHeader markChangeDistanceAsPaymentCancelled(String uniqueID) {
+
+	public RegistrationHeader markChangeDistanceAsPaymentCancelled(
+			String uniqueID) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
 		return markChangeDistanceAsPaymentCancelled(header);
 	}
 
-	public RegistrationHeader markChangeDistanceAsPaymentCancelled(RegistrationHeader header) {
-		return null;		
+	public RegistrationHeader markChangeDistanceAsPaymentCancelled(
+			RegistrationHeader header) {
+		return null;
 	}
 
 	public RegistrationHeader markChangeDistanceAsPaid(String uniqueID,
@@ -1976,26 +1792,24 @@ public class PheidippidesService {
 			String saleId) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
-		return markChangeDistanceAsPaid(header, 
-				securityString, cardType, cardNumber, paymentDate,
-				authorizationNumber, transactionNumber, referenceNumber,
-				comment, saleId);
+		return markChangeDistanceAsPaid(header, securityString, cardType,
+				cardNumber, paymentDate, authorizationNumber,
+				transactionNumber, referenceNumber, comment, saleId);
 	}
 
-	public RegistrationHeader markChangeDistanceAsPaid(RegistrationHeader header,
-			String securityString, String cardType, String cardNumber,
-			String paymentDate, String authorizationNumber,
+	public RegistrationHeader markChangeDistanceAsPaid(
+			RegistrationHeader header, String securityString, String cardType,
+			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		return null;
 	}
-	
+
 	public RegistrationHeader markRegistrationAsPaymentCancelled(String uniqueID) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
 		return markRegistrationAsPaymentCancelled(header);
 	}
-
 
 	public RegistrationHeader markRegistrationAsPaymentCancelled(
 			RegistrationHeader header) {
@@ -2330,35 +2144,39 @@ public class PheidippidesService {
 	public RegistrationHeader getRegistrationHeader(String uniqueID) {
 		return dao.getRegistrationHeader(uniqueID);
 	}
-	
+
 	public Participant getRaceRegistration(String idOrPersonalID, String racePK) {
 		Race race = dao.getRace(Long.parseLong(racePK));
-		
-		if (SocialSecurityNumber.isIndividualSocialSecurityNumber(idOrPersonalID, LocaleUtil.getIcelandicLocale())) {
+
+		if (SocialSecurityNumber.isIndividualSocialSecurityNumber(
+				idOrPersonalID, LocaleUtil.getIcelandicLocale())) {
 			Participant participant = getParticipant(idOrPersonalID);
-			
+
 			if (participant != null) {
-				Registration registration = dao.getRegistration(participant.getUuid(), race, RegistrationStatus.OK);
+				Registration registration = dao.getRegistration(
+						participant.getUuid(), race, RegistrationStatus.OK);
 				if (registration != null) {
 					participant.setRegistrationID(registration.getId());
 					return participant;
 				}
 			}
-		}
-		else {
+		} else {
 			try {
-				Registration registration = dao.getRegistration(Long.parseLong(idOrPersonalID));
-				if (registration != null && registration.getStatus().equals(RegistrationStatus.OK) && registration.getRace().equals(race)) {
+				Registration registration = dao.getRegistration(Long
+						.parseLong(idOrPersonalID));
+				if (registration != null
+						&& registration.getStatus().equals(
+								RegistrationStatus.OK)
+						&& registration.getRace().equals(race)) {
 					Participant participant = getParticipant(registration);
 					participant.setRegistrationID(registration.getId());
 					return participant;
 				}
-			}
-			catch (NumberFormatException nfe) {
-				//Not a valid number...
+			} catch (NumberFormatException nfe) {
+				// Not a valid number...
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -2601,35 +2419,35 @@ public class PheidippidesService {
 
 		return registrations;
 	}
-	
-	public void updateTeam(Registration registration, String teamName, String[] ids) {
+
+	public void updateTeam(Registration registration, String teamName,
+			String[] ids) {
 		Team team = registration.getTeam();
 		if (team == null) {
 			team = dao.storeTeam(null, teamName, false);
-		}
-		else {
+		} else {
 			dao.updateTeamName(team, teamName);
 		}
-		
+
 		registration.setTeam(team);
 		dao.updateTeam(registration, team);
-		
+
 		List<Registration> newTeamMembers = new ArrayList<Registration>();
 		List<Registration> currentTeamMembers = getOtherTeamMembers(registration);
 
 		for (String id : ids) {
 			if (id != null && id.length() > 0) {
-				Registration teamRegistration = dao.getRegistration(Long.parseLong(id));
-				
+				Registration teamRegistration = dao.getRegistration(Long
+						.parseLong(id));
+
 				if (currentTeamMembers.contains(teamRegistration)) {
 					currentTeamMembers.remove(teamRegistration);
-				}
-				else {
+				} else {
 					newTeamMembers.add(teamRegistration);
 				}
 			}
 		}
-		
+
 		for (Registration registration2 : currentTeamMembers) {
 			dao.updateTeam(registration2, null);
 		}
@@ -2943,9 +2761,10 @@ public class PheidippidesService {
 				}
 
 				if (user == null && participant.getPersonalId() != null) {
-					user = getUserBusiness().getUser(participant.getPersonalId());
+					user = getUserBusiness().getUser(
+							participant.getPersonalId());
 				}
-				
+
 				if (user != null) {
 					if (participant.getPhoneMobile() != null
 							&& !"".equals(participant.getPhoneMobile())) {
@@ -2983,13 +2802,12 @@ public class PheidippidesService {
 								LocaleUtil.getIcelandicLocale().getCountry());
 					}
 
-					Registration registration = dao
-							.storeRegistration(null, header,
-									RegistrationStatus.OK, holder.getRace(),
-									holder.getShirtSize(), null, null, 0, holder.getCharity(),
-									country.getPrimaryKey().toString(),
-									user.getUniqueId(), 0, false, false, null,
-									null);
+					Registration registration = dao.storeRegistration(null,
+							header, RegistrationStatus.OK, holder.getRace(),
+							holder.getShirtSize(), null, null, 0, holder
+									.getCharity(), country.getPrimaryKey()
+									.toString(), user.getUniqueId(), 0, false,
+							false, null, null);
 
 					String userNameString = "";
 					String passwordString = "";
@@ -3070,7 +2888,7 @@ public class PheidippidesService {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return "No user with personal id found";
 	}
 }

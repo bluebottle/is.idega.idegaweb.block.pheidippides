@@ -101,7 +101,9 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 					Race newDistance = getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)));
 					ShirtSize newShirtSize = iwc.isParameterSet(PARAMETER_SHIRT_SIZE) ? getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))) : null;
 					
-					RegistrationAnswerHolder answer = getService().createChangeDistanceRegistration(registration, newDistance, newShirtSize);
+					String descriptionText = "blabla";
+					
+					RegistrationAnswerHolder answer = getService().createChangeDistanceRegistration(registration, newDistance, newShirtSize, descriptionText);
 					bean.setAnswer(answer);
 					bean.setRace(newDistance);
 					bean.setShirtSize(newShirtSize);

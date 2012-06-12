@@ -519,7 +519,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHeader(registration.getHeader());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
-			newReg.setHeader(registration.getHeader());
+			if (header != null) {
+				newReg.setHeader(header);				
+			} else {
+				newReg.setHeader(registration.getHeader());
+			}
 			newReg.setLeg(registration.getLeg());
 			newReg.setNationality(registration.getNationality());
 			newReg.setShirtSize(registration.getShirtSize());
@@ -532,9 +536,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
 			newReg.setBestMarathonTime(registration.getBestMarathonTime());
 			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			newReg.setMovedFrom(registration);
 			getEntityManager().persist(newReg);
 
-			registration.setStatus(RegistrationStatus.Moved);
+			if (status == null || !status.equals(RegistrationStatus.InTransition)) {
+				registration.setStatus(RegistrationStatus.Moved);
+			}
+			registration.setMovedTo(newReg);
 			getEntityManager().persist(registration);
 
 			registration = newReg;
