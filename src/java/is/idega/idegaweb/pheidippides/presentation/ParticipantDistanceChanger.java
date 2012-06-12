@@ -101,14 +101,19 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 					Race newDistance = getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)));
 					ShirtSize newShirtSize = iwc.isParameterSet(PARAMETER_SHIRT_SIZE) ? getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))) : null;
 					
-					String descriptionText = "blabla";
+					StringBuilder description = new StringBuilder();
+					description.append(iwb.getResourceBundle(iwc.getCurrentLocale()).getLocalizedString("change_of_distance", "Change of distance"));
+					description.append(": ");
+					description.append(getService().getLocalizedRaceName(registration.getRace(), iwc.getCurrentLocale().toString()).getValue());
+					description.append(" => ");
+					description.append(getService().getLocalizedRaceName(newDistance, iwc.getCurrentLocale().toString()).getValue());
 					
-					RegistrationAnswerHolder answer = getService().createChangeDistanceRegistration(registration, newDistance, newShirtSize, descriptionText);
+					RegistrationAnswerHolder answer = getService().createChangeDistanceRegistration(registration, newDistance, newShirtSize, description.toString());
 					bean.setAnswer(answer);
 					bean.setRace(newDistance);
 					bean.setShirtSize(newShirtSize);
 
-					if (answer.getValitorURL() != null) {
+					if (answer != null) {
 						facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/payment.xhtml"));
 					}
 					else {

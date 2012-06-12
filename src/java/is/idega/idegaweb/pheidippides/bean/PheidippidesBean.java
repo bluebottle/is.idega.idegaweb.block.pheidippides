@@ -12,6 +12,7 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 import java.util.Collection;
@@ -40,6 +41,7 @@ public class PheidippidesBean {
 
 	private RaceTrinket trinket;
 	private List<RaceTrinket> trinkets;
+	private Map<RaceTrinket, RegistrationTrinket> registrationTrinkets;
 	
 	private List<RacePrice> raceTrinkets;
 
@@ -413,5 +415,14 @@ public class PheidippidesBean {
 
 	public void setRaceTrinkets(List<RacePrice> raceTrinkets) {
 		this.raceTrinkets = raceTrinkets;
+	}
+
+	public Map<RaceTrinket, RegistrationTrinket> getRegistrationTrinkets() {
+		return registrationTrinkets;
+	}
+
+	public void setRegistrationTrinkets(
+			Map<RaceTrinket, RegistrationTrinket> registrationTrinkets) {
+		this.registrationTrinkets = registrationTrinkets;
 	}
 }

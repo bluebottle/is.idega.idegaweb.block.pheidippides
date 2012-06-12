@@ -68,6 +68,7 @@ public class Registration implements Serializable {
 	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_ultra_marathon_before";
 	private static final String COLUMN_BEST_ULTRA_MARATHON_TIME = "best_ultra_marathon_time";
 	private static final String COLUMN_ESTIMATED_TIME = "estimated_time";
+	private static final String COLUMN_COMMENT = "comment";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -135,6 +136,9 @@ public class Registration implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_ESTIMATED_TIME)
 	private Date estimatedTime;
+	
+	@Column(name = Registration.COLUMN_COMMENT, length = 4000)
+	private String comment;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
@@ -301,6 +305,14 @@ public class Registration implements Serializable {
 
 	public void setEstimatedTime(Date estimatedTime) {
 		this.estimatedTime = estimatedTime;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+	
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public List<RegistrationTrinket> getTrinkets() {
