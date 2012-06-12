@@ -35,6 +35,7 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "registration.findByCompanyAndEventAndYearAndStatus", query = "select r from Registration r where r.header.company = :company and r.race.event = :event and r.race.year = :year and r.status = :status"),
 	@NamedQuery(name = "registration.findByParticipantAndStatuses", query = "select r from Registration r where r.userUUID = :uuid and r.status in (:statuses) order by r.createdDate"),
 	@NamedQuery(name = "registration.findByParticipant", query = "select r from Registration r where r.userUUID = :uuid order by r.createdDate"),
+	@NamedQuery(name = "registration.findByParticipantAndRaceAndStatus", query = "select r from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByRaceAndStatus", query = "select count(r) from Registration r where r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByParticipantAndRaceAndStatus", query = "select count(r) from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByCompanyAndAventAndYear", query = "select count(r) from Registration r where r.header.company = :company and r.race.event = :event and r.race.year = :year and r.status = :status"),
@@ -127,6 +128,10 @@ public class Registration implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_BEST_ULTRA_MARATHON_TIME)
 	private Date bestUltraMarathonTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = Registration.COLUMN_ESTIMATED_TIME)
+	private Date estimatedTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
@@ -279,11 +284,44 @@ public class Registration implements Serializable {
 		this.bestUltraMarathonTime = bestUltraMarathonTime;
 	}
 
+	public Date getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(Date estimatedTime) {
+		this.estimatedTime = estimatedTime;
+	}
+
 	public List<RegistrationTrinket> getTrinkets() {
 		return trinkets;
 	}
 
 	public void setTrinkets(List<RegistrationTrinket> trinkets) {
 		this.trinkets = trinkets;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Registration other = (Registration) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

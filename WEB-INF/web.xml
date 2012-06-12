@@ -11,9 +11,21 @@
 	</servlet>
 
 	<servlet>
+		<display-name>Valitor Move Success</display-name>
+		<servlet-name>ValitorMoveSuccess</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorMoveSuccess</servlet-class>
+	</servlet>
+
+	<servlet>
 		<display-name>Valitor Cancellation</display-name>
 		<servlet-name>ValitorCancel</servlet-name>
 		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorCancel</servlet-class>
+	</servlet>
+
+	<servlet>
+		<display-name>Valitor Move Cancellation</display-name>
+		<servlet-name>ValitorMoveCancel</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorMoveCancel</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -22,8 +34,18 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
+		<servlet-name>ValitorMoveSuccess</servlet-name>
+		<url-pattern>/valitorMoveSuccess/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
 		<servlet-name>ValitorCancel</servlet-name>
 		<url-pattern>/valitorCancel/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ValitorMoveCancel</servlet-name>
+		<url-pattern>/valitorMoveCancel/*</url-pattern>
 	</servlet-mapping>
 
 	<filter>

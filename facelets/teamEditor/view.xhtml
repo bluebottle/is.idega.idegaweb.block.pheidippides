@@ -1,0 +1,89 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+		xmlns:j="http://java.sun.com/jstl/core"
+>
+<ui:component>
+	<ui:fragment rendered="#{not empty pheidippidesBean.registration and pheidippidesBean.registration.race.teamRun}">
+		<ui:param value="#{pheidippidesBean.participant}" name="participant" />
+		<ui:param value="#{pheidippidesBean.registration}" name="registration" />
+
+		<form class="userForm" id="teamEditor" action="" method="post">
+			<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
+			<input type="hidden" name="prm_action" value="store" />
+			<input type="hidden" name="prm_race_pk" value="#{registration.race.id}" />
+		
+			<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_editor']}" /></h1>
+	
+			<ui:fragment rendered="#{not empty param['prm_action']}">
+				<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_stored']}" /></div>
+			</ui:fragment>
+	
+			<fieldset class="formSection">
+				
+				<div class="formItem required">
+					<label for="prm_team_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></label>
+					<input type="text" class="required" name="prm_team_name" value="#{registration.team.name}" />
+				</div>
+				
+				<table class="relayTeam" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+								<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+							</ui:fragment>
+							<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+								<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration_id']}" /></th>
+							</ui:fragment>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr>
+							<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+								<td class="firstColumn"><h:outputText value="#{participant.personalId}" /></td>
+							</ui:fragment>
+							<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+								<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
+							</ui:fragment>
+							<td><h:outputText value="#{participant.fullName}" /></td>
+							<td><h:outputText value="#{participant.email}" /></td>
+						</tr>
+						
+						<j:forEach items="#{pheidippidesBean.properties}" var="member">
+							<ui:param value="#{pheidippidesBean.registrationMap[member.value]}" name="otherRegistration" />
+							<ui:param value="#{pheidippidesBean.participantsMap[otherRegistration]}" name="partner" />
+							<tr>
+								<ui:fragment rendered="#{!p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td class="firstColumn"><input type="hidden" name="prm_other_registration_pk" value="#{otherRegistration.id}" /><input type="text" name="prm_personalId" value="#{partner.personalId}" /></td>
+								</ui:fragment>
+								<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
+									<td class="firstColumn"><input type="text" name="prm_other_registration_pk" value="#{otherRegistration.id}" /></td>
+								</ui:fragment>
+								<td><span class="fullName"><h:outputText value="#{partner.fullName}" /></span></td>
+								<td><span class="email"><h:outputText value="#{partner.email}" /></span></td>
+							</tr>
+						</j:forEach>
+					</tbody>
+				</table>
+			</fieldset>
+			
+			<div class="submit">
+				<h:outputLink rendered="#{not empty pheidippidesBean.responseURL}" value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}">
+					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span>
+				</h:outputLink>
+				<h:outputLink rendered="#{empty pheidippidesBean.responseURL}" value="/pages/sidanmin/minsida/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}">
+					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span>
+				</h:outputLink>
+				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+			</div>
+		</form>
+	</ui:fragment>
+</ui:component>
+</html>

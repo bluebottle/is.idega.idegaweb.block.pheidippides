@@ -23,7 +23,9 @@ import is.idega.idegaweb.pheidippides.data.Team;
 import java.util.Date;
 import java.util.List;
 
-public interface PheidippidesDao {
+import com.idega.core.persistence.GenericDao;
+
+public interface PheidippidesDao extends GenericDao {
 
 	public Event getEvent(Long eventID);
 
@@ -102,6 +104,8 @@ public interface PheidippidesDao {
 
 	public List<RegistrationHeader> getRegistrationHeaders(Event event, Integer year, RegistrationHeaderStatus status);
 	
+	public Registration getRegistration(String uuid, Race race, RegistrationStatus status);
+	
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
 			String registrantUUID, String paymentGroup, String locale,
@@ -178,7 +182,7 @@ public interface PheidippidesDao {
 
 	public List<RaceTrinket> getTrinkets();
 
-	public RaceTrinket storeTrinket(Long trinketID, String code,
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, String code,
 			String description, String localizedKey);
 
 	public boolean removeTrinket(Long trinketID);
@@ -187,4 +191,6 @@ public interface PheidippidesDao {
 	
 	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket);
 
+	public void updateTeamName(Team team, String name);
+	public void updateTeam(Registration registration, Team team);
 }

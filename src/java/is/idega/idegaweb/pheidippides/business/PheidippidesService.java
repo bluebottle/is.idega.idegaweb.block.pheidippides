@@ -85,6 +85,7 @@ import com.idega.util.Age;
 import com.idega.util.IWTimestamp;
 import com.idega.util.LocaleUtil;
 import com.idega.util.text.Name;
+import com.idega.util.text.SocialSecurityNumber;
 
 @Scope("singleton")
 @Service("pheidippidesService")
@@ -1853,6 +1854,37 @@ public class PheidippidesService {
 	public RegistrationHeader getRegistrationHeader(String uniqueID) {
 		return dao.getRegistrationHeader(uniqueID);
 	}
+	
+	public Participant getRaceRegistration(String idOrPersonalID, String racePK) {
+		Race race = dao.getRace(Long.parseLong(racePK));
+		
+		if (SocialSecurityNumber.isIndividualSocialSecurityNumber(idOrPersonalID, LocaleUtil.getIcelandicLocale())) {
+			Participant participant = getParticipant(idOrPersonalID);
+			
+			if (participant != null) {
+				Registration registration = dao.getRegistration(participant.getUuid(), race, RegistrationStatus.OK);
+				if (registration != null) {
+					participant.setRegistrationID(registration.getId());
+					return participant;
+				}
+			}
+		}
+		else {
+			try {
+				Registration registration = dao.getRegistration(Long.parseLong(idOrPersonalID));
+				if (registration != null && registration.getStatus().equals(RegistrationStatus.OK) && registration.getRace().equals(race)) {
+					Participant participant = getParticipant(registration);
+					participant.setRegistrationID(registration.getId());
+					return participant;
+				}
+			}
+			catch (NumberFormatException nfe) {
+				//Not a valid number...
+			}
+		}
+		
+		return null;
+	}
 
 	public List<Participant> searchForParticipants(SearchParameter parameter) {
 		Set<Participant> returnSet = new HashSet<Participant>();
@@ -1871,18 +1903,6 @@ public class PheidippidesService {
 		}
 
 		if (parameter.getDateOfBirth() != null) {
-			Name name = new Name();
-			if (parameter.getFirstName() != null
-					|| parameter.getMiddleName() != null
-					|| parameter.getLastName() != null) {
-				name = new Name(parameter.getFirstName(),
-						parameter.getMiddleName(), parameter.getLastName());
-			}
-
-			if (parameter.getFullName() != null) {
-				name = new Name(parameter.getFullName());
-			}
-
 			try {
 				Collection<User> col = getUserBusiness().getUserHome()
 						.findByDateOfBirth(
@@ -2104,6 +2124,42 @@ public class PheidippidesService {
 		registrations.remove(registration);
 
 		return registrations;
+	}
+	
+	public void updateTeam(Registration registration, String teamName, String[] ids) {
+		Team team = registration.getTeam();
+		if (team == null) {
+			team = dao.storeTeam(null, teamName, false);
+		}
+		else {
+			dao.updateTeamName(team, teamName);
+		}
+		
+		registration.setTeam(team);
+		dao.updateTeam(registration, team);
+		
+		List<Registration> newTeamMembers = new ArrayList<Registration>();
+		List<Registration> currentTeamMembers = getOtherTeamMembers(registration);
+
+		for (String id : ids) {
+			if (id != null && id.length() > 0) {
+				Registration teamRegistration = dao.getRegistration(Long.parseLong(id));
+				
+				if (currentTeamMembers.contains(teamRegistration)) {
+					currentTeamMembers.remove(teamRegistration);
+				}
+				else {
+					newTeamMembers.add(teamRegistration);
+				}
+			}
+		}
+		
+		for (Registration registration2 : currentTeamMembers) {
+			dao.updateTeam(registration2, null);
+		}
+		for (Registration registration2 : newTeamMembers) {
+			dao.updateTeam(registration2, team);
+		}
 	}
 
 	public void updateRelayTeam(Registration registration, String relayLeg,

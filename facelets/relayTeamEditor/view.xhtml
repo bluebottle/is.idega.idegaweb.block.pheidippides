@@ -101,7 +101,7 @@
 					<f:param name="prm_race_pk" value="#{registration.race.id}" />
 					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span>
 				</h:outputLink>
-				<h:outputLink rendered="empty pheidippidesBean.responseURL}" value="/pages/sidanmin/minsida/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" />
+				<h:outputLink rendered="#{empty pheidippidesBean.responseURL}" value="/pages/sidanmin/minsida/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" />
 				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 			</div>
 		</form>

@@ -357,6 +357,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			return getResultList("registrationHeader.findByStatus", RegistrationHeader.class, new Param("status", status));
 		}
 	}
+	
+	public Registration getRegistration(String uuid, Race race, RegistrationStatus status) {
+		return getSingleResult("registration.findByParticipantAndRaceAndStatus", Registration.class, new Param("uuid", uuid), new Param("race", race), new Param("status", status));
+	}
 
 	@Transactional(readOnly = false)
 	public RegistrationHeader storeRegistrationHeader(
@@ -828,13 +832,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Transactional(readOnly = false)
-	public RaceTrinket storeTrinket(Long trinketID, String code,
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, String code,
 			String description, String localizedKey) {
 		RaceTrinket trinket = trinketID != null ? getTrinket(trinketID) : null;
 		if (trinket == null) {
 			trinket = new RaceTrinket();
 			trinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}
+		trinket.setMultiple(isMultiple);
 		trinket.setCode(code);
 		trinket.setDescription(description);
 		trinket.setLocalizedKey(localizedKey);
@@ -874,5 +879,19 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		getEntityManager().persist(registrationTrinket);
 
 		return registrationTrinket;
+	}
+	
+	@Transactional(readOnly = false)
+	public void updateTeamName(Team team, String name) {
+		Team theTeam = getTeam(team.getId());
+		theTeam.setName(name);
+		persist(theTeam);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateTeam(Registration registration, Team team) {
+		Registration reg = getRegistration(registration.getId());
+		reg.setTeam(team);
+		persist(reg);
 	}
 }

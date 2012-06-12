@@ -30,6 +30,7 @@ public class Participant implements Serializable {
 	
 	private String relayLeg;
 	private ShirtSize shirtSize;
+	private Long registrationID;
 
 	public String getFirstName() {
 		return firstName;
@@ -243,5 +244,13 @@ public class Participant implements Serializable {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public Long getRegistrationID() {
+		return registrationID;
+	}
+
+	public void setRegistrationID(Long registrationID) {
+		this.registrationID = registrationID;
 	}
 }

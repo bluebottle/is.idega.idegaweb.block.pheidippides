@@ -33,6 +33,7 @@ public class TrinketEditor extends IWBaseComponent implements IWPageEventListene
 	private static final int ACTION_DELETE = 3;
 	
 	private static final String PARAMETER_TRINKET_PK = "prm_trinket_pk";
+	private static final String PARAMETER_MULTIPLE = "prm_multiple";
 	private static final String PARAMETER_CODE = "prm_code";
 	private static final String PARAMETER_DESCRIPTION = "prm_description";
 	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
@@ -136,6 +137,7 @@ public class TrinketEditor extends IWBaseComponent implements IWPageEventListene
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		getDao().storeTrinket(
 			iwc.isParameterSet(PARAMETER_TRINKET_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_TRINKET_PK)) : null,
+			iwc.isParameterSet(PARAMETER_MULTIPLE),
 			iwc.getParameter(PARAMETER_CODE),
 			iwc.getParameter(PARAMETER_DESCRIPTION),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY)

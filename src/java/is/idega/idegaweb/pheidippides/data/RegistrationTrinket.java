@@ -26,6 +26,7 @@ public class RegistrationTrinket {
 	private static final String COLUMN_ENTRY_ID = "registration_trinket_id";
 	private static final String COLUMN_REGISTRATION = "registration_id";
 	private static final String COLUMN_TRINKET = "trinket_id";
+	private static final String COLUMN_TRINKET_COUNT = "trinket_count";
 	private static final String COLUMN_AMOUNT_PAID = "amount_paid";
 	private static final String COLUMN_CREATED_DATE = "created";
 	
@@ -33,6 +34,9 @@ public class RegistrationTrinket {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = RegistrationTrinket.COLUMN_ENTRY_ID)
 	private Long id;
+	
+	@Column(name = RegistrationTrinket.COLUMN_TRINKET_COUNT)
+	private int count;
 
 	@ManyToOne
 	@JoinColumn(name = RegistrationTrinket.COLUMN_REGISTRATION)
@@ -55,6 +59,14 @@ public class RegistrationTrinket {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public int getCount() {
+		return count;
+	}
+	
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	public Registration getRegistration() {

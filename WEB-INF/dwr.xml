@@ -7,6 +7,7 @@
             <param name="managedBeanName" value="pheidippidesService" />
             <param name="class" value="is.idega.idegaweb.pheidippides.business.PheidippidesService" />
             <include method="getRaces" />
+            <include method="getRaceRegistration" />
             <include method="getShirts" />
             <include method="isValidPersonalID" />
             <include method="getParticipant" />
