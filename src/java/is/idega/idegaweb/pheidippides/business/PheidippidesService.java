@@ -1515,11 +1515,47 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
+	public String createChangeDistanceRegistration(Registration registration, Race newDistance) {
+		return null;
+	}
+	
+	public RegistrationHeader markChangeDistanceAsPaymentCancelled(String uniqueID) {
+		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
+
+		return markChangeDistanceAsPaymentCancelled(header);
+	}
+
+	public RegistrationHeader markChangeDistanceAsPaymentCancelled(RegistrationHeader header) {
+		return null;		
+	}
+
+	public RegistrationHeader markChangeDistanceAsPaid(String uniqueID,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId) {
+		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
+
+		return markChangeDistanceAsPaid(header, 
+				securityString, cardType, cardNumber, paymentDate,
+				authorizationNumber, transactionNumber, referenceNumber,
+				comment, saleId);
+	}
+
+	public RegistrationHeader markChangeDistanceAsPaid(RegistrationHeader header,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId) {
+		return null;
+	}
+	
 	public RegistrationHeader markRegistrationAsPaymentCancelled(String uniqueID) {
 		RegistrationHeader header = dao.getRegistrationHeader(uniqueID);
 
 		return markRegistrationAsPaymentCancelled(header);
 	}
+
 
 	public RegistrationHeader markRegistrationAsPaymentCancelled(
 			RegistrationHeader header) {

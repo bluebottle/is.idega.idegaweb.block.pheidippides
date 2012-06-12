@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,6 +60,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_AMOUNT_DISCOUNT = "amount_discount";
 	private static final String COLUMN_CHARITY = "charity";
 	private static final String COLUMN_STATUS = "status";
+	private static final String COLUMN_MOVED_FROM = "moved_from";
+	private static final String COLUMN_MOVED_TO = "moved_to";
 	
 	private static final String COLUMN_HAS_DONE_MARATHON_BEFORE = "done_marathon_before";
 	private static final String COLUMN_BEST_MARATHON_TIME = "best_marathon_time";
@@ -140,6 +143,14 @@ public class Registration implements Serializable {
 	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
 	private List<RegistrationTrinket> trinkets;
 
+	@OneToOne
+	@JoinColumn(name = Registration.COLUMN_MOVED_FROM)
+	private Registration movedFrom;
+
+	@OneToOne
+	@JoinColumn(name = Registration.COLUMN_MOVED_TO)
+	private Registration movedTo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -323,5 +334,21 @@ public class Registration implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Registration getMovedFrom() {
+		return movedFrom;
+	}
+
+	public void setMovedFrom(Registration movedFrom) {
+		this.movedFrom = movedFrom;
+	}
+
+	public Registration getMovedTo() {
+		return movedTo;
+	}
+
+	public void setMovedTo(Registration movedTo) {
+		this.movedTo = movedTo;
 	}
 }
