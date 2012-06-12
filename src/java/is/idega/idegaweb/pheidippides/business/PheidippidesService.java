@@ -1782,7 +1782,22 @@ public class PheidippidesService {
 
 	public RegistrationHeader markChangeDistanceAsPaymentCancelled(
 			RegistrationHeader header) {
-		return null;
+		List<Registration> registrations = header.getRegistrations();
+		header = dao.storeRegistrationHeader(header.getId(),
+				RegistrationHeaderStatus.UserDidntFinishPayment, null, null,
+				null, null, null, null, null, null, null, null, null, null,
+				null, null);
+		for (Registration registration : registrations) {
+			if (registration.getStatus().equals(RegistrationStatus.InTransition)) {
+				dao.storeRegistration(registration.getId(), header,
+						RegistrationStatus.Cancelled, null, null, null, null,
+						0, null, null, null, 0,
+						registration.isHasDoneMarathonBefore(),
+						registration.isHasDoneLVBefore(), null, null);
+			}
+		}
+
+		return header;
 	}
 
 	public RegistrationHeader markChangeDistanceAsPaid(String uniqueID,
@@ -1802,7 +1817,35 @@ public class PheidippidesService {
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
-		return null;
+		List<Registration> registrations = dao.getRegistrations(header);
+		dao.storeRegistrationHeader(
+				header.getId(),
+				RegistrationHeaderStatus.Paid, null, null,
+				null, null, securityString, cardType, cardNumber, paymentDate,
+				authorizationNumber, transactionNumber, referenceNumber,
+				comment, saleId, null);
+		for (Registration registration : registrations) {
+			if (registration.getStatus().equals(RegistrationStatus.InTransition)) {
+				registration = dao.storeRegistration(registration.getId(),
+						header, RegistrationStatus.OK, null, null, null, null,
+						0, null, null, null, 0,
+						registration.isHasDoneMarathonBefore(),
+						registration.isHasDoneLVBefore(), null, null);
+
+				Registration oldRegistration = registration.getMovedFrom();
+				dao.updateRegistrationStatus(oldRegistration.getId(), null, null, RegistrationStatus.Moved);
+				
+				List<RegistrationTrinket> trinkets = oldRegistration.getTrinkets();
+				for (RegistrationTrinket registrationTrinket : trinkets) {
+					RacePrice trinket = new RacePrice();
+					trinket.setTrinket(registrationTrinket.getTrinket());
+					trinket.setPrice(registrationTrinket.getAmountPaid());
+					dao.storeRegistrationTrinket(null, registration, trinket);
+				}
+			}
+		}
+
+		return header;
 	}
 
 	public RegistrationHeader markRegistrationAsPaymentCancelled(String uniqueID) {
