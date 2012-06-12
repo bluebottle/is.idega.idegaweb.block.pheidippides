@@ -102,6 +102,12 @@ public class PheidippidesService {
 	private static final String VALITOR_RETURN_URL_SERVER_SIDE = "VALITOR_RETURN_URL_SERVER_SIDE";
 	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
 	private static final String VALITOR_RETURN_URL = "VALITOR_RETURN_URL";
+
+	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_CANCEL = "VALITOR_RETURN_URL_CD_CANCEL";
+	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_SERVER_SIDE = "VALITOR_RETURN_URL_CD_SERVER_SIDE";
+	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT = "VALITOR_RETURN_URL_CD_TEXT";
+	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE = "VALITOR_RETURN_URL_CD";
+
 	private static final String VALITOR_SECURITY_NUMBER_EUR = "VALITOR_SECURITY_NUMBER_EUR";
 	private static final String VALITOR_SHOP_ID_EUR = "VALITOR_SHOP_ID_EUR";
 	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
@@ -1280,10 +1286,6 @@ public class PheidippidesService {
 		return null;
 	}
 
-	public void updateRegistrationStatus() {
-
-	}
-
 	public void calculatePrices(ParticipantHolder current,
 			List<ParticipantHolder> holder,
 			boolean isRegistrationWithPersonalID, Currency fixedCurrency) {
@@ -1515,8 +1517,446 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
-	public RegistrationAnswerHolder createChangeDistanceRegistration(Registration registration, Race newDistance) {
-		return null;
+	public RegistrationAnswerHolder createChangeDistanceRegistration(Registration registration, Race newDistance, ShirtSize newShirtSize) {
+		RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
+
+		String valitorURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_URL,
+						"https://testvefverslun.valitor.is/default.aspx");
+		String valitorShopID = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SHOP_ID, "1");
+		String valitorSecurityNumber = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorShopIDEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SHOP_ID_EUR, "1");
+		String valitorSecurityNumberEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
+
+		String valitorReturnURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE,
+						"http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLText = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT, "Halda afram");
+		String valitorReturnURLServerSide = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_SERVER_SIDE,
+						"http://skraning.marathon.is/pages/valitor");
+		String valitorReturnURLCancel = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_CANCEL,
+						"http://skraning.marathon.is/pages/valitor");
+
+		StringBuilder securityString = null;
+		if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
+			securityString = new StringBuilder(valitorSecurityNumber);
+		} else {
+			securityString = new StringBuilder(valitorSecurityNumberEUR);
+		}
+
+		StringBuilder url = new StringBuilder(valitorURL);
+		url.append("?");
+		url.append(VEFVERSLUN_ID);
+		url.append("=");
+		if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
+			url.append(valitorShopID);
+		} else {
+			url.append(valitorShopIDEUR);
+		}
+		url.append("&");
+		url.append(LANG);
+		url.append("=");
+		if (Locale.ENGLISH.equals(registration.getHeader().getLocale())) {
+			url.append("en");
+		} else {
+			url.append("is");
+		}
+		String currency = "ISK";
+
+		if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
+			currency = "ISK";
+		} else {
+			currency = "EUR";
+		}
+		url.append("&");
+		url.append(GJALDMIDILL);
+		url.append("=");
+		url.append(currency);
+		url.append("&");
+		url.append(ADEINSHEIMILD);
+		url.append("=");
+		url.append("0");
+		securityString.append("0");
+
+/*		if (holders != null && !holders.isEmpty()) {
+			RegistrationHeader header = null;
+			if (doPayment) {
+				header = dao.storeRegistrationHeader(null,
+						RegistrationHeaderStatus.WaitingForPayment,
+						registrantUUID, paymentGroup, locale.toString(),
+						fixedCurrency != null ? fixedCurrency
+								: createUsers ? Currency.EUR : Currency.ISK,
+						null, null, null, null, null, null, null, null, null,
+						null);
+			} else {
+				header = dao.storeRegistrationHeader(null,
+						RegistrationHeaderStatus.RegisteredWithoutPayment,
+						registrantUUID, paymentGroup, locale.toString(),
+						fixedCurrency != null ? fixedCurrency
+								: createUsers ? Currency.EUR : Currency.ISK,
+						null, null, null, null, null, null, null, null, null,
+						null);
+			}
+			holder.setHeader(header);
+
+			valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
+			valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
+
+			if (isBankTransfer) {
+				BankReference reference = dao.storeBankReference(header);
+				holder.setBankReference(reference);
+			}
+
+			int amount = 0;
+
+			int counter = 1;
+			for (ParticipantHolder participantHolder : holders) {
+				User user = null;
+				Participant participant = participantHolder.getParticipant();
+				if (createUsers) {
+					if (participant.getUuid() != null) {
+						try {
+							user = getUserBusiness().getUserByUniqueId(
+									participant.getUuid());
+						} catch (RemoteException e) {
+						} catch (FinderException e) {
+						}
+					}
+
+					try {
+						if (user == null) {
+							Gender gender = null;
+							if (participant.getGender().equals(
+									getGenderHome().getMaleGender().getName())) {
+								gender = getGenderHome().getMaleGender();
+							} else {
+								gender = getGenderHome().getFemaleGender();
+							}
+							user = saveUser(
+									new Name(participant.getFullName()),
+									new IWTimestamp(participant
+											.getDateOfBirth()),
+									gender,
+									participant.getAddress(),
+									participant.getPostalCode(),
+									participant.getCity(),
+									getCountryHome().findByPrimaryKey(
+											new Integer(participant
+													.getCountry())));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						user = null; // Something got fucked up
+					}
+				} else {
+					try {
+						user = getUserBusiness().getUserByUniqueId(
+								participant.getUuid());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+				if (user != null) {
+					if (participant.getPhoneMobile() != null
+							&& !"".equals(participant.getPhoneMobile())) {
+						try {
+							getUserBusiness().updateUserMobilePhone(user,
+									participant.getPhoneMobile());
+						} catch (Exception e) {
+						}
+					}
+
+					if (participant.getPhoneHome() != null
+							&& !"".equals(participant.getPhoneHome())) {
+						try {
+							getUserBusiness().updateUserHomePhone(user,
+									participant.getPhoneHome());
+						} catch (Exception e) {
+						}
+					}
+
+					if (participant.getEmail() != null
+							&& !"".equals(participant.getEmail())) {
+						try {
+							getUserBusiness().updateUserMail(user,
+									participant.getEmail());
+						} catch (Exception e) {
+						}
+					}
+
+					List<Participant> relayPartners = participantHolder
+							.getRelayPartners();
+					Team team = participantHolder.getTeam();
+					if (relayPartners != null && !relayPartners.isEmpty()) {
+						team = dao.storeTeam(team.getId(), team.getName(),
+								team.isRelayTeam());
+					}
+
+					Registration registration = dao.storeRegistration(null,
+							header, RegistrationStatus.Unconfirmed,
+							participantHolder.getRace(),
+							participantHolder.getShirtSize(), team,
+							participantHolder.getLeg(),
+							participantHolder.getAmount(),
+							participantHolder.getCharity(),
+							participant.getNationality(), user.getUniqueId(),
+							participantHolder.getDiscount(),
+							participantHolder.isHasDoneMarathonBefore(),
+							participantHolder.isHasDoneLVBefore(),
+							participantHolder.getBestMarathonTime(),
+							participantHolder.getBestUltraMarathonTime());
+
+					amount += participantHolder.getAmount()
+							- participantHolder.getDiscount();
+
+					securityString.append("1");
+					securityString.append(participantHolder.getAmount());
+					securityString.append(participantHolder.getDiscount());
+
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_LYSING);
+					url.append("=");
+					try {
+						url.append(URLEncoder.encode(
+								participantHolder.getValitorDescription(),
+								"UTF-8"));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_FJOLDI);
+					url.append("=");
+					url.append("1");
+					url.append("&");
+					url.append(VARA);
+					url.append(counter);
+					url.append(VARA_VERD);
+					url.append("=");
+					url.append(participantHolder.getAmount());
+					url.append("&");
+					url.append(VARA);
+					url.append(counter++);
+					url.append(VARA_AFSLATTUR);
+					url.append("=");
+					url.append(participantHolder.getDiscount());
+
+					List<RacePrice> trinkets = participantHolder.getTrinkets();
+					if (trinkets != null && !trinkets.isEmpty()) {
+						for (RacePrice trinket : trinkets) {
+							dao.storeRegistrationTrinket(null, registration,
+									trinket);
+							securityString.append("1");
+							securityString.append(trinket.getPrice());
+							securityString.append("0");
+
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_LYSING);
+							url.append("=");
+							try {
+								url.append(URLEncoder
+										.encode(trinket.getTrinket()
+												.getDescription(), "UTF-8"));
+							} catch (UnsupportedEncodingException e) {
+								e.printStackTrace();
+							}
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_FJOLDI);
+							url.append("=");
+							url.append("1");
+							url.append("&");
+							url.append(VARA);
+							url.append(counter);
+							url.append(VARA_VERD);
+							url.append("=");
+							url.append(trinket.getPrice());
+							url.append("&");
+							url.append(VARA);
+							url.append(counter++);
+							url.append(VARA_AFSLATTUR);
+							url.append("=0");
+
+							amount += trinket.getPrice();
+						}
+					}
+
+					if (relayPartners != null && !relayPartners.isEmpty()) {
+						for (Participant participant2 : relayPartners) {
+							user = null;
+
+							if (createUsers) {
+								if (participant2.getPersonalId() != null) {
+									try {
+										user = getUserBusiness().getUser(
+												participant2.getPersonalId());
+									} catch (RemoteException e) {
+									} catch (FinderException e) {
+									}
+								}
+
+								try {
+									if (user == null) {
+										user = saveUser(
+												new Name(participant2
+														.getFullName()),
+												new IWTimestamp(participant2
+														.getDateOfBirth()),
+												null, null, null, null, null);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									user = null; // Something got fucked up
+								}
+							} else {
+								try {
+									user = getUserBusiness().getUser(
+											participant2.getPersonalId());
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
+							if (user != null) {
+								if (participant2.getEmail() != null
+										&& !"".equals(participant2.getEmail())) {
+									try {
+										getUserBusiness().updateUserMail(user,
+												participant2.getEmail());
+									} catch (Exception e) {
+									}
+								}
+
+								dao.storeRegistration(null, header,
+										RegistrationStatus.RelayPartner,
+										participantHolder.getRace(),
+										participant2.getShirtSize(), team,
+										participant2.getRelayLeg(), 0, null,
+										participant.getNationality(),
+										user.getUniqueId(), 0, false, false,
+										null, null);
+							}
+						}
+					}
+				}
+			}
+
+			if (fixedCurrency != null) {
+				if (fixedCurrency.equals(Currency.ISK)) {
+					securityString.append(valitorShopID);
+				} else {
+					securityString.append(valitorShopIDEUR);
+				}
+			} else if (createUsers) {
+				securityString.append(valitorShopIDEUR);
+			} else {
+				securityString.append(valitorShopID);
+			}
+			securityString.append(header.getUuid());
+			securityString.append(valitorReturnURL);
+			securityString.append(valitorReturnURLServerSide);
+			securityString.append(currency);
+
+			url.append("&");
+			url.append(KAUPANDA_UPPLYSINGAR);
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("NafnSkylda");
+			url.append("=");
+			url.append("1");
+			if (!createUsers) {
+				url.append("&");
+				url.append("KennitalaSkylda");
+				url.append("=");
+				url.append("1");
+			} else {
+				url.append("&");
+				url.append("FelaKennitala");
+				url.append("=");
+				url.append("1");
+			}
+			url.append("&");
+			url.append("FelaHeimilisfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaPostnumer");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaStadur");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaLand");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaNetfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaAthugasemdir");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append(TILVISUNARNUMER);
+			url.append("=");
+			url.append(header.getUuid());
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA);
+			url.append("=");
+			url.append(valitorReturnURL);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI);
+			url.append("=");
+			url.append(valitorReturnURLText);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE);
+			url.append("=");
+			url.append(valitorReturnURLServerSide);
+			url.append("&");
+			url.append(SLOD_NOTANDI_HAETTIR_VID);
+			url.append("=");
+			url.append(valitorReturnURLCancel);
+			url.append("&");
+			url.append(RAFRAEN_UNDIRSKRIFT);
+			url.append("=");
+			url.append(createValitorSecurityString(securityString.toString()));
+
+			holder.setAmount(amount);
+			holder.setValitorURL(url.toString());
+		}
+*/
+		return holder;
 	}
 	
 	public RegistrationHeader markChangeDistanceAsPaymentCancelled(String uniqueID) {
