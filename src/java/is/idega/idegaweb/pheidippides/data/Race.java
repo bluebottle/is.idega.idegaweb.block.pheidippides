@@ -39,6 +39,7 @@ public class Race implements Serializable, Comparable<Race> {
 	private static final String COLUMN_CLOSE_REGISTRATION = "close_registration";
 	private static final String COLUMN_HAS_FAMILY_DISCOUNT = "family_discount";
 	private static final String COLUMN_HAS_CHARITY = "charity_run";
+	private static final String COLUMN_ALLOWS_TEAMS = "team_run";
 	private static final String COLUMN_NUMBER_OF_RELAY_LEGS = "relay_legs";
 	private static final String COLUMN_MIN_AGE = "min_age";
 	private static final String COLUMN_MAX_AGE = "max_age";
@@ -77,6 +78,9 @@ public class Race implements Serializable, Comparable<Race> {
 
 	@Column(name = Race.COLUMN_HAS_CHARITY)
 	private boolean charityRun;
+	
+	@Column(name = Race.COLUMN_ALLOWS_TEAMS)
+	private boolean teamRun;
 
 	@Column(name = Race.COLUMN_NUMBER_OF_RELAY_LEGS)
 	private int numberOfRelayLegs;
@@ -162,6 +166,14 @@ public class Race implements Serializable, Comparable<Race> {
 
 	public void setCharityRun(boolean charityRun) {
 		this.charityRun = charityRun;
+	}
+	
+	public boolean isTeamRun() {
+		return teamRun;
+	}
+	
+	public void setTeamRun(boolean teamRun) {
+		this.teamRun = teamRun;
 	}
 
 	public Date getCreatedDate() {

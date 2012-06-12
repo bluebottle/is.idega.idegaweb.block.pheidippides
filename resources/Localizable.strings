@@ -164,6 +164,7 @@ step=Step
 store=Store
 string_localizer=Localizer
 team_name=Team name
+team_run=Team run
 transfer_payment=Pay w/bank transfer
 use_charity=Yes, I want to receive pledges from <a href\="http\://www.hlaupastyrkur.is" target\="_blank">hlaupastyrkur.is</a>.
 uuid=Reference number

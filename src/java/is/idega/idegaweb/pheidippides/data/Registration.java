@@ -63,6 +63,7 @@ public class Registration implements Serializable {
 	private static final String COLUMN_BEST_MARATHON_TIME = "best_marathon_time";
 	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_ultra_marathon_before";
 	private static final String COLUMN_BEST_ULTRA_MARATHON_TIME = "best_ultra_marathon_time";
+	private static final String COLUMN_ESTIMATED_TIME = "estimated_time";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 

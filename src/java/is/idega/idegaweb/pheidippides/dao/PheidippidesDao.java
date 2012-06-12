@@ -62,7 +62,7 @@ public interface PheidippidesDao {
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
 			Date openRegistration, Date closeRegistration,
-			boolean familyDiscount, int relayLegs, boolean charityRun,
+			boolean familyDiscount, int relayLegs, boolean charityRun, boolean teamRun,
 			int currentParticipantNumber, int maxParticipantNumber, int orderNumber);
 
 	public boolean removeRace(Long raceID);

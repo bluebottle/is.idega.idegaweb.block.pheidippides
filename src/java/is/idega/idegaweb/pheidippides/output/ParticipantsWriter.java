@@ -13,6 +13,7 @@ import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -205,6 +206,12 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellValue(this.iwrb.getLocalizedString("shirt_size", "Shirt size"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("team_name", "Team name"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("relay_leg", "Leg"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("amount", "Amount"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
@@ -235,9 +242,11 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			if (participant == null) {
 				continue;
 			}
+			Race registrationRace = registration.getRace();
 			Country country = participant.getCountry() != null ? getCountryHome().findByPrimaryKey(participant.getCountry()) : null;
 			Country nationality = registration.getNationality() != null ? getCountryHome().findByPrimaryKey(registration.getNationality()) : null;
 			ShirtSize shirtSize = registration.getShirtSize();
+			Team team = registration.getTeam();
 			
 			List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 			List<RegistrationTrinket> registrationTrinkets = registration.getTrinkets();
@@ -291,6 +300,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			else {
 				row.createCell(iCell++).setCellValue("");
 			}
+			row.createCell(iCell++).setCellValue(team != null ? team.getName() : "");
+			row.createCell(iCell++).setCellValue(registration.getLeg());
 			row.createCell(iCell++).setCellValue(registration.getAmountPaid() - registration.getAmountDiscount());
 			
 			if (header.getAuthorizationNumber() != null) {
@@ -308,7 +319,84 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 				row.createCell(iCell++).setCellValue(raceTrinkets.contains(trinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			}
 			
-			row.createCell(iCell++).setCellValue(new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm"));
+			row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
+			
+			if (registrationRace.getNumberOfRelayLegs() > 1) {
+				List<Registration> teamMembers = getService().getRelayPartners(registration);
+
+				for (Registration registration2 : teamMembers) {
+					Participant otherParticipant = getService().getParticipant(registration2);
+					
+					country = otherParticipant.getCountry() != null ? getCountryHome().findByPrimaryKey(otherParticipant.getCountry()) : null;
+					nationality = registration2.getNationality() != null ? getCountryHome().findByPrimaryKey(registration2.getNationality()) : null;
+					shirtSize = registration2.getShirtSize();
+
+					dateOfBirth = new IWTimestamp(otherParticipant.getDateOfBirth());
+					if (dateOfBirth != null) {
+						if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
+							continue;
+						}
+						if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
+							continue;
+						}
+					}
+
+					raceTrinkets = new ArrayList<RaceTrinket>();
+					registrationTrinkets = registration2.getTrinkets();
+					if (registrationTrinkets != null && !registrationTrinkets.isEmpty()) {
+						for (RegistrationTrinket registrationTrinket : registrationTrinkets) {
+							raceTrinkets.add(registrationTrinket.getTrinket());
+						}
+					}
+					row = sheet.createRow(cellRow++);
+					iCell = 0;
+
+					row.createCell(iCell++).setCellValue(registration2.getId());
+					if (race == null) {
+						Race participantRace = registration2.getRace();
+						row.createCell(iCell++).setCellValue(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + participantRace.getDistance().getLocalizedKey() + (participantRace.getNumberOfRelayLegs() > 1 ? ".relay" : ""), participantRace.getDistance().getName()).replaceAll("\\<[^>]*>", "")));
+					}
+					row.createCell(iCell++).setCellValue(otherParticipant.getFullName());
+					row.createCell(iCell++).setCellValue(otherParticipant.getPersonalId());
+					row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
+					row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("yyyy"));
+					row.createCell(iCell++).setCellValue(participant.getGender().equals("male") ? "M" : "F");
+					row.createCell(iCell++).setCellValue(otherParticipant.getEmail());
+					row.createCell(iCell++).setCellValue(otherParticipant.getAddress());
+					row.createCell(iCell++).setCellValue(otherParticipant.getPostalAddress());
+					row.createCell(iCell++).setCellValue(country != null ? country.getName() : "");
+					row.createCell(iCell++).setCellValue(otherParticipant.getPhoneHome());
+					row.createCell(iCell++).setCellValue(otherParticipant.getPhoneMobile());
+					row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
+					row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
+					if (shirtSize != null) {
+						row.createCell(iCell++).setCellValue(shirtSize.getSize() + " - " + shirtSize.getGender());
+					}
+					else {
+						row.createCell(iCell++).setCellValue("");
+					}
+					row.createCell(iCell++).setCellValue(team != null ? team.getName() : "");
+					row.createCell(iCell++).setCellValue(registration2.getLeg());
+					row.createCell(iCell++).setCellValue(registration2.getAmountPaid() - registration2.getAmountDiscount());
+					
+					if (header.getAuthorizationNumber() != null) {
+						row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.credit_card", "Credit card"));
+					}
+					else {
+						row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.bank_transfer", "Bank transfer"));
+					}
+					
+					row.createCell(iCell++).setCellValue(registration2.getBestMarathonTime() != null ? new IWTimestamp(registration2.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
+					row.createCell(iCell++).setCellValue(registration2.getBestUltraMarathonTime() != null ? new IWTimestamp(registration2.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
+					row.createCell(iCell++).setCellValue(registration2.getCharity() != null ? registration2.getCharity().getName() : "");
+					
+					for (RaceTrinket trinket : trinkets) {
+						row.createCell(iCell++).setCellValue(raceTrinkets.contains(trinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+					}
+					
+					row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration2.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
+				}
+			}
 		}
 		
 		wb.write(mos);
