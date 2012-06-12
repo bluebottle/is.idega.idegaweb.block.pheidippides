@@ -517,6 +517,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 			Registration newReg = new Registration();
 			newReg.setHeader(registration.getHeader());
+			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
 			if (header != null) {
