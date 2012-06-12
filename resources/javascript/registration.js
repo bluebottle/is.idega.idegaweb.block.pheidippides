@@ -49,9 +49,6 @@ jQuery(document).ready(function() {
 		    	required: "#prm_no_personal_id:unchecked",
 		    	validUser: true
 		    },
-		    prm_charity: {
-		    	required: "#prm_use_charity:checked"
-		    },
 		    prm_best_marathon_time: {
 		    	required: "#prm_has_not_run_marathon:unchecked"
 		    },

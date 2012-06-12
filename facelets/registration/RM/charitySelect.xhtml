@@ -18,7 +18,7 @@
 		<fieldset class="formSection">
 			<div class="formItem checkbox">
 				<c:checkBox name="prm_use_charity" checked="#{not empty pheidippidesRegistrationSession.currentParticipant.charity}" />
-				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, 'use_charity')]}" /></label>
+				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.use_charity')]}" /></label>
 			</div>
 			<br />
 			<div class="formItem">
