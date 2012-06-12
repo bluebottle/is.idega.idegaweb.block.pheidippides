@@ -96,12 +96,11 @@
 			
 			<div class="submit">
 				<h:outputLink rendered="#{not empty pheidippidesBean.responseURL}" value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}">
-					<f:param name="prm_event_pk" value="#{registration.race.event.id}" />
-					<f:param name="prm_year" value="#{registration.race.year}" />
-					<f:param name="prm_race_pk" value="#{registration.race.id}" />
 					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span>
 				</h:outputLink>
-				<h:outputLink rendered="#{empty pheidippidesBean.responseURL}" value="/pages/sidanmin/minsida/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" />
+				<h:outputLink rendered="#{empty pheidippidesBean.responseURL}" value="/pages/sidanmin/minsida/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}">
+					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span>
+				</h:outputLink>
 				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 			</div>
 		</form>

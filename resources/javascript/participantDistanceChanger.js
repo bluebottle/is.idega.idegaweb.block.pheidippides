@@ -1,6 +1,8 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
+	jQuery('form.userForm').validate();
+
 	jQuery('select[name="prm_race_pk"]').change(function() {
 		var racePK = jQuery(this).val();
 		var language = jQuery('input[name="prm_language"]').val();
@@ -24,6 +26,9 @@ jQuery(document).ready(function() {
 	
 	jQuery('a.store').live('click', function(event) {
 		event.preventDefault();
-		jQuery('form#participantDistanceChanger').submit();
+		var form = jQuery('form#participantDistanceChanger');
+		if (form.valid()) {
+			form.submit();
+		}
 	});
 });

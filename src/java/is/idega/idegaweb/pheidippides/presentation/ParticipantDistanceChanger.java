@@ -1,15 +1,14 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.output.ReceiptWriter;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import com.idega.idegaweb.IWBundle;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.user.data.User;
-import com.idega.util.Age;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
@@ -39,8 +37,7 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_PHASE_ONE = 1;
-	private static final int ACTION_PHASE_TWO = 2;
-	private static final int ACTION_SAVE = 3;
+	private static final int ACTION_SAVE = 2;
 
 	@Autowired
 	private PheidippidesService service;
@@ -73,6 +70,7 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 			}
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
@@ -85,6 +83,7 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistration(registration);
+			bean.setEvent(registration.getRace().getEvent());
 			bean.setDownloadWriter(ReceiptWriter.class);
 
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
@@ -92,19 +91,27 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 			switch (parseAction(iwc, registration)) {
 				case ACTION_PHASE_ONE:
 					if (registration != null) {
-						bean.setRaces(getService().getOpenRaces(registration.getRace().getEvent().getId(), IWTimestamp.RightNow().getYear()));
+						bean.setRaces(getService().getOpenRaces(registration.getRace().getEvent().getId(), IWTimestamp.RightNow().getYear(), false));
 						bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
 					}
 					facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/phaseOne.xhtml"));
 					break;
 
-				case ACTION_PHASE_TWO:
-					facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/phaseTwo.xhtml"));
-					break;
-
 				case ACTION_SAVE:
-					handleSave(iwc, registration);
-					facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/save.xhtml"));
+					Race newDistance = getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)));
+					ShirtSize newShirtSize = iwc.isParameterSet(PARAMETER_SHIRT_SIZE) ? getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))) : null;
+					
+					RegistrationAnswerHolder answer = getService().createChangeDistanceRegistration(registration, newDistance, newShirtSize);
+					bean.setAnswer(answer);
+					bean.setRace(newDistance);
+					bean.setShirtSize(newShirtSize);
+
+					if (answer.getValitorURL() != null) {
+						facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/payment.xhtml"));
+					}
+					else {
+						facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/save.xhtml"));
+					}
 					break;
 
 			}
@@ -112,25 +119,8 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 		}
 	}
 
-	private void handleSave(IWContext iwc, Registration registration) {
-		getDao().updateRegistration(registration.getId(), Long.parseLong(iwc.getParameter(PARAMETER_RACE)), Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE)), null);
-	}
-
 	private int parseAction(IWContext iwc, Registration registration) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_PHASE_ONE;
-		
-		if (action == ACTION_PHASE_TWO) {
-			Participant participant = getService().getParticipant(registration);
-			Age age = new Age(participant.getDateOfBirth());
-
-			Race race = getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)));
-			RacePrice price = getDao().getCurrentRacePrice(race, !participant.isForeigner() ? Currency.ISK : Currency.EUR);
-			
-			if ((registration.getAmountPaid() - registration.getAmountDiscount()) >= (age.getYears() > 16 ? price.getPrice() : price.getPriceKids())) {
-				action = ACTION_SAVE;
-			}
-		}
-		
 		return action;
 	}
 

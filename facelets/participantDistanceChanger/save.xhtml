@@ -10,10 +10,15 @@
 	<form class="userForm" action="" method="post">
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance']}" /></h1>
 
-		<div class="receipt"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance.receipt']}" /></div>
+		<div class="receipt">
+			<h:outputFormat escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_distance.receipt')]}">
+				<f:param value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.registration.race.distance.localizedKey))])}" />
+				<f:param value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.race.distance.localizedKey))])}" />
+			</h:outputFormat>
+		</div>
 
 		<div class="submit">
-			<a href="/pages/sidanmin/minsida/"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="/pages/sidanmin/minsida/"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['my_page']}" /></span></a>
 		</div>
 	</form>
 </ui:component>

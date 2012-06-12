@@ -35,7 +35,7 @@ public class ValitorMoveCancel extends HttpServlet {
 			WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 			PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 	
-			//service.markRegistrationAsPaymentCancelled(iwc.getParameter("uniqueID"));
+			service.markChangeDistanceAsPaymentCancelled(iwc.getParameter("uniqueID"));
 			out.println("The Valitor move cancellation response has been processed...");
 		}
 		else {

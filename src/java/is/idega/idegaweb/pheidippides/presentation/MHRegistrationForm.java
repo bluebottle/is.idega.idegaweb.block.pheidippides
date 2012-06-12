@@ -61,7 +61,6 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
-	private static final String PARAMETER_TRINKET = "prm_trinket";
 	
 	@Autowired
 	private PheidippidesService service;

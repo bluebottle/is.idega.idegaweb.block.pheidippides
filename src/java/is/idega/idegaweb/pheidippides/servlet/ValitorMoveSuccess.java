@@ -65,7 +65,7 @@ public class ValitorMoveSuccess extends HttpServlet {
 				String comment = iwc.getParameter("Athugasemd");
 				String saleID = iwc.getParameter("VefverslunSalaID");
 				
-				//service.markRegistrationAsPaid(header, false, false, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
+				service.markChangeDistanceAsPaid(header, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
 			}
 		}
 		

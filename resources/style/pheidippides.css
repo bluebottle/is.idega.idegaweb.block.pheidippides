@@ -754,3 +754,12 @@ table.relayPartners .shirtSize {
 table.relayPartners .leg {
 	width: 10%;
 }
+
+form.userForm div.receipt {
+	margin-bottom: 18px;
+}
+
+form.userForm div.receipt p {
+	margin-bottom: 12px;
+	line-height: 1.25em;
+}
