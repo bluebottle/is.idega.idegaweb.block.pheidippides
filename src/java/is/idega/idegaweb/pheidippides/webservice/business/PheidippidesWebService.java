@@ -45,6 +45,7 @@ import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.location.business.AddressBusiness;
 import com.idega.core.location.data.Address;
+import com.idega.core.location.data.Country;
 import com.idega.data.IDOLookup;
 import com.idega.data.IDOLookupException;
 import com.idega.idegaweb.IWMainApplication;
@@ -293,12 +294,22 @@ public class PheidippidesWebService {
 						info.setMobile(mobile.getNumber());						
 					}
 					info.setName(user.getName());
-					info.setNationality(registration.getNationality());
+					
+					Country country = null;
+					try {
+						country = getUserBusiness().getAddressBusiness().getCountryHome().findByPrimaryKey(new Integer(registration.getNationality()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					} 
+					
+					if (country != null) {
+						info.setNationality(country.getName());
+					}
 					info.setPersonalID(user.getPersonalID());
 					if (phone != null) {
 						info.setPhone(phone.getNumber());
 					}
-					info.setPostalCode(address.getPostalCode().getName());
+					info.setPostalCode(address.getPostalCode().getPostalCode());
 					
 					return info;
 				}
