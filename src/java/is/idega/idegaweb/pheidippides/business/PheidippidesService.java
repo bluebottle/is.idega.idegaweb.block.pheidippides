@@ -1515,7 +1515,7 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
-	public String createChangeDistanceRegistration(Registration registration, Race newDistance) {
+	public RegistrationAnswerHolder createChangeDistanceRegistration(Registration registration, Race newDistance) {
 		return null;
 	}
 	
