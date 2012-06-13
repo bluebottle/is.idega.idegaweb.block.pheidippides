@@ -6,7 +6,9 @@ import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
 import java.sql.Date;
@@ -275,7 +277,18 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		
-		getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
+		boolean distanceChange = registration.getRace().getId() != racePK;
+		List<RegistrationTrinket> trinkets = registration.getTrinkets();
+		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
+
+		if (distanceChange) {
+			for (RegistrationTrinket registrationTrinket : trinkets) {
+				RacePrice trinket = new RacePrice();
+				trinket.setTrinket(registrationTrinket.getTrinket());
+				trinket.setPrice(registrationTrinket.getAmountPaid());
+				dao.storeRegistrationTrinket(null, registration, trinket);
+			}
+		}
 		
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")

@@ -601,7 +601,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return registration;
 	}
 	
-	public void updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK) {
+	public Registration updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK) {
 		Registration registration = getRegistration(registrationPK);
 		
 		Race newRace = getRace(racePK);
@@ -635,6 +635,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
 			
 			getEntityManager().persist(newReg);
+			
+			return newReg;
 		}
 		else {
 			if (shirtSizePK != null) {
@@ -645,6 +647,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			}
 
 			getEntityManager().persist(registration);
+			
+			return registration;
 		}
 	}
 	
