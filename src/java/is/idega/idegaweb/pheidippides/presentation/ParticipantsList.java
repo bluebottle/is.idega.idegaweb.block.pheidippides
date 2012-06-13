@@ -268,7 +268,11 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Long racePK = Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK));
-		Long shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
+		Long shirtSizePK = null;
+		if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE_PK)) {
+			shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));	
+		}
+		
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		
 		getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);

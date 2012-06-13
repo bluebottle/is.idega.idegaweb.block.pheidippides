@@ -621,7 +621,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			else {
 				newReg.setNationality(registration.getNationality());
 			}
-			newReg.setShirtSize(getShirtSize(shirtSizePK));
+			if (shirtSizePK != null) {
+				newReg.setShirtSize(getShirtSize(shirtSizePK));
+			}
 			newReg.setStatus(status);
 			newReg.setRace(newRace);
 			newReg.setParticipantNumber(newRace.getCurrentParticipantNumber());
@@ -635,7 +637,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			getEntityManager().persist(newReg);
 		}
 		else {
-			registration.setShirtSize(getShirtSize(shirtSizePK));
+			if (shirtSizePK != null) {
+				registration.setShirtSize(getShirtSize(shirtSizePK));
+			}
 			if (nationalityPK != null) {
 				registration.setNationality(nationalityPK);
 			}
