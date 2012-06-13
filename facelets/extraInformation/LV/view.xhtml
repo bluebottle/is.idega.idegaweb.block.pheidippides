@@ -17,17 +17,21 @@
 			<ui:param value="#{pheidippidesBean.registrationTrinkets[raceTrinket.trinket]}" name="registrationTrinket" />
 			
 			<fieldset class="formSection trinket">
-				<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '_help')))]}" /></div>
+				<div class="helpText">
+					<h:outputFormat escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '_help')))]}">
+						<f:param value="#{raceTrinket.price}" />
+					</h:outputFormat>
+				</div>
 				
 				<div class="formItem checkbox">
-					<c:checkBox name="#{racePrice.trinket.paramName}" checked="#{not empty registrationTrinket}" />
+					<c:checkBox styleClass="#{raceTrinket.trinket.multiple ? 'multiple' : ''}" name="#{racePrice.trinket.paramName}" checked="#{not empty registrationTrinket}" />
 					<label for="#{racePrice.trinket.paramName}"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', raceTrinket.trinket.localizedKey))]}" /></label>
 				</div>
 				
 				<ui:fragment rendered="#{raceTrinket.trinket.multiple}">
 					<div class="formItem required">
-						<label for="#{p:concat(racePrice.trinket.paramName, '_count')}"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '_count')))]}" /></label>
-						<input type="text" class="required" name="#{p:concat(racePrice.trinket.paramName, '_count')}" value="#{registrationTrinket.count}" />
+						<label for="#{p:concat(racePrice.trinket.paramName, '_count')}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '_count')))])}" /></label>
+						<input type="text" disabled="disabled" class="required" name="#{p:concat(racePrice.trinket.paramName, '_count')}" value="#{registrationTrinket.count}" />
 					</div>
 				</ui:fragment>
 			</fieldset>
@@ -37,7 +41,7 @@
 			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time_help')]}" /></div>
 
 			<div class="formItem">
-				<label for="prm_estimated_time"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time')]}" /></label>
+				<label for="prm_estimated_time"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time')])}" /></label>
 				<c:textInput name="prm_estimated_time" styleClass="required" content="#{p:formatDate(pheidippidesBean.registration.estimatedTime, 'HH:mm')}" />
 			</div>
 		</fieldset>
@@ -45,8 +49,7 @@
 		<fieldset class="formSection comment">
 			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.comment_help')]}" /></div>
 
-			<div class="formItem">
-				<label for="prm_comment"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.comment')]}" /></label>
+			<div class="formItem textarea">
 				<c:textArea name="prm_comment" content="#{pheidippidesBean.registration.comment}" />
 			</div>
 		</fieldset>

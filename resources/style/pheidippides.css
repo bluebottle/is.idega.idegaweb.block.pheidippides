@@ -763,3 +763,22 @@ form.userForm div.receipt p {
 	margin-bottom: 12px;
 	line-height: 1.25em;
 }
+
+form.userForm fieldset.trinket, form.userForm fieldset.estimated {
+	border-bottom: 1px #ccc solid;
+	margin-bottom: 12px;
+}
+
+form.userForm fieldset div.checkbox label {
+	width: auto;
+}
+
+form.userForm fieldset div.helpText {
+	margin-bottom: 12px;
+}
+
+form.userForm fieldset textarea {
+	width: 80%;
+	height: 200px;
+	border: 1px #ccc solid;
+}
