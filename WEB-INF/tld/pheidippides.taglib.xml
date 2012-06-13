@@ -64,4 +64,10 @@
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
 		<function-signature>boolean isEnglishLocale(java.util.Locale)</function-signature>
 	</function>
+
+	<function>
+		<function-name>isOpenForRegistration</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>boolean isOpenForRegistration(is.idega.idegaweb.pheidippides.data.Race)</function-signature>
+	</function>
 </facelet-taglib>

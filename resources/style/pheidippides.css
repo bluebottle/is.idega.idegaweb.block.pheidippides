@@ -722,9 +722,12 @@ table.userTable td.action a.edit:before {
 	content: 'W';
 }
 
+table.userTable td.action a.extra:before {
+	content: 'i';
+}
+
 table.userTable td.action a.team:before {
 	content: 'g';
-	font-size: 28px;
 }
 
 table.userTable td.action a.pdf:before {
@@ -781,4 +784,46 @@ form.userForm fieldset textarea {
 	width: 80%;
 	height: 200px;
 	border: 1px #ccc solid;
+}
+
+ul.legend.registrations {
+	position: absolute;
+	right: 16px;
+	top: 110px;
+	border: 1px #ccc solid;
+	padding: 12px;
+	background-color: #efefef;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+
+ul.legend.registrations li {
+	display: block;
+	clear: both;
+	font-size: 0.75em;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+ul.legend.registrations li:before {
+	font-family: 'Pictos';
+	color: #a00;
+	font-size: 20px;
+	line-height: 18px;
+	text-shadow: #666 0px 0px 3px;
+	margin-right: 4px;
+	font-weight: normal;
+}
+
+ul.legend.registrations li.extra:before {
+	content: 'i';
+}
+
+ul.legend.registrations li.edit:before {
+	content: 'W';
+}
+
+ul.legend.registrations li.editTeam:before {
+	content: 'g';
 }

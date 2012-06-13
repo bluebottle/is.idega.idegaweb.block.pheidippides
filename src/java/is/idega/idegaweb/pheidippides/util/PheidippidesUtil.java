@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.data.Race;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -67,5 +68,12 @@ public class PheidippidesUtil {
 	
 	public static boolean isEnglishLocale(Locale locale) {
 		return locale.equals(Locale.ENGLISH);
+	}
+	
+	public static boolean isOpenForRegistration(Race race) {
+		IWTimestamp rightNow = IWTimestamp.RightNow();
+		IWTimestamp registrationClose = new IWTimestamp(race.getCloseRegistrationDate());
+		
+		return rightNow.isEarlierThan(registrationClose);
 	}
 }
