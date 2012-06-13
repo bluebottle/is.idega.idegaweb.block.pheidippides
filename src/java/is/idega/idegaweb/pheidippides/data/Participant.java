@@ -207,6 +207,7 @@ public class Participant implements Serializable {
 		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
 		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((personalId == null) ? 0 : personalId.hashCode());
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 		return result;
 	}
 
@@ -235,6 +236,12 @@ public class Participant implements Serializable {
 				return false;
 		} else if (!personalId.equals(other.personalId))
 			return false;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+
 		return true;
 	}
 

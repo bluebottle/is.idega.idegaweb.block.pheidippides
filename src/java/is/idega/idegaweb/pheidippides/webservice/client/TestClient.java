@@ -15,10 +15,10 @@ public class TestClient {
 	private void doStuff() {
 		try {
 			CharityServiceServiceLocator locator = new CharityServiceServiceLocator();
-			CharityService port = locator.getCharityService(new URL("http://skraning.marathon.is/services/CharityService"));
+			CharityService port = locator.getCharityService(new URL("http://pheidippidestest.sidan.is/services/CharityService"));
 			
 			//Session session = port.authenticateUser("isb", "ch4r1tys3rv1c3");//getCharities();//getCharityInformation("0610703899");
-			CharityInformation charity = port.getCharityInformation("2202675049");
+			CharityInformation charity = port.getCharityInformation("0610703899");
 
 /*			if (info != null) {
 				for (Charity charity : info) {
@@ -45,6 +45,11 @@ public class TestClient {
 				System.out.println("phone = " + charity.getPhone());
 				System.out.println("postal code = " + charity.getPostalCode());
 			}
+			
+			//Charity charity = port.getCharity("0610703899");
+			//if (charity != null) {
+			//	System.out.println("Got something");
+			//}
 
 		} catch (Exception e) {
 			e.printStackTrace();
