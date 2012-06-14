@@ -796,7 +796,7 @@ form.userForm fieldset textarea {
 ul.legend.registrations {
 	position: absolute;
 	right: 16px;
-	top: 90px;
+	top: 48px;
 	border: 1px #ccc solid;
 	padding: 12px;
 	background-color: #efefef;
@@ -810,7 +810,7 @@ ul.legend.registrations li {
 	clear: both;
 	font-size: 0.75em;
 	font-weight: bold;
-	line-height: 18px;
+	line-height: 20px;
 }
 
 ul.legend.registrations li:before {
@@ -821,6 +821,9 @@ ul.legend.registrations li:before {
 	text-shadow: #666 0px 0px 3px;
 	margin-right: 4px;
 	font-weight: normal;
+	width: 20px;
+	display: inline-block;
+	text-align: center;
 }
 
 ul.legend.registrations li.extra:before {
@@ -835,7 +838,7 @@ ul.legend.registrations li.editTeam:before {
 	content: 'g';
 }
 
-ul.legend.registrations li.editTeam:before {
+ul.legend.registrations li.receipt:before {
 	content: 'F';
 }
 

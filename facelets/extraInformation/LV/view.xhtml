@@ -19,7 +19,7 @@
 			<div class="success"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_stored')]}" /></div>
 		</ui:fragment>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_help')]}" /></div>
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_help_text')]}" /></div>
 	
 		<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="raceTrinket">
 			<ui:param value="#{pheidippidesBean.registrationTrinkets[raceTrinket.trinket]}" name="registrationTrinket" />
@@ -33,11 +33,11 @@
 				
 				<div class="formItem radioButton">
 					<c:radioButton styleClass="required #{raceTrinket.trinket.multiple ? 'multiple' : ''}" name="#{raceTrinket.trinket.paramName}" content="true" selected="#{not empty registrationTrinket}" />
-					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '.yes')))])}" /></label>
+					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['yes']}" /></label>
 				</div>
 				<div class="formItem radioButton">
 					<c:radioButton styleClass="required" name="#{raceTrinket.trinket.paramName}" content="false" selected="#{not empty pheidippidesBean.registrationTrinkets and empty registrationTrinket}" />
-					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '.no')))])}" /></label>
+					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['no']}" /></label>
 				</div>
 
 				<ui:fragment rendered="#{raceTrinket.trinket.multiple and raceTrinket.trinket.maximumAllowed gt 1}">

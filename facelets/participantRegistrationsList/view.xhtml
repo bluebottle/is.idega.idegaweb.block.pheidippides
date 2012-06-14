@@ -8,13 +8,6 @@
 >
 <ui:component>
 	<ui:fragment rendered="#{not empty pheidippidesBean.registrations}">
-		<ul class="legend registrations">
-			<li class="receipt"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></li>
-			<li class="edit"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" /></li>
-			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_teams']}" /></li>
-			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
-		</ul>
-	
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_registrations']}" /></h1>
 	
 		<table class="userTable" width="100%" cellspacing="0" cellpadding="0">
@@ -71,6 +64,13 @@
 				</ui:repeat>
 			</tbody>
 		</table>
+		
+		<ul class="legend registrations">
+			<li class="receipt"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></li>
+			<li class="edit"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" /></li>
+			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_teams']}" /></li>
+			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
+		</ul>
 	</ui:fragment>
 </ui:component>
 </html>
