@@ -767,6 +767,12 @@ form.userForm div.receipt p {
 	line-height: 1.25em;
 }
 
+form.userForm div.helpText {
+	border-bottom: 1px #ccc solid;
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+}
+
 form.userForm fieldset.trinket, form.userForm fieldset.estimated {
 	border-bottom: 1px #ccc solid;
 	margin-bottom: 12px;
@@ -776,7 +782,7 @@ form.userForm fieldset div.checkbox label {
 	width: auto;
 }
 
-form.userForm fieldset div.helpText {
+form.userForm fieldset p {
 	margin-bottom: 12px;
 }
 
@@ -784,12 +790,13 @@ form.userForm fieldset textarea {
 	width: 80%;
 	height: 200px;
 	border: 1px #ccc solid;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 ul.legend.registrations {
 	position: absolute;
 	right: 16px;
-	top: 110px;
+	top: 90px;
 	border: 1px #ccc solid;
 	padding: 12px;
 	background-color: #efefef;
@@ -826,4 +833,17 @@ ul.legend.registrations li.edit:before {
 
 ul.legend.registrations li.editTeam:before {
 	content: 'g';
+}
+
+ul.legend.registrations li.editTeam:before {
+	content: 'F';
+}
+
+form#distanceChanger div.helpText {
+	border: 0;
+	padding: 0;
+}
+
+form#distanceChanger table {
+	margin-bottom: 12px;
 }

@@ -88,4 +88,20 @@ public class PheidippidesUtil {
 		
 		return list;
 	}
+	
+	public static String getDefaultComment() {
+		StringBuilder builder = new StringBuilder();
+		
+		int from = 1;
+		int to = 5;
+		
+		for (int a = from; a <= to; a++) {
+			builder.append(a).append(". ");
+			if (a < to) {
+				builder.append("\n");
+			}
+		}
+		
+		return builder.toString();
+	}
 }

@@ -160,10 +160,15 @@ public class PheidippidesService {
 
 		return openRaces;
 	}
-
+	
 	public List<Race> getAvailableRaces(Long eventPK, int year,
 			Participant participant) {
-		List<Race> races = getOpenRaces(eventPK, year);
+		return getAvailableRaces(eventPK, year, participant, true);
+	}
+
+	public List<Race> getAvailableRaces(Long eventPK, int year,
+			Participant participant, boolean showRelayRaces) {
+		List<Race> races = getOpenRaces(eventPK, year, showRelayRaces);
 		List<Race> availableRaces = new ArrayList<Race>();
 
 		Date dateOfBirth = participant.getDateOfBirth();
@@ -173,7 +178,7 @@ public class PheidippidesService {
 				if (race.getMinimumAge() <= age.getYears()
 						&& race.getMaximumAge() >= age.getYears()) {
 					boolean addRace = true;
-					if (participant.getUuid() != null
+					if (showRelayRaces && participant.getUuid() != null
 							&& dao.getNumberOfRegistrations(
 									participant.getUuid(), race,
 									RegistrationStatus.OK) > 0) {

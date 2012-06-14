@@ -76,4 +76,10 @@
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
 		<function-signature>java.util.List getCounterList(int, int)</function-signature>
 	</function>
+
+	<function>
+		<function-name>getDefaultComment</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.lang.String getDefaultComment()</function-signature>
+	</function>
 </facelet-taglib>

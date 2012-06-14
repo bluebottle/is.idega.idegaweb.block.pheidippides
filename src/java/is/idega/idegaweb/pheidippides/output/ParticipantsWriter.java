@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -224,6 +225,9 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell.setCellValue(this.iwrb.getLocalizedString("best_ultra_marathon_time", "Best ultra marathon time"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("estimated_time", "Estimated time"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("charity", "Charity"));
 		cell.setCellStyle(style);
 		
@@ -231,8 +235,18 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			cell = row.createCell(iCell++);
 			cell.setCellValue(this.iwrb.getLocalizedString("trinket." + trinket.getCode(), trinket.getCode()));
 			cell.setCellStyle(style);
+			
+			if (trinket.getMultiple()) {
+				cell = row.createCell(iCell++);
+				cell.setCellValue(this.iwrb.getLocalizedString("count", "Count"));
+				cell.setCellStyle(style);
+			}
 		}
 		
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("comment", "Comment"));
+		cell.setCellStyle(style);
+
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("created", "Created"));
 		cell.setCellStyle(style);
@@ -250,9 +264,11 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			
 			List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 			List<RegistrationTrinket> registrationTrinkets = registration.getTrinkets();
+			Map<RaceTrinket, RegistrationTrinket> trinketMap = new HashMap<RaceTrinket, RegistrationTrinket>();
 			if (registrationTrinkets != null && !registrationTrinkets.isEmpty()) {
 				for (RegistrationTrinket registrationTrinket : registrationTrinkets) {
 					raceTrinkets.add(registrationTrinket.getTrinket());
+					trinketMap.put(registrationTrinket.getTrinket(), registrationTrinket);
 				}
 			}
 			
@@ -313,10 +329,23 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
+			row.createCell(iCell++).setCellValue(registration.getEstimatedTime() != null ? new IWTimestamp(registration.getEstimatedTime()).getDateString("HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getCharity() != null ? registration.getCharity().getName() : "");
 			
 			for (RaceTrinket trinket : trinkets) {
-				row.createCell(iCell++).setCellValue(raceTrinkets.contains(trinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+				RegistrationTrinket raceTrinket = trinketMap.get(trinket);
+				if (raceTrinket != null) {
+					row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("yes", "Yes"));
+					if (trinket.getMultiple()) {
+						row.createCell(iCell++).setCellValue(raceTrinket.getCount());
+					}
+				}
+				else {
+					row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("no", "No"));
+					if (trinket.getMultiple()) {
+						row.createCell(iCell++).setCellValue("");
+					}
+				}
 			}
 			
 			row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");

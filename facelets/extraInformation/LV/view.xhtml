@@ -14,20 +14,22 @@
 		<input type="hidden" name="prm_registration_pk" value="#{pheidippidesBean.registration.id}" />
 		
 		<h1><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information')]}" /></h1>
-	
+
 		<ui:fragment rendered="#{not empty param['prm_action']}">
-			<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information_stored']}" /></div>
+			<div class="success"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_stored')]}" /></div>
 		</ui:fragment>
 
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.extra_information_help')]}" /></div>
+	
 		<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="raceTrinket">
 			<ui:param value="#{pheidippidesBean.registrationTrinkets[raceTrinket.trinket]}" name="registrationTrinket" />
 			
 			<fieldset class="formSection trinket">
-				<div class="helpText">
+				<p>
 					<h:outputFormat escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(raceTrinket.trinket.localizedKey, '_help')))]}">
 						<f:param value="#{raceTrinket.price}" />
 					</h:outputFormat>
-				</div>
+				</p>
 				
 				<div class="formItem radioButton">
 					<c:radioButton styleClass="required #{raceTrinket.trinket.multiple ? 'multiple' : ''}" name="#{raceTrinket.trinket.paramName}" content="true" selected="#{not empty registrationTrinket}" />
@@ -53,7 +55,7 @@
 		</ui:repeat>
 		
 		<fieldset class="formSection estimated">
-			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time_help')]}" /></div>
+			<p><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time_help')]}" /></p>
 
 			<div class="formItem">
 				<label for="prm_estimated_time"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.estimated_time')])}" /></label>
@@ -62,10 +64,10 @@
 		</fieldset>
 
 		<fieldset class="formSection comment">
-			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.comment_help')]}" /></div>
+			<p><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.comment_help')]}" /></p>
 
 			<div class="formItem textarea">
-				<c:textArea name="prm_comment" content="#{pheidippidesBean.registration.comment}" />
+				<c:textArea name="prm_comment" content="#{not empty pheidippidesBean.registration.comment ? pheidippidesBean.registration.comment : p:getDefaultComment()}" />
 			</div>
 		</fieldset>
 

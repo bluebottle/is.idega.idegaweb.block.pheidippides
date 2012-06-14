@@ -91,7 +91,7 @@ public class ParticipantDistanceChanger extends IWBaseComponent {
 			switch (parseAction(iwc, registration)) {
 				case ACTION_PHASE_ONE:
 					if (registration != null) {
-						bean.setRaces(getService().getOpenRaces(registration.getRace().getEvent().getId(), IWTimestamp.RightNow().getYear(), false));
+						bean.setRaces(getService().getAvailableRaces(registration.getRace().getEvent().getId(), IWTimestamp.RightNow().getYear(), getService().getParticipant(registration), false));
 						bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
 					}
 					facelet.setFaceletURI(iwb.getFaceletURI("participantDistanceChanger/phaseOne.xhtml"));
