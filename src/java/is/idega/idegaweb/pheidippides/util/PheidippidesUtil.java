@@ -6,6 +6,7 @@ import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
 import is.idega.idegaweb.pheidippides.data.Race;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.ibm.icu.text.MessageFormat;
+import com.idega.builder.bean.AdvancedProperty;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 
@@ -75,5 +77,15 @@ public class PheidippidesUtil {
 		IWTimestamp registrationClose = new IWTimestamp(race.getCloseRegistrationDate());
 		
 		return rightNow.isEarlierThan(registrationClose);
+	}
+	
+	public static List<AdvancedProperty> getCounterList(int from, int to) {
+		List<AdvancedProperty> list = new ArrayList<AdvancedProperty>();
+		
+		for (int a = from; a <= to; a++) {
+			list.add(new AdvancedProperty(String.valueOf(a), String.valueOf(a)));
+		}
+		
+		return list;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -144,7 +145,7 @@ public class Registration implements Serializable {
 	@Column(name = Registration.COLUMN_CREATED_DATE)
 	private Date createdDate;
 
-	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	private List<RegistrationTrinket> trinkets;
 
 	@OneToOne

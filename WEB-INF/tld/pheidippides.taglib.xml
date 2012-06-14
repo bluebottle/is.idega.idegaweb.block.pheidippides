@@ -70,4 +70,10 @@
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
 		<function-signature>boolean isOpenForRegistration(is.idega.idegaweb.pheidippides.data.Race)</function-signature>
 	</function>
+
+	<function>
+		<function-name>getCounterList</function-name>
+		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+		<function-signature>java.util.List getCounterList(int, int)</function-signature>
+	</function>
 </facelet-taglib>

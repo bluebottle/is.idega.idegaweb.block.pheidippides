@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
@@ -28,12 +29,15 @@ import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.user.data.User;
+import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
 public class LVExtraInformation extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_REGISTRATION = "prm_registration_pk";
+	private static final String PARAMETER_ESTIMATED_TIME = "prm_estimated_time";
+	private static final String PARAMETER_COMMENT = "prm_comment";
 
 	@Autowired
 	private PheidippidesService service;
@@ -76,8 +80,9 @@ public class LVExtraInformation extends IWBaseComponent implements IWPageEventLi
 			bean.setEventHandler(IWMainApplication.getEncryptedClassName(LVExtraInformation.class));
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setEvent(registration.getRace().getEvent());
+			bean.setRegistration(registration);
 			bean.setParticipant(getService().getParticipant(registration));
-			bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(registration.getRace(), registration.getHeader().getCurrency()));
+			bean.setRaceTrinkets(getDao().getCurrentRaceTrinketPrice(registration.getRace(), registration.getHeader().getCurrency()));
 			
 			Map<RaceTrinket, RegistrationTrinket> registrationTrinkets = new HashMap<RaceTrinket, RegistrationTrinket>();
 			List<RegistrationTrinket> trinkets = registration.getTrinkets();
@@ -121,6 +126,31 @@ public class LVExtraInformation extends IWBaseComponent implements IWPageEventLi
 	}
 
 	public boolean actionPerformed(IWContext iwc) throws IWException {
+		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION)));
+		List<RacePrice> prices = getDao().getCurrentRaceTrinketPrice(registration.getRace(), registration.getHeader().getCurrency());
+		List<RegistrationTrinket> trinkets = new ArrayList<RegistrationTrinket>();
+		
+		IWTimestamp stamp = iwc.isParameterSet(PARAMETER_ESTIMATED_TIME) ? new IWTimestamp(iwc.getParameter(PARAMETER_ESTIMATED_TIME) + ":00") : null;
+		String comment = iwc.getParameter(PARAMETER_COMMENT);
+		
+		for (RacePrice price : prices) {
+			RaceTrinket trinket = price.getTrinket();
+			
+			Boolean selected = iwc.isParameterSet(trinket.getParamName()) ? new Boolean(iwc.getParameter(trinket.getParamName())) : false;
+			if (selected) {
+				RegistrationTrinket regTrinket = new RegistrationTrinket();
+				regTrinket.setAmountPaid(0);
+				regTrinket.setCount(iwc.isParameterSet(trinket.getParamName() + "_count") ? Integer.parseInt(iwc.getParameter(trinket.getParamName() + "_count")) : 0);
+				regTrinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
+				regTrinket.setRegistration(registration);
+				regTrinket.setTrinket(trinket);
+				trinkets.add(regTrinket);
+			}
+		}
+		
+		getDao().updateRegistrationTrinkets(registration, trinkets);
+		getDao().updateExtraInformation(registration, stamp.getDate(), comment);
+		
 		return true;
 	}
 }

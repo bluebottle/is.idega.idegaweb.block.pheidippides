@@ -1,20 +1,23 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
-	jQuery('form.user').validate();
+	var userForm = jQuery('form.user').validate();
 	
 	jQuery('input[name="prm_estimated_time"]').mask("99:99");
 
-	jQuery('input.multiple').click(function() {
+	jQuery('.radioButton input:radio').click(function() {
 		var input = jQuery(this);
 		var parent = input.parents('fieldset.formSection');
 		
-		if (input.is(':checked')) {
-			jQuery('input:text', parent).removeAttr('disabled');
+		if (input.hasClass('multiple')) {
+			jQuery('select', parent).removeAttr('disabled');
 		}
 		else {
-			jQuery('input:text', parent).attr('disabled', 'disabled');
+			jQuery('select', parent).attr('disabled', 'disabled');
 		}
+		
+		jQuery('label.error', parent).remove();
+		jQuery(".error", parent).removeClass("error");
 	})
 	
 	jQuery('a.store').live('click', function(event) {

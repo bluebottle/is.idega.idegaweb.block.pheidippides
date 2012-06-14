@@ -849,7 +849,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Transactional(readOnly = false)
-	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, String code,
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, int maximumAllowed, String code,
 			String description, String localizedKey) {
 		RaceTrinket trinket = trinketID != null ? getTrinket(trinketID) : null;
 		if (trinket == null) {
@@ -857,6 +857,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			trinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		}
 		trinket.setMultiple(isMultiple);
+		trinket.setMaximumAllowed(maximumAllowed);
 		trinket.setCode(code);
 		trinket.setDescription(description);
 		trinket.setLocalizedKey(localizedKey);
@@ -896,6 +897,30 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		getEntityManager().persist(registrationTrinket);
 
 		return registrationTrinket;
+	}
+	
+	public void updateRegistrationTrinkets(Registration registration, List<RegistrationTrinket> trinkets) {
+		Registration reg = getRegistration(registration.getId());
+		
+		List<RegistrationTrinket> oldTrinkets = reg.getTrinkets();
+		for (RegistrationTrinket oldTrinket : oldTrinkets) {
+			this.remove(oldTrinket);
+		}
+		
+		for (RegistrationTrinket trinket : trinkets) {
+			this.persist(trinket);
+		}
+		
+		reg.setTrinkets(trinkets);
+		this.persist(reg);
+	}
+	
+	public void updateExtraInformation(Registration registration, Date estimatedTime, String comment) {
+		Registration reg = getRegistration(registration.getId());
+		reg.setEstimatedTime(estimatedTime);
+		reg.setComment(comment);
+		
+		this.persist(reg);
 	}
 	
 	@Transactional(readOnly = false)

@@ -25,6 +25,10 @@
 				<label for="prm_localized_key"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['localized_key']}" /></label>
 				<input type="text" name="prm_localized_key" value="#{pheidippidesBean.trinket.localizedKey}" />
 			</div>
+			<div class="formItem">
+				<label for="prm_max_allowed"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['maximum_allowed']}" /></label>
+				<input type="text" name="prm_max_allowed" value="#{pheidippidesBean.trinket.maximumAllowed}" />
+			</div>
 			<div class="formItem checkbox">
 				<c:checkBox name="prm_multiple" content="true" checked="#{pheidippidesBean.trinket.multiple}" />
 				<label for="prm_multiple"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['allow_multiple_purchase']}" /></label>

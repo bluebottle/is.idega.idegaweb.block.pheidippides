@@ -182,7 +182,7 @@ public interface PheidippidesDao extends GenericDao {
 
 	public List<RaceTrinket> getTrinkets();
 
-	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, String code,
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, int maximumAllowed, String code,
 			String description, String localizedKey);
 
 	public boolean removeTrinket(Long trinketID);
@@ -190,7 +190,9 @@ public interface PheidippidesDao extends GenericDao {
 	public RegistrationTrinket getRegistrationTrinket(Long registrationTrinketID);
 	
 	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket);
-
+	public void updateRegistrationTrinkets(Registration registration, List<RegistrationTrinket> trinkets);
+	public void updateExtraInformation(Registration registration, Date estimatedTime, String comment);
+	
 	public void updateTeamName(Team team, String name);
 	public void updateTeam(Registration registration, Team team);
 }

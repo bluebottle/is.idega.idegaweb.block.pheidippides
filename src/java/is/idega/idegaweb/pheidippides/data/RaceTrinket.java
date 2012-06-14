@@ -27,6 +27,7 @@ public class RaceTrinket implements Serializable {
 	public static final String ENTITY_NAME = "ph_race_trinket";
 	private static final String COLUMN_ENTRY_ID = "trinket_id";
 	private static final String COLUMN_ALLOW_MULTIPLE = "allow_multiple";
+	private static final String COLUMN_MAXIMUM_ALLOWED = "max_allowed";
 	private static final String COLUMN_CODE = "trinket_code";
 	private static final String COLUMN_DESCRIPTION = "trinket_description";
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
@@ -49,6 +50,9 @@ public class RaceTrinket implements Serializable {
 
 	@Column(name = RaceTrinket.COLUMN_ALLOW_MULTIPLE)
 	private boolean multiple;
+	
+	@Column(name = RaceTrinket.COLUMN_MAXIMUM_ALLOWED)
+	private int maximumAllowed;
 	
 	@Column(name = RaceTrinket.COLUMN_CODE)
 	private String code;
@@ -80,6 +84,14 @@ public class RaceTrinket implements Serializable {
 	
 	public void setMultiple(boolean isMultiple) {
 		this.multiple = isMultiple;
+	}
+	
+	public int getMaximumAllowed() {
+		return this.maximumAllowed;
+	}
+	
+	public void setMaximumAllowed(int maximumAllowed) {
+		this.maximumAllowed = maximumAllowed;
 	}
 
 	public String getCode() {
