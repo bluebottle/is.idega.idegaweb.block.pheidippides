@@ -29,6 +29,7 @@ import com.idega.builder.bean.AdvancedProperty;
 @Scope("request")
 public class PheidippidesBean {
 
+	private String action;
 	private String eventHandler;
 	private String responseURL;
 	private Class<?> downloadWriter;
@@ -86,6 +87,14 @@ public class PheidippidesBean {
 	
 	private Map<Event, List<Race>> eventRacesMap;
 	private Map<Race, Long> participantCountMap;
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
 
 	public String getEventHandler() {
 		return eventHandler;

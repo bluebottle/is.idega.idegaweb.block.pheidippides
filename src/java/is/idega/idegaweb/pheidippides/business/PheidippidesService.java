@@ -980,7 +980,7 @@ public class PheidippidesService {
 					if (trinkets != null && !trinkets.isEmpty()) {
 						for (RacePrice trinket : trinkets) {
 							dao.storeRegistrationTrinket(null, registration,
-									trinket);
+									trinket, 0);
 							securityString.append("1");
 							securityString.append(trinket.getPrice());
 							securityString.append("0");
@@ -1561,10 +1561,20 @@ public class PheidippidesService {
 	private Registration changeDistance(RegistrationHeader header,
 			Registration oldRegistration, Race newDistance,
 			ShirtSize newShirtSize) {
-		return dao.storeRegistration(oldRegistration.getId(), header, null,
+		Registration registration = dao.storeRegistration(oldRegistration.getId(), header, null,
 				newDistance, newShirtSize, null, null, 0, null, null, null, 0,
 				oldRegistration.isHasDoneMarathonBefore(),
 				oldRegistration.isHasDoneLVBefore(), null, null);
+		
+		List<RegistrationTrinket> trinkets = oldRegistration.getTrinkets();
+		for (RegistrationTrinket registrationTrinket : trinkets) {
+			RacePrice trinket = new RacePrice();
+			trinket.setTrinket(registrationTrinket.getTrinket());
+			trinket.setPrice(registrationTrinket.getAmountPaid());
+			dao.storeRegistrationTrinket(null, registration, trinket, registrationTrinket.getCount());
+		}
+		
+		return registration;
 	}
 
 	private RegistrationAnswerHolder getValitorURLForChangeDistance(
@@ -1845,7 +1855,7 @@ public class PheidippidesService {
 					RacePrice trinket = new RacePrice();
 					trinket.setTrinket(registrationTrinket.getTrinket());
 					trinket.setPrice(registrationTrinket.getAmountPaid());
-					dao.storeRegistrationTrinket(null, registration, trinket);
+					dao.storeRegistrationTrinket(null, registration, trinket, registrationTrinket.getCount());
 				}
 			}
 		}

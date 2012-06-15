@@ -537,6 +537,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
 			newReg.setBestMarathonTime(registration.getBestMarathonTime());
 			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			newReg.setEstimatedTime(registration.getEstimatedTime());
+			newReg.setComment(registration.getComment());
 			newReg.setMovedFrom(registration);
 			getEntityManager().persist(newReg);
 
@@ -616,7 +618,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHeader(registration.getHeader());
 			newReg.setLeg(registration.getLeg());
 			if (nationalityPK != null) {
-				registration.setNationality(nationalityPK);
+				newReg.setNationality(nationalityPK);
 			}
 			else {
 				newReg.setNationality(registration.getNationality());
@@ -633,6 +635,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
 			newReg.setBestMarathonTime(registration.getBestMarathonTime());
 			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			newReg.setEstimatedTime(registration.getEstimatedTime());
+			newReg.setComment(registration.getComment());
+			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
 			
 			getEntityManager().persist(newReg);
 			
@@ -884,7 +889,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	
 	@Transactional(readOnly = false)
-	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket) {
+	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket, int count) {
 		RegistrationTrinket registrationTrinket = registrationTrinketID != null ? getRegistrationTrinket(registrationTrinketID) : null;
 		if (registrationTrinket == null) {
 			registrationTrinket = new RegistrationTrinket();
@@ -893,6 +898,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		registrationTrinket.setRegistration(registration);
 		registrationTrinket.setTrinket(trinket.getTrinket());
 		registrationTrinket.setAmountPaid(trinket.getPrice());
+		registrationTrinket.setCount(count);
 
 		getEntityManager().persist(registrationTrinket);
 

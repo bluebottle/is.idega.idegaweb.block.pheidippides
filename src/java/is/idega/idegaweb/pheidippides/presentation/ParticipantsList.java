@@ -128,6 +128,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		}
 		
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
+		bean.setAction(iwc.getRequestURI());
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
 		bean.setDownloadWriter(ParticipantsWriter.class);
@@ -277,7 +278,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		
-		boolean distanceChange = registration.getRace().getId() != racePK;
+		boolean distanceChange = registration.getRace().getId().intValue() != racePK.intValue();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
 		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
 
@@ -286,7 +287,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 				RacePrice trinket = new RacePrice();
 				trinket.setTrinket(registrationTrinket.getTrinket());
 				trinket.setPrice(registrationTrinket.getAmountPaid());
-				dao.storeRegistrationTrinket(null, registration, trinket);
+				dao.storeRegistrationTrinket(null, registration, trinket, registrationTrinket.getCount());
 			}
 		}
 		

@@ -189,7 +189,7 @@ public interface PheidippidesDao extends GenericDao {
 
 	public RegistrationTrinket getRegistrationTrinket(Long registrationTrinketID);
 	
-	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket);
+	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket, int count);
 	public void updateRegistrationTrinkets(Registration registration, List<RegistrationTrinket> trinkets);
 	public void updateExtraInformation(Registration registration, Date estimatedTime, String comment);
 	
