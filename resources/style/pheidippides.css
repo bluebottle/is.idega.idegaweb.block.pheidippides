@@ -647,6 +647,7 @@ div.userInformation {
 	margin-bottom: 32px;
 	width: auto;
 	overflow: hidden;
+	min-height: 80px;
 }
 
 div.userInformation img {
