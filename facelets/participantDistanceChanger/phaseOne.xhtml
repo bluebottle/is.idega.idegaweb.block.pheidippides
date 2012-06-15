@@ -14,6 +14,8 @@
 		
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance']}" /></h1>
 	
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_distance_help')]}" /></div>
+
 		<ui:fragment rendered="#{not empty pheidippidesBean.registration}">
 			<ui:param value="#{pheidippidesBean.registration}" name="registration" />
 			<input type="hidden" name="prm_registration_pk" value="#{registration.id}" />

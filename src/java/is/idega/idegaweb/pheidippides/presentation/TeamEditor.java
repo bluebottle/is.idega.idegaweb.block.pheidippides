@@ -84,6 +84,7 @@ public class TeamEditor extends IWBaseComponent {
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistration(registration);
+			bean.setEvent(registration.getRace().getEvent());
 
 			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 			for (int i = 1; i <= 4; i++) {

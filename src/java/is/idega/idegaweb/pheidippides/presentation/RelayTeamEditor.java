@@ -124,6 +124,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistration(registration);
+			bean.setEvent(registration.getRace().getEvent());
 			bean.setResponseURL(getResponseURL());
 
 			if (registration != null) {

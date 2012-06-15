@@ -348,6 +348,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 				}
 			}
 			
+			row.createCell(iCell++).setCellValue(registration.getComment() != null ? registration.getComment() : "");
 			row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
 			
 			if (registrationRace.getNumberOfRelayLegs() > 1) {
@@ -372,11 +373,14 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 
 					raceTrinkets = new ArrayList<RaceTrinket>();
 					registrationTrinkets = registration2.getTrinkets();
+					trinketMap = new HashMap<RaceTrinket, RegistrationTrinket>();
 					if (registrationTrinkets != null && !registrationTrinkets.isEmpty()) {
 						for (RegistrationTrinket registrationTrinket : registrationTrinkets) {
 							raceTrinkets.add(registrationTrinket.getTrinket());
+							trinketMap.put(registrationTrinket.getTrinket(), registrationTrinket);
 						}
 					}
+
 					row = sheet.createRow(cellRow++);
 					iCell = 0;
 
@@ -417,12 +421,26 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 					
 					row.createCell(iCell++).setCellValue(registration2.getBestMarathonTime() != null ? new IWTimestamp(registration2.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 					row.createCell(iCell++).setCellValue(registration2.getBestUltraMarathonTime() != null ? new IWTimestamp(registration2.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
+					row.createCell(iCell++).setCellValue(registration2.getEstimatedTime() != null ? new IWTimestamp(registration2.getEstimatedTime()).getDateString("HH:mm") : "");
 					row.createCell(iCell++).setCellValue(registration2.getCharity() != null ? registration2.getCharity().getName() : "");
 					
 					for (RaceTrinket trinket : trinkets) {
-						row.createCell(iCell++).setCellValue(raceTrinkets.contains(trinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+						RegistrationTrinket raceTrinket = trinketMap.get(trinket);
+						if (raceTrinket != null) {
+							row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("yes", "Yes"));
+							if (trinket.getMultiple()) {
+								row.createCell(iCell++).setCellValue(raceTrinket.getCount());
+							}
+						}
+						else {
+							row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("no", "No"));
+							if (trinket.getMultiple()) {
+								row.createCell(iCell++).setCellValue("");
+							}
+						}
 					}
 					
+					row.createCell(iCell++).setCellValue(registration.getComment() != null ? registration.getComment() : "");
 					row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration2.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
 				}
 			}

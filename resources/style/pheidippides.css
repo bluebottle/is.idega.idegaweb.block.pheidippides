@@ -699,7 +699,7 @@ table.smallTable tr.trinket td {
 }
 
 /* User table icons */
-table.userTable td.action {
+table.userTable .action {
 	vertical-align: middle;
 	text-align: center;
 }
@@ -727,6 +727,10 @@ table.userTable td.action a.extra:before {
 }
 
 table.userTable td.action a.team:before {
+	content: '@';
+}
+
+table.userTable td.action a.relayTeam:before {
 	content: 'g';
 }
 
@@ -835,6 +839,10 @@ ul.legend.registrations li.edit:before {
 }
 
 ul.legend.registrations li.editTeam:before {
+	content: '@';
+}
+
+ul.legend.registrations li.editRelayTeam:before {
 	content: 'g';
 }
 

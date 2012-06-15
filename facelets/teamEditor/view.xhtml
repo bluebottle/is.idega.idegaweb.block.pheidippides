@@ -19,6 +19,8 @@
 		
 			<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_editor']}" /></h1>
 	
+			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.team_help')]}" /></div>
+
 			<ui:fragment rendered="#{not empty param['prm_action']}">
 				<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_stored']}" /></div>
 			</ui:fragment>

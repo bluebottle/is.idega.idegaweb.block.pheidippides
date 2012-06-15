@@ -21,8 +21,8 @@
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration_date']}" /></th>
-					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['actions']}" /></th>
-					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></th>
+					<th class="action"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['actions']}" /></th>
+					<th class="action"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></th>
 				</tr>
 			</thead>
 			
@@ -44,13 +44,13 @@
 							</h:outputLink>
 							<h:outputLink rendered="#{registration.race.numberOfRelayLegs lt 2 and p:isOpenForRegistration(registration.race) and registration.race.event.reportSign ne 'LV'}" value="/pages/sidanmin/breytavegalengd/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" styleClass="edit">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
-								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit']}" /></span>
+								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" /></span>
 							</h:outputLink>
 							<h:outputLink rendered="#{registration.race.teamRun and p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/sveitakeppni/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_team']}" styleClass="team">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_team']}" /></span>
 							</h:outputLink>
-							<h:outputLink rendered="#{registration.race.numberOfRelayLegs gt 1 and p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/bodhlaupslid/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" styleClass="team">
+							<h:outputLink rendered="#{registration.race.numberOfRelayLegs gt 1 and p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/bodhlaupslid/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" styleClass="relayTeam">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
 							</h:outputLink>
@@ -68,7 +68,8 @@
 		<ul class="legend registrations">
 			<li class="receipt"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></li>
 			<li class="edit"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" /></li>
-			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_teams']}" /></li>
+			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_team']}" /></li>
+			<li class="editRelayTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></li>
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
 		</ul>
 	</ui:fragment>
