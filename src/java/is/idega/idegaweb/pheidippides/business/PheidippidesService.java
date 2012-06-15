@@ -18,9 +18,14 @@ import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantRequest;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantServiceLocator;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login;
 
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
@@ -107,6 +112,9 @@ public class PheidippidesService {
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_SERVER_SIDE = "VALITOR_RETURN_URL_CD_SERVER_SIDE";
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT = "VALITOR_RETURN_URL_CD_TEXT";
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE = "VALITOR_RETURN_URL_CD";
+	
+	private static final String HLAUPASTYRKUR_USER_ID = "HLAUPASTYRKUR_USER_ID";
+	private static final String HLAUPASTYRKUR_PASSWORD = "HLAUPASTYRKUR_PASSWORD";
 
 	private static final String VALITOR_SECURITY_NUMBER_EUR = "VALITOR_SECURITY_NUMBER_EUR";
 	private static final String VALITOR_SHOP_ID_EUR = "VALITOR_SHOP_ID_EUR";
@@ -937,7 +945,7 @@ public class PheidippidesService {
 							participantHolder.isHasDoneLVBefore(),
 							participantHolder.getBestMarathonTime(),
 							participantHolder.getBestUltraMarathonTime());
-
+					
 					amount += participantHolder.getAmount()
 							- participantHolder.getDiscount();
 
@@ -2006,6 +2014,32 @@ public class PheidippidesService {
 					}
 
 					addUserToRootRunnersGroup(user);
+					
+					if (registration.getRace().isCharityRun() && user.getPersonalID() != null) {
+						try {
+							ContestantServiceLocator locator = new ContestantServiceLocator();
+							IContestantService port = locator
+									.getBasicHttpBinding_IContestantService(new URL(
+											"http://www.hlaupastyrkur.is/services/contestantservice.svc"));
+							
+							String passwd = IWMainApplication
+									.getDefaultIWApplicationContext()
+									.getApplicationSettings()
+									.getProperty(HLAUPASTYRKUR_PASSWORD,
+											"password");
+							String userID = IWMainApplication
+									.getDefaultIWApplicationContext()
+									.getApplicationSettings()
+									.getProperty(HLAUPASTYRKUR_USER_ID,
+											"user_id");
+							
+							ContestantRequest request = new ContestantRequest(registration.getRace().getDistance().getName(), new Login(passwd, userID), registration.getCharity() == null ? "" : registration.getCharity().getPersonalId(), user.getName(), passwordString, userNameString, user.getPersonalID(), Boolean.TRUE);
+							port.registerContestant(request);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
 
 					Email email = getUserBusiness().getUserMail(user);
 					Object[] args = {
