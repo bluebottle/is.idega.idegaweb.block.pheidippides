@@ -18,13 +18,11 @@ public class UpdateRequest  extends is.idega.idegaweb.pheidippides.webservice.hl
     }
 
     public UpdateRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
            java.lang.String email,
            java.lang.String password) {
         super(
-            distance,
             login);
         this.charityID = charityID;
         this.email = email;

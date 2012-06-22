@@ -16,18 +16,18 @@ public class TeamRequest  extends is.idega.idegaweb.pheidippides.webservice.hlau
     }
 
     public TeamRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
+           java.lang.String distance,
            java.lang.String name,
            java.lang.String password,
            java.lang.String username,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.TeamMember[] members,
            java.lang.String teamID) {
         super(
-            distance,
             login,
             charityID,
+            distance,
             name,
             password,
             username);

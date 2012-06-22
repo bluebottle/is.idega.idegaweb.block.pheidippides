@@ -8,38 +8,14 @@
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
 public class BaseRequest  implements java.io.Serializable {
-    private java.lang.String distance;
-
     private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login;
 
     public BaseRequest() {
     }
 
     public BaseRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login) {
-           this.distance = distance;
            this.login = login;
-    }
-
-
-    /**
-     * Gets the distance value for this BaseRequest.
-     * 
-     * @return distance
-     */
-    public java.lang.String getDistance() {
-        return distance;
-    }
-
-
-    /**
-     * Sets the distance value for this BaseRequest.
-     * 
-     * @param distance
-     */
-    public void setDistance(java.lang.String distance) {
-        this.distance = distance;
     }
 
 
@@ -74,9 +50,6 @@ public class BaseRequest  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.distance==null && other.getDistance()==null) || 
-             (this.distance!=null &&
-              this.distance.equals(other.getDistance()))) &&
             ((this.login==null && other.getLogin()==null) || 
              (this.login!=null &&
               this.login.equals(other.getLogin())));
@@ -91,9 +64,6 @@ public class BaseRequest  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getDistance() != null) {
-            _hashCode += getDistance().hashCode();
-        }
         if (getLogin() != null) {
             _hashCode += getLogin().hashCode();
         }
@@ -108,13 +78,6 @@ public class BaseRequest  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "BaseRequest"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("distance");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "Distance"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("login");
         elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "Login"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "Login"));

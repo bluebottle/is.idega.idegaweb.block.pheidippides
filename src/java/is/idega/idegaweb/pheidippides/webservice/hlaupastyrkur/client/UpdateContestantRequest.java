@@ -16,7 +16,6 @@ public class UpdateContestantRequest  extends is.idega.idegaweb.pheidippides.web
     }
 
     public UpdateContestantRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
            java.lang.String email,
@@ -24,7 +23,6 @@ public class UpdateContestantRequest  extends is.idega.idegaweb.pheidippides.web
            java.lang.String personID,
            java.lang.Boolean showOnWeb) {
         super(
-            distance,
             login,
             charityID,
             email,

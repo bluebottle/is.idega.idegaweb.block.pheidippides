@@ -8,6 +8,8 @@
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
 public class TeamMember  implements java.io.Serializable {
+    private java.lang.String name;
+
     private java.lang.String personID;
 
     private java.lang.Boolean showOnWeb;
@@ -16,10 +18,32 @@ public class TeamMember  implements java.io.Serializable {
     }
 
     public TeamMember(
+           java.lang.String name,
            java.lang.String personID,
            java.lang.Boolean showOnWeb) {
+           this.name = name;
            this.personID = personID;
            this.showOnWeb = showOnWeb;
+    }
+
+
+    /**
+     * Gets the name value for this TeamMember.
+     * 
+     * @return name
+     */
+    public java.lang.String getName() {
+        return name;
+    }
+
+
+    /**
+     * Sets the name value for this TeamMember.
+     * 
+     * @param name
+     */
+    public void setName(java.lang.String name) {
+        this.name = name;
     }
 
 
@@ -74,6 +98,9 @@ public class TeamMember  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.name==null && other.getName()==null) || 
+             (this.name!=null &&
+              this.name.equals(other.getName()))) &&
             ((this.personID==null && other.getPersonID()==null) || 
              (this.personID!=null &&
               this.personID.equals(other.getPersonID()))) &&
@@ -91,6 +118,9 @@ public class TeamMember  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getName() != null) {
+            _hashCode += getName().hashCode();
+        }
         if (getPersonID() != null) {
             _hashCode += getPersonID().hashCode();
         }
@@ -108,6 +138,13 @@ public class TeamMember  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "TeamMember"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("name");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "Name"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("personID");
         elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "PersonID"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));

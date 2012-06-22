@@ -2033,7 +2033,7 @@ public class PheidippidesService {
 									.getProperty(HLAUPASTYRKUR_USER_ID,
 											"user_id");
 							
-							ContestantRequest request = new ContestantRequest(registration.getRace().getDistance().getName(), new Login(passwd, userID), registration.getCharity() == null ? "" : registration.getCharity().getPersonalId(), user.getName(), passwordString, userNameString, user.getPersonalID(), Boolean.TRUE);
+							ContestantRequest request = new ContestantRequest(new Login(passwd, userID), registration.getCharity() == null ? "" : registration.getCharity().getPersonalId(), registration.getRace().getDistance().getName(), user.getName(), passwordString, userNameString, user.getPersonalID(), Boolean.TRUE);
 							port.registerContestant(request);
 						} catch (Exception e) {
 							e.printStackTrace();

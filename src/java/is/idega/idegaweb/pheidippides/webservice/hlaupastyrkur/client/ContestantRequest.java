@@ -16,18 +16,18 @@ public class ContestantRequest  extends is.idega.idegaweb.pheidippides.webservic
     }
 
     public ContestantRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
+           java.lang.String distance,
            java.lang.String name,
            java.lang.String password,
            java.lang.String username,
            java.lang.String personalID,
            java.lang.Boolean showOnWeb) {
         super(
-            distance,
             login,
             charityID,
+            distance,
             name,
             password,
             username);

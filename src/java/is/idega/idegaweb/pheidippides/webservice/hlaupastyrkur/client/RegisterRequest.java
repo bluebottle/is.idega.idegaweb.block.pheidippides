@@ -10,6 +10,8 @@ package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BaseRequest  implements java.io.Serializable {
     private java.lang.String charityID;
 
+    private java.lang.String distance;
+
     private java.lang.String name;
 
     private java.lang.String password;
@@ -20,16 +22,16 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
     }
 
     public RegisterRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
+           java.lang.String distance,
            java.lang.String name,
            java.lang.String password,
            java.lang.String username) {
         super(
-            distance,
             login);
         this.charityID = charityID;
+        this.distance = distance;
         this.name = name;
         this.password = password;
         this.username = username;
@@ -53,6 +55,26 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
      */
     public void setCharityID(java.lang.String charityID) {
         this.charityID = charityID;
+    }
+
+
+    /**
+     * Gets the distance value for this RegisterRequest.
+     * 
+     * @return distance
+     */
+    public java.lang.String getDistance() {
+        return distance;
+    }
+
+
+    /**
+     * Sets the distance value for this RegisterRequest.
+     * 
+     * @param distance
+     */
+    public void setDistance(java.lang.String distance) {
+        this.distance = distance;
     }
 
 
@@ -130,6 +152,9 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
             ((this.charityID==null && other.getCharityID()==null) || 
              (this.charityID!=null &&
               this.charityID.equals(other.getCharityID()))) &&
+            ((this.distance==null && other.getDistance()==null) || 
+             (this.distance!=null &&
+              this.distance.equals(other.getDistance()))) &&
             ((this.name==null && other.getName()==null) || 
              (this.name!=null &&
               this.name.equals(other.getName()))) &&
@@ -153,6 +178,9 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
         if (getCharityID() != null) {
             _hashCode += getCharityID().hashCode();
         }
+        if (getDistance() != null) {
+            _hashCode += getDistance().hashCode();
+        }
         if (getName() != null) {
             _hashCode += getName().hashCode();
         }
@@ -175,6 +203,13 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("charityID");
         elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "CharityID"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("distance");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "Distance"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

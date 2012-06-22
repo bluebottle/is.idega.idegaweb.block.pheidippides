@@ -20,7 +20,6 @@ public class UpdateTeamRequest  extends is.idega.idegaweb.pheidippides.webservic
     }
 
     public UpdateTeamRequest(
-           java.lang.String distance,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login,
            java.lang.String charityID,
            java.lang.String email,
@@ -30,7 +29,6 @@ public class UpdateTeamRequest  extends is.idega.idegaweb.pheidippides.webservic
            java.lang.String teamID,
            is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.TeamMember[] updatedMembers) {
         super(
-            distance,
             login,
             charityID,
             email,
