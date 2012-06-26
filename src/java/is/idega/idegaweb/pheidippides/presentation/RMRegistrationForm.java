@@ -400,7 +400,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showCharitySelect(IWContext iwc, PheidippidesBean bean) {
-		bean.setCharities(getDao().getCharities());
+		bean.setCharities(bean.getEvent().getCharities());
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/charitySelect.xhtml"));
