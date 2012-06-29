@@ -11,6 +11,7 @@ import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import com.idega.block.web2.business.JQueryUIType;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.builder.bean.AdvancedProperty;
 import com.idega.builder.business.BuilderLogicWrapper;
+import com.idega.core.accesscontrol.business.LoginCreateException;
 import com.idega.core.accesscontrol.business.LoginDBHandler;
 import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.event.IWPageEventListener;
@@ -313,6 +315,17 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			if (login != null && !LoginDBHandler.isLoginInUse(login)) {
 				loginEntry.setUserLogin(login);
 				loginEntry.store();
+			}
+			else if (login == null && !LoginDBHandler.isLoginInUse(login)) {
+				try {
+					loginEntry = LoginDBHandler.createLogin(user, login, password);
+				}
+				catch (LoginCreateException lce) {
+					lce.printStackTrace();
+				}
+				catch (RemoteException re) {
+					re.printStackTrace();
+				}
 			}
 			if (password != null) {
 				try {
