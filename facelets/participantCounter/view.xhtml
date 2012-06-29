@@ -18,9 +18,10 @@
 						<dl>
 							<ui:repeat value="#{pheidippidesBean.eventRacesMap[event]}" var="race">
 								<ui:param value="#{pheidippidesBean.participantCountMap[race]}" name="count" />
+								<ui:param value="#{pheidippidesBean.deregisteredCountMap[race]}" name="deregistered" />
 							
 								<dt><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(race.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></dt>
-								<dd><h:outputText value="#{count}" /></dd>
+								<dd><h:outputText value="#{count} (#{deregistered})" /></dd>
 							</ui:repeat>
 						</dl>
 					</fieldset>

@@ -87,6 +87,7 @@ public class PheidippidesBean {
 	
 	private Map<Event, List<Race>> eventRacesMap;
 	private Map<Race, Long> participantCountMap;
+	private Map<Race, Long> deregisteredCountMap;
 
 	public String getAction() {
 		return action;
@@ -400,6 +401,14 @@ public class PheidippidesBean {
 
 	public void setParticipantCountMap(Map<Race, Long> participantCountMap) {
 		this.participantCountMap = participantCountMap;
+	}
+
+	public Map<Race, Long> getDeregisteredCountMap() {
+		return deregisteredCountMap;
+	}
+
+	public void setDeregisteredCountMap(Map<Race, Long> deregisteredCountMap) {
+		this.deregisteredCountMap = deregisteredCountMap;
 	}
 
 	public RaceTrinket getTrinket() {

@@ -44,17 +44,20 @@ public class ParticipantCounter extends IWBaseComponent {
 		
 		Map<Event, List<Race>> eventRacesMap = new HashMap<Event, List<Race>>();
 		Map<Race, Long> participantCountMap = new HashMap<Race, Long>();
+		Map<Race, Long> deregisteredCountMap = new HashMap<Race, Long>();
 		for (Event event : bean.getEvents()) {
 			eventRacesMap.put(event, getDao().getRaces(event, IWTimestamp.RightNow().getYear()));
 			
 			if (eventRacesMap.get(event) != null) {
 				for (Race race : eventRacesMap.get(event)) {
 					participantCountMap.put(race, getDao().getNumberOfParticipants(race, RegistrationStatus.OK));
+					deregisteredCountMap.put(race, getDao().getNumberOfParticipants(race, RegistrationStatus.Deregistered));
 				}
 			}
 		}
 		bean.setEventRacesMap(eventRacesMap);
 		bean.setParticipantCountMap(participantCountMap);
+		bean.setDeregisteredCountMap(deregisteredCountMap);
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("participantCounter/view.xhtml"));
