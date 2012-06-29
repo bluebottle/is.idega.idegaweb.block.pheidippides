@@ -2157,7 +2157,7 @@ public class PheidippidesService {
 		}
 	}
 
-	private void addUserToRootRunnersGroup(User user) throws RemoteException {
+	public void addUserToRootRunnersGroup(User user) throws RemoteException {
 		try {
 			Group runners = getRootRunnersGroup();
 			if (!getUserBusiness().isMemberOfGroup(

@@ -312,11 +312,11 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			String login = iwc.isParameterSet(PARAMETER_LOGIN) ? iwc.getParameter(PARAMETER_LOGIN) : null;
 
 			LoginTable loginEntry = LoginDBHandler.getUserLogin(user);
-			if (login != null && !LoginDBHandler.isLoginInUse(login)) {
+			if (loginEntry != null && login != null && !LoginDBHandler.isLoginInUse(login)) {
 				loginEntry.setUserLogin(login);
 				loginEntry.store();
 			}
-			else if (login == null && !LoginDBHandler.isLoginInUse(login)) {
+			else if (loginEntry == null && login != null && !LoginDBHandler.isLoginInUse(login)) {
 				try {
 					loginEntry = LoginDBHandler.createLogin(user, login, password);
 				}
@@ -333,6 +333,13 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+
+			try {
+				getService().addUserToRootRunnersGroup(user);
+			}
+			catch (RemoteException re) {
+				re.printStackTrace();
 			}
 		}
 
