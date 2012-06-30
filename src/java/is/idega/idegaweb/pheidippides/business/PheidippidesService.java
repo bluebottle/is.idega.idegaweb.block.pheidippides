@@ -2015,7 +2015,7 @@ public class PheidippidesService {
 
 					addUserToRootRunnersGroup(user);
 					
-					if (registration.getRace().isCharityRun() && user.getPersonalID() != null) {
+					if (registration.getRace().isCharityRun() && user.getPersonalID() != null && registration.getCharity() != null) {
 						try {
 							ContestantServiceLocator locator = new ContestantServiceLocator();
 							IContestantService port = locator
@@ -2033,7 +2033,7 @@ public class PheidippidesService {
 									.getProperty(HLAUPASTYRKUR_USER_ID,
 											"user_id");
 							
-							ContestantRequest request = new ContestantRequest(new Login(passwd, userID), registration.getCharity() == null ? "" : registration.getCharity().getPersonalId(), registration.getRace().getDistance().getName(), user.getName(), passwordString, userNameString, user.getPersonalID(), Boolean.TRUE);
+							ContestantRequest request = new ContestantRequest(new Login(passwd, userID), registration.getCharity().getPersonalId(), registration.getRace().getDistance().getName(), user.getName(), passwordString, userNameString, user.getPersonalID(), Boolean.TRUE);
 							port.registerContestant(request);
 						} catch (Exception e) {
 							e.printStackTrace();
