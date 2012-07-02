@@ -59,7 +59,7 @@ public interface PheidippidesDao extends GenericDao {
 
 	public List<Race> getRaces(Event event, Integer year);
 	
-	public Race getRace(Event event, Distance distance, Integer year);
+	public Race getRace(Event event, Distance distance, Integer year, boolean relay);
 
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
@@ -117,6 +117,7 @@ public interface PheidippidesDao extends GenericDao {
 	public Registration getRegistration(Long registrationID);
 
 	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID);
+	public List<Registration> getRelayPartnerRegistrationForUser(Event event, Integer year, String userUUID);
 
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
 	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status);

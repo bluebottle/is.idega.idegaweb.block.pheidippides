@@ -113,7 +113,7 @@ public class PheidippidesWebService {
 		
 		Company company = dao.getCompanyByUserUUID(loginSession.getUser().getUniqueId());
 
-		Race race = dao.getRace(company.getEvent(), d, IWTimestamp.RightNow().getYear()); //todo get the correct year
+		Race race = dao.getRace(company.getEvent(), d, IWTimestamp.RightNow().getYear(), leg == null ? false : true); //todo get the correct year
 		
 		if (race == null) {
 			return "Could not find distance for the event this company can register to for this year";			
@@ -239,9 +239,12 @@ public class PheidippidesWebService {
 		
 		Event event = dao.getEvent(1L); //TODO get event some other way :D
 		List<Registration> regs = dao.getRegistrationForUser(event, IWTimestamp.RightNow().getYear(), user.getUniqueId());
+		if (regs == null || regs.isEmpty()) {
+			regs = dao.getRelayPartnerRegistrationForUser(event, IWTimestamp.RightNow().getYear(), user.getUniqueId());
+		}
 		if (regs != null) {
 			for (Registration registration : regs) {
-				if (registration.getStatus().equals(RegistrationStatus.OK)) {
+				if (registration.getStatus().equals(RegistrationStatus.OK) || registration.getStatus().equals(RegistrationStatus.RelayPartner)) {
 					CharityInformation info = new CharityInformation();
 					Address address = null;
 					try {
@@ -309,7 +312,11 @@ public class PheidippidesWebService {
 					if (phone != null) {
 						info.setPhone(phone.getNumber());
 					}
-					info.setPostalCode(address.getPostalCode().getPostalCode());
+					if (address.getPostalCode() != null) {
+						info.setPostalCode(address.getPostalCode().getPostalCode());
+					} else {
+						info.setPostalCode("");
+					}
 					
 					return info;
 				}

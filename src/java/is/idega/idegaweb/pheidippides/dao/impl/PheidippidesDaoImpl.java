@@ -146,9 +146,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 
-	public Race getRace(Event event, Distance distance, Integer year) {
-			return getSingleResult("race.findByEventAndDistanceAndYear", Race.class,
+	public Race getRace(Event event, Distance distance, Integer year, boolean relay) {
+		if (relay) {
+			return getSingleResult("race.findByEventAndDistanceAndYearRelay", Race.class,
 					new Param("event", event), new Param("distance", distance), new Param("year", year));
+		} else {
+			return getSingleResult("race.findByEventAndDistanceAndYear", Race.class,
+					new Param("event", event), new Param("distance", distance), new Param("year", year));			
+		}
 	}
 
 	@Transactional(readOnly = false)
@@ -446,7 +451,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID) {
 		return getResultList("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK));
 	}
-	
+
+	public List<Registration> getRelayPartnerRegistrationForUser(Event event, Integer year, String userUUID) {
+		return getResultList("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.RelayPartner));
+	}
+
 	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
 		return getRegistrations(null, race, status);
 	}
