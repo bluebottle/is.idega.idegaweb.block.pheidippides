@@ -1536,6 +1536,15 @@ public class PheidippidesService {
 		// new registration entry in same header and mark the old one as moved
 		RegistrationHeader oldHeader = registration.getHeader();
 
+		if (registration.getRace().equals(newDistance) && newShirtSize.equals(registration.getShirtSize())) {
+			return null;
+		}
+
+		if (registration.getRace().equals(newDistance) && !newShirtSize.equals(registration.getShirtSize())) {
+			dao.updateRegistration(registration.getId(), registration.getRace().getId(), newShirtSize.getId(), null);
+			return null;
+		}
+
 		if (oldHeader.getStatus()
 				.equals(RegistrationHeaderStatus.RegisteredWithoutPayment) || oldHeader.getCompany() != null) {
 			changeDistance(registration.getHeader(), registration, newDistance,
