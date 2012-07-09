@@ -108,15 +108,15 @@ public class PheidippidesWebService {
 		
 		Distance d = dao.getDistance(distance);
 		if (d == null) {
-			return "Could not find distance";
+			return "ERROR: Could not find distance";
 		}
 		
 		Company company = dao.getCompanyByUserUUID(loginSession.getUser().getUniqueId());
 
-		Race race = dao.getRace(company.getEvent(), d, IWTimestamp.RightNow().getYear(), leg == null ? false : true); //todo get the correct year
+		Race race = dao.getRace(company.getEvent(), d, IWTimestamp.RightNow().getYear(), (leg == null || "0".equals(leg)) ? false : true); //todo get the correct year
 		
 		if (race == null) {
-			return "Could not find distance for the event this company can register to for this year";			
+			return "ERROR: Could not find distance for the event this company can register to for this year";			
 		}
 
 		ShirtSizeGender gender = null;
@@ -129,7 +129,7 @@ public class PheidippidesWebService {
 		} 
  
 		if (gender == null) {
-			return "Unknown gender";
+			return "ERROR: Unknown gender";
 		}
 
 		ShirtSizeSizes size = null;
@@ -154,17 +154,17 @@ public class PheidippidesWebService {
 		}
 		
 		if (size == null) {
-			return "Unknown shirt size";
+			return "ERROR: Unknown shirt size";
 		}
 		
 		ShirtSize shirtSizeEntry = dao.getShirtSize(size, gender);
 		if (shirtSizeEntry == null) {
-			return "Could not find shirt size for this gender";
+			return "ERROR: Could not find shirt size for this gender";
 		}
 		
 		RaceShirtSize rss = dao.getRaceShirtSize(race, shirtSizeEntry);
 		if (rss == null) {
-			return "Shirt size not available for this distance";
+			return "ERROR: Shirt size not available for this distance";
 		}
 		
 		//Add checks and relay handling
