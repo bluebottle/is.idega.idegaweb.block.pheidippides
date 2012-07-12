@@ -134,6 +134,8 @@ public class PheidippidesService {
 	private static String DEFAULT_SMTP_MAILSERVER = "mail.idega.is";
 	private static String DEFAULT_MESSAGEBOX_FROM_ADDRESS = "marathon@marathon.is";
 	private static String DEFAULT_CC_ADDRESS = "marathon@marathon.is";
+	private static String DEFAULT_BCC_ADDRESS = "reykjavikmarathon@inbound.basno.com";
+	
 
 	@Autowired
 	private PheidippidesDao dao;
@@ -2216,6 +2218,7 @@ public class PheidippidesService {
 		String mailServer = DEFAULT_SMTP_MAILSERVER;
 		String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
 		String cc = DEFAULT_CC_ADDRESS;
+		String bcc = DEFAULT_BCC_ADDRESS;
 		try {
 			MessagingSettings messagingSetting = IWMainApplication
 					.getDefaultIWMainApplication().getMessagingSettings();
@@ -2223,6 +2226,8 @@ public class PheidippidesService {
 			fromAddress = messagingSetting.getFromMailAddress();
 			cc = IWMainApplication.getDefaultIWMainApplication().getSettings()
 					.getProperty("messagebox_cc_receiver_address", "");
+			bcc = IWMainApplication.getDefaultIWMainApplication().getSettings()
+					.getProperty("messagebox_bcc_receiver_address", "reykjavikmarathon@inbound.basno.com");
 		} catch (Exception e) {
 			System.err
 					.println("MessageBusinessBean: Error getting mail property from bundle");
@@ -2230,7 +2235,7 @@ public class PheidippidesService {
 		}
 
 		try {
-			com.idega.util.SendMail.send(fromAddress, email.trim(), cc, "",
+			com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
 					mailServer, subject, body);
 		} catch (javax.mail.MessagingException me) {
 			System.err
