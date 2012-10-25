@@ -12,15 +12,17 @@
 		<input type="hidden" name="prm_action" value="1" />
 
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fiffo_import']}" /></h1>
-				
-		<div class="formItem">
-			<label for="fileupload"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['excel']}" /></label>
-			<input type="file" name="fileupload" />
-		</div>
-				
-		<div class="submit">
-			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</div>
+		
+		<fieldset>		
+			<div class="formItem">
+				<label for="fileupload"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['excel']}" /></label>
+				<input type="file" name="fileupload" />
+			</div>
+	
+			<div class="submit">
+				<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+			</div>
+		</fieldset>
 	</form>
 </ui:component>
 </html>
