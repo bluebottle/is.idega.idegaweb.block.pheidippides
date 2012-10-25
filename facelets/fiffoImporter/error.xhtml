@@ -1,0 +1,103 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="adminForm" action="" method="post">
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fiffo_import_error']}" /></h1>
+		
+		<ui:fragment rendered="#{fiffoImportBean.unableToImportFile}">		
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['unable_to_import_file']}" /></h2>
+		</ui:fragment>
+		
+		<ui:fragment rendered="#{not empty fiffoImportBean.missingRequiredFields}">		
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['missing_required_fields']}" /></h2>
+			<fieldset class="formSection">
+				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['city']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['postal_code']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['country']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<ui:repeat value="#{fiffoImportBean.missingRequiredFields}" var="participant">
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
+								<ui:fragment rendered="#{not empty participant.personalId}">
+									<td><h:outputText value="#{participant.personalId}"><c:personalIDConverter /></h:outputText></td>
+								</ui:fragment>
+								<ui:fragment rendered="#{empty participant.personalId}">
+									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+								</ui:fragment>
+								<td><h:outputText value="#{participant.email}" /></td>
+								<td><h:outputText value="#{participant.address}" /></td>
+								<td><h:outputText value="#{participant.city}" /></td>
+								<td><h:outputText value="#{participant.postalCode}" /></td>
+								<td><h:outputText value="#{participant.country}" /></td>
+								<td><h:outputText value="#{participant.gender}" /></td>
+								<td><h:outputText value="#{participant.nationality}" /></td>								
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</fieldset>
+		</ui:fragment>
+		
+		<ui:fragment rendered="#{not empty fiffoImportBean.invalidPersonalID}">		
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['invalid_personal_id']}" /></h2>
+			<fieldset class="formSection">
+				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['city']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['postal_code']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['country']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<ui:repeat value="#{pheidippidesCompanyBean.invalidPersonalID}" var="participant">
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
+								<ui:fragment rendered="#{not empty participant.personalId}">
+									<td><h:outputText value="#{participant.personalId}"><c:personalIDConverter /></h:outputText></td>
+								</ui:fragment>
+								<ui:fragment rendered="#{empty participant.personalId}">
+									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+								</ui:fragment>
+								<td><h:outputText value="#{participant.email}" /></td>
+								<td><h:outputText value="#{participant.address}" /></td>
+								<td><h:outputText value="#{participant.city}" /></td>
+								<td><h:outputText value="#{participant.postalCode}" /></td>
+								<td><h:outputText value="#{participant.country}" /></td>
+								<td><h:outputText value="#{participant.gender}" /></td>
+								<td><h:outputText value="#{participant.nationality}" /></td>								
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</fieldset>
+		</ui:fragment>
+	</form>
+</ui:component>
+</html>

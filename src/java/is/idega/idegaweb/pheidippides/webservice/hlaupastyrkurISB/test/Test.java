@@ -28,7 +28,7 @@ public class Test {
 			} else {
 				System.out.println("session = " + session.getSessionID());
 				
-				RunnerInfo in1 = new RunnerInfo(null, "10km", "kaja@hive.is", null, "8498555", null, "1409743589", "8498555", "palli", session, "S", "Female");
+				RunnerInfo in1 = new RunnerInfo(null, "10km", "Sigurdur.Viktor.Ulfarsson@islandsbanki.is", null, "", null, "1804745529", "", "palli", session, "M", "Male");
 				String reg = port.registerRunner(in1 );
 				
 				System.out.println("registered = "+ reg);
