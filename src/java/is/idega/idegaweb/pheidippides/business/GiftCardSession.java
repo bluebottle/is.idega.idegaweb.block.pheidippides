@@ -1,5 +1,6 @@
 package is.idega.idegaweb.pheidippides.business;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,8 +53,17 @@ public class GiftCardSession {
 		return cards;
 	}
 
-	public void setCards(List<GiftCardHolder> cards) {
-		this.cards = cards;
+	public void addGiftCard(int amount, String amountText, int count) {
+		if (cards == null) {
+			cards = new ArrayList<GiftCardHolder>();
+		}
+		
+		GiftCardHolder holder = new GiftCardHolder();
+		holder.setAmount(amount);
+		holder.setAmountText(amountText);
+		holder.setCount(count);
+
+		cards.add(holder);
 	}
 
 	public void empty() {
