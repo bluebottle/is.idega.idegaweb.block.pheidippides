@@ -1,4 +1,4 @@
-package is.idega.idegaweb.pheidippides;
+package is.idega.idegaweb.pheidippides.business;
 
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;

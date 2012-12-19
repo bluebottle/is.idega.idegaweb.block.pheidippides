@@ -1,5 +1,5 @@
 package is.idega.idegaweb.pheidippides.servlet.filter;
-import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
+import is.idega.idegaweb.pheidippides.business.GiftCardSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 
@@ -20,7 +20,7 @@ import com.idega.presentation.IWContext;
 import com.idega.servlet.filter.BaseFilter;
 
 
-public class ValitorFilter extends BaseFilter {
+public class ValitorGiftCardFilter extends BaseFilter {
 
 	public void destroy() {
 	}
@@ -35,14 +35,12 @@ public class ValitorFilter extends BaseFilter {
 		IWContext iwc = new IWContext(request, response, request.getSession().getServletContext());
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
-		PheidippidesRegistrationSession session = (PheidippidesRegistrationSession) springContext.getBean("pheidippidesRegistrationSession");
+		GiftCardSession session = (GiftCardSession) springContext.getBean("giftCardSession");
 		
-		session.addParticipantHolder(session.getCurrentParticipant());
-		
-		RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency());
+		/*RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency());
 		session.empty();
 		
-		response.sendRedirect(holder.getValitorURL());
+		response.sendRedirect(holder.getValitorURL());*/
 	}
 
 }

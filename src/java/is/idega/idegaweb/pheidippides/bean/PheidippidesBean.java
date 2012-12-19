@@ -1,6 +1,6 @@
 package is.idega.idegaweb.pheidippides.bean;
 
-import is.idega.idegaweb.pheidippides.RegistrationAnswerHolder;
+import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Distance;

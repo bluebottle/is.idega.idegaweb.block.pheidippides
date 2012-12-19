@@ -9,6 +9,9 @@
     <entity class="is.idega.idegaweb.pheidippides.data.Company" />
     <entity class="is.idega.idegaweb.pheidippides.data.Distance" />
     <entity class="is.idega.idegaweb.pheidippides.data.Event" />
+    <entity class="is.idega.idegaweb.pheidippides.data.GiftCard" />
+    <entity class="is.idega.idegaweb.pheidippides.data.GiftCardHeader" />
+    <entity class="is.idega.idegaweb.pheidippides.data.GiftCardUsage" />
     <entity class="is.idega.idegaweb.pheidippides.data.Race" />
     <entity class="is.idega.idegaweb.pheidippides.data.RacePrice" />
     <entity class="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
