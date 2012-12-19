@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
@@ -11,6 +12,9 @@ import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -146,13 +150,16 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 
-	public Race getRace(Event event, Distance distance, Integer year, boolean relay) {
+	public Race getRace(Event event, Distance distance, Integer year,
+			boolean relay) {
 		if (relay) {
-			return getSingleResult("race.findByEventAndDistanceAndYearRelay", Race.class,
-					new Param("event", event), new Param("distance", distance), new Param("year", year));
+			return getSingleResult("race.findByEventAndDistanceAndYearRelay",
+					Race.class, new Param("event", event), new Param(
+							"distance", distance), new Param("year", year));
 		} else {
-			return getSingleResult("race.findByEventAndDistanceAndYear", Race.class,
-					new Param("event", event), new Param("distance", distance), new Param("year", year));			
+			return getSingleResult("race.findByEventAndDistanceAndYear",
+					Race.class, new Param("event", event), new Param(
+							"distance", distance), new Param("year", year));
 		}
 	}
 
@@ -160,9 +167,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
 			Date openRegistrationDate, Date closeRegistrationDate,
-			boolean familyDiscount, int relayLegs, boolean charityRun, boolean teamRun,
-			int currentParticipantNumber, int maxParticipantNumber,
-			int orderNumber) {
+			boolean familyDiscount, int relayLegs, boolean charityRun,
+			boolean teamRun, int currentParticipantNumber,
+			int maxParticipantNumber, int orderNumber) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -201,15 +208,25 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	/* Participant methods */
 	public long getNumberOfParticipants(Race race, RegistrationStatus status) {
-		return getSingleResult("registration.countByRaceAndStatus", Long.class, new Param("race", race), new Param("status", status)).longValue();
-	}
-	
-	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status) {
-		return getSingleResult("registration.countByParticipantAndRaceAndStatus", Long.class, new Param("uuid", uuid), new Param("race", race), new Param("status", status)).longValue();
+		return getSingleResult("registration.countByRaceAndStatus", Long.class,
+				new Param("race", race), new Param("status", status))
+				.longValue();
 	}
 
-	public long getNumberOfParticipantsForCompany(Company company, Event event, Integer year) {
-		return getSingleResult("registration.countByCompanyAndAventAndYear", Long.class, new Param("company", company), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK)).longValue();
+	public long getNumberOfRegistrations(String uuid, Race race,
+			RegistrationStatus status) {
+		return getSingleResult(
+				"registration.countByParticipantAndRaceAndStatus", Long.class,
+				new Param("uuid", uuid), new Param("race", race),
+				new Param("status", status)).longValue();
+	}
+
+	public long getNumberOfParticipantsForCompany(Company company, Event event,
+			Integer year) {
+		return getSingleResult("registration.countByCompanyAndAventAndYear",
+				Long.class, new Param("company", company),
+				new Param("event", event), new Param("year", year),
+				new Param("status", RegistrationStatus.OK)).longValue();
 	}
 
 	/* ShirtSize methods */
@@ -222,7 +239,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public ShirtSize getShirtSize(ShirtSizeSizes size, ShirtSizeGender gender) {
-		return getSingleResult("shirtSize.findBySizeAndGender", ShirtSize.class, new Param("size", size), new Param("gender", gender));
+		return getSingleResult("shirtSize.findBySizeAndGender",
+				ShirtSize.class, new Param("size", size), new Param("gender",
+						gender));
 	}
 
 	@Transactional(readOnly = false)
@@ -271,28 +290,30 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				new Param("currency", currency));
 	}
 
-	public List<RacePrice> getCurrentRaceTrinketPrice(Race race, Currency currency) {
-		return getResultList("racePrice.findTrinketsByRaceAndDate", RacePrice.class,
-				new Param("race", race),
-				new Param("date", IWTimestamp.getTimestampRightNow()),
-				new Param("currency", currency));
+	public List<RacePrice> getCurrentRaceTrinketPrice(Race race,
+			Currency currency) {
+		return getResultList("racePrice.findTrinketsByRaceAndDate",
+				RacePrice.class, new Param("race", race), new Param("date",
+						IWTimestamp.getTimestampRightNow()), new Param(
+						"currency", currency));
 	}
-	
-	public List<RacePrice> getRaceTrinketPrice(Race race, Date date, Currency currency) {
-		return getResultList("racePrice.findTrinketsByRaceAndDate", RacePrice.class,
-				new Param("race", race),
-				new Param("date", date),
-				new Param("currency", currency));
+
+	public List<RacePrice> getRaceTrinketPrice(Race race, Date date,
+			Currency currency) {
+		return getResultList("racePrice.findTrinketsByRaceAndDate",
+				RacePrice.class, new Param("race", race), new Param("date",
+						date), new Param("currency", currency));
 	}
-	
+
 	public List<RaceTrinket> getRaceTrinkets() {
 		return getResultList("raceTrinket.findAll", RaceTrinket.class);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
-			int familyDiscount, int shirtPrice, Currency currency, RaceTrinket trinket) {
+			int familyDiscount, int shirtPrice, Currency currency,
+			RaceTrinket trinket) {
 		RacePrice racePrice = racePriceID != null ? getRacePrice(racePriceID)
 				: null;
 		if (racePrice == null) {
@@ -353,18 +374,26 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return getSingleResult("registrationHeader.findByUUID",
 				RegistrationHeader.class, new Param("uuid", uniqueID));
 	}
-	
-	public List<RegistrationHeader> getRegistrationHeaders(Event event, Integer year, RegistrationHeaderStatus status) {
+
+	public List<RegistrationHeader> getRegistrationHeaders(Event event,
+			Integer year, RegistrationHeaderStatus status) {
 		if (event != null && year != null) {
-			return getResultList("registrationHeader.findByEventAndYearAndStatus", RegistrationHeader.class, new Param("event", event), new Param("year", year), new Param("status", status));
-		}
-		else {
-			return getResultList("registrationHeader.findByStatus", RegistrationHeader.class, new Param("status", status));
+			return getResultList(
+					"registrationHeader.findByEventAndYearAndStatus",
+					RegistrationHeader.class, new Param("event", event),
+					new Param("year", year), new Param("status", status));
+		} else {
+			return getResultList("registrationHeader.findByStatus",
+					RegistrationHeader.class, new Param("status", status));
 		}
 	}
-	
-	public Registration getRegistration(String uuid, Race race, RegistrationStatus status) {
-		return getSingleResult("registration.findByParticipantAndRaceAndStatus", Registration.class, new Param("uuid", uuid), new Param("race", race), new Param("status", status));
+
+	public Registration getRegistration(String uuid, Race race,
+			RegistrationStatus status) {
+		return getSingleResult(
+				"registration.findByParticipantAndRaceAndStatus",
+				Registration.class, new Param("uuid", uuid), new Param("race",
+						race), new Param("status", status));
 	}
 
 	@Transactional(readOnly = false)
@@ -394,43 +423,43 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (locale != null) {
 			header.setLocale(locale);
 		}
-		
+
 		if (currency != null) {
 			header.setCurrency(currency);
 		}
-		
+
 		if (securityString != null) {
 			header.setSecurityString(securityString);
 		}
-		
+
 		if (cardType != null) {
 			header.setCardType(cardType);
 		}
-		
+
 		if (cardNumber != null) {
 			header.setCardNumber(cardNumber);
 		}
-		
+
 		if (paymentDate != null) {
 			header.setPaymentDate(paymentDate);
 		}
-		
+
 		if (authorizationNumber != null) {
 			header.setAuthorizationNumber(authorizationNumber);
 		}
-		
+
 		if (transactionNumber != null) {
 			header.setTransactionNumber(transactionNumber);
 		}
-		
+
 		if (referenceNumber != null) {
 			header.setReferenceNumber(referenceNumber);
 		}
-		
+
 		if (comment != null) {
 			header.setComment(comment);
 		}
-		
+
 		if (saleId != null) {
 			header.setSaleId(saleId);
 		}
@@ -438,7 +467,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (company != null) {
 			header.setCompany(company);
 		}
-		
+
 		getEntityManager().persist(header);
 
 		return header;
@@ -448,60 +477,89 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(Registration.class, registrationID);
 	}
 
-	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID) {
-		return getResultList("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.OK));
+	public List<Registration> getRegistrationForUser(Event event, Integer year,
+			String userUUID) {
+		return getResultList(
+				"registration.findByParticipantAndEventAndYearAndStatus",
+				Registration.class, new Param("uuid", userUUID), new Param(
+						"event", event), new Param("year", year), new Param(
+						"status", RegistrationStatus.OK));
 	}
 
-	public List<Registration> getRelayPartnerRegistrationForUser(Event event, Integer year, String userUUID) {
-		return getResultList("registration.findByParticipantAndEventAndYearAndStatus", Registration.class, new Param("uuid", userUUID), new Param("event", event), new Param("year", year), new Param("status", RegistrationStatus.RelayPartner));
+	public List<Registration> getRelayPartnerRegistrationForUser(Event event,
+			Integer year, String userUUID) {
+		return getResultList(
+				"registration.findByParticipantAndEventAndYearAndStatus",
+				Registration.class, new Param("uuid", userUUID), new Param(
+						"event", event), new Param("year", year), new Param(
+						"status", RegistrationStatus.RelayPartner));
 	}
 
-	public List<Registration> getRegistrations(Race race, RegistrationStatus status) {
+	public List<Registration> getRegistrations(Race race,
+			RegistrationStatus status) {
 		return getRegistrations(null, race, status);
 	}
-	
-	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status) {
+
+	public List<Registration> getRegistrations(Company company, Race race,
+			RegistrationStatus status) {
 		if (status != null && company != null) {
-			return getResultList("registration.findByCompanyAndRaceAndStatus", Registration.class, new Param("company", company), new Param("race", race), new Param("status", status));
-		}
-		else if (status != null) {
-			return getResultList("registration.findByRaceAndStatus", Registration.class, new Param("race", race), new Param("status", status));
-		}
-		else {
-			return getResultList("registration.findByRace", Registration.class, new Param("race", race));
+			return getResultList("registration.findByCompanyAndRaceAndStatus",
+					Registration.class, new Param("company", company),
+					new Param("race", race), new Param("status", status));
+		} else if (status != null) {
+			return getResultList("registration.findByRaceAndStatus",
+					Registration.class, new Param("race", race), new Param(
+							"status", status));
+		} else {
+			return getResultList("registration.findByRace", Registration.class,
+					new Param("race", race));
 		}
 	}
 
-	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status) {
+	public List<Registration> getRegistrations(Event event, Integer year,
+			RegistrationStatus status) {
 		return getRegistrations(null, event, year, status);
 	}
-	
-	public List<Registration> getRegistrations(Company company, Event event, Integer year, RegistrationStatus status) {
+
+	public List<Registration> getRegistrations(Company company, Event event,
+			Integer year, RegistrationStatus status) {
 		if (company != null) {
-			return getResultList("registration.findByCompanyAndEventAndYearAndStatus", Registration.class, new Param("company", company), new Param("event", event), new Param("year", year), new Param("status", status));
-		}
-		else {
-			return getResultList("registration.findByEventAndYearAndStatus", Registration.class, new Param("event", event), new Param("year", year), new Param("status", status));
+			return getResultList(
+					"registration.findByCompanyAndEventAndYearAndStatus",
+					Registration.class, new Param("company", company),
+					new Param("event", event), new Param("year", year),
+					new Param("status", status));
+		} else {
+			return getResultList("registration.findByEventAndYearAndStatus",
+					Registration.class, new Param("event", event), new Param(
+							"year", year), new Param("status", status));
 		}
 	}
 
 	public List<Registration> getRegistrations(RegistrationHeader header) {
-		return getResultList("registration.findByHeader", Registration.class, new Param("header", header));
+		return getResultList("registration.findByHeader", Registration.class,
+				new Param("header", header));
 	}
-	
-	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses) {
+
+	public List<Registration> getRegistrations(String uuid,
+			List<RegistrationStatus> statuses) {
 		if (statuses != null) {
-			return getResultList("registration.findByParticipantAndStatuses", Registration.class, new Param("uuid", uuid), new Param("statuses", statuses));
-		}
-		else {
-			return getResultList("registration.findByParticipant", Registration.class, new Param("uuid", uuid));
+			return getResultList("registration.findByParticipantAndStatuses",
+					Registration.class, new Param("uuid", uuid), new Param(
+							"statuses", statuses));
+		} else {
+			return getResultList("registration.findByParticipant",
+					Registration.class, new Param("uuid", uuid));
 		}
 	}
-	
-	public List<Registration> getRegistrations(Team team, RegistrationStatus status) {
-		return getResultList("registration.findByTeamAndStatus", Registration.class, new Param("team", team), new Param("status", status));
+
+	public List<Registration> getRegistrations(Team team,
+			RegistrationStatus status) {
+		return getResultList("registration.findByTeamAndStatus",
+				Registration.class, new Param("team", team), new Param(
+						"status", status));
 	}
-	
+
 	@Transactional(readOnly = false)
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
@@ -530,7 +588,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
 			if (header != null) {
-				newReg.setHeader(header);				
+				newReg.setHeader(header);
 			} else {
 				newReg.setHeader(registration.getHeader());
 			}
@@ -542,16 +600,19 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setParticipantNumber(race.getCurrentParticipantNumber());
 			newReg.setTeam(registration.getTeam());
 			newReg.setUserUUID(registration.getUserUUID());
-			newReg.setHasDoneMarathonBefore(registration.isHasDoneMarathonBefore());
+			newReg.setHasDoneMarathonBefore(registration
+					.isHasDoneMarathonBefore());
 			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
 			newReg.setBestMarathonTime(registration.getBestMarathonTime());
-			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			newReg.setBestUltraMarathonTime(registration
+					.getBestUltraMarathonTime());
 			newReg.setEstimatedTime(registration.getEstimatedTime());
 			newReg.setComment(registration.getComment());
 			newReg.setMovedFrom(registration);
 			getEntityManager().persist(newReg);
 
-			if (status == null || !status.equals(RegistrationStatus.InTransition)) {
+			if (status == null
+					|| !status.equals(RegistrationStatus.InTransition)) {
 				registration.setStatus(RegistrationStatus.Moved);
 			}
 			registration.setMovedTo(newReg);
@@ -595,31 +656,33 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (discount > 0) {
 			registration.setAmountDiscount(discount);
 		}
-		
+
 		registration.setHasDoneLVBefore(hasDoneLVBefore);
 		registration.setHasDoneMarathonBefore(hasDoneMarathonBefore);
-		
+
 		if (bestMarathonTime != null) {
 			registration.setBestMarathonTime(bestMarathonTime);
 		}
-		
+
 		if (bestUltraMarathonTime != null) {
 			registration.setBestUltraMarathonTime(bestUltraMarathonTime);
 		}
-		
+
 		getEntityManager().persist(registration);
 
 		return registration;
 	}
-	
-	public Registration updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK) {
+
+	public Registration updateRegistration(Long registrationPK, Long racePK,
+			Long shirtSizePK, String nationalityPK) {
 		Registration registration = getRegistration(registrationPK);
-		
+
 		Race newRace = getRace(racePK);
 		if (!newRace.equals(registration.getRace())) {
 			RegistrationStatus status = registration.getStatus();
-			updateRegistrationStatus(registrationPK, null, null, RegistrationStatus.Moved);
-			
+			updateRegistrationStatus(registrationPK, null, null,
+					RegistrationStatus.Moved);
+
 			Registration newReg = new Registration();
 			newReg.setHeader(registration.getHeader());
 			newReg.setAmountPaid(registration.getAmountPaid());
@@ -628,8 +691,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setLeg(registration.getLeg());
 			if (nationalityPK != null) {
 				newReg.setNationality(nationalityPK);
-			}
-			else {
+			} else {
 				newReg.setNationality(registration.getNationality());
 			}
 			if (shirtSizePK != null) {
@@ -640,19 +702,20 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setParticipantNumber(newRace.getCurrentParticipantNumber());
 			newReg.setTeam(registration.getTeam());
 			newReg.setUserUUID(registration.getUserUUID());
-			newReg.setHasDoneMarathonBefore(registration.isHasDoneMarathonBefore());
+			newReg.setHasDoneMarathonBefore(registration
+					.isHasDoneMarathonBefore());
 			newReg.setHasDoneLVBefore(registration.isHasDoneLVBefore());
 			newReg.setBestMarathonTime(registration.getBestMarathonTime());
-			newReg.setBestUltraMarathonTime(registration.getBestUltraMarathonTime());
+			newReg.setBestUltraMarathonTime(registration
+					.getBestUltraMarathonTime());
 			newReg.setEstimatedTime(registration.getEstimatedTime());
 			newReg.setComment(registration.getComment());
 			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
-			
+
 			getEntityManager().persist(newReg);
-			
+
 			return newReg;
-		}
-		else {
+		} else {
 			if (shirtSizePK != null) {
 				registration.setShirtSize(getShirtSize(shirtSizePK));
 			}
@@ -661,12 +724,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			}
 
 			getEntityManager().persist(registration);
-			
+
 			return registration;
 		}
 	}
-	
-	public void updateRegistrationStatus(Long registrationPK, String relayLeg, ShirtSize shirtSize, RegistrationStatus status) {
+
+	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
+			ShirtSize shirtSize, RegistrationStatus status) {
 		Registration registration = getRegistration(registrationPK);
 		if (relayLeg != null) {
 			registration.setLeg(relayLeg);
@@ -675,7 +739,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			registration.setShirtSize(shirtSize);
 		}
 		registration.setStatus(status);
-		
+
 		getEntityManager().persist(registration);
 	}
 
@@ -690,7 +754,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	public RaceShirtSize getRaceShirtSize(Race race, ShirtSize size) {
 		return getSingleResult("raceShirtSize.findByRaceAndShirtSize",
-				RaceShirtSize.class, new Param("race", race), new Param("size", size));
+				RaceShirtSize.class, new Param("race", race), new Param("size",
+						size));
 	}
 
 	@Transactional(readOnly = false)
@@ -732,7 +797,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public Charity getCharity(String personalId) {
-		return getSingleResult("charity.findByPersonalID", Charity.class, new Param("personalId", personalId));
+		return getSingleResult("charity.findByPersonalID", Charity.class,
+				new Param("personalId", personalId));
 	}
 
 	@Transactional(readOnly = false)
@@ -792,20 +858,20 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 
 		team.setRelayTeam(isRelayTeam);
-		
+
 		getEntityManager().persist(team);
 
 		return team;
 
 	}
-	
-	
+
 	/* Company methods */
 	public Company getCompany(Long companyID) {
 		return find(Company.class, companyID);
 	}
-	
-	public Company storeCompany(Long companyID, String name, Event event, int maxNumberOfParticipants, boolean isOpen) {
+
+	public Company storeCompany(Long companyID, String name, Event event,
+			int maxNumberOfParticipants, boolean isOpen) {
 		Company company = companyID != null ? getCompany(companyID) : null;
 		if (company == null) {
 			company = new Company();
@@ -819,7 +885,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		return company;
 	}
-	
+
 	public Company storeCompanyUser(Long companyID, String userUUID) {
 		Company company = companyID != null ? getCompany(companyID) : null;
 		if (company == null) {
@@ -829,25 +895,26 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (userUUID != null) {
 			company.setUserUUID(userUUID);
 		}
-		
+
 		getEntityManager().persist(company);
 
-		return company;		
+		return company;
 	}
-	
+
 	public List<Company> getCompanies() {
 		return getResultList("company.findAll", Company.class);
 	}
-	
+
 	public List<Company> getCompanies(Event event) {
-		return getResultList("company.findByEvent", Company.class, new Param("event", event));
+		return getResultList("company.findByEvent", Company.class, new Param(
+				"event", event));
 	}
-	
+
 	public Company getCompanyByUserUUID(String userUUID) {
-		return getSingleResult("company.findByUserUUID",
-				Company.class, new Param("uuid", userUUID));
+		return getSingleResult("company.findByUserUUID", Company.class,
+				new Param("uuid", userUUID));
 	}
-	
+
 	/* Trinket methods */
 	public RaceTrinket getTrinket(Long trinketID) {
 		return find(RaceTrinket.class, trinketID);
@@ -863,8 +930,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Transactional(readOnly = false)
-	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, int maximumAllowed, String code,
-			String description, String localizedKey) {
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple,
+			int maximumAllowed, String code, String description,
+			String localizedKey) {
 		RaceTrinket trinket = trinketID != null ? getTrinket(trinketID) : null;
 		if (trinket == null) {
 			trinket = new RaceTrinket();
@@ -896,13 +964,16 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return find(RegistrationTrinket.class, registrationTrinketID);
 	}
 
-	
 	@Transactional(readOnly = false)
-	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket, int count) {
-		RegistrationTrinket registrationTrinket = registrationTrinketID != null ? getRegistrationTrinket(registrationTrinketID) : null;
+	public RegistrationTrinket storeRegistrationTrinket(
+			Long registrationTrinketID, Registration registration,
+			RacePrice trinket, int count) {
+		RegistrationTrinket registrationTrinket = registrationTrinketID != null ? getRegistrationTrinket(registrationTrinketID)
+				: null;
 		if (registrationTrinket == null) {
 			registrationTrinket = new RegistrationTrinket();
-			registrationTrinket.setCreatedDate(IWTimestamp.getTimestampRightNow());
+			registrationTrinket.setCreatedDate(IWTimestamp
+					.getTimestampRightNow());
 		}
 		registrationTrinket.setRegistration(registration);
 		registrationTrinket.setTrinket(trinket.getTrinket());
@@ -913,31 +984,33 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		return registrationTrinket;
 	}
-	
-	public void updateRegistrationTrinkets(Registration registration, List<RegistrationTrinket> trinkets) {
+
+	public void updateRegistrationTrinkets(Registration registration,
+			List<RegistrationTrinket> trinkets) {
 		Registration reg = getRegistration(registration.getId());
-		
+
 		List<RegistrationTrinket> oldTrinkets = reg.getTrinkets();
 		for (RegistrationTrinket oldTrinket : oldTrinkets) {
 			this.remove(oldTrinket);
 		}
-		
+
 		for (RegistrationTrinket trinket : trinkets) {
 			this.persist(trinket);
 		}
-		
+
 		reg.setTrinkets(trinkets);
 		this.persist(reg);
 	}
-	
-	public void updateExtraInformation(Registration registration, Date estimatedTime, String comment) {
+
+	public void updateExtraInformation(Registration registration,
+			Date estimatedTime, String comment) {
 		Registration reg = getRegistration(registration.getId());
 		reg.setEstimatedTime(estimatedTime);
 		reg.setComment(comment);
-		
+
 		this.persist(reg);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void updateTeamName(Team team, String name) {
 		Team theTeam = getTeam(team.getId());
@@ -950,5 +1023,123 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		Registration reg = getRegistration(registration.getId());
 		reg.setTeam(team);
 		persist(reg);
+	}
+
+	/* Gift card methods */
+	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID) {
+		
+	}
+
+	public GiftCardHeader getGiftCardHeader(String uniqueID);
+
+	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status);
+
+	public GiftCardHeader storeGiftCardHeader(
+			Long giftCardHeaderID, GiftCardHeaderStatus status,
+			String buyerUUID, String email, Date validFrom, Date validTo, String locale,
+			Currency currency, String securityString, String cardType,
+			String cardNumber, String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId);
+
+	
+	public GiftCard getGiftCard(String code) {
+		return getSingleResult("giftCard.findByCode", GiftCard.class,
+				new Param("code", code));
+	}
+
+	public List<GiftCard> getGiftCards() {
+		return getResultList("giftCard.findAll", GiftCard.class);
+	}
+
+	@Transactional(readOnly = false)
+	public GiftCard storeGiftCard(String code, String buyer_uuid, String email,
+			int amount, String greeting, Date validFrom, Date validTo, Currency currency) {
+		GiftCard giftCard = new GiftCard();
+		giftCard.setCode(code);
+		giftCard.setAmount(amount);
+		giftCard.setBuyer(buyer_uuid);
+		giftCard.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		giftCard.setEmail(email);
+		giftCard.setGreeting(greeting);
+		giftCard.setValidFrom(validFrom);
+		giftCard.setValidTo(validTo);
+		giftCard.setCurrency(currency);
+		
+		getEntityManager().persist(giftCard);
+
+		return giftCard;
+	}
+
+	public GiftCard updateGiftCard(String uuid, String securityString,
+			String cardType, String cardNumber, String paymentDate,
+			String authorizationNumber, String transactionNumber,
+			String referenceNumber, String comment, String saleId) {
+		
+		GiftCard giftCard = getGiftCardBYUUID(uuid);
+		if (giftCard == null) {
+			return null;
+		}
+		
+		giftCard.setSecurityString(securityString);
+		giftCard.setCardType(cardType);
+		giftCard.setCardNumber(cardNumber);
+		giftCard.setPaymentDate(paymentDate);
+		giftCard.setAuthorizationNumber(authorizationNumber);
+		giftCard.setTransactionNumber(transactionNumber);
+		giftCard.setReferenceNumber(referenceNumber);
+		giftCard.setComment(comment);
+		giftCard.setSaleId(saleId);
+		
+		getEntityManager().persist(giftCard);
+
+		return giftCard;	
+	}
+	
+	@Transactional(readOnly = false)
+	public boolean removeGiftCard(String code) {
+		GiftCard giftCard = getGiftCard(code);
+		if (giftCard != null) {
+			getEntityManager().remove(giftCard);
+			return true;
+		}
+
+		return false;
+	}
+	
+	public List<GiftCardUsage> getGiftCardUsage(GiftCard card) {
+		return getResultList("giftCardUsage.findAllByGiftCard", GiftCardUsage.class, new Param("card", card));
+	}
+	
+	public int getGiftCardUsageSum(GiftCard card) {
+		return getSingleResult("giftCardUsage.sumByGiftCard", Integer.class,
+				new Param("card", card)).intValue();
+	}
+
+	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount) {
+		GiftCardUsage usage = new GiftCardUsage();
+		usage.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		usage.setCard(card);
+		usage.setHeader(header);
+		usage.setAmount(amount);
+		
+		getEntityManager().persist(usage);
+
+		return usage;	
+	}
+	
+	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID) {
+		return find(GiftCardUsage.class, giftCardUsageID);
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeGiftCardUsage(Long giftCardUsageID) {
+		GiftCardUsage usage = getGiftCardUsage(giftCardUsageID);
+		if (usage != null) {
+			getEntityManager().remove(usage);
+			return true;
+		}
+
+		return false;
 	}
 }

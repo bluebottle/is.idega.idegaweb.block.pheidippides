@@ -2,7 +2,6 @@ package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.FiffoImportBean;
-import is.idega.idegaweb.pheidippides.business.FiffoImportSession;
 import is.idega.idegaweb.pheidippides.business.FiffoImportStatus;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
@@ -37,7 +36,6 @@ import com.idega.util.expression.ELUtil;
 public class ImportFiffoFile extends IWBaseComponent {
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_SELECT_FILE = 1;
-	private static final int ACTION_RACE_SELECT = 2;
 	private static final int ACTION_DONE = 3;
 	private static final int ACTION_ERROR = 4;
 
@@ -74,6 +72,11 @@ public class ImportFiffoFile extends IWBaseComponent {
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
 				"/dwr/interface/PheidippidesService.js");
 
+		PresentationUtil
+		.addJavaScriptSourceLineToHeader(
+				iwc,
+				iwb.getVirtualPathWithFileNameString("javascript/fiffoImporter.js"));
+
 		PresentationUtil.addStyleSheetToHeader(iwc,
 				iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
@@ -98,10 +101,6 @@ public class ImportFiffoFile extends IWBaseComponent {
 			showError(iwc);
 			break;
 
-		case ACTION_RACE_SELECT:
-			showRaceSelect(iwc);
-			break;
-
 		case ACTION_DONE:
 			showDone(iwc);
 			break;
@@ -116,13 +115,12 @@ public class ImportFiffoFile extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void showRaceSelect(IWContext iwc) {
+	private void showDone(IWContext iwc) {
 		UploadFile uploadFile = iwc.getUploadedFile();
 		if (uploadFile != null && uploadFile.getName() != null
 				&& uploadFile.getName().length() > 0) {
 			try {
 				FiffoImportBean bean = getBeanInstance("fiffoImportBean");
-				FiffoImportSession session = getBeanInstance("fiffoImportSession");
 
 				FileInputStream input = new FileInputStream(
 						uploadFile.getRealPath());
@@ -148,9 +146,33 @@ public class ImportFiffoFile extends IWBaseComponent {
 
 					if (!hasError) {
 						participantList = toImport.get(FiffoImportStatus.OK);
-						if (participantList != null && !participantList.isEmpty()) {
-							bean.setToImport(participantList);
-							session.setParticipantsToImport(participantList);
+						if (participantList != null && !participantList.isEmpty()) {							
+							List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
+							for (Participant participant : participantList) {
+								ParticipantHolder holder = new ParticipantHolder();
+								holder.setParticipant(participant);
+								
+								holders.add(holder);
+							}
+
+							/*if (!holders.isEmpty()) {
+								getService().storeFiffoImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
+							}*/
+							
+							System.out.println("Got " + participantList.size() + " entries to import");
+							participantList = toImport.get(FiffoImportStatus.CHANGED_DISTANCE);
+							if (participantList != null) {
+								System.out.println("Got " + participantList.size() + " entries to move");								
+							} else {
+								System.out.println("Got 0 entries to import");
+							}
+							participantList = toImport.get(FiffoImportStatus.ALREADY_REGISTERED);
+							if (participantList != null) {
+								System.out.println("Got " + participantList.size() + " already registered");								
+							} else {
+								System.out.println("Got 0 entries already registered");
+							}
+
 						} else {
 							bean.setUnableToImportFile(true);
 							hasError = true;						
@@ -178,30 +200,6 @@ public class ImportFiffoFile extends IWBaseComponent {
 				uploadFile.setId(-1);
 			}
 		}
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-				.createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb
-				.getFaceletURI("fiffoImporter/raceSelect.xhtml"));
-		add(facelet);
-	}
-
-	private void showDone(IWContext iwc) {
-		FiffoImportSession session = getBeanInstance("fiffoImportSession");
-		
-		List<Participant> participants = session.getParticipantsToImport();
-
-		List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
-		for (Participant participant : participants) {
-			ParticipantHolder holder = new ParticipantHolder();
-			holder.setParticipant(participant);
-			
-			holders.add(holder);
-		}
-
-		if (!holders.isEmpty()) {
-			getService().storeFiffoImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
-		}
-
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("fiffoImporter/done.xhtml"));

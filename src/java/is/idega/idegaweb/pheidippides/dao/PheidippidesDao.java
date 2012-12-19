@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.dao;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
@@ -10,6 +11,9 @@ import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -40,10 +44,12 @@ public interface PheidippidesDao extends GenericDao {
 
 	public long getNumberOfParticipants(Race race, RegistrationStatus status);
 
-	public long getNumberOfRegistrations(String uuid, Race race, RegistrationStatus status);
-	
-	public long getNumberOfParticipantsForCompany(Company company, Event event, Integer year);
-	
+	public long getNumberOfRegistrations(String uuid, Race race,
+			RegistrationStatus status);
+
+	public long getNumberOfParticipantsForCompany(Company company, Event event,
+			Integer year);
+
 	public Distance getDistance(Long distanceID);
 
 	public Distance getDistance(String name);
@@ -58,21 +64,23 @@ public interface PheidippidesDao extends GenericDao {
 	public Race getRace(Long raceID);
 
 	public List<Race> getRaces(Event event, Integer year);
-	
-	public Race getRace(Event event, Distance distance, Integer year, boolean relay);
+
+	public Race getRace(Event event, Distance distance, Integer year,
+			boolean relay);
 
 	public Race storeRace(Long raceID, int year, Event event,
 			Distance distance, int minimumAge, int maximumAge,
 			Date openRegistration, Date closeRegistration,
-			boolean familyDiscount, int relayLegs, boolean charityRun, boolean teamRun,
-			int currentParticipantNumber, int maxParticipantNumber, int orderNumber);
+			boolean familyDiscount, int relayLegs, boolean charityRun,
+			boolean teamRun, int currentParticipantNumber,
+			int maxParticipantNumber, int orderNumber);
 
 	public boolean removeRace(Long raceID);
 
 	public ShirtSize getShirtSize(Long shirtSizeID);
 
 	public List<ShirtSize> getShirtSizes();
-	
+
 	public ShirtSize getShirtSize(ShirtSizeSizes size, ShirtSizeGender gender);
 
 	public ShirtSize storeShirtSize(Long shirtSizeID, ShirtSizeSizes size,
@@ -83,29 +91,36 @@ public interface PheidippidesDao extends GenericDao {
 	public RacePrice getRacePrice(Long racePriceID);
 
 	public List<RacePrice> getRacePrices(Race race);
-	
+
 	public RacePrice getCurrentRacePrice(Race race, Currency currency);
 
 	public List<RaceTrinket> getRaceTrinkets();
-	public List<RacePrice> getCurrentRaceTrinketPrice(Race race, Currency currency);
-	public List<RacePrice> getRaceTrinketPrice(Race race, Date date, Currency currency);
+
+	public List<RacePrice> getCurrentRaceTrinketPrice(Race race,
+			Currency currency);
+
+	public List<RacePrice> getRaceTrinketPrice(Race race, Date date,
+			Currency currency);
 
 	public RacePrice storeRacePrice(Long racePriceID, Race race,
 			Date validFrom, Date validTo, int price, int priceKids,
-			int familyDiscount, int shirtPrice, Currency currency, RaceTrinket trinket);
+			int familyDiscount, int shirtPrice, Currency currency,
+			RaceTrinket trinket);
 
 	public boolean removeRacePrice(Long racePriceID);
 
 	public Race increaseRaceParticipantNumber(Long raceID);
 
 	public RegistrationHeader getRegistrationHeader(Long registrationHeaderID);
-	
+
 	public RegistrationHeader getRegistrationHeader(String uniqueID);
 
-	public List<RegistrationHeader> getRegistrationHeaders(Event event, Integer year, RegistrationHeaderStatus status);
-	
-	public Registration getRegistration(String uuid, Race race, RegistrationStatus status);
-	
+	public List<RegistrationHeader> getRegistrationHeaders(Event event,
+			Integer year, RegistrationHeaderStatus status);
+
+	public Registration getRegistration(String uuid, Race race,
+			RegistrationStatus status);
+
 	public RegistrationHeader storeRegistrationHeader(
 			Long registrationHeaderID, RegistrationHeaderStatus status,
 			String registrantUUID, String paymentGroup, String locale,
@@ -113,68 +128,89 @@ public interface PheidippidesDao extends GenericDao {
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId, Company company);
-	
+
 	public Registration getRegistration(Long registrationID);
 
-	public List<Registration> getRegistrationForUser(Event event, Integer year, String userUUID);
-	public List<Registration> getRelayPartnerRegistrationForUser(Event event, Integer year, String userUUID);
+	public List<Registration> getRegistrationForUser(Event event, Integer year,
+			String userUUID);
 
-	public List<Registration> getRegistrations(Race race, RegistrationStatus status);
-	public List<Registration> getRegistrations(Company company, Race race, RegistrationStatus status);
-	public List<Registration> getRegistrations(Event event, Integer year, RegistrationStatus status);
-	public List<Registration> getRegistrations(Company company, Event event, Integer year, RegistrationStatus status);
-	
+	public List<Registration> getRelayPartnerRegistrationForUser(Event event,
+			Integer year, String userUUID);
+
+	public List<Registration> getRegistrations(Race race,
+			RegistrationStatus status);
+
+	public List<Registration> getRegistrations(Company company, Race race,
+			RegistrationStatus status);
+
+	public List<Registration> getRegistrations(Event event, Integer year,
+			RegistrationStatus status);
+
+	public List<Registration> getRegistrations(Company company, Event event,
+			Integer year, RegistrationStatus status);
+
 	public List<Registration> getRegistrations(RegistrationHeader header);
-	public List<Registration> getRegistrations(String uuid, List<RegistrationStatus> statuses);
-	public List<Registration> getRegistrations(Team team, RegistrationStatus status);
-	
+
+	public List<Registration> getRegistrations(String uuid,
+			List<RegistrationStatus> statuses);
+
+	public List<Registration> getRegistrations(Team team,
+			RegistrationStatus status);
+
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
 			ShirtSize shirtSize, Team team, String leg, int amount,
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime);
-	
-	public Registration updateRegistration(Long registrationPK, Long racePK, Long shirtSizePK, String nationalityPK);
-	public void updateRegistrationStatus(Long registrationPK, String relayLeg, ShirtSize shirtSize, RegistrationStatus status);
-	
+
+	public Registration updateRegistration(Long registrationPK, Long racePK,
+			Long shirtSizePK, String nationalityPK);
+
+	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
+			ShirtSize shirtSize, RegistrationStatus status);
+
 	public RaceShirtSize getRaceShirtSize(Long raceShirtSizePK);
-	
+
 	public List<RaceShirtSize> getRaceShirtSizes(Race race);
-	
+
 	public RaceShirtSize getRaceShirtSize(Race race, ShirtSize size);
-	
-	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race, ShirtSize shirtSize, String localizedKey, int orderNumber);
-	
+
+	public RaceShirtSize storeRaceShirtSize(Long raceShirtSizePK, Race race,
+			ShirtSize shirtSize, String localizedKey, int orderNumber);
+
 	public boolean removeRaceShirtSize(Long raceShirtSizePK);
-	
+
 	public Charity getCharity(Long charityPK);
-	
+
 	public List<Charity> getCharities();
-	
+
 	public Charity getCharity(String personalId);
-	
-	public Charity storeCharity(Long charityPK, String name, String personalID, String description);
-	
+
+	public Charity storeCharity(Long charityPK, String name, String personalID,
+			String description);
+
 	public boolean removeCharity(Long charityPK);
-	
+
 	public BankReference storeBankReference(RegistrationHeader header);
-	
+
 	public BankReference findBankReference(RegistrationHeader header);
-	
+
 	public Team getTeam(Long teamID);
-	
+
 	public Team storeTeam(Long teamID, String name, boolean isRelayTeam);
-	
+
 	public Company getCompany(Long companyID);
-	
-	public Company storeCompany(Long companyID, String name, Event event, int maxNumberOfParticipants, boolean isOpen);
-	
+
+	public Company storeCompany(Long companyID, String name, Event event,
+			int maxNumberOfParticipants, boolean isOpen);
+
 	public Company storeCompanyUser(Long companyID, String userUUID);
-	
+
 	public List<Company> getCompanies(Event event);
+
 	public List<Company> getCompanies();
-	
+
 	public Company getCompanyByUserUUID(String userUUID);
 
 	public RaceTrinket getTrinket(Long trinketID);
@@ -183,17 +219,57 @@ public interface PheidippidesDao extends GenericDao {
 
 	public List<RaceTrinket> getTrinkets();
 
-	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple, int maximumAllowed, String code,
-			String description, String localizedKey);
+	public RaceTrinket storeTrinket(Long trinketID, boolean isMultiple,
+			int maximumAllowed, String code, String description,
+			String localizedKey);
 
 	public boolean removeTrinket(Long trinketID);
 
 	public RegistrationTrinket getRegistrationTrinket(Long registrationTrinketID);
-	
-	public RegistrationTrinket storeRegistrationTrinket(Long registrationTrinketID, Registration registration, RacePrice trinket, int count);
-	public void updateRegistrationTrinkets(Registration registration, List<RegistrationTrinket> trinkets);
-	public void updateExtraInformation(Registration registration, Date estimatedTime, String comment);
-	
+
+	public RegistrationTrinket storeRegistrationTrinket(
+			Long registrationTrinketID, Registration registration,
+			RacePrice trinket, int count);
+
+	public void updateRegistrationTrinkets(Registration registration,
+			List<RegistrationTrinket> trinkets);
+
+	public void updateExtraInformation(Registration registration,
+			Date estimatedTime, String comment);
+
 	public void updateTeamName(Team team, String name);
+
 	public void updateTeam(Registration registration, Team team);
+
+	// Gift cards
+	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID);
+
+	public GiftCardHeader getGiftCardHeader(String uniqueID);
+
+	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status);
+
+	public GiftCardHeader storeGiftCardHeader(
+			Long giftCardHeaderID, GiftCardHeaderStatus status,
+			String buyerUUID, String email, Date validFrom, Date validTo, String locale,
+			Currency currency, String securityString, String cardType,
+			String cardNumber, String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId);
+	
+	public GiftCard getGiftCard(String code);
+
+	public List<GiftCard> getGiftCards(GiftCardHeader header);
+
+	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
+			int amount);
+	
+	public List<GiftCardUsage> getGiftCardUsage(GiftCard card);
+
+	public int getGiftCardUsageSum(GiftCard card);
+
+	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount);
+	
+	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID);
+	
+	public boolean removeGiftCardUsage(Long giftCardUsageID);
 }

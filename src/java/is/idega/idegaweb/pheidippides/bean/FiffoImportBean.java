@@ -26,10 +26,7 @@ public class FiffoImportBean {
 	private List<Participant> alreadyRegistered;
 	private List<Participant> changedDistance;
 
-	
 	private boolean unableToImportFile;
-	private List<Participant> toImport;
-
 
 	public Locale getLocale() {
 		return locale;
@@ -77,14 +74,6 @@ public class FiffoImportBean {
 
 	public void setInvalidPersonalID(List<Participant> invalidPersonalID) {
 		this.invalidPersonalID = invalidPersonalID;
-	}
-
-	public List<Participant> getToImport() {
-		return toImport;
-	}
-
-	public void setToImport(List<Participant> toImport) {
-		this.toImport = toImport;
 	}
 
 	public boolean isUnableToImportFile() {

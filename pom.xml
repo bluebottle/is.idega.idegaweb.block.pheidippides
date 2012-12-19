@@ -48,6 +48,11 @@
       <groupId>com.idega.block.addon</groupId>
       <artifactId>com.idega.block.pdf</artifactId>
     </dependency>
-    
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.7</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>

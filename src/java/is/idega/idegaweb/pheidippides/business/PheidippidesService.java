@@ -669,34 +669,44 @@ public class PheidippidesService {
 			List<Participant> ok = new ArrayList<Participant>();
 			List<Participant> missing = new ArrayList<Participant>();
 			List<Participant> errorInPID = new ArrayList<Participant>();
+			List<Participant> alreadyRegistered = new ArrayList<Participant>();
+			List<Participant> changedDistance = new ArrayList<Participant>();
 
 			for (int a = sheet.getFirstRowNum() + 1; a <= sheet.getLastRowNum(); a++) {
 				boolean rowHasError = false;
 				boolean errorInPersonalID = false;
+				boolean previousRegistration = false;
+				boolean changeDistance = false;
 
 				HSSFRow row = sheet.getRow(a);
 
 				User user = null;
 				Participant participant = new Participant();
 
-				int column = 0;
-				String personalID = getCellValue(row.getCell(column++));
-				String uniqueID = getCellValue(row.getCell(column++));
+				int column = 1;
 				String name = getCellValue(row.getCell(column++));
-				String dateOfBirth = getCellValue(row.getCell(column++));
-				String address = getCellValue(row.getCell(column++));
-				String city = getCellValue(row.getCell(column++));
-				String postalCode = getCellValue(row.getCell(column++));
-				String country = getCellValue(row.getCell(column++));
+				String firstName = getCellValue(row.getCell(column++));
+				String middleName = getCellValue(row.getCell(column++));
+				String lastName = getCellValue(row.getCell(column++));
+				String personalID = getCellValue(row.getCell(column++));
 				String gender = getCellValue(row.getCell(column++));
-				String email = getCellValue(row.getCell(column++));
-				String phone = getCellValue(row.getCell(column++));
-				String mobile = getCellValue(row.getCell(column++));
+				String dateOfBirth = getCellValue(row.getCell(column++));
 				String nationality = getCellValue(row.getCell(column));
+				String address = getCellValue(row.getCell(column++));
+				column++;
+				String postalCode = getCellValue(row.getCell(column++));
+				String city = getCellValue(row.getCell(column++));
+				column++;
+				String country = getCellValue(row.getCell(column++));
+				column+=2;
+				String email = getCellValue(row.getCell(column++));
+				column+=4;
+				String distance = getCellValue(row.getCell(column++));
+				column+=3;
+				String participantNumber = getCellValue(row.getCell(column++));
 
 				// Hmmmm, is this correct?
-				if (personalID == null && uniqueID == null
-						&& (name == null || dateOfBirth == null)) {
+				if (personalID == null || (name == null && dateOfBirth == null)) {
 					continue;
 				}
 
@@ -711,14 +721,9 @@ public class PheidippidesService {
 				}
 
 				if (!rowHasError) {
-					if (personalID != null || uniqueID != null) {
+					if (personalID != null) {
 						try {
-							if (uniqueID != null) {
-								user = getUserBusiness().getUserByUniqueId(
-										uniqueID);
-							} else if (personalID != null) {
-								user = getUserBusiness().getUser(personalID);
-							}
+							user = getUserBusiness().getUser(personalID);
 						} catch (Exception e) {
 							rowHasError = true;
 							errorInPersonalID = true;
@@ -745,32 +750,17 @@ public class PheidippidesService {
 							}
 						}
 
-						if (address == null || "".equals(address.trim())) {
-							rowHasError = true;
-						}
-
-						if (city == null || "".equals(city.trim())) {
-							rowHasError = true;
-						}
-
-						if (postalCode == null || "".equals(postalCode.trim())) {
-							rowHasError = true;
-						}
-
-						if (country == null || "".equals(country.trim())) {
-							rowHasError = true;
-						}
 
 						if (gender == null || "".equals(gender.trim())) {
 							rowHasError = true;
 						}
 
-						if (email == null || "".equals(email.trim())) {
+						if (nationality == null
+								|| "".equals(nationality.trim())) {
 							rowHasError = true;
 						}
 
-						if (nationality == null
-								|| "".equals(nationality.trim())) {
+						if (distance == null || "".equals(distance.trim())) {
 							rowHasError = true;
 						}
 
@@ -783,41 +773,43 @@ public class PheidippidesService {
 							participant.setCountry(country);
 							participant.setGender(gender);
 							participant.setEmail(email);
-							participant.setPhoneHome(phone);
-							participant.setPhoneMobile(mobile);
 							participant.setNationality(nationality);
 						}
 					} else {
-						if (email == null || "".equals(email.trim())) {
+						if (distance == null || "".equals(distance.trim())) {
 							rowHasError = true;
 						}
 
 						if (isRegistered(user, event, year)) {
-							// Check distance and move if needed, otherwise no
-							// need to do anything
+							// Check distance and move if needed, otherwise no need to do anything
+							previousRegistration = true;
 						}
 
 						participant = getParticipant(user);
 						participant.setEmail(email);
-						participant.setPhoneHome(phone);
-						participant.setPhoneMobile(mobile);
 					}
 				}
 
 				if (rowHasError) {
 					if (errorInPersonalID) {
 						errorInPID.add(createErrorParticipant(personalID,
-								uniqueID, name, dateOfBirth, address, city,
-								postalCode, country, gender, email, phone,
-								mobile, nationality));
+								null, name, dateOfBirth, address, city,
+								postalCode, country, gender, email, null,
+								null, nationality));
 					} else {
 						missing.add(createErrorParticipant(personalID,
-								uniqueID, name, dateOfBirth, address, city,
-								postalCode, country, gender, email, phone,
-								mobile, nationality));
+								null, name, dateOfBirth, address, city,
+								postalCode, country, gender, email, null,
+								null, nationality));
 					}
 				} else {
-					ok.add(participant);
+					if (previousRegistration) {
+						alreadyRegistered.add(participant);
+					} else if (changeDistance) {
+						changedDistance.add(participant);
+					} else {
+						ok.add(participant);
+					}
 				}
 			}
 
@@ -829,6 +821,14 @@ public class PheidippidesService {
 				map.put(FiffoImportStatus.MISSING_REQUIRED_FIELD, missing);
 			}
 
+			if (!alreadyRegistered.isEmpty()) {
+				map.put(FiffoImportStatus.ALREADY_REGISTERED, alreadyRegistered);
+			}
+			
+			if (!changedDistance.isEmpty()) {
+				map.put(FiffoImportStatus.CHANGED_DISTANCE, changedDistance);
+			}
+						
 			map.put(FiffoImportStatus.OK, ok);
 
 			return map;
