@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,20 +117,23 @@ public class GiftCardCreator extends IWBaseComponent {
 	}
 	
 	private void showGiftCards(IWContext iwc, GiftCardBean bean) {
+		NumberFormat formatter = NumberFormat.getCurrencyInstance(iwc.getCurrentLocale());
+		formatter.setParseIntegerOnly(true);
+		
 		List<AdvancedProperty> amounts = new ArrayList<AdvancedProperty>();
-		amounts.add(new AdvancedProperty("1000"));
-		amounts.add(new AdvancedProperty("2000"));
-		amounts.add(new AdvancedProperty("3000"));
-		amounts.add(new AdvancedProperty("4000"));
-		amounts.add(new AdvancedProperty("5000"));
-		amounts.add(new AdvancedProperty("6000"));
-		amounts.add(new AdvancedProperty("7000"));
-		amounts.add(new AdvancedProperty("8000"));
-		amounts.add(new AdvancedProperty("9000"));
-		amounts.add(new AdvancedProperty("10000"));
-		amounts.add(new AdvancedProperty("15000"));
-		amounts.add(new AdvancedProperty("20000"));
-		amounts.add(new AdvancedProperty("25000"));
+		amounts.add(new AdvancedProperty("1000", formatter.format(1000)));
+		amounts.add(new AdvancedProperty("2000", formatter.format(2000)));
+		amounts.add(new AdvancedProperty("3000", formatter.format(3000)));
+		amounts.add(new AdvancedProperty("4000", formatter.format(4000)));
+		amounts.add(new AdvancedProperty("5000", formatter.format(5000)));
+		amounts.add(new AdvancedProperty("6000", formatter.format(6000)));
+		amounts.add(new AdvancedProperty("7000", formatter.format(7000)));
+		amounts.add(new AdvancedProperty("8000", formatter.format(8000)));
+		amounts.add(new AdvancedProperty("9000", formatter.format(9000)));
+		amounts.add(new AdvancedProperty("10000", formatter.format(10000)));
+		amounts.add(new AdvancedProperty("15000", formatter.format(15000)));
+		amounts.add(new AdvancedProperty("20000", formatter.format(20000)));
+		amounts.add(new AdvancedProperty("25000", formatter.format(25000)));
 		bean.setAmounts(amounts);
 		
 		List<AdvancedProperty> counts = new ArrayList<AdvancedProperty>();
