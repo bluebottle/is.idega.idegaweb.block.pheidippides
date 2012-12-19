@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
         }
     });
 	
-	jQuery('form.giftCardForm').validate({
+	jQuery('form.registrationForm').validate({
 		onkeyup: false,
 		onfocusout: false,
 		
@@ -40,7 +40,7 @@ jQuery(document).ready(function() {
 		var link = jQuery(this);
 		jQuery('input[name="prm_action"]').val(link.attr('rel'));
 		
-		var form = jQuery('form.giftCardForm');
+		var form = jQuery('form.registrationForm');
 		if (form.valid()) {
 			form.submit();
 		}
@@ -52,7 +52,7 @@ jQuery(document).ready(function() {
 		var link = jQuery(this);
 		jQuery('input[name="prm_action"]').val(link.attr('rel'));
 		
-		var form = jQuery('form.giftCardForm');
+		var form = jQuery('form.registrationForm');
 		form.validate().cancelSubmit = true;
 		form.submit();
 	});

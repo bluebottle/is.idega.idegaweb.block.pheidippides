@@ -56,7 +56,7 @@
 	<function>
 		<function-name>formatReceipt</function-name>
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
-		<function-signature>boolean formatReceipt(java.lang.String, is.idega.idegaweb.pheidippides.RegistrationAnswerHolder)</function-signature>
+		<function-signature>boolean formatReceipt(java.lang.String, is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder)</function-signature>
 	</function>
 
 	<function>
