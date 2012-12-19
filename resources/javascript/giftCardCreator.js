@@ -1,6 +1,5 @@
 jQuery.noConflict();
 var validUser = null;
-var availableRaces = false;
 
 jQuery(document).ready(function() {
 	jQuery.validator.addMethod("validUser", function( value, element ) {
@@ -31,6 +30,21 @@ jQuery(document).ready(function() {
 		    	required: true,
 		    	validUser: true
 		    }
+		}
+	});
+	
+	jQuery('input[name="prm_personal_id"]').keyup(function() {
+		var input = jQuery(this);
+		var value = input.val();
+
+		if (value.length == 10) {
+			PheidippidesService.getParticipant(value, {
+				callback: function(participant) {
+					if (participant != null) {
+						validUser = participant.personalId;
+					}
+				}
+			});
 		}
 	});
 	
