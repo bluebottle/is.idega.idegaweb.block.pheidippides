@@ -26,7 +26,8 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @Table(name = GiftCardHeader.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "giftCardPaymentHeader.findAll", query = "select g from GiftCardPaymentHeader g"),
-	@NamedQuery(name = "giftCardPaymentHeader.findByUUID", query = "select g from GiftCardPaymentHeader g where g.uuid = :uuid")
+	@NamedQuery(name = "giftCardPaymentHeader.findByUniqueID", query = "select g from GiftCardPaymentHeader g where g.uuid = :uuid"),
+	@NamedQuery(name = "giftCardPaymentHeader.findByStatus", query = "select g from GiftCardPaymentHeader g where g.status = :status")
 })
 public class GiftCardHeader implements Serializable {
 	private static final long serialVersionUID = 5852884348639636627L;

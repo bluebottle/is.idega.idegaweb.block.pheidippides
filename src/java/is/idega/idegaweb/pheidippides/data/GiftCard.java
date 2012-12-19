@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = GiftCard.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "giftCard.findAll", query = "select g from GiftCard g"),
+	@NamedQuery(name = "giftCard.findAll", query = "select g from GiftCard g where g.header = :header"),
 	@NamedQuery(name = "giftCard.findByCode", query = "select g from GiftCard g were g.code = :code")
 })
 public class GiftCard implements Serializable {

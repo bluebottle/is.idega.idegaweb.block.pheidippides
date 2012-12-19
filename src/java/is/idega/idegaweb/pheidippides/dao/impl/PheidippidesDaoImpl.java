@@ -1027,12 +1027,22 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	/* Gift card methods */
 	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID) {
-		
+		return find(GiftCardHeader.class, giftCardHeaderID);
 	}
 
-	public GiftCardHeader getGiftCardHeader(String uniqueID);
+	public GiftCardHeader getGiftCardHeader(String uniqueID) {
+		return getSingleResult("GiftCardHeader.findByUniqueID", GiftCardHeader.class,
+				new Param("uuid", uniqueID));
 
-	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status);
+	}
+
+	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status) {
+		if (status == null) {
+			return getResultList("GiftCardHeader.findAll", GiftCardHeader.class);			
+		} else {
+			return getResultList("GiftCardHeader.findByStatus", GiftCardHeader.class, new Param("status", status));
+		}
+	}
 
 	public GiftCardHeader storeGiftCardHeader(
 			Long giftCardHeaderID, GiftCardHeaderStatus status,
@@ -1040,7 +1050,81 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Currency currency, String securityString, String cardType,
 			String cardNumber, String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
-			String saleId);
+			String saleId) {
+		GiftCardHeader header = giftCardHeaderID != null ? getGiftCardHeader(giftCardHeaderID)
+				: null;
+		if (header == null) {
+			header = new GiftCardHeader();
+			header.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		}
+
+		header.setStatus(status);
+		if (buyerUUID != null) {
+			header.setBuyer(buyerUUID);
+		}
+
+		if (email != null) {
+			header.setEmail(email);
+		}
+		
+		if (validFrom != null) {
+			header.setValidFrom(validFrom);
+		}
+		
+		if (validTo != null) {
+			header.setValidTo(validTo);
+		}
+
+		/*if (locale != null) {
+			header.setLocale(locale);
+		}*/
+
+		if (currency != null) {
+			header.setCurrency(currency);
+		}
+
+		if (securityString != null) {
+			header.setSecurityString(securityString);
+		}
+
+		if (cardType != null) {
+			header.setCardType(cardType);
+		}
+
+		if (cardNumber != null) {
+			header.setCardNumber(cardNumber);
+		}
+
+		if (paymentDate != null) {
+			header.setPaymentDate(paymentDate);
+		}
+
+		if (authorizationNumber != null) {
+			header.setAuthorizationNumber(authorizationNumber);
+		}
+
+		if (transactionNumber != null) {
+			header.setTransactionNumber(transactionNumber);
+		}
+
+		if (referenceNumber != null) {
+			header.setReferenceNumber(referenceNumber);
+		}
+
+		if (comment != null) {
+			header.setComment(comment);
+		}
+
+		if (saleId != null) {
+			header.setSaleId(saleId);
+		}
+
+		getEntityManager().persist(header);
+
+		return header;
+
+		
+	}
 
 	
 	public GiftCard getGiftCard(String code) {
@@ -1048,63 +1132,21 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				new Param("code", code));
 	}
 
-	public List<GiftCard> getGiftCards() {
-		return getResultList("giftCard.findAll", GiftCard.class);
+	public List<GiftCard> getGiftCards(GiftCardHeader header) {
+		return getResultList("giftCard.findAll", GiftCard.class, new Param("header", header));
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCard storeGiftCard(String code, String buyer_uuid, String email,
-			int amount, String greeting, Date validFrom, Date validTo, Currency currency) {
+	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
+			int amount) {
 		GiftCard giftCard = new GiftCard();
+		giftCard.setHeader(header);
 		giftCard.setCode(code);
 		giftCard.setAmount(amount);
-		giftCard.setBuyer(buyer_uuid);
-		giftCard.setCreatedDate(IWTimestamp.getTimestampRightNow());
-		giftCard.setEmail(email);
-		giftCard.setGreeting(greeting);
-		giftCard.setValidFrom(validFrom);
-		giftCard.setValidTo(validTo);
-		giftCard.setCurrency(currency);
 		
 		getEntityManager().persist(giftCard);
 
 		return giftCard;
-	}
-
-	public GiftCard updateGiftCard(String uuid, String securityString,
-			String cardType, String cardNumber, String paymentDate,
-			String authorizationNumber, String transactionNumber,
-			String referenceNumber, String comment, String saleId) {
-		
-		GiftCard giftCard = getGiftCardBYUUID(uuid);
-		if (giftCard == null) {
-			return null;
-		}
-		
-		giftCard.setSecurityString(securityString);
-		giftCard.setCardType(cardType);
-		giftCard.setCardNumber(cardNumber);
-		giftCard.setPaymentDate(paymentDate);
-		giftCard.setAuthorizationNumber(authorizationNumber);
-		giftCard.setTransactionNumber(transactionNumber);
-		giftCard.setReferenceNumber(referenceNumber);
-		giftCard.setComment(comment);
-		giftCard.setSaleId(saleId);
-		
-		getEntityManager().persist(giftCard);
-
-		return giftCard;	
-	}
-	
-	@Transactional(readOnly = false)
-	public boolean removeGiftCard(String code) {
-		GiftCard giftCard = getGiftCard(code);
-		if (giftCard != null) {
-			getEntityManager().remove(giftCard);
-			return true;
-		}
-
-		return false;
 	}
 	
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card) {
