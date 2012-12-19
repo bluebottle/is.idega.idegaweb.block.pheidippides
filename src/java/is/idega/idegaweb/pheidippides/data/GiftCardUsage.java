@@ -19,8 +19,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = GiftCard.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "giftCardUsage.findAllByGiftCard", query = "select g from GiftCardUsage g were g.card = :card"),
-	@NamedQuery(name = "giftCardUsage.sumByGiftCard", query = "select sum(g.amount) from GiftCardUsage g were g.card = :card")
+	@NamedQuery(name = "giftCardUsage.findAllByGiftCard", query = "select g from GiftCardUsage g where g.card = :card"),
+	@NamedQuery(name = "giftCardUsage.sumByGiftCard", query = "select sum(g.amount) from GiftCardUsage g where g.card = :card")
 })
 public class GiftCardUsage implements Serializable {
 	private static final long serialVersionUID = -5035894763289201483L;
