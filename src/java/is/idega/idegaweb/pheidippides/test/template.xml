@@ -6,11 +6,12 @@
 <document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
 	
 	<register-font family="chancery" source="apple_chancery.ttf"/>
+	<color-def name="darkBlue" color-space="RGB" value="2,68,140"/>
 
-	<font-def name="normal" family="Helvetica" size="17.26" style="normal"/>
-	<font-def name="amount" family="chancery" size="39.25" style="normal"/>
-	<font-def name="amountText" family="chancery" size="17.26" style="normal"/>
-	<font-def name="small" family="chancery" size="12" style="normal"/>
+	<font-def name="normal" color="darkBlue" family="Helvetica" size="17.26" style="normal"/>
+	<font-def name="amount" color="darkBlue" family="chancery" size="39.25" style="normal"/>
+	<font-def name="amountText" color="darkBlue" family="chancery" size="17.26" style="normal"/>
+	<font-def name="small" color="darkBlue" family="chancery" size="12" style="normal"/>
 
 	<overlay source="giftcard_IS.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="-109" y="-199" />
 
