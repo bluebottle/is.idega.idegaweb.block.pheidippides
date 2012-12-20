@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = GiftCard.ENTITY_NAME)
+@Table(name = GiftCardUsage.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "giftCardUsage.findAllByGiftCard", query = "select g from GiftCardUsage g where g.card = :card"),
 	@NamedQuery(name = "giftCardUsage.sumByGiftCard", query = "select sum(g.amount) from GiftCardUsage g where g.card = :card")
