@@ -40,7 +40,8 @@
 				
 				<tfoot>
 					<tr>
-						<td class="firstColumn" colspan="2"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount_due']}" /></td>
+						<td class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount_due']}" /></td>
+						<td><h:outputText value="#{giftCardSession.count}" /></td>
 						<td class="amount"><h:outputText value="#{giftCardSession.totalAmount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
 						<td class="lastColumn"></td>
 					</tr>
