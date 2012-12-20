@@ -55,7 +55,7 @@ public class GiftCardSession {
 		return cards;
 	}
 
-	public void addGiftCard(int amount, String amountText, int count) {
+	public void addGiftCard(int amount, String amountText, String valitorDescriptionText, int count) {
 		if (cards == null) {
 			cards = new ArrayList<GiftCardHolder>();
 		}
@@ -63,6 +63,7 @@ public class GiftCardSession {
 		GiftCardHolder holder = new GiftCardHolder();
 		holder.setAmount(amount);
 		holder.setAmountText(amountText);
+		holder.setValitorDescriptionText(valitorDescriptionText);
 		holder.setCount(count);
 		holder.setIndex(cards.size());
 
@@ -79,7 +80,7 @@ public class GiftCardSession {
 		empty();
 		
 		for (GiftCardHolder giftCardHolder : holder) {
-			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getCount());
+			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getValitorDescriptionText(), giftCardHolder.getCount());
 		}
 	}
 	

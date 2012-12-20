@@ -97,11 +97,15 @@ public class GiftCardCreator extends IWBaseComponent {
 				
 			case ACTION_OVERVIEW:
 				if (iwc.isParameterSet(PARAMETER_AMOUNT)) {
+					NumberFormat formatter = NumberFormat.getCurrencyInstance(iwc.getCurrentLocale());
+					formatter.setParseIntegerOnly(true);
+
 					int amount = Integer.parseInt(iwc.getParameter(PARAMETER_AMOUNT));
 					String amountText = iwrb.getLocalizedString("gift_card_amount." + String.valueOf(amount), String.valueOf(amount));
+					String valitorText = iwrb.getLocalizedString("gift_card", "Gift card") + ": " + formatter.format(amount).replaceAll(",", "");
 					int count = Integer.parseInt(iwc.getParameter(PARAMETER_COUNT));
 					
-					getSession().addGiftCard(amount, amountText, count);
+					getSession().addGiftCard(amount, amountText, valitorText, count);
 				}
 				if (iwc.isParameterSet(PARAMETER_REMOVE)) {
 					int index = Integer.parseInt(iwc.getParameter(PARAMETER_REMOVE));
@@ -132,19 +136,19 @@ public class GiftCardCreator extends IWBaseComponent {
 		formatter.setParseIntegerOnly(true);
 		
 		List<AdvancedProperty> amounts = new ArrayList<AdvancedProperty>();
-		amounts.add(new AdvancedProperty("1000", formatter.format(1000)));
-		amounts.add(new AdvancedProperty("2000", formatter.format(2000)));
-		amounts.add(new AdvancedProperty("3000", formatter.format(3000)));
-		amounts.add(new AdvancedProperty("4000", formatter.format(4000)));
-		amounts.add(new AdvancedProperty("5000", formatter.format(5000)));
-		amounts.add(new AdvancedProperty("6000", formatter.format(6000)));
-		amounts.add(new AdvancedProperty("7000", formatter.format(7000)));
-		amounts.add(new AdvancedProperty("8000", formatter.format(8000)));
-		amounts.add(new AdvancedProperty("9000", formatter.format(9000)));
-		amounts.add(new AdvancedProperty("10000", formatter.format(10000)));
-		amounts.add(new AdvancedProperty("15000", formatter.format(15000)));
-		amounts.add(new AdvancedProperty("20000", formatter.format(20000)));
-		amounts.add(new AdvancedProperty("25000", formatter.format(25000)));
+		amounts.add(new AdvancedProperty("1000", formatter.format(1000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("2000", formatter.format(2000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("3000", formatter.format(3000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("4000", formatter.format(4000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("5000", formatter.format(5000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("6000", formatter.format(6000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("7000", formatter.format(7000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("8000", formatter.format(8000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("9000", formatter.format(9000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("10000", formatter.format(10000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("15000", formatter.format(15000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("20000", formatter.format(20000).replaceAll(",", "")));
+		amounts.add(new AdvancedProperty("25000", formatter.format(25000).replaceAll(",", "")));
 		bean.setAmounts(amounts);
 		
 		List<AdvancedProperty> counts = new ArrayList<AdvancedProperty>();
