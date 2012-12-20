@@ -17,12 +17,12 @@
 		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.overview_help']}" /></div>
 
 		<fieldset class="formSection">
-			<table width="100%" cellspacing="0" cellpadding="0">
+			<table class="giftCardTable" width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['count']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['total_amount']}" /></th>
+						<th class="amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['total_amount']}" /></th>
 						<th class="lastColumn"></th>
 					</tr>
 				</thead>
@@ -32,11 +32,19 @@
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{card.amount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
 							<td><h:outputText value="#{card.count}" /></td>
-							<td><h:outputText value="#{card.amount * card.count}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
+							<td class="amount"><h:outputText value="#{card.amount * card.count}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
 							<td class="lastColumn"><a href="#" class="remove" rel="#{card.index}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" /></span></a></td>
 						</tr>
 					</ui:repeat>
 				</tbody>
+				
+				<tfoot>
+					<tr>
+						<td class="firstColumn" colspan="2"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount_due']}" /></td>
+						<td class="amount"><h:outputText value="#{giftCardSession.totalAmount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
+						<td class="lastColumn"></td>
+					</tr>
+				</tfoot>
 			</table>
 		</fieldset>
 		

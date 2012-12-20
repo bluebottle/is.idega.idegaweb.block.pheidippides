@@ -16,6 +16,7 @@ public class GiftCardSession {
 	private Locale locale;
 	private Currency currency;
 	private List<GiftCardHolder> cards = null;
+	private int totalAmount = 0;
 
 	public String getCreatorUUID() {
 		return creatorUUID;
@@ -65,6 +66,8 @@ public class GiftCardSession {
 		holder.setIndex(cards.size());
 
 		cards.add(holder);
+		
+		totalAmount += amount * count;
 	}
 	
 	public void removeGiftCard(int index) {
@@ -77,8 +80,13 @@ public class GiftCardSession {
 			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getCount());
 		}
 	}
+	
+	public int getTotalAmount() {
+		return this.totalAmount;
+	}
 
 	public void empty() {
 		this.cards = null;
+		this.totalAmount = 0;
 	}
 }
