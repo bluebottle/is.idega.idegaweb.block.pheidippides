@@ -3585,49 +3585,64 @@ public class PheidippidesService {
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 
-		//Fix this later
-		Locale locale = LocaleUtil.getIcelandicLocale();
-		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
-				.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
-				.getResourceBundle(locale);
-
-		List<GiftCard> cards = dao.getGiftCards(header);
-		header = dao.storeGiftCardHeader(
-				header.getId(),
-				withoutPayment ? GiftCardHeaderStatus.RegisteredWithoutPayment
-						: (manualPayment ? GiftCardHeaderStatus.ManualPayment
-								: GiftCardHeaderStatus.Paid), null, null,
-				null, null, null, null, securityString, cardType, cardNumber, paymentDate,
-				authorizationNumber, transactionNumber, referenceNumber,
-				comment, saleId);
-		
-		for (GiftCard card : cards) {
-			Object[] args = {
-					card.getAmount(),
-					card.getAmountText(),
-					card.getCode(), 
-					card.getGreeting() };
+		try {
+			//Fix this later
+			Locale locale = LocaleUtil.getIcelandicLocale();
+			IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+					.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+					.getResourceBundle(locale);
+	
+			List<GiftCard> cards = dao.getGiftCards(header);
+			header = dao.storeGiftCardHeader(
+					header.getId(),
+					withoutPayment ? GiftCardHeaderStatus.RegisteredWithoutPayment
+							: (manualPayment ? GiftCardHeaderStatus.ManualPayment
+									: GiftCardHeaderStatus.Paid), null, null,
+					null, null, null, null, securityString, cardType, cardNumber, paymentDate,
+					authorizationNumber, transactionNumber, referenceNumber,
+					comment, saleId);
 			
-			String subject = PheidippidesUtil.escapeXML(iwrb
-					.getLocalizedString("gift_card_purchased_subject",
-							"Gift card purchased"));
-			String body = MessageFormat.format(StringEscapeUtils
-					.unescapeHtml(iwrb.getLocalizedString("gift_card_purchased_body",
-							"You have purchased a gift card. See attached file.")),
-					args);
-
-			body = body.replaceAll("<p>", "")
-					.replaceAll("<strong>", "")
-					.replaceAll("</strong>", "");
-			body = body.replaceAll("</p>", "\r\n");
-			body = body.replaceAll("<br />", "\r\n");
-
-			GiftCardUtil util = new GiftCardUtil();
+			Participant participant = getParticipant(getUserBusiness().getUserByUniqueId(header.getBuyer()));
 			
-			sendGiftCardMessage(header.getEmail(), subject, body, util.createPDFFile(IWMainApplication.getDefaultIWMainApplication().getIWApplicationContext(), card, locale));			
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
+			formatter.setParseIntegerOnly(true);
+
+			for (GiftCard card : cards) {
+				Object[] args = {
+					participant.getFullName(),
+					participant.getPersonalId(),
+					formatter.format(card.getAmount()).replaceAll(",", ""),
+					new IWTimestamp(header.getValidFrom()).getDateString("dd.MM.yyyy", locale),
+					card.getCode()
+				};
+				
+				String subject = PheidippidesUtil.escapeXML(iwrb
+						.getLocalizedString("gift_card_purchased_subject",
+								"Gift card purchased"));
+				String body = MessageFormat.format(StringEscapeUtils
+						.unescapeHtml(iwrb.getLocalizedString("gift_card_purchased_body",
+								"You have purchased a gift card. See attached file.")),
+						args);
+	
+				body = body.replaceAll("<p>", "")
+						.replaceAll("<strong>", "")
+						.replaceAll("</strong>", "");
+				body = body.replaceAll("</p>", "\r\n");
+				body = body.replaceAll("<br />", "\r\n");
+	
+				GiftCardUtil util = new GiftCardUtil();
+				
+				sendGiftCardMessage(header.getEmail(), subject, body, util.createPDFFile(IWMainApplication.getDefaultIWMainApplication().getIWApplicationContext(), card, locale));			
+			}
+	
+			return header;
 		}
-
-		return header;
+		catch (RemoteException re) {
+			throw new IBORuntimeException(re);
+		}
+		catch (FinderException fe) {
+			return null;
+		}
 	}
 
 	public GiftCardHeader markGiftCardAsPaymentCancelled(String uniqueID) {
