@@ -60,6 +60,17 @@ jQuery(document).ready(function() {
 		}
 	});
 
+	jQuery('a.remove').click(function(event) {
+		event.preventDefault();
+		
+		var link = jQuery(this);
+		jQuery('input[name="prm_remove"]').val(link.attr('rel'));
+		
+		var form = jQuery('form.registrationForm');
+		form.validate().cancelSubmit = true;
+		form.submit();
+	});
+
 	jQuery('a.back').click(function(event) {
 		event.preventDefault();
 		

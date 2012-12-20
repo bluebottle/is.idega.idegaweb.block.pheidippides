@@ -38,7 +38,9 @@
 		</fieldset>
 		
 		<fieldset class="submit">
-			<a href="#" class="back" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<ui:fragment rendered="#{empty giftCardSession.cards}">
+				<a href="#" class="back" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			</ui:fragment>
 			<a href="#" class="next" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

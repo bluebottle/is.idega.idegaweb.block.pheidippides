@@ -4,7 +4,6 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
 import is.idega.idegaweb.pheidippides.business.GiftCardSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Participant;
 
 import java.text.NumberFormat;
@@ -30,6 +29,7 @@ import com.idega.util.expression.ELUtil;
 public class GiftCardCreator extends IWBaseComponent {
 
 	private static final String PARAMETER_ACTION = "prm_action";
+	private static final String PARAMETER_REMOVE = "prm_remove";
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_AMOUNT = "prm_amount";
@@ -45,9 +45,6 @@ public class GiftCardCreator extends IWBaseComponent {
 
 	@Autowired
 	private GiftCardSession session;
-
-	@Autowired
-	private PheidippidesDao dao;
 
 	@Autowired
 	private JQuery jQuery;
@@ -106,7 +103,16 @@ public class GiftCardCreator extends IWBaseComponent {
 					
 					getSession().addGiftCard(amount, amountText, count);
 				}
-				showOverview(iwc, bean);
+				if (iwc.isParameterSet(PARAMETER_REMOVE)) {
+					int index = Integer.parseInt(iwc.getParameter(PARAMETER_REMOVE));
+					getSession().removeGiftCard(index);
+				}
+				if (getSession().getCards() == null) {
+					showGiftCards(iwc, bean);
+				}
+				else {
+					showOverview(iwc, bean);
+				}
 				break;
 				
 			case ACTION_SAVE:
@@ -187,14 +193,6 @@ public class GiftCardCreator extends IWBaseComponent {
 		}
 		
 		return session;
-	}
-
-	private PheidippidesDao getDao() {
-		if (dao == null) {
-			ELUtil.getInstance().autowire(this);
-		}
-		
-		return dao;
 	}
 
 	private JQuery getJQuery() {

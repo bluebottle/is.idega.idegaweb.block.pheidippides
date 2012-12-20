@@ -5,6 +5,7 @@ public class GiftCardHolder {
 	private int count;
 	private int amount;
 	private String amountText;
+	private int index;
 
 	public int getCount() {
 		return count;
@@ -28,5 +29,13 @@ public class GiftCardHolder {
 
 	public void setAmountText(String amountText) {
 		this.amountText = amountText;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

@@ -62,8 +62,20 @@ public class GiftCardSession {
 		holder.setAmount(amount);
 		holder.setAmountText(amountText);
 		holder.setCount(count);
+		holder.setIndex(cards.size());
 
 		cards.add(holder);
+	}
+	
+	public void removeGiftCard(int index) {
+		cards.remove(index);
+		
+		List<GiftCardHolder> holder = getCards();
+		empty();
+		
+		for (GiftCardHolder giftCardHolder : holder) {
+			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getCount());
+		}
 	}
 
 	public void empty() {

@@ -1,0 +1,49 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="3" />
+		<input type="hidden" name="prm_remove" value="" />
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_cards']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 3" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.overview_help']}" /></div>
+
+		<fieldset class="formSection">
+			<table width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['count']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['total_amount']}" /></th>
+						<th class="lastColumn"></th>
+					</tr>
+				</thead>
+			
+				<tbody>
+					<ui:repeat var="card" value="#{giftCardSession.cards}">
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{card.amount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
+							<td><h:outputText value="#{card.count}" /></td>
+							<td><h:outputText value="#{card.amount * card.count}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></td>
+							<td class="lastColumn"><a href="#" class="remove" rel="#{card.index}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" /></span></a></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</fieldset>
+		
+		<fieldset class="submit">
+			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['buy_more_gift_cards']}" /></span></a>
+			<a href="/valitorGiftCard/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>
