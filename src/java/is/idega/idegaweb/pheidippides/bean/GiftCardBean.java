@@ -16,6 +16,8 @@ public class GiftCardBean {
 	
 	private List<AdvancedProperty> amounts;
 	private List<AdvancedProperty> counts;
+	
+	private String name;
 
 	public Locale getLocale() {
 		return locale;
@@ -39,5 +41,13 @@ public class GiftCardBean {
 
 	public void setCounts(List<AdvancedProperty> counts) {
 		this.counts = counts;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

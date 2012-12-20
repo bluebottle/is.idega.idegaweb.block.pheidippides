@@ -83,6 +83,7 @@ public class GiftCardCreator extends IWBaseComponent {
 
 		switch (parseAction(iwc)) {
 			case ACTION_PERSON_SELECT:
+				getSession().empty();
 				showPersonSelect(iwc, bean);
 				break;
 				
@@ -169,6 +170,8 @@ public class GiftCardCreator extends IWBaseComponent {
 	}
 	
 	private void save(IWContext iwc, GiftCardBean bean) {
+		bean.setName(getService().getParticipant(iwc.getParameter(PARAMETER_PERSONAL_ID)).getFullName());
+		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/save.xhtml"));
 		add(facelet);
