@@ -5,6 +5,7 @@ public class GiftCardHolder {
 	private int count;
 	private int amount;
 	private String amountText;
+	private String greetingText;
 	private int index;
 	private String valitorDescriptionText;
 
@@ -46,5 +47,13 @@ public class GiftCardHolder {
 
 	public void setValitorDescriptionText(String valitorDescriptionText) {
 		this.valitorDescriptionText = valitorDescriptionText;
+	}
+
+	public String getGreetingText() {
+		return greetingText;
+	}
+
+	public void setGreetingText(String greetingText) {
+		this.greetingText = greetingText;
 	}
 }

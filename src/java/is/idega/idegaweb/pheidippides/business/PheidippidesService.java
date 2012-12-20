@@ -6,6 +6,8 @@ import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
@@ -16,6 +18,7 @@ import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
+import is.idega.idegaweb.pheidippides.util.GiftCardUtil;
 import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantRequest;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantServiceLocator;
@@ -111,6 +114,11 @@ public class PheidippidesService {
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_SERVER_SIDE = "VALITOR_RETURN_URL_CD_SERVER_SIDE";
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE_TEXT = "VALITOR_RETURN_URL_CD_TEXT";
 	private static final String VALITOR_RETURN_URL_CHANGE_DISTANCE = "VALITOR_RETURN_URL_CD";
+
+	private static final String VALITOR_RETURN_URL_GIFTCARD_CANCEL = "VALITOR_RETURN_URL_GC_CANCEL";
+	private static final String VALITOR_RETURN_URL_GIFTCARD_SERVER_SIDE = "VALITOR_RETURN_URL_GC_SERVER_SIDE";
+	private static final String VALITOR_RETURN_URL_GIFTCARD_TEXT = "VALITOR_RETURN_URL_GC_TEXT";
+	private static final String VALITOR_RETURN_URL_GIFTCARD = "VALITOR_RETURN_URL_GC";
 
 	private static final String HLAUPASTYRKUR_USER_ID = "HLAUPASTYRKUR_USER_ID";
 	private static final String HLAUPASTYRKUR_PASSWORD = "HLAUPASTYRKUR_PASSWORD";
@@ -3316,5 +3324,243 @@ public class PheidippidesService {
 		}
 
 		return "No user with personal id found";
+	}
+	
+	//Gift card stuff
+	public GiftCardAnswerHolder storeGiftCard(
+			List<GiftCardHolder> holder, 
+			String registrantUUID, String email, Locale locale, boolean doPayment) {
+
+		GiftCardAnswerHolder answer = new GiftCardAnswerHolder();
+
+		String valitorURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_URL,
+						"https://testvefverslun.valitor.is/default.aspx");
+		String valitorShopID = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SHOP_ID, "1");
+		String valitorSecurityNumber = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorShopIDEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SHOP_ID_EUR, "1");
+		String valitorSecurityNumberEUR = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
+
+		String valitorReturnURL = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_GIFTCARD,
+						"http://skraning.marathon.is/pages/valitorGiftCard");
+		String valitorReturnURLText = IWMainApplication
+				.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_GIFTCARD_TEXT, "Halda afram");
+		String valitorReturnURLServerSide = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_GIFTCARD_SERVER_SIDE,
+						"http://skraning.marathon.is/pages/valitorGiftCard");
+		String valitorReturnURLCancel = IWMainApplication
+				.getDefaultIWApplicationContext()
+				.getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_GIFTCARD_CANCEL,
+						"http://skraning.marathon.is/pages/valitorGiftCard");
+
+		String currency = "ISK";
+
+		StringBuilder securityString = null;
+		if (currency != null) {
+			if (currency.equals(Currency.ISK)) {
+				securityString = new StringBuilder(valitorSecurityNumber);
+			} else {
+				securityString = new StringBuilder(valitorSecurityNumberEUR);
+			}
+		}
+
+		StringBuilder url = new StringBuilder(valitorURL);
+		url.append("?");
+		url.append(VEFVERSLUN_ID);
+		url.append("=");
+		if (currency != null) {
+			if (currency.equals(Currency.ISK)) {
+				url.append(valitorShopID);
+			} else {
+				url.append(valitorShopIDEUR);
+			}
+		}
+		url.append("&");
+		url.append(LANG);
+		url.append("=");
+		if (Locale.ENGLISH.equals(locale)) {
+			url.append("en");
+		} else {
+			url.append("is");
+		}
+
+		url.append("&");
+		url.append(GJALDMIDILL);
+		url.append("=");
+		url.append(currency);
+		url.append("&");
+		url.append(ADEINSHEIMILD);
+		url.append("=");
+		url.append("0");
+		securityString.append("0");
+
+		if (holder != null && !holder.isEmpty()) {
+			GiftCardHeaderStatus stat = GiftCardHeaderStatus.WaitingForPayment;
+			if (!doPayment) {
+				stat = GiftCardHeaderStatus.WaitingForPayment;
+			}
+			
+			IWTimestamp validFrom = new IWTimestamp();
+			IWTimestamp validTo = new IWTimestamp();
+			validTo.addYears(4);
+			
+			GiftCardHeader header = dao.storeGiftCardHeader(null, stat, registrantUUID, email, validFrom.getDate(), validTo.getDate(), locale.toString(), currency.equals("ISK") ? Currency.ISK : Currency.EUR, null, null, null, null, null, null, null, null, null);
+			answer.setHeader(header);
+
+			valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
+			valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
+
+			int amount = 0;
+
+			int counter = 1;
+			for (GiftCardHolder giftCardHolder : holder) {
+				for (int i = 0; i < giftCardHolder.getCount(); i++) {
+					amount += giftCardHolder.getAmount() * giftCardHolder.getCount();
+					dao.storeGiftCard(header, getGiftCardCode(), giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getGreetingText());
+				}
+
+				securityString.append(giftCardHolder.getCount());
+				securityString.append(giftCardHolder.getAmount());
+				securityString.append("0");
+
+				url.append("&");
+				url.append(VARA);
+				url.append(counter);
+				url.append(VARA_LYSING);
+				url.append("=");
+				try {
+					url.append(URLEncoder.encode(
+							giftCardHolder.getValitorDescriptionText(),
+							"UTF-8"));
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				url.append("&");
+				url.append(VARA);
+				url.append(counter);
+				url.append(VARA_FJOLDI);
+				url.append("=");
+				url.append(giftCardHolder.getCount());
+				url.append("&");
+				url.append(VARA);
+				url.append(counter);
+				url.append(VARA_VERD);
+				url.append("=");
+				url.append(giftCardHolder.getAmount());
+				url.append("&");
+				url.append(VARA);
+				url.append(counter++);
+				url.append(VARA_AFSLATTUR);
+				url.append("=");
+				url.append("0");			
+			}
+
+			if (currency.equals(Currency.ISK)) {
+				securityString.append(valitorShopID);
+			} else {
+				securityString.append(valitorShopIDEUR);
+			}
+			securityString.append(header.getUuid());
+			securityString.append(valitorReturnURL);
+			securityString.append(valitorReturnURLServerSide);
+			securityString.append(currency);
+
+			url.append("&");
+			url.append(KAUPANDA_UPPLYSINGAR);
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("NafnSkylda");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaKennitala");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaHeimilisfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaPostnumer");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaStadur");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaLand");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaNetfang");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append("FelaAthugasemdir");
+			url.append("=");
+			url.append("1");
+			url.append("&");
+			url.append(TILVISUNARNUMER);
+			url.append("=");
+			url.append(header.getUuid());
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA);
+			url.append("=");
+			url.append(valitorReturnURL);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI);
+			url.append("=");
+			url.append(valitorReturnURLText);
+			url.append("&");
+			url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE);
+			url.append("=");
+			url.append(valitorReturnURLServerSide);
+			url.append("&");
+			url.append(SLOD_NOTANDI_HAETTIR_VID);
+			url.append("=");
+			url.append(valitorReturnURLCancel);
+			url.append("&");
+			url.append(RAFRAEN_UNDIRSKRIFT);
+			url.append("=");
+			url.append(createValitorSecurityString(securityString.toString()));
+
+			answer.setAmount(amount);
+			answer.setValitorURL(url.toString());
+		}
+
+		return answer;
+	}
+	
+	private String getGiftCardCode() {
+		GiftCardUtil util = new GiftCardUtil();
+		String code = util.generateCode();
+		
+		GiftCard card = dao.getGiftCard(code);
+		while (card != null) {
+			code = util.generateCode();
+			
+			card = dao.getGiftCard(code);
+		}
+		
+		return code;
 	}
 }

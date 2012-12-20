@@ -25,6 +25,7 @@ public class GiftCard implements Serializable {
 	private static final String COLUMN_CODE = "code";
 	private static final String COLUMN_GIFT_CARD_HEADER = "gift_card_header";
 	private static final String COLUMN_AMOUNT = "amount";
+	private static final String COLUMN_AMOUNT_TEXT = "amount_text";
 	private static final String COLUMN_GREETING_TEXT = "greeting_text";
 	
 	@Id
@@ -38,6 +39,9 @@ public class GiftCard implements Serializable {
 
 	@Column(name = GiftCard.COLUMN_AMOUNT)
 	private int amount;
+
+	@Column(name = GiftCard.COLUMN_AMOUNT_TEXT)
+	private String amountText;
 
 	@Column(name = GiftCard.COLUMN_GREETING_TEXT)
 	private String greeting;
@@ -73,5 +77,13 @@ public class GiftCard implements Serializable {
 
 	public void setHeader(GiftCardHeader header) {
 		this.header = header;
+	}
+
+	public String getAmountText() {
+		return amountText;
+	}
+
+	public void setAmountText(String amountText) {
+		this.amountText = amountText;
 	}
 }

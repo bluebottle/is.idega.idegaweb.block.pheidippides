@@ -261,7 +261,7 @@ public interface PheidippidesDao extends GenericDao {
 	public List<GiftCard> getGiftCards(GiftCardHeader header);
 
 	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
-			int amount);
+			int amount, String amountText, String greetingText);
 	
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card);
 
