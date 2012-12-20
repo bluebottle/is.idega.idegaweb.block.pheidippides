@@ -3436,7 +3436,7 @@ public class PheidippidesService {
 			IWTimestamp validTo = new IWTimestamp();
 			validTo.addYears(4);
 			
-			GiftCardHeader header = dao.storeGiftCardHeader(null, stat, registrantUUID, email, validFrom.getDate(), validTo.getDate(), locale.toString(), currency.equals("ISK") ? Currency.ISK : Currency.EUR, null, null, null, null, null, null, null, null, null);
+			GiftCardHeader header = dao.storeGiftCardHeader(null, stat, registrantUUID, email, validFrom.getDate(), validTo.getDate(), locale.toString(), currency, null, null, null, null, null, null, null, null, null);
 			answer.setHeader(header);
 
 			valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
