@@ -11,6 +11,12 @@
 	</servlet>
 
 	<servlet>
+		<display-name>Valitor Gift Card Success</display-name>
+		<servlet-name>ValitorGiftCardSuccess</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorGiftCardSuccess</servlet-class>
+	</servlet>
+
+	<servlet>
 		<display-name>Valitor Move Success</display-name>
 		<servlet-name>ValitorMoveSuccess</servlet-name>
 		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorMoveSuccess</servlet-class>
@@ -20,6 +26,12 @@
 		<display-name>Valitor Cancellation</display-name>
 		<servlet-name>ValitorCancel</servlet-name>
 		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorCancel</servlet-class>
+	</servlet>
+
+	<servlet>
+		<display-name>Valitor Gift Card Cancellation</display-name>
+		<servlet-name>ValitorCancel</servlet-name>
+		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorGiftCardCancel</servlet-class>
 	</servlet>
 
 	<servlet>
@@ -34,6 +46,11 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
+		<servlet-name>ValitorGiftCardSuccess</servlet-name>
+		<url-pattern>/valitorGiftCardSuccess/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
 		<servlet-name>ValitorMoveSuccess</servlet-name>
 		<url-pattern>/valitorMoveSuccess/*</url-pattern>
 	</servlet-mapping>
@@ -41,6 +58,11 @@
 	<servlet-mapping>
 		<servlet-name>ValitorCancel</servlet-name>
 		<url-pattern>/valitorCancel/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ValitorGiftCardCancel</servlet-name>
+		<url-pattern>/valitorGiftCardCancel/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
