@@ -43,7 +43,8 @@ public class GiftCardPrintingContext extends PrintingContextImpl {
 		
 		props.put("amount", holder.getAmount());
 		props.put("amountText", holder.getAmountText());
-		props.put("key", "PALLIFIXTHIS");
+		props.put("key", holder.getCode());
+		props.put("created", holder.getCreated());
 
 		setFileName(getResourceBundle(iwac, locale).getLocalizedString("gift_card_filename", "gift_card") + ".pdf");
 		addDocumentProperties(props);

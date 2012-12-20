@@ -8,6 +8,8 @@ public class GiftCardHolder {
 	private String greetingText;
 	private int index;
 	private String valitorDescriptionText;
+	private String code;
+	private String created;
 
 	public int getCount() {
 		return count;
@@ -55,5 +57,21 @@ public class GiftCardHolder {
 
 	public void setGreetingText(String greetingText) {
 		this.greetingText = greetingText;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
 	}
 }

@@ -2300,7 +2300,7 @@ public class PheidippidesService {
 					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
 
-					sendMessage(email.getEmailAddress(), subject, body, null);
+					sendMessage(email.getEmailAddress(), subject, body);
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				} catch (FinderException e) {
@@ -2341,7 +2341,7 @@ public class PheidippidesService {
 			body = body.replaceAll("</p>", "\r\n");
 			body = body.replaceAll("<br />", "\r\n");
 
-			sendMessage(email.getEmailAddress(), subject, body, null);
+			sendMessage(email.getEmailAddress(), subject, body);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (FinderException e) {
@@ -2375,7 +2375,7 @@ public class PheidippidesService {
 									"A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"),
 							arguments);
 
-			sendMessage(participant.getEmail(), subject, body, null);
+			sendMessage(participant.getEmail(), subject, body);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2427,7 +2427,7 @@ public class PheidippidesService {
 		return group;
 	}
 
-	private void sendMessage(String email, String subject, String body, File attachment) {
+	private void sendMessage(String email, String subject, String body) {
 		String mailServer = DEFAULT_SMTP_MAILSERVER;
 		String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
 		String cc = DEFAULT_CC_ADDRESS;
@@ -2451,13 +2451,8 @@ public class PheidippidesService {
 		}
 
 		try {
-			if (attachment == null) {
-				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
-					mailServer, subject, body);
-			} else {
-				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
-						mailServer, subject, body, attachment);
-			}
+			com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
+				mailServer, subject, body);
 				
 		} catch (javax.mail.MessagingException me) {
 			System.err
@@ -3056,7 +3051,7 @@ public class PheidippidesService {
 						body = body.replaceAll("</p>", "\r\n");
 						body = body.replaceAll("<br />", "\r\n");
 
-						sendMessage(email.getEmailAddress(), subject, body, null);
+						sendMessage(email.getEmailAddress(), subject, body);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -3321,7 +3316,7 @@ public class PheidippidesService {
 					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
 					
-					sendMessage(email.getEmailAddress(), subject, body, null);
+					sendMessage(email.getEmailAddress(), subject, body);
 
 					return passwordString;
 				}
@@ -3627,9 +3622,9 @@ public class PheidippidesService {
 			body = body.replaceAll("</p>", "\r\n");
 			body = body.replaceAll("<br />", "\r\n");
 
-			File pdf = null;
+			GiftCardUtil util = new GiftCardUtil();
 			
-			sendMessage(header.getEmail(), subject, body, pdf);			
+			sendGiftCardMessage(header.getEmail(), subject, body, util.createPDFFile(IWMainApplication.getDefaultIWMainApplication().getIWApplicationContext(), card, locale));			
 		}
 
 		return header;
@@ -3650,4 +3645,42 @@ public class PheidippidesService {
 
 		return header;
 	}
+	
+	private void sendGiftCardMessage(String email, String subject, String body, File attachment) {
+		String mailServer = DEFAULT_SMTP_MAILSERVER;
+		String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
+		String cc = DEFAULT_CC_ADDRESS;
+		String bcc = DEFAULT_BCC_ADDRESS;
+		try {
+			MessagingSettings messagingSetting = IWMainApplication
+					.getDefaultIWMainApplication().getMessagingSettings();
+			mailServer = messagingSetting.getSMTPMailServer();
+			fromAddress = messagingSetting.getFromMailAddress();
+			cc = IWMainApplication.getDefaultIWMainApplication().getSettings()
+					.getProperty("messagebox_cc_receiver_address", "");
+		} catch (Exception e) {
+			System.err
+					.println("MessageBusinessBean: Error getting mail property from bundle");
+			e.printStackTrace();
+		}
+
+		try {
+			if (attachment == null) {
+				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
+					mailServer, subject, body);
+			} else {
+				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
+						mailServer, subject, body, attachment);
+			}
+				
+		} catch (javax.mail.MessagingException me) {
+			System.err
+					.println("MessagingException when sending mail to address: "
+							+ email + " Message was: " + me.getMessage());
+		} catch (Exception e) {
+			System.err.println("Exception when sending mail to address: "
+					+ email + " Message was: " + e.getMessage());
+		}
+	}
+
 }
