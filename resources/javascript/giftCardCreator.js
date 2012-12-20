@@ -72,13 +72,17 @@ jQuery(document).ready(function() {
 	});
 
 	jQuery('a.back').click(function(event) {
-		event.preventDefault();
-		
 		var link = jQuery(this);
-		jQuery('input[name="prm_action"]').val(link.attr('rel'));
+		var rel = link.attr('rel');
 		
-		var form = jQuery('form.registrationForm');
-		form.validate().cancelSubmit = true;
-		form.submit();
+		if (rel) {
+			event.preventDefault();
+			
+			jQuery('input[name="prm_action"]').val(rel);
+			
+			var form = jQuery('form.registrationForm');
+			form.validate().cancelSubmit = true;
+			form.submit();
+		}
 	});
 });
