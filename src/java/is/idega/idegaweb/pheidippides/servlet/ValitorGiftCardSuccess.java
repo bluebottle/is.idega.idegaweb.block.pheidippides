@@ -1,9 +1,9 @@
 package is.idega.idegaweb.pheidippides.servlet;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
-import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,9 +42,9 @@ public class ValitorGiftCardSuccess extends HttpServlet {
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		
 		String uniqueID = iwc.getParameter("uniqueID");
-		RegistrationHeader header = service.getRegistrationHeader(uniqueID);
+		GiftCardHeader header = service.getGiftCardHeader(uniqueID);
 		
-		if (header.getStatus().equals(RegistrationHeaderStatus.WaitingForPayment)) {
+		if (header.getStatus().equals(GiftCardHeaderStatus.WaitingForPayment)) {
 			String securityString = iwc.getParameter("RafraenUndirskriftSvar");
 			String referenceNumber = iwc.getParameter("Tilvisunarnumer");
 			String securityNumber = IWMainApplication
@@ -65,7 +65,7 @@ public class ValitorGiftCardSuccess extends HttpServlet {
 				String comment = iwc.getParameter("Athugasemd");
 				String saleID = iwc.getParameter("VefverslunSalaID");
 				
-				service.markRegistrationAsPaid(header, false, false, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
+				service.markGiftCardAsPaid(header, false, false, securityString, cardType, cardNumber, paymentDate, authorizationNumber, transactionNumber, referenceNumber, comment, saleID);
 			}
 		}
 		

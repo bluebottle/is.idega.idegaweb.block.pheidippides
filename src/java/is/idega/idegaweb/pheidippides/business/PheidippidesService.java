@@ -25,6 +25,7 @@ import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Contestant
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService;
 import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -2299,7 +2300,7 @@ public class PheidippidesService {
 					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
 
-					sendMessage(email.getEmailAddress(), subject, body);
+					sendMessage(email.getEmailAddress(), subject, body, null);
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				} catch (FinderException e) {
@@ -2340,7 +2341,7 @@ public class PheidippidesService {
 			body = body.replaceAll("</p>", "\r\n");
 			body = body.replaceAll("<br />", "\r\n");
 
-			sendMessage(email.getEmailAddress(), subject, body);
+			sendMessage(email.getEmailAddress(), subject, body, null);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (FinderException e) {
@@ -2374,7 +2375,7 @@ public class PheidippidesService {
 									"A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"),
 							arguments);
 
-			sendMessage(participant.getEmail(), subject, body);
+			sendMessage(participant.getEmail(), subject, body, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2426,7 +2427,7 @@ public class PheidippidesService {
 		return group;
 	}
 
-	private void sendMessage(String email, String subject, String body) {
+	private void sendMessage(String email, String subject, String body, File attachment) {
 		String mailServer = DEFAULT_SMTP_MAILSERVER;
 		String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
 		String cc = DEFAULT_CC_ADDRESS;
@@ -2450,8 +2451,14 @@ public class PheidippidesService {
 		}
 
 		try {
-			com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
+			if (attachment == null) {
+				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
 					mailServer, subject, body);
+			} else {
+				com.idega.util.SendMail.send(fromAddress, email.trim(), cc, bcc,
+						mailServer, subject, body, attachment);
+			}
+				
 		} catch (javax.mail.MessagingException me) {
 			System.err
 					.println("MessagingException when sending mail to address: "
@@ -3049,7 +3056,7 @@ public class PheidippidesService {
 						body = body.replaceAll("</p>", "\r\n");
 						body = body.replaceAll("<br />", "\r\n");
 
-						sendMessage(email.getEmailAddress(), subject, body);
+						sendMessage(email.getEmailAddress(), subject, body, null);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -3313,8 +3320,8 @@ public class PheidippidesService {
 							.replaceAll("</strong>", "");
 					body = body.replaceAll("</p>", "\r\n");
 					body = body.replaceAll("<br />", "\r\n");
-
-					sendMessage(email.getEmailAddress(), subject, body);
+					
+					sendMessage(email.getEmailAddress(), subject, body, null);
 
 					return passwordString;
 				}
@@ -3562,5 +3569,77 @@ public class PheidippidesService {
 		}
 		
 		return code;
+	}
+	
+	public GiftCardHeader getGiftCardHeader(String uniqueID) {
+		return dao.getGiftCardHeader(uniqueID);
+	}
+
+	public GiftCardHeader markGiftCardAsPaid(GiftCardHeader header,
+			boolean manualPayment, boolean withoutPayment,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
+			String transactionNumber, String referenceNumber, String comment,
+			String saleId) {
+
+		//Fix this later
+		Locale locale = LocaleUtil.getIcelandicLocale();
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+				.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+				.getResourceBundle(locale);
+
+		List<GiftCard> cards = dao.getGiftCards(header);
+		header = dao.storeGiftCardHeader(
+				header.getId(),
+				withoutPayment ? GiftCardHeaderStatus.RegisteredWithoutPayment
+						: (manualPayment ? GiftCardHeaderStatus.ManualPayment
+								: GiftCardHeaderStatus.Paid), null, null,
+				null, null, null, null, securityString, cardType, cardNumber, paymentDate,
+				authorizationNumber, transactionNumber, referenceNumber,
+				comment, saleId);
+		
+		for (GiftCard card : cards) {
+			Object[] args = {
+					card.getAmount(),
+					card.getAmountText(),
+					card.getCode(), 
+					card.getGreeting() };
+			
+			String subject = PheidippidesUtil.escapeXML(iwrb
+					.getLocalizedString("gift_card_purchased_subject",
+							"Gift card purchased"));
+			String body = MessageFormat.format(StringEscapeUtils
+					.unescapeHtml(iwrb.getLocalizedString("gift_card_purchased_body",
+							"You have purchased a gift card. See attached file.")),
+					args);
+
+			body = body.replaceAll("<p>", "")
+					.replaceAll("<strong>", "")
+					.replaceAll("</strong>", "");
+			body = body.replaceAll("</p>", "\r\n");
+			body = body.replaceAll("<br />", "\r\n");
+
+			File pdf = null;
+			
+			sendMessage(header.getEmail(), subject, body, pdf);			
+		}
+
+		return header;
+	}
+
+	public GiftCardHeader markGiftCardAsPaymentCancelled(String uniqueID) {
+		GiftCardHeader header = dao.getGiftCardHeader(uniqueID);
+
+		return markGiftCardAsPaymentCancelled(header);
+	}
+
+	public GiftCardHeader markGiftCardAsPaymentCancelled(
+			GiftCardHeader header) {
+		header = dao.storeGiftCardHeader(header.getId(),
+				GiftCardHeaderStatus.UserDidntFinishPayment, null, null,
+				null, null, null, null, null, null, null, null, null, null,
+				null, null, null);
+
+		return header;
 	}
 }

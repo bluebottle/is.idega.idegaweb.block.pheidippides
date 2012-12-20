@@ -1,7 +1,7 @@
 package is.idega.idegaweb.pheidippides.servlet.filter;
+import is.idega.idegaweb.pheidippides.business.GiftCardAnswerHolder;
 import is.idega.idegaweb.pheidippides.business.GiftCardSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 
 import java.io.IOException;
 
@@ -37,10 +37,10 @@ public class ValitorGiftCardFilter extends BaseFilter {
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		GiftCardSession session = (GiftCardSession) springContext.getBean("giftCardSession");
 		
-		/*RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency());
+		GiftCardAnswerHolder holder = service.storeGiftCard(session.getCards(), session.getCreatorUUID(), session.getEmail(), session.getLocale(), true);
 		session.empty();
 		
-		response.sendRedirect(holder.getValitorURL());*/
+		response.sendRedirect(holder.getValitorURL());
 	}
 
 }

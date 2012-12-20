@@ -35,7 +35,7 @@ public class ValitorGiftCardCancel extends HttpServlet {
 			WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 			PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 	
-			service.markRegistrationAsPaymentCancelled(iwc.getParameter("uniqueID"));
+			service.markGiftCardAsPaymentCancelled(iwc.getParameter("uniqueID"));
 			out.println("The Valitor cancellation response has been processed...");
 		}
 		else {
