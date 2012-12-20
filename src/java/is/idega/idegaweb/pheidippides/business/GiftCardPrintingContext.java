@@ -50,7 +50,7 @@ public class GiftCardPrintingContext extends PrintingContextImpl {
 		addDocumentProperties(props);
 		setResourceDirectory(new File(getResourceRealPath(getBundle(iwac), locale)));
 		try {
-			File file = FileUtil.getFileFromWorkspace(getResourceRealPath(getBundle(iwac), locale) + "/" + "gift_card_template.xml");
+			File file = FileUtil.getFileFromWorkspace(getResourceRealPath(getBundle(iwac), locale) + "gift_card_template.xml");
 			setTemplateStream(new FileInputStream(file));
 		}
 		catch (IOException e) {

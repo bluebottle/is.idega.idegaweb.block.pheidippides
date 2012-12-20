@@ -4,18 +4,24 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
 import is.idega.idegaweb.pheidippides.business.GiftCardSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.Participant;
 
+import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.FinderException;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.block.web2.business.JQuery;
 import com.idega.builder.bean.AdvancedProperty;
+import com.idega.business.IBORuntimeException;
 import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
@@ -43,6 +49,9 @@ public class GiftCardCreator extends IWBaseComponent {
 	@Autowired
 	private PheidippidesService service;
 
+	@Autowired
+	private PheidippidesDao dao;
+	
 	@Autowired
 	private GiftCardSession session;
 
@@ -121,6 +130,31 @@ public class GiftCardCreator extends IWBaseComponent {
 				break;
 				
 			case ACTION_SAVE:
+				if (iwc.isParameterSet("Tilvisunarnumer")) {
+					try {
+						String referenceNumber = iwc.getParameter("Tilvisunarnumer");
+						GiftCardHeader header = getDao().getGiftCardHeader(referenceNumber);
+						Participant participant = getService().getParticipant(getService().getUserBusiness().getUserByUniqueId(header.getBuyer()));
+						
+						bean.setHeader(header);
+						bean.setName(participant.getFullName());
+						
+						List<GiftCard> cards = getDao().getGiftCards(header);
+						bean.setCount(cards.size());
+						
+						int amount = 0;
+						for (GiftCard giftCard : cards) {
+							amount += giftCard.getAmount();
+						}
+						bean.setTotalAmount(amount);
+					}
+					catch (RemoteException re) {
+						throw new IBORuntimeException(re);
+					}
+					catch (FinderException fe) {
+						fe.printStackTrace();
+					}
+				}
 				save(iwc, bean);
 				break;
 		}
@@ -170,8 +204,6 @@ public class GiftCardCreator extends IWBaseComponent {
 	}
 	
 	private void save(IWContext iwc, GiftCardBean bean) {
-		bean.setName(getService().getParticipant(iwc.getParameter(PARAMETER_PERSONAL_ID)).getFullName());
-		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/save.xhtml"));
 		add(facelet);
@@ -192,6 +224,14 @@ public class GiftCardCreator extends IWBaseComponent {
 		}
 		
 		return service;
+	}
+	
+	private PheidippidesDao getDao() {
+		if (dao == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return dao;
 	}
 
 	private GiftCardSession getSession() {

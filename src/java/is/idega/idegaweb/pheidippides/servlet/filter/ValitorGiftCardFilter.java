@@ -38,7 +38,6 @@ public class ValitorGiftCardFilter extends BaseFilter {
 		GiftCardSession session = (GiftCardSession) springContext.getBean("giftCardSession");
 		
 		GiftCardAnswerHolder holder = service.storeGiftCard(session.getCards(), session.getCreatorUUID(), session.getEmail(), session.getLocale(), true);
-		session.empty();
 		
 		response.sendRedirect(holder.getValitorURL());
 	}

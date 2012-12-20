@@ -1,5 +1,7 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -18,6 +20,11 @@ public class GiftCardBean {
 	private List<AdvancedProperty> counts;
 	
 	private String name;
+	
+	private GiftCardHeader header;
+
+	private int count;
+	private int totalAmount;
 
 	public Locale getLocale() {
 		return locale;
@@ -49,5 +56,29 @@ public class GiftCardBean {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public GiftCardHeader getHeader() {
+		return header;
+	}
+
+	public void setHeader(GiftCardHeader header) {
+		this.header = header;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 }

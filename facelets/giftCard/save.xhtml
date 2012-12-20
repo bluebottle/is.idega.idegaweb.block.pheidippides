@@ -20,19 +20,23 @@
 		<fieldset class="formSection">
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
-				<span><h:outputText value="#{giftCardBean.participant.name}" /></span>
+				<span><h:outputText value="#{giftCardBean.name}" /></span>
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
-				<span><h:outputText value="#{giftCardSession.email}" /></span>
+				<span><h:outputText value="#{giftCardBean.header.email}" /></span>
+			</div>
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.issue_date']}" /></label>
+				<span><h:outputText value="#{giftCardBean.header.validFrom}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></span>
 			</div>
 			<div class="formItem">
 				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.count']}" /></label>
-				<span><h:outputText value="#{giftCardSession.count}" /></span>
+				<span><h:outputText value="#{giftCardBean.count}" /></span>
 			</div>
 			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.count']}" /></label>
-				<span><h:outputText value="#{giftCardSession.totalAmount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></span>
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.total_amount']}" /></label>
+				<span><h:outputText value="#{giftCardBean.totalAmount}"><f:convertNumber integerOnly="true" maxFractionDigits="0" type="currency" locale="#{giftCardBean.locale}" /></h:outputText></span>
 			</div>
 		</fieldset>
 		
