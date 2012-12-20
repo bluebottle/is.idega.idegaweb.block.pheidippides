@@ -3377,7 +3377,7 @@ public class PheidippidesService {
 				.getProperty(VALITOR_RETURN_URL_GIFTCARD_CANCEL,
 						"http://skraning.marathon.is/pages/valitorGiftCard");
 
-		String currency = "ISK";
+		Currency currency = Currency.ISK;
 
 		StringBuilder securityString = null;
 		if (currency != null) {
@@ -3411,7 +3411,15 @@ public class PheidippidesService {
 		url.append("&");
 		url.append(GJALDMIDILL);
 		url.append("=");
-		url.append(currency);
+		if (currency != null) {
+			if (currency.equals(Currency.ISK)) {
+				url.append("ISK");
+			} else {
+				url.append("EUR");
+			}
+		} else {
+			url.append("ISK");
+		}
 		url.append("&");
 		url.append(ADEINSHEIMILD);
 		url.append("=");
