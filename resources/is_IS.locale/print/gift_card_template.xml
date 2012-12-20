@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="70" margin-right="70" margin-top="410" margin-bottom="70">
+	
+	<register-font family="chancery" source="apple_chancery.ttf"/>
+
+	<font-def name="normal" family="Helvetica" size="17.26" style="normal"/>
+	<font-def name="amount" family="chancery" size="39.25" style="normal"/>
+	<font-def name="amountText" family="chancery" size="17.26" style="normal"/>
+
+	<overlay source="giftcard_IS.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="-109" y="-199" />
+
+	<paragraph font="amount" halign="center" spacing-after="12.0">
+		${amount}
+	</paragraph>
+	<paragraph font="amountText" halign="center" spacing-after="6.0">
+		${amountText}
+	</paragraph>
+	<paragraph font="amountText" halign="center">
+		Veflykill þinn er: <phrase font="normal">${key}</phrase>
+	</paragraph>
+</document>
