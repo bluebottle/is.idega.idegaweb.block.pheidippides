@@ -11,6 +11,9 @@ import org.ujac.print.DocumentHandlerException;
 import org.ujac.print.DocumentPrinter;
 import org.ujac.util.io.FileResourceLoader;
 
+import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
+
 public class PDFTest {
 
 	public static void main(String[] args) {
@@ -20,6 +23,7 @@ public class PDFTest {
 			documentProperties.put("amount", "35.000 kr.");
 			documentProperties.put("amountText", "Þrjátíu og fimm þúsund krónur");
 			documentProperties.put("key", "0123456789ABCDEFGH");
+			documentProperties.put("created", IWTimestamp.RightNow().getDateString("d. MMMM yyyy", LocaleUtil.getIcelandicLocale()));
 			
 			// instantiating the document printer
 			FileInputStream templateStream = new FileInputStream("/Users/laddi/Development/idega/git-repo-v4/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/src/java/is/idega/idegaweb/pheidippides/test/template.xml");
