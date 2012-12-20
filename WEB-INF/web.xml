@@ -30,7 +30,7 @@
 
 	<servlet>
 		<display-name>Valitor Gift Card Cancellation</display-name>
-		<servlet-name>ValitorCancel</servlet-name>
+		<servlet-name>ValitorGiftCardCancel</servlet-name>
 		<servlet-class>is.idega.idegaweb.pheidippides.servlet.ValitorGiftCardCancel</servlet-class>
 	</servlet>
 
