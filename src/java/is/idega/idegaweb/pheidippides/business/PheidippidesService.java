@@ -99,6 +99,7 @@ import com.idega.util.text.SocialSecurityNumber;
 @Service("pheidippidesService")
 public class PheidippidesService {
 
+	private static final int CHILD_DISCOUNT_AGE = 17;
 	private static final String RAFRAEN_UNDIRSKRIFT = "RafraenUndirskrift";
 	private static final String SLOD_NOTANDI_HAETTIR_VID = "SlodNotandiHaettirVid";
 	private static final String SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE = "SlodTokstAdGjaldfaeraServerSide";
@@ -1508,7 +1509,7 @@ public class PheidippidesService {
 				Participant participant = participantHolder.getParticipant();
 
 				Age age = new Age(participant.getDateOfBirth());
-				if (age.getYears() <= 16) {
+				if (age.getYears() <= CHILD_DISCOUNT_AGE) {
 					if (price.getPriceKids() > 0) {
 						participantHolder.setAmount(price.getPriceKids());
 					} else {
@@ -1519,7 +1520,7 @@ public class PheidippidesService {
 				}
 
 				if (race.isFamilyDiscount()) {
-					if (age.getYears() <= 16) {
+					if (age.getYears() <= CHILD_DISCOUNT_AGE) {
 						childCount++;
 					}
 
@@ -1540,7 +1541,7 @@ public class PheidippidesService {
 			Participant participant = current.getParticipant();
 
 			Age age = new Age(participant.getDateOfBirth());
-			if (age.getYears() <= 16) {
+			if (age.getYears() <= CHILD_DISCOUNT_AGE) {
 				if (price.getPriceKids() > 0) {
 					current.setAmount(price.getPriceKids());
 				} else {
@@ -1551,7 +1552,7 @@ public class PheidippidesService {
 			}
 
 			if (race.isFamilyDiscount()) {
-				if (age.getYears() <= 16) {
+				if (age.getYears() <= CHILD_DISCOUNT_AGE) {
 					childCount++;
 				}
 
