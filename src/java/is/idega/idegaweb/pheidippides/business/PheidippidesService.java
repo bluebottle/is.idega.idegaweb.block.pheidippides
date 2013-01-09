@@ -189,12 +189,16 @@ public class PheidippidesService {
 		List<Race> races = getOpenRaces(eventPK, year, showRelayRaces);
 		List<Race> availableRaces = new ArrayList<Race>();
 
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
+		
 		Date dateOfBirth = participant.getDateOfBirth();
 		if (dateOfBirth != null) {
 			Age age = new Age(dateOfBirth);
 			for (Race race : races) {
-				if (race.getMinimumAge() <= age.getYears()
-						&& race.getMaximumAge() >= age.getYears()) {
+				if (race.getMinimumAge() <= age.getYears(endOfYear.getDate())
+						&& race.getMaximumAge() >= age.getYears(endOfYear.getDate())) {
 					boolean addRace = true;
 					if (showRelayRaces
 							&& participant.getUuid() != null
@@ -218,11 +222,15 @@ public class PheidippidesService {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
 
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
+		
 		if (dateOfBirth != null) {
 			Age age = new Age(dateOfBirth);
 			for (Race race : races) {
-				if (race.getMinimumAge() <= age.getYears()
-						&& race.getMaximumAge() >= age.getYears()) {
+				if (race.getMinimumAge() <= age.getYears(endOfYear.getDate())
+						&& race.getMaximumAge() >= age.getYears(endOfYear.getDate())) {
 					availableRaces.add(race);
 				}
 			}
@@ -1498,6 +1506,9 @@ public class PheidippidesService {
 	public void calculatePrices(ParticipantHolder current,
 			List<ParticipantHolder> holder,
 			boolean isRegistrationWithPersonalID, Currency fixedCurrency) {
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
 		int childCount = 0;
 		if (holder != null && !holder.isEmpty()) {
 			for (ParticipantHolder participantHolder : holder) {
@@ -1509,7 +1520,7 @@ public class PheidippidesService {
 				Participant participant = participantHolder.getParticipant();
 
 				Age age = new Age(participant.getDateOfBirth());
-				if (age.getYears() <= CHILD_DISCOUNT_AGE) {
+				if (age.getYears(endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
 					if (price.getPriceKids() > 0) {
 						participantHolder.setAmount(price.getPriceKids());
 					} else {
@@ -1520,7 +1531,7 @@ public class PheidippidesService {
 				}
 
 				if (race.isFamilyDiscount()) {
-					if (age.getYears() <= CHILD_DISCOUNT_AGE) {
+					if (age.getYears(endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
 						childCount++;
 					}
 
@@ -1541,7 +1552,7 @@ public class PheidippidesService {
 			Participant participant = current.getParticipant();
 
 			Age age = new Age(participant.getDateOfBirth());
-			if (age.getYears() <= CHILD_DISCOUNT_AGE) {
+			if (age.getYears(endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
 				if (price.getPriceKids() > 0) {
 					current.setAmount(price.getPriceKids());
 				} else {
@@ -1552,7 +1563,7 @@ public class PheidippidesService {
 			}
 
 			if (race.isFamilyDiscount()) {
-				if (age.getYears() <= CHILD_DISCOUNT_AGE) {
+				if (age.getYears(endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
 					childCount++;
 				}
 
