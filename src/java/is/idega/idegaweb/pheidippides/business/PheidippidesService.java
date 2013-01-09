@@ -38,8 +38,10 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1383,7 +1385,7 @@ public class PheidippidesService {
 	}
 
 	public static void main(String args[]) {
-		PheidippidesService service = new PheidippidesService();
+		/*PheidippidesService service = new PheidippidesService();
 		String uuid = service
 				.createValitorSecurityString("12345011999018536035056191428820http://www.mbl.ishttp://www.visir.isISK");
 		uuid = service
@@ -1403,9 +1405,21 @@ public class PheidippidesService {
 		builder.append("&SlodNotandiHaettirVid=http://www.bleikt.is")
 				.append("&RafraenUndirskrift=").append(uuid);
 
-		System.out.println("url = " + builder.toString());
-	}
+		System.out.println("url = " + builder.toString());*/
+		
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
 
+		
+		IWTimestamp dob = new IWTimestamp(25,1,1996);
+		Age age = new Age(dob.getDate());
+		System.out.println("date = " + endOfYear.getDateString("dd.MM.yyyy"));
+		System.out.println("age = " + age.getYears());
+		System.out.println("age = " + age.getYears(endOfYear.getDate()));
+
+	}
+	
 	public User saveUser(Name fullName, IWTimestamp dateOfBirth, Gender gender,
 			String address, String postal, String city, Country country) {
 		User user = null;
@@ -3708,6 +3722,5 @@ public class PheidippidesService {
 			System.err.println("Exception when sending mail to address: "
 					+ email + " Message was: " + e.getMessage());
 		}
-	}
-
+	}	
 }

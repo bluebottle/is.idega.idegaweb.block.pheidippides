@@ -91,7 +91,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
-		getSession().setCurrency(Currency.ISK);
+		getSession().setCurrency(null);//Currency.ISK);
 
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
