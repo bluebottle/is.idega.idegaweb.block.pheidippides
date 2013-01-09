@@ -189,12 +189,16 @@ public class PheidippidesService {
 		List<Race> races = getOpenRaces(eventPK, year, showRelayRaces);
 		List<Race> availableRaces = new ArrayList<Race>();
 
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
+		
 		Date dateOfBirth = participant.getDateOfBirth();
 		if (dateOfBirth != null) {
 			Age age = new Age(dateOfBirth);
 			for (Race race : races) {
-				if (race.getMinimumAge() <= age.getYears()
-						&& race.getMaximumAge() >= age.getYears()) {
+				if (race.getMinimumAge() <= age.getYears(endOfYear.getDate())
+						&& race.getMaximumAge() >= age.getYears(endOfYear.getDate())) {
 					boolean addRace = true;
 					if (showRelayRaces
 							&& participant.getUuid() != null
@@ -218,11 +222,15 @@ public class PheidippidesService {
 		List<Race> races = getOpenRaces(eventPK, year);
 		List<Race> availableRaces = new ArrayList<Race>();
 
+		IWTimestamp endOfYear = new IWTimestamp();
+		endOfYear.setMonth(12);
+		endOfYear.setDay(31);
+		
 		if (dateOfBirth != null) {
 			Age age = new Age(dateOfBirth);
 			for (Race race : races) {
-				if (race.getMinimumAge() <= age.getYears()
-						&& race.getMaximumAge() >= age.getYears()) {
+				if (race.getMinimumAge() <= age.getYears(endOfYear.getDate())
+						&& race.getMaximumAge() >= age.getYears(endOfYear.getDate())) {
 					availableRaces.add(race);
 				}
 			}
