@@ -91,7 +91,12 @@ public class MHRegistrationForm extends IWBaseComponent {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
-		getSession().setCurrency(null);//Currency.ISK);
+		if (getSession().getLocale().equals(LocaleUtil.getIcelandicLocale())) {
+			getSession().setCurrency(Currency.ISK);
+		}
+		else {
+			getSession().setCurrency(Currency.EUR);
+		}
 
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
@@ -186,7 +191,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_RACE)) {
 							getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
-							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK));
+							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().getCurrency()));
 						}
 						
 						showTrinketsSelect(iwc, bean);
@@ -198,7 +203,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
-						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), Currency.ISK);
+						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().getCurrency());
 						getSession().getCurrentParticipant().clearTrinkets();
 						for (RacePrice racePrice : raceTrinkets) {
 							if (iwc.getBooleanParameter(racePrice.getTrinket().getParamName())) {
@@ -217,7 +222,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
 						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
-						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), Currency.ISK);
+						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), null);
 					}
 					else {
 						getSession().setCurrentParticipant(getSession().getParticipantHolders().get(getSession().getParticipantHolders().size() - 1));
@@ -230,7 +235,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
 						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
 						
-						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, Currency.ISK);
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null);
 						bean.setAnswer(answer);
 						getSession().empty();
 						
