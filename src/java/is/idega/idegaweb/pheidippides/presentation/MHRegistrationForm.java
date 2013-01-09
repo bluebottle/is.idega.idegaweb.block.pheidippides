@@ -91,7 +91,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
-		if (getSession().getLocale().equals(LocaleUtil.getIcelandicLocale())) {
+		if (getSession().getLocale().equals(LocaleUtil.getIcelandicLocale()) || getSession().isRegistrationWithPersonalId()) {
 			getSession().setCurrency(Currency.ISK);
 		}
 		else {
