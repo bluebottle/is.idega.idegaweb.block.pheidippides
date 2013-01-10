@@ -81,6 +81,7 @@ public class CompanyEditor extends IWBaseComponent implements
 				.getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery()
 				.getBundleURISToValidation());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/pheidippides.js"));
 		PresentationUtil
 				.addJavaScriptSourceLineToHeader(
 						iwc,

@@ -3,10 +3,19 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
-            10: { 
+        	2: {
+        		sorter: 'datetime'
+        	},
+        	3: {
+        		sorter: 'datetime'
+        	},
+        	10: {
+        		sorter: 'datetime'
+        	},
+            11: { 
                 sorter: false 
             },
-            11: { 
+            12: { 
                 sorter: false 
             } 
         } 

@@ -1,15 +1,17 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
-	jQuery("table.adminTable").tablesorter({ 
-        headers: { 
+	jQuery("table.adminTable").tablesorter({
+		dateFormat: 'dd.mm.yyyy',
+		textSorter: sortBy,
+        headers: {
+        	4: {
+        		sorter: 'datetime'
+        	},
             5: { 
                 sorter: false 
             }, 
             6: { 
-                sorter: false 
-            }, 
-            7: { 
                 sorter: false 
             } 
         } 

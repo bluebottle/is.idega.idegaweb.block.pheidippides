@@ -134,17 +134,17 @@ table.adminTable tr .action {
 	width: 16px;
 }
 
-table.adminTable th.header {
+table.adminTable th.tablesorter-header {
 	background: url(images/bg.gif) 5px center no-repeat;
 	padding-left: 16px;
 }
 
-table.adminTable th.headerSortDown {
+table.adminTable th.tablesorter-headerAsc {
 	background-image: url(images/asc.gif);
 	background-color: #eee;
 }
 
-table.adminTable th.headerSortUp {
+table.adminTable th.tablesorter-headerDesc {
 	background-image: url(images/desc.gif);
 	background-color: #eee;
 }

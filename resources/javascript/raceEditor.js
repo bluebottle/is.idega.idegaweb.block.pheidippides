@@ -3,9 +3,18 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
+        	5: {
+        		sorter: 'datetime'
+        	},
+        	6: {
+        		sorter: 'datetime'
+        	},
             8: { 
                 sorter: false 
             }, 
+        	9: {
+        		sorter: 'datetime'
+        	},
             10: { 
                 sorter: false 
             },

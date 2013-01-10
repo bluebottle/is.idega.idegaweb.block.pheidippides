@@ -3,25 +3,20 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
 		cssChildRow: 'childRow',
-        headers: { 
+		textSorter: sortBy,
+        headers: {
+        	2: {
+        		sorter: 'personalId'
+        	},
             4: { 
                 sorter: false 
             }, 
             5: { 
                 sorter: false 
-            }, 
-            6: { 
-                sorter: false 
-            }, 
-            7: { 
-                sorter: false 
-            }, 
-            8: { 
-                sorter: false 
             }
         } 
-	}); 
-	
+	});
+
 	jQuery('.dwrEnabled').change(function() {
 		var eventPK = jQuery('select[name="prm_event_pk"]').val();
 		var year = jQuery('select[name="prm_year"]').val();

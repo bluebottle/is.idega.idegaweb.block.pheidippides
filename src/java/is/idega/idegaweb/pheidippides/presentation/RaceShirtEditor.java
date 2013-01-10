@@ -78,6 +78,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		scripts.add(jQuery.getBundleURIToJQueryUILib("1.6rc5/datepicker/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
 
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/pheidippides.js"));
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/raceShirtEditor.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());

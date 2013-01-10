@@ -3,6 +3,9 @@ jQuery.noConflict();
 jQuery(document).ready(function() {
 	jQuery("table.adminTable").tablesorter({ 
         headers: { 
+        	5: {
+        		sorter: 'datetime'
+        	},
             6: { 
                 sorter: false 
             }, 
