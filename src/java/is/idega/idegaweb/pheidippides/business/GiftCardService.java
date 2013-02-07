@@ -37,15 +37,18 @@ public class GiftCardService {
 	
 	public GiftCardUsage reserveGiftCard(GiftCard card, int amount, RegistrationHeader header) {
 		if (card == null || amount <= 0) {
+			System.out.println(amount);
 			return null;
 		}
 		
 		GiftCardStatus status = getGiftCardStatus(card);
 		if (!status.isValid()) {
+			System.out.println(status.isValid());
 			return null;
 		}
 		
 		if (status.getOriginalAmount() - status.getUsedAmount() == 0) {
+			System.out.println(status.getOriginalAmount() + " - " + status.getUsedAmount());
 			return null;
 		}
 		

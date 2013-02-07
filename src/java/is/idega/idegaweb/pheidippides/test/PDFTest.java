@@ -20,10 +20,10 @@ public class PDFTest {
 		try {
 			// defining the document properties, this map is used for dynamical content evaluation.
 			Map<String, String> documentProperties = new HashMap<String, String>();
-			documentProperties.put("amount", "35.000 kr.");
-			documentProperties.put("amountText", "Þrjátíu og fimm þúsund krónur");
-			documentProperties.put("key", "0123456789ABCDEFGH");
-			documentProperties.put("created", IWTimestamp.RightNow().getDateString("d. MMMM yyyy", LocaleUtil.getIcelandicLocale()));
+			documentProperties.put("amount", "4.000 kr.");
+			documentProperties.put("amountText", "fjögur þúsund krónur");
+			documentProperties.put("key", "QAXOEVXSPHEUQI2E");
+			documentProperties.put("created", new IWTimestamp(9, 1, 2013).getDateString("d. MMMM yyyy", LocaleUtil.getIcelandicLocale()));
 			
 			// instantiating the document printer
 			FileInputStream templateStream = new FileInputStream("/Users/laddi/Development/idega/git-repo-v4/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/src/java/is/idega/idegaweb/pheidippides/test/template.xml");

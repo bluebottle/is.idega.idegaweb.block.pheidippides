@@ -3,12 +3,14 @@ package is.idega.idegaweb.pheidippides.presentation;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardService;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 
@@ -47,6 +49,9 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_OVERVIEW = 6;
 	private static final int ACTION_RECEIPT = 7;
 	private static final int ACTION_REGISTER_ANOTHER = 8;
+	private static final int ACTION_GIFT_CARD = 9;
+	private static final int ACTION_ADD_GIFT_CARD = 10;
+	private static final int ACTION_REMOVE_GIFT_CARD = 11;
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_RACE = "prm_race_pk";
@@ -61,12 +66,16 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
+	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 	
 	@Autowired
 	private PheidippidesService service;
 
 	@Autowired
 	private PheidippidesRegistrationSession session;
+
+	@Autowired
+	private GiftCardService giftCardService;
 
 	@Autowired
 	private PheidippidesDao dao;
@@ -235,7 +244,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
 						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
 						
-						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null);
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null, getSession().getGiftCards());
 						bean.setAnswer(answer);
 						getSession().empty();
 						
@@ -262,7 +271,33 @@ public class MHRegistrationForm extends IWBaseComponent {
 						showParticipant(iwc, bean);
 					}
 					break;
-			}
+					
+				case ACTION_GIFT_CARD:
+					showGiftCard(iwc, bean);
+					break;
+					
+				case ACTION_ADD_GIFT_CARD:
+					if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+						GiftCardUsage usage = getGiftCardService().reserveGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD), getSession().getTotalAmount(), null);
+						if (usage != null) {
+							getSession().addGiftCard(usage);
+						}
+					}
+					
+					showOverview(iwc, bean);
+					break;
+					
+				case ACTION_REMOVE_GIFT_CARD:
+					if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+						GiftCardUsage usage = getDao().getGiftCardUsage(Long.parseLong(iwc.getParameter(PARAMETER_GIFT_CARD)));
+						if (usage != null) {
+							getSession().removeGiftCard(usage);
+						}
+					}
+					
+					showOverview(iwc, bean);
+					break;
+}
 		}
 		else {
 			add(new Text("No event selected..."));
@@ -324,6 +359,12 @@ public class MHRegistrationForm extends IWBaseComponent {
 		add(facelet);
 	}
 
+	private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/giftCard.xhtml"));
+		add(facelet);
+	}
+
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
@@ -342,6 +383,14 @@ public class MHRegistrationForm extends IWBaseComponent {
 		}
 		
 		return session;
+	}
+
+	private GiftCardService getGiftCardService() {
+		if (giftCardService == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		
+		return giftCardService;
 	}
 
 	private PheidippidesDao getDao() {

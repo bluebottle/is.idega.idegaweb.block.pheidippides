@@ -62,6 +62,20 @@
 							</tr>
 						</ui:repeat>
 					</ui:fragment>
+					
+					<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
+						<tr class="giftCard">
+							<td class="firstColumn" colspan="3">
+								<h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card']}" />: <code><h:outputText value="#{giftCard.card.code}" /></code>
+								<h:outputLink title="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" styleClass="removeGiftCard">
+									<f:param name="prm_gift_card" value="#{giftCard.id}" />
+									<f:param name="prm_action" value="12" />
+									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove']}" /></span>
+								</h:outputLink>
+							</td>
+							<td class="lastColumn">-<h:outputText value="#{giftCard.amount}" /></td>
+						</tr>
+					</ui:repeat>
 				</tbody>
 			</table>
 		</fieldset>
@@ -73,6 +87,7 @@
 			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
 				<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
 			</ui:fragment>
+			<a href="#" class="next" rel="10"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
 		</fieldset>
 	</form>
 </ui:component>

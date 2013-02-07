@@ -39,10 +39,9 @@ public class ValitorFilter extends BaseFilter {
 		
 		session.addParticipantHolder(session.getCurrentParticipant());
 		
-		RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency());
+		RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards());
 		session.empty();
 		
 		response.sendRedirect(holder.getValitorURL());
 	}
-
 }

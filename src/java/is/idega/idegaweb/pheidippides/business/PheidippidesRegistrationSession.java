@@ -1,5 +1,7 @@
 package is.idega.idegaweb.pheidippides.business;
 
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +19,7 @@ public class PheidippidesRegistrationSession {
 	private ParticipantHolder currentParticipant;
 	private Locale locale;
 	private Currency currency;
+	private List<GiftCardUsage> giftCards = null;
 
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
@@ -42,6 +45,7 @@ public class PheidippidesRegistrationSession {
 		this.registrationWithPersonalId = false;
 		this.holders = null;
 		this.currentParticipant = null;
+		this.giftCards = null;
 	}
 
 	public String getRegistrantUUID() {
@@ -74,5 +78,42 @@ public class PheidippidesRegistrationSession {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+	
+	public void addGiftCard(GiftCardUsage card) {
+		if (giftCards == null) {
+			giftCards = new ArrayList<GiftCardUsage>();
+		}
+		
+		giftCards.add(card);
+	}
+	
+	public void removeGiftCard(GiftCardUsage card) {
+		giftCards.remove(card);
+	}
+	
+	public List<GiftCardUsage> getGiftCards() {
+		return giftCards;
+	}
+	
+	public int getTotalAmount() {
+		int amount = 0;
+		
+		if (holders != null) {
+			for (ParticipantHolder holder : holders) {
+				amount += holder.getAmount() - holder.getDiscount();
+			}
+		}
+		
+		ParticipantHolder current = getCurrentParticipant();
+		amount += current.getAmount() - current.getDiscount();
+		
+		if (giftCards != null) {
+			for (GiftCardUsage usage : giftCards) {
+				amount -= usage.getAmount();
+			}
+		}
+		
+		return amount;
 	}
 }
