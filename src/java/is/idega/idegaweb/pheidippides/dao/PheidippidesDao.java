@@ -2,6 +2,7 @@ package is.idega.idegaweb.pheidippides.dao;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
@@ -264,10 +265,16 @@ public interface PheidippidesDao extends GenericDao {
 			int amount, String amountText, String greetingText);
 	
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card);
+	
+	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header, GiftCardUsageStatus status);
 
 	public int getGiftCardUsageSum(GiftCard card);
 
-	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount);
+	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount, GiftCardUsageStatus status);
+
+	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage, RegistrationHeader header, GiftCardUsageStatus status);
+	
+	public boolean removeGiftCardUsage(GiftCardUsage usage);
 	
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID);
 	

@@ -2,6 +2,7 @@ package is.idega.idegaweb.pheidippides.dao.impl;
 
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
@@ -1155,24 +1156,51 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card) {
 		return getResultList("giftCardUsage.findAllByGiftCard", GiftCardUsage.class, new Param("card", card));
 	}
-	
+
+	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header, GiftCardUsageStatus status) {
+		return getResultList("giftCardUsage.findAllByRegistrationHeaderAndStatus", GiftCardUsage.class, new Param("header", header), new Param("status", status));
+	}
+
 	public int getGiftCardUsageSum(GiftCard card) {
 		return getSingleResult("giftCardUsage.sumByGiftCard", Integer.class,
 				new Param("card", card)).intValue();
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount) {
+	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount, GiftCardUsageStatus status) {
 		GiftCardUsage usage = new GiftCardUsage();
 		usage.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		usage.setCard(card);
-		usage.setHeader(header);
+		if (header != null) {
+			usage.setHeader(header);
+		}
 		usage.setAmount(amount);
+		usage.setStatus(status);
 		
 		getEntityManager().persist(usage);
 
 		return usage;	
 	}
+
+	@Transactional(readOnly = false)
+	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage, RegistrationHeader header, GiftCardUsageStatus status) {
+		if (header != null) {
+			usage.setHeader(header);
+		}
+		usage.setStatus(status);
+		
+		getEntityManager().persist(usage);
+
+		return usage;	
+	}
+
+	@Transactional(readOnly = false)
+	public boolean removeGiftCardUsage(GiftCardUsage usage) {
+		getEntityManager().remove(usage);
+		
+		return true;
+	}
+
 	
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID) {
 		return find(GiftCardUsage.class, giftCardUsageID);
@@ -1182,8 +1210,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public boolean removeGiftCardUsage(Long giftCardUsageID) {
 		GiftCardUsage usage = getGiftCardUsage(giftCardUsageID);
 		if (usage != null) {
-			getEntityManager().remove(usage);
-			return true;
+			return removeGiftCardUsage(usage);
 		}
 
 		return false;

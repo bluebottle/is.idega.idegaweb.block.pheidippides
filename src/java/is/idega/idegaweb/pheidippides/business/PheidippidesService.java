@@ -8,6 +8,7 @@ import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.GiftCard;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
@@ -38,10 +39,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -924,7 +923,7 @@ public class PheidippidesService {
 	public RegistrationAnswerHolder storeRegistration(
 			List<ParticipantHolder> holders, boolean doPayment,
 			String registrantUUID, boolean createUsers, Locale locale,
-			String paymentGroup, boolean isBankTransfer, Currency fixedCurrency) {
+			String paymentGroup, boolean isBankTransfer, Currency fixedCurrency, List<GiftCardUsage> giftCardUsage) {
 
 		RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
@@ -1381,6 +1380,10 @@ public class PheidippidesService {
 			holder.setValitorURL(url.toString());
 		}
 
+		for (GiftCardUsage usage : giftCardUsage) {
+			dao.updateGiftCardUsage(usage, holder.getHeader(), GiftCardUsageStatus.Reservation);
+		}
+		
 		return holder;
 	}
 
@@ -2137,6 +2140,11 @@ public class PheidippidesService {
 			}
 		}
 
+		List<GiftCardUsage> usage = dao.getGiftCardUsage(header, GiftCardUsageStatus.Reservation);
+		for (GiftCardUsage giftCardUsage : usage) {
+			dao.removeGiftCardUsage(giftCardUsage);
+		}
+
 		return header;
 	}
 
@@ -2335,6 +2343,11 @@ public class PheidippidesService {
 			}
 		}
 
+		List<GiftCardUsage> usage = dao.getGiftCardUsage(header, GiftCardUsageStatus.Reservation);
+		for (GiftCardUsage giftCardUsage : usage) {
+			dao.updateGiftCardUsage(giftCardUsage, header, GiftCardUsageStatus.Confirmed);
+		}
+		
 		return header;
 	}
 

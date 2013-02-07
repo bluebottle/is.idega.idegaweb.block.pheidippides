@@ -1,10 +1,14 @@
 package is.idega.idegaweb.pheidippides.data;
 
+import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +24,7 @@ import javax.persistence.TemporalType;
 @Table(name = GiftCardUsage.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "giftCardUsage.findAllByGiftCard", query = "select g from GiftCardUsage g where g.card = :card"),
+	@NamedQuery(name = "giftCardUsage.findAllByRegistrationHeaderAndStatus", query = "select g from GiftCardUsage g where g.header = :header and g.status = :status"),
 	@NamedQuery(name = "giftCardUsage.sumByGiftCard", query = "select sum(g.amount) from GiftCardUsage g where g.card = :card")
 })
 public class GiftCardUsage implements Serializable {
@@ -31,6 +36,7 @@ public class GiftCardUsage implements Serializable {
 	private static final String COLUMN_REGISTRATION_HEADER = "registration_header";
 	private static final String COLUMN_AMOUNT = "amount";
 	private static final String COLUMN_CREATED_DATE = "created";
+	private static final String COLUMN_STATUS = "status";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,7 +58,10 @@ public class GiftCardUsage implements Serializable {
 	@Column(name = GiftCardUsage.COLUMN_CREATED_DATE)
 	private Date createdDate;
 
-	
+	@Column(name = GiftCardUsage.COLUMN_STATUS)
+	@Enumerated(EnumType.STRING)
+	private GiftCardUsageStatus status;
+
 	public Long getId() {
 		return id;
 	}
@@ -91,6 +100,14 @@ public class GiftCardUsage implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public GiftCardUsageStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(GiftCardUsageStatus status) {
+		this.status = status;
 	}
 
 }
