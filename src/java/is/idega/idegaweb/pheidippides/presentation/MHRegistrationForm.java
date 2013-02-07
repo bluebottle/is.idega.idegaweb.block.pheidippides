@@ -291,6 +291,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
 						GiftCardUsage usage = getDao().getGiftCardUsage(Long.parseLong(iwc.getParameter(PARAMETER_GIFT_CARD)));
 						if (usage != null) {
+							getGiftCardService().releaseGiftCardReservation(usage);
 							getSession().removeGiftCard(usage);
 						}
 					}

@@ -1195,6 +1195,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Transactional(readOnly = false)
 	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage,
 			RegistrationHeader header, GiftCardUsageStatus status) {
+		usage = getGiftCardUsage(usage.getId());
 		if (header != null) {
 			usage.setHeader(header);
 		}
@@ -1207,9 +1208,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Transactional(readOnly = false)
 	public boolean removeGiftCardUsage(GiftCardUsage usage) {
-		getEntityManager().remove(usage);
-
-		return true;
+		return removeGiftCardUsage(usage.getId());
 	}
 
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID) {
@@ -1220,7 +1219,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public boolean removeGiftCardUsage(Long giftCardUsageID) {
 		GiftCardUsage usage = getGiftCardUsage(giftCardUsageID);
 		if (usage != null) {
-			return removeGiftCardUsage(usage);
+			getEntityManager().remove(usage);
+			return true;
 		}
 
 		return false;

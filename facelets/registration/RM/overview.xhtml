@@ -9,6 +9,7 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="7" />
+		<input type="hidden" name="prm_gift_card" value="" />
 	
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
@@ -67,11 +68,9 @@
 						<tr class="giftCard">
 							<td class="firstColumn" colspan="3">
 								<h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card']}" />: <code><h:outputText value="#{giftCard.card.code}" /></code>
-								<h:outputLink title="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" styleClass="removeGiftCard">
-									<f:param name="prm_gift_card" value="#{giftCard.id}" />
-									<f:param name="prm_action" value="12" />
+								<a title="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" data-action="12" data-giftcard="#{giftCard.id}" class="removeGiftCard">
 									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove']}" /></span>
-								</h:outputLink>
+								</a>
 							</td>
 							<td class="lastColumn">-<h:outputText value="#{giftCard.amount}" /></td>
 						</tr>

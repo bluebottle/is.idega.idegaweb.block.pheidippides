@@ -173,4 +173,16 @@ jQuery(document).ready(function() {
 		form.validate().cancelSubmit = true;
 		form.submit();
 	});
+	
+	jQuery('a.removeGiftCard').click(function(event) {
+		event.preventDefault();
+
+		var link = jQuery(this);
+		jQuery('input[name="prm_action"]').val(link.data('action'));
+		jQuery('input[name="prm_gift_card"]').val(link.data('giftcard'));
+		
+		var form = jQuery('form.registrationForm');
+		form.validate().cancelSubmit = true;
+		form.submit();
+	})
 });
