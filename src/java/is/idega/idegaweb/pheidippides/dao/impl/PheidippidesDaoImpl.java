@@ -1032,25 +1032,26 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	public GiftCardHeader getGiftCardHeader(String uniqueID) {
-		return getSingleResult("giftCardHeader.findByUniqueID", GiftCardHeader.class,
-				new Param("uuid", uniqueID));
+		return getSingleResult("giftCardHeader.findByUniqueID",
+				GiftCardHeader.class, new Param("uuid", uniqueID));
 
 	}
 
 	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status) {
 		if (status == null) {
-			return getResultList("giftCardHeader.findAll", GiftCardHeader.class);			
+			return getResultList("giftCardHeader.findAll", GiftCardHeader.class);
 		} else {
-			return getResultList("giftCardHeader.findByStatus", GiftCardHeader.class, new Param("status", status));
+			return getResultList("giftCardHeader.findByStatus",
+					GiftCardHeader.class, new Param("status", status));
 		}
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCardHeader storeGiftCardHeader(
-			Long giftCardHeaderID, GiftCardHeaderStatus status,
-			String buyerUUID, String email, Date validFrom, Date validTo, String locale,
-			Currency currency, String securityString, String cardType,
-			String cardNumber, String paymentDate, String authorizationNumber,
+	public GiftCardHeader storeGiftCardHeader(Long giftCardHeaderID,
+			GiftCardHeaderStatus status, String buyerUUID, String email,
+			Date validFrom, Date validTo, String locale, Currency currency,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId) {
 		GiftCardHeader header = giftCardHeaderID != null ? getGiftCardHeader(giftCardHeaderID)
@@ -1068,18 +1069,18 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (email != null) {
 			header.setEmail(email);
 		}
-		
+
 		if (validFrom != null) {
 			header.setValidFrom(validFrom);
 		}
-		
+
 		if (validTo != null) {
 			header.setValidTo(validTo);
 		}
 
-		/*if (locale != null) {
-			header.setLocale(locale);
-		}*/
+		/*
+		 * if (locale != null) { header.setLocale(locale); }
+		 */
 
 		if (currency != null) {
 			header.setCurrency(currency);
@@ -1125,21 +1126,20 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		return header;
 
-		
 	}
 
-	
 	public GiftCard getGiftCard(String code) {
 		return getSingleResult("giftCard.findByCode", GiftCard.class,
 				new Param("code", code));
 	}
 
 	public List<GiftCard> getGiftCards(GiftCardHeader header) {
-		return getResultList("giftCard.findAll", GiftCard.class, new Param("header", header));
+		return getResultList("giftCard.findAll", GiftCard.class, new Param(
+				"header", header));
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
+	public GiftCard storeGiftCard(GiftCardHeader header, String code,
 			int amount, String amountText, String greetingText) {
 		GiftCard giftCard = new GiftCard();
 		giftCard.setHeader(header);
@@ -1147,27 +1147,37 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		giftCard.setAmount(amount);
 		giftCard.setAmountText(amountText);
 		giftCard.setGreeting(greetingText);
-		
+
 		getEntityManager().persist(giftCard);
 
 		return giftCard;
 	}
-	
+
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card) {
-		return getResultList("giftCardUsage.findAllByGiftCard", GiftCardUsage.class, new Param("card", card));
+		return getResultList("giftCardUsage.findAllByGiftCard",
+				GiftCardUsage.class, new Param("card", card));
 	}
 
-	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header, GiftCardUsageStatus status) {
-		return getResultList("giftCardUsage.findAllByRegistrationHeaderAndStatus", GiftCardUsage.class, new Param("header", header), new Param("status", status));
+	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header,
+			GiftCardUsageStatus status) {
+		return getResultList(
+				"giftCardUsage.findAllByRegistrationHeaderAndStatus",
+				GiftCardUsage.class, new Param("header", header), new Param(
+						"status", status));
 	}
 
 	public int getGiftCardUsageSum(GiftCard card) {
-		return getSingleResult("giftCardUsage.sumByGiftCard", Integer.class,
-				new Param("card", card));
+		try {
+			return getSingleResult("giftCardUsage.sumByGiftCard",
+					Integer.class, new Param("card", card));
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount, GiftCardUsageStatus status) {
+	public GiftCardUsage storeGiftCardUsage(GiftCard card,
+			RegistrationHeader header, int amount, GiftCardUsageStatus status) {
 		GiftCardUsage usage = new GiftCardUsage();
 		usage.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		usage.setCard(card);
@@ -1176,32 +1186,32 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 		usage.setAmount(amount);
 		usage.setStatus(status);
-		
+
 		getEntityManager().persist(usage);
 
-		return usage;	
+		return usage;
 	}
 
 	@Transactional(readOnly = false)
-	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage, RegistrationHeader header, GiftCardUsageStatus status) {
+	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage,
+			RegistrationHeader header, GiftCardUsageStatus status) {
 		if (header != null) {
 			usage.setHeader(header);
 		}
 		usage.setStatus(status);
-		
+
 		getEntityManager().persist(usage);
 
-		return usage;	
+		return usage;
 	}
 
 	@Transactional(readOnly = false)
 	public boolean removeGiftCardUsage(GiftCardUsage usage) {
 		getEntityManager().remove(usage);
-		
+
 		return true;
 	}
 
-	
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID) {
 		return find(GiftCardUsage.class, giftCardUsageID);
 	}
