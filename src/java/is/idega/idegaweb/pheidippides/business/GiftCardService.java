@@ -47,7 +47,7 @@ public class GiftCardService {
 			return null;
 		}
 		
-		if (status.getOriginalAmount() - status.getUsedAmount() == 0) {
+		if ((status.getOriginalAmount() - status.getUsedAmount()) <= 0) {
 			System.out.println(status.getOriginalAmount() + " - " + status.getUsedAmount());
 			return null;
 		}

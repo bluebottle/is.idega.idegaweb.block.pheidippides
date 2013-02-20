@@ -1169,8 +1169,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public int getGiftCardUsageSum(GiftCard card) {
 		try {
 			return getSingleResult("giftCardUsage.sumByGiftCard",
-					Integer.class, new Param("card", card));
+					Long.class, new Param("card", card)).intValue();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return 0;
 		}
 	}
