@@ -1,6 +1,7 @@
 package is.idega.idegaweb.pheidippides.data;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 public class Participant implements Serializable {
@@ -31,6 +32,8 @@ public class Participant implements Serializable {
 	private String relayLeg;
 	private ShirtSize shirtSize;
 	private Long registrationID;
+	
+	private Collection<Race> availableRaces;
 
 	public String getFirstName() {
 		return firstName;
@@ -259,5 +262,13 @@ public class Participant implements Serializable {
 
 	public void setRegistrationID(Long registrationID) {
 		this.registrationID = registrationID;
+	}
+
+	public Collection<Race> getAvailableRaces() {
+		return availableRaces;
+	}
+
+	public void setAvailableRaces(Collection<Race> availableRaces) {
+		this.availableRaces = availableRaces;
 	}
 }
