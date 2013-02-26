@@ -490,7 +490,7 @@ form.registrationForm fieldset.formSection div.formItem label.error,form.userFor
 }
 
 form.registrationForm fieldset.formSection div.formItem.required label:not
-	(.error ):after {
+	 (.error  ):after {
 	content: '*';
 	color: #a00;
 	padding-left: 4px;
@@ -916,4 +916,13 @@ table.giftCardTable .remove span {
 table.giftCardTable .remove:before {
 	content: '#';
 	font-family: 'Pictos';
+}
+
+ul.errors {
+	border: 2px #a00 solid;
+	background-color: #faa;
+	padding: 12px;
+	font-weight: bold;
+	font-size: 0.875em;
+	margin-bottom: 18px;
 }

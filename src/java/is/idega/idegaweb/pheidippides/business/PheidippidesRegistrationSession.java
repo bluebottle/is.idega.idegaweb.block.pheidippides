@@ -114,6 +114,10 @@ public class PheidippidesRegistrationSession {
 			}
 		}
 		
+		if (amount < 0) {
+			amount = 0;
+		}
+		
 		return amount;
 	}
 }

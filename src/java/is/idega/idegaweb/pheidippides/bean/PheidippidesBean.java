@@ -15,6 +15,7 @@ import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -88,6 +89,8 @@ public class PheidippidesBean {
 	private Map<Event, List<Race>> eventRacesMap;
 	private Map<Race, Long> participantCountMap;
 	private Map<Race, Long> deregisteredCountMap;
+	
+	private List<String> errors;
 
 	public String getAction() {
 		return action;
@@ -442,5 +445,17 @@ public class PheidippidesBean {
 	public void setRegistrationTrinkets(
 			Map<RaceTrinket, RegistrationTrinket> registrationTrinkets) {
 		this.registrationTrinkets = registrationTrinkets;
+	}
+	
+	public List<String> getErrors() {
+		return errors;
+	}
+	
+	public void addError(String error) {
+		if (errors == null) {
+			errors = new ArrayList<String>();
+		}
+		
+		errors.add(error);
 	}
 }

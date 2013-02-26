@@ -1,5 +1,6 @@
 accept_waiver=Yes, I accept waiver
 actions=Actions
+add_gift_card=Pay w/gift card
 address=Address
 age=Age
 all_races=All races
@@ -164,6 +165,7 @@ new_shirt_size=New shirt size
 new_trinket=New trinket
 next=Next
 no=No
+no_gift_card_found=No gift card was found or already used
 no_personal_id=I do not have an Icelandic personal ID (kennitala)
 none=None
 open=Open

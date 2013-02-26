@@ -11,11 +11,16 @@
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
 
-		<div class="receipt"><h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" /></div>
+		<ui:fragment rendered="#{pheidippidesBean.answer.amount gt 0}">
+			<div class="receipt"><h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" /></div>
 
-		<fieldset class="submit">
-			<a href="/pages/skraningmottekin/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
-		</fieldset>
+			<fieldset class="submit">
+				<a href="/pages/skraningmottekin/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
+			</fieldset>
+		</ui:fragment>
+		<ui:fragment rendered="#{pheidippidesBean.answer.amount eq 0}">
+			<div class="receipt"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt_no_payment')]}" /></div>
+		</ui:fragment>
 	</form>
 </ui:component>
 </html>

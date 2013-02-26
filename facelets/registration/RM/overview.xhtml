@@ -17,6 +17,14 @@
 		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.overview_help')]}" /></div>
 
 		<fieldset class="formSection">
+			<ui:fragment rendered="#{not empty pheidippidesBean.errors}">
+				<ul class="errors">
+					<ui:repeat value="#{pheidippidesBean.errors}" var="error">
+						<li><h:outputText value="#{error}" /></li>
+					</ui:repeat>
+				</ul>
+			</ui:fragment>
+	
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
@@ -82,11 +90,16 @@
 		<fieldset class="submit">
 			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
-			<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
-				<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
+			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount gt 0}">
+				<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
+				<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and empty pheidippidesRegistrationSession.giftCards}">
+					<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
+				</ui:fragment>
+				<a href="#" class="next" rel="10"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
 			</ui:fragment>
-			<a href="#" class="next" rel="10"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
+			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount eq 0}">
+				<a href="#" class="next" rel="13"><span><h:outputText value="#{localizedString['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
+			</ui:fragment>
 		</fieldset>
 	</form>
 </ui:component>

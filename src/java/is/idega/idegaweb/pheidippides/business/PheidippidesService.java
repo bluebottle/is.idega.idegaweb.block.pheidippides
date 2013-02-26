@@ -1056,22 +1056,24 @@ public class PheidippidesService {
 
 			int amount = 0;
 
-			for (GiftCardUsage usage : giftCardUsage) {
-				dao.updateGiftCardUsage(usage, holder.getHeader(), GiftCardUsageStatus.Reservation);
-				int discount = usage.getAmount();
-				for (ParticipantHolder participantHolder : holders) {
-					if (discount > 0) {
-						if ((participantHolder.getAmount() - participantHolder.getDiscount()) >= discount) {
-							participantHolder.setDiscount(participantHolder.getDiscount() + discount);
-							discount = 0;
-						} else {
-							discount -= (participantHolder.getAmount() - participantHolder.getDiscount());
-							participantHolder.setDiscount(participantHolder.getAmount());
+			if (giftCardUsage != null) {
+				for (GiftCardUsage usage : giftCardUsage) {
+					dao.updateGiftCardUsage(usage, holder.getHeader(), GiftCardUsageStatus.Reservation);
+					int discount = usage.getAmount();
+					for (ParticipantHolder participantHolder : holders) {
+						if (discount > 0) {
+							if ((participantHolder.getAmount() - participantHolder.getDiscount()) >= discount) {
+								participantHolder.setDiscount(participantHolder.getDiscount() + discount);
+								discount = 0;
+							} else {
+								discount -= (participantHolder.getAmount() - participantHolder.getDiscount());
+								participantHolder.setDiscount(participantHolder.getAmount());
+							}
 						}
 					}
 				}
 			}
-
+			
 			int counter = 1;
 			for (ParticipantHolder participantHolder : holders) {
 				User user = null;

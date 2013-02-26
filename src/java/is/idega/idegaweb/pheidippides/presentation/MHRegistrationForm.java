@@ -52,6 +52,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_GIFT_CARD = 9;
 	private static final int ACTION_ADD_GIFT_CARD = 10;
 	private static final int ACTION_REMOVE_GIFT_CARD = 11;
+	private static final int ACTION_FINISH_REGISTRATION = 12;
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_RACE = "prm_race_pk";
@@ -282,6 +283,9 @@ public class MHRegistrationForm extends IWBaseComponent {
 						if (usage != null) {
 							getSession().addGiftCard(usage);
 						}
+						else {
+							bean.addError(iwb.getResourceBundle(iwc).getLocalizedString("no_gift_card_found", "No gift card was found or already used"));
+						}
 					}
 					
 					showOverview(iwc, bean);
@@ -298,7 +302,22 @@ public class MHRegistrationForm extends IWBaseComponent {
 					
 					showOverview(iwc, bean);
 					break;
-}
+					
+				case ACTION_FINISH_REGISTRATION:
+					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null && getSession().getTotalAmount() == 0) {
+						getSession().addParticipantHolder(getSession().getCurrentParticipant());
+						
+						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, null, getSession().getGiftCards());
+						getService().markRegistrationAsPaid(answer.getHeader(), true, false, null, null, null, null, null, null, null, null, null);
+						bean.setAnswer(answer);
+						getSession().empty();
+						
+						showReceipt(iwc, bean);
+					}
+					else {
+						showPersonSelect(iwc, bean);
+					}
+			}
 		}
 		else {
 			add(new Text("No event selected..."));
