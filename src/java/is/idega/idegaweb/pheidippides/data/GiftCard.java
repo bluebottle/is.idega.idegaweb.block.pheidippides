@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +16,8 @@ import javax.persistence.Table;
 @Table(name = GiftCard.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "giftCard.findAll", query = "select g from GiftCard g where g.header = :header"),
-	@NamedQuery(name = "giftCard.findByCode", query = "select g from GiftCard g where g.code = :code")
+	@NamedQuery(name = "giftCard.findByCode", query = "select g from GiftCard g where g.code = :code"),
+	@NamedQuery(name = "giftCard.findByHeaderStatus", query = "select g from GiftCard g join g.header h where h.status in (:statuses) order by h.createdDate desc"),
 })
 public class GiftCard implements Serializable {
 	private static final long serialVersionUID = 6216484960480690814L;
@@ -32,7 +34,7 @@ public class GiftCard implements Serializable {
 	@Column(name = GiftCard.COLUMN_CODE, length = 20)
 	private String code;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = GiftCard.COLUMN_GIFT_CARD_HEADER)
 	private GiftCardHeader header;
 

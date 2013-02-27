@@ -166,7 +166,7 @@ table.adminTable tbody tr td.discount_true span,table.userTable tbody tr td.OK s
 	background: url(images/check.png);
 }
 
-table.adminTable tbody tr td a.editItem,table.adminTable tbody tr td a.deleteItem,table.adminTable tbody tr td a.viewItem,table.adminTable tbody tr td a.team
+table.adminTable tbody tr td a.editItem,table.adminTable tbody tr td a.deleteItem,table.adminTable tbody tr td a.viewItem,table.adminTable tbody tr td a.team, table.adminTable tbody tr td a.pdf
 	{
 	display: block;
 	width: 16px;
@@ -174,7 +174,7 @@ table.adminTable tbody tr td a.editItem,table.adminTable tbody tr td a.deleteIte
 	background: url(images/edit.png);
 }
 
-table.adminTable tbody tr td a.editItem span,table.adminTable tbody tr td a.deleteItem span,table.adminTable tbody tr td a.viewItem span,table.adminTable tbody tr td a.team span
+table.adminTable tbody tr td a.editItem span,table.adminTable tbody tr td a.deleteItem span,table.adminTable tbody tr td a.viewItem span,table.adminTable tbody tr td a.team span, table.adminTable tbody tr td a.pdf span
 	{
 	display: none;
 }
@@ -189,6 +189,10 @@ table.adminTable tbody tr td a.viewItem {
 
 table.adminTable tbody tr td a.team {
 	background-image: url(images/group.png);
+}
+
+table.adminTable tbody tr td a.pdf {
+	background-image: url(images/pdf.png);
 }
 
 table.adminTable tbody tr.childRow>td {
@@ -490,7 +494,7 @@ form.registrationForm fieldset.formSection div.formItem label.error,form.userFor
 }
 
 form.registrationForm fieldset.formSection div.formItem.required label:not
-	 (.error  ):after {
+	  (.error   ):after {
 	content: '*';
 	color: #a00;
 	padding-left: 4px;
@@ -788,6 +792,18 @@ table.relayPartners .leg {
 	width: 10%;
 }
 
+table.giftCardUsage .amount {
+	width: 50%;
+}
+
+table.giftCardUsage .createdDate {
+	width: 25%;
+}
+
+table.giftCardUsage .status {
+	width: 25%;
+}
+
 form.userForm div.receipt {
 	margin-bottom: 18px;
 }
@@ -925,4 +941,11 @@ ul.errors {
 	font-weight: bold;
 	font-size: 0.875em;
 	margin-bottom: 18px;
+}
+
+table.giftCards tr.childRow>td {
+	background-color: #fff !important;
+	border: 0 !important;
+	border-bottom: 2px #ccc solid !important;
+	border-top: 2px #ccc solid !important;
 }

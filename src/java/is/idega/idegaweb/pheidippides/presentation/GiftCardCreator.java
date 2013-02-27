@@ -162,7 +162,7 @@ public class GiftCardCreator extends IWBaseComponent {
 	
 	private void showPersonSelect(IWContext iwc, GiftCardBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/personSelect.xhtml"));
+		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/personSelect.xhtml"));
 		add(facelet);
 	}
 	
@@ -193,19 +193,19 @@ public class GiftCardCreator extends IWBaseComponent {
 		bean.setCounts(counts);
 		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/giftCards.xhtml"));
+		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/giftCards.xhtml"));
 		add(facelet);
 	}
 
 	private void showOverview(IWContext iwc, GiftCardBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/overview.xhtml"));
+		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/overview.xhtml"));
 		add(facelet);
 	}
 	
 	private void save(IWContext iwc, GiftCardBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb.getFaceletURI("giftCard/save.xhtml"));
+		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/save.xhtml"));
 		add(facelet);
 	}
 

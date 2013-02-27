@@ -1,9 +1,12 @@
 package is.idega.idegaweb.pheidippides.bean;
 
+import is.idega.idegaweb.pheidippides.data.GiftCard;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,10 @@ import com.idega.builder.bean.AdvancedProperty;
 @Scope("request")
 public class GiftCardBean {
 
+	private String action;
+	private String eventHandler;
+	private String responseURL;
+	private Class<?> downloadWriter;
 	private Locale locale;
 	
 	private List<AdvancedProperty> amounts;
@@ -25,6 +32,41 @@ public class GiftCardBean {
 
 	private int count;
 	private int totalAmount;
+	
+	private List<GiftCard> giftCards;
+	private Map<GiftCard, List<GiftCardUsage>> cardUsage;
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getEventHandler() {
+		return eventHandler;
+	}
+
+	public void setEventHandler(String eventHandler) {
+		this.eventHandler = eventHandler;
+	}
+
+	public String getResponseURL() {
+		return responseURL;
+	}
+
+	public void setResponseURL(String responseURL) {
+		this.responseURL = responseURL;
+	}
+
+	public Class<?> getDownloadWriter() {
+		return downloadWriter;
+	}
+
+	public void setDownloadWriter(Class<?> downloadWriter) {
+		this.downloadWriter = downloadWriter;
+	}
 
 	public Locale getLocale() {
 		return locale;
@@ -80,5 +122,21 @@ public class GiftCardBean {
 
 	public void setTotalAmount(int totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public List<GiftCard> getGiftCards() {
+		return giftCards;
+	}
+
+	public void setGiftCards(List<GiftCard> giftCards) {
+		this.giftCards = giftCards;
+	}
+
+	public Map<GiftCard, List<GiftCardUsage>> getCardUsage() {
+		return cardUsage;
+	}
+
+	public void setCardUsage(Map<GiftCard, List<GiftCardUsage>> cardUsage) {
+		this.cardUsage = cardUsage;
 	}
 }

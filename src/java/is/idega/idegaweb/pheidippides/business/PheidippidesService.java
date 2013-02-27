@@ -3480,7 +3480,7 @@ public class PheidippidesService {
 		if (holder != null && !holder.isEmpty()) {
 			GiftCardHeaderStatus stat = GiftCardHeaderStatus.WaitingForPayment;
 			if (!doPayment) {
-				stat = GiftCardHeaderStatus.WaitingForPayment;
+				stat = GiftCardHeaderStatus.RegisteredWithoutPayment;
 			}
 			
 			IWTimestamp validFrom = new IWTimestamp();

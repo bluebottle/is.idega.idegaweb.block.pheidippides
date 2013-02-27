@@ -1,0 +1,40 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="giftCardCreatorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{giftCardBean.eventHandler}" />
+		
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_gift_card']}" /></legend>
+			
+			<div class="formItem required">
+				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></label>
+				<input type="text" class="required number" name="prm_amount" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_amount_text"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount_text']}" /></label>
+				<input type="text" class="required" name="prm_amount_text" />
+			</div>
+			<div class="formItem">
+				<label for="prm_greeting_text"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['greeting_text']}" /></label>
+				<input type="text" name="prm_greeting_text" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_count"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['count']}" /></label>
+				<input type="text" class="required number" name="prm_count" />
+			</div>
+		</fieldset>
+		
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

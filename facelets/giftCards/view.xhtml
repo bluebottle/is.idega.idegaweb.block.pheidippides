@@ -1,0 +1,83 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<fieldset class="formSection noNavigation">
+		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card_list']}" /></legend>
+
+		<h:outputLink value="#{giftCardBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_gift_card']}" styleClass="addItem fancybox.ajax">
+			<f:param name="prm_action" value="2" />
+			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_gift_card']}" /></span>
+		</h:outputLink>
+	
+		<ui:fragment rendered="#{not empty giftCardBean.giftCards}">
+			<table class="adminTable giftCards" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['code']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
+						<th class="action lastColumn"></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<ui:repeat value="#{giftCardBean.giftCards}" var="giftCard">
+						<ui:param value="#{giftCardBean.cardUsage[giftCard]}" name="usages" />
+						
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{giftCard.code}" /></td>
+							<td><h:outputText value="#{giftCard.amount}" /></td>
+							<td><h:outputText value="#{giftCard.header.validFrom}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td><h:outputText value="#{giftCard.header.validTo}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td><h:outputText value="#{giftCard.header.email}" /></td>
+							<td class="action lastColumn">
+								<c:DownloadLink styleClass="pdf" downloadWriter="#{giftCardBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_pdf']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_pdf']}">
+									<f:param name="prm_gift_card_code" value="#{giftCard.code}" />
+								</c:DownloadLink>
+							</td>
+						</tr>
+						
+						<ui:fragment rendered="#{not empty usages}">
+							<tr class="childRow">
+								<td colspan="6">
+									<table class="subTable giftCardUsage" width="100%" cellpadding="0" cellspacing="0">
+										<colgroup>
+											<col span="1" class="firstColumn amount" />
+											<col span="1" class="createdDate" />
+											<col span="1" class="lastColumn status" />
+										</colgroup>
+										<thead>
+											<tr>
+												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created_date']}" /></th>
+												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['status']}" /></th>
+											</tr>
+										</thead>
+										<tbody>
+											<ui:repeat value="#{usages}" var="usage">
+												<tr>
+													<td class="firstRow"><h:outputText value="#{usage.amount}" /></td>
+													<td><h:outputText value="#{usage.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+													<td class="lastRow"><h:outputText value="#{usage.status}" /></td>
+												</tr>
+											</ui:repeat>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</ui:fragment>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</ui:fragment>
+	</fieldset>
+</ui:component>
+</html>

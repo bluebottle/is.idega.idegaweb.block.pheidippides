@@ -1137,6 +1137,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return getResultList("giftCard.findAll", GiftCard.class, new Param(
 				"header", header));
 	}
+	
+	public List<GiftCard> getGiftCards(List<GiftCardHeaderStatus> statuses) {
+		return getResultList("giftCard.findByHeaderStatus", GiftCard.class, new Param(
+				"statuses", statuses));
+	}
 
 	@Transactional(readOnly = false)
 	public GiftCard storeGiftCard(GiftCardHeader header, String code,
