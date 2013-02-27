@@ -646,7 +646,7 @@ public class PheidippidesService {
 					}
 				} else {
 					
-					participant.setAvailableRaces(getAvailableRaces(event.getId(), year, participant));
+					participant.setAvailableRaces(getAvailableRaces(event.getId(), year, participant, false));
 					
 					ok.add(participant);
 				}
