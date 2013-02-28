@@ -1,5 +1,7 @@
 jQuery.noConflict();
 
+var sortBy;
+
 jQuery(document).ready(function() {
 	/* sortBy functions & helpers extracted and slightly modified from
     * Sugar Library v1.3.7

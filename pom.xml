@@ -54,5 +54,25 @@
       <version>1.7</version>
       <type>jar</type>
     </dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-server</artifactId>
+	    <version>1.12</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-servlet</artifactId>
+	    <version>1.12</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-json</artifactId>
+	    <version>1.12</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jcors</groupId>
+		<artifactId>jcors</artifactId>
+		<version>1.1</version>
+	</dependency>
   </dependencies>
 </project>
