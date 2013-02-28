@@ -7,7 +7,6 @@ import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.GiftCard;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.output.GiftCardWriter;
 
 import java.util.ArrayList;
@@ -108,9 +107,9 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (giftCards != null) {
 			bean.setGiftCards(giftCards);
 
-			Map<GiftCard, List<GiftCardUsage>> cardUsageMap = new HashMap<GiftCard, List<GiftCardUsage>>();
+			Map<GiftCard, Integer> cardUsageMap = new HashMap<GiftCard, Integer>();
 			for (GiftCard giftCard : giftCards) {
-				cardUsageMap.put(giftCard, getDao().getGiftCardUsage(giftCard));
+				cardUsageMap.put(giftCard, getDao().getGiftCardUsageSum(giftCard));
 			}
 			bean.setCardUsage(cardUsageMap);
 		}		

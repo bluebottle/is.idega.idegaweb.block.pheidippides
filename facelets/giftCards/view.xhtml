@@ -21,6 +21,7 @@
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['code']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remainder']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
@@ -30,11 +31,12 @@
 				
 				<tbody>
 					<ui:repeat value="#{giftCardBean.giftCards}" var="giftCard">
-						<ui:param value="#{giftCardBean.cardUsage[giftCard]}" name="usages" />
+						<ui:param value="#{giftCardBean.cardUsage[giftCard]}" name="remainder" />
 						
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{giftCard.code}" /></td>
 							<td><h:outputText value="#{giftCard.amount}" /></td>
+							<td><h:outputText value="#{giftCard.amount - remainder}" /></td>
 							<td><h:outputText value="#{giftCard.header.validFrom}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td><h:outputText value="#{giftCard.header.validTo}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td><h:outputText value="#{giftCard.header.email}" /></td>
@@ -44,36 +46,6 @@
 								</c:DownloadLink>
 							</td>
 						</tr>
-						
-						<ui:fragment rendered="#{not empty usages}">
-							<tr class="childRow">
-								<td colspan="6">
-									<table class="subTable giftCardUsage" width="100%" cellpadding="0" cellspacing="0">
-										<colgroup>
-											<col span="1" class="firstColumn amount" />
-											<col span="1" class="createdDate" />
-											<col span="1" class="lastColumn status" />
-										</colgroup>
-										<thead>
-											<tr>
-												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
-												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['created_date']}" /></th>
-												<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['status']}" /></th>
-											</tr>
-										</thead>
-										<tbody>
-											<ui:repeat value="#{usages}" var="usage">
-												<tr>
-													<td class="firstRow"><h:outputText value="#{usage.amount}" /></td>
-													<td><h:outputText value="#{usage.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
-													<td class="lastRow"><h:outputText value="#{usage.status}" /></td>
-												</tr>
-											</ui:repeat>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-						</ui:fragment>
 					</ui:repeat>
 				</tbody>
 			</table>

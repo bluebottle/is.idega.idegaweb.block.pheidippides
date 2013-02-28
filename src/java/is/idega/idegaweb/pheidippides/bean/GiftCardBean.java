@@ -2,7 +2,6 @@ package is.idega.idegaweb.pheidippides.bean;
 
 import is.idega.idegaweb.pheidippides.data.GiftCard;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 
 import java.util.List;
 import java.util.Locale;
@@ -34,7 +33,7 @@ public class GiftCardBean {
 	private int totalAmount;
 	
 	private List<GiftCard> giftCards;
-	private Map<GiftCard, List<GiftCardUsage>> cardUsage;
+	private Map<GiftCard, Integer> cardUsage;
 
 	public String getAction() {
 		return action;
@@ -132,11 +131,11 @@ public class GiftCardBean {
 		this.giftCards = giftCards;
 	}
 
-	public Map<GiftCard, List<GiftCardUsage>> getCardUsage() {
+	public Map<GiftCard, Integer> getCardUsage() {
 		return cardUsage;
 	}
 
-	public void setCardUsage(Map<GiftCard, List<GiftCardUsage>> cardUsage) {
+	public void setCardUsage(Map<GiftCard, Integer> cardUsage) {
 		this.cardUsage = cardUsage;
 	}
 }
