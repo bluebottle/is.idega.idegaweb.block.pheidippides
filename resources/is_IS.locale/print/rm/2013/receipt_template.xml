@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="70" margin-right="70" margin-top="40" margin-bottom="70">
+	
+	<font-def name="small" family="Helvetica" size="8" style="normal"/>
+	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
+	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
+	
+	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
+		<cell><image source="logo.jpg" width="150" scale-to-fit="true" /></cell>
+		<cell halign="right">
+			Reykjavíkurmaraþon<br />
+			kt. 590493-2369<br />
+			Engjavegi 6, 104 Reykjavík<br />
+			Sími 535 3700<br />
+			<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
+		</cell>
+	</table>
+
+	<paragraph font="bold" spacing-after="18.0">
+		Kvittun fyrir skráningu í Reykjavíkurmaraþon Íslandsbanka 24.ágúst 2012.
+	</paragraph>
+
+	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
+		<cell>Nafn:</cell>
+		<cell font="bold">${name}</cell>
+		<cell>Kennitala:</cell>
+		<cell font="bold">${personalID}</cell>
+		<cell>Bolastærð:</cell>
+		<cell font="bold">${shirtSize}</cell>
+		<cell>Vegalengd:</cell>
+		<cell font="bold">${distance}</cell>
+		<cell>Verð:</cell>
+		<cell font="bold">${price}</cell>
+	</table>
+	
+	<paragraph font="normal" spacing-after="18.0">
+		Afhending gagna fer fram í Laugardalshöll föstudaginn 23.ágúst kl.10:00-19:00.
+	</paragraph>
+	<paragraph font="normal" spacing-after="18.0">
+		Vinsamlegast framvísið þessari kvittun þegar gögnin eru sótt til að flýta fyrir afgreiðslu. Vinsamlegast kynnið ykkur nánari upplýsingar um hlaupið á heimasíðunni <anchor reference="http://www.marathon.is/reykjavikurmaraton">www.marathon.is/reykjavikurmaraton</anchor>.
+	</paragraph>
+	<paragraph font="normal" spacing-after="18.0">
+		Þau sem vilja hlaupa til góðs geta safnað áheitum á vefnum <anchor reference="http://www.hlaupastyrkur.is">www.hlaupastyrkur.is</anchor>.
+	</paragraph>
+	
+	<paragraph font="small" halign="right">
+		Kvittun númer: ${id}
+	</paragraph>
+</document>
