@@ -16,7 +16,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[7];
+        _operations = new org.apache.axis.description.OperationDesc[9];
         _initOperationDesc1();
     }
 
@@ -25,7 +25,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getCharityInformation");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "charityPersonalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://illuminati.is", "CharityInformation"));
         oper.setReturnClass(is.idega.idegaweb.pheidippides.webservice.server.CharityInformation.class);
@@ -51,7 +51,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setName("updateUserPassword");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "session"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://illuminati.is", "Session"), is.idega.idegaweb.pheidippides.webservice.server.Session.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "identifier"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "password"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -72,7 +72,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setName("updateUserCharity");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "session"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://illuminati.is", "Session"), is.idega.idegaweb.pheidippides.webservice.server.Session.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "identifier"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "charityPersonalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -93,7 +93,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setName("updateUserEmail");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "session"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://illuminati.is", "Session"), is.idega.idegaweb.pheidippides.webservice.server.Session.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "identifier"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "email"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -120,6 +120,17 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("getCharitiesLocalized");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "locale"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://illuminati.is", "ArrayOfCharity"));
+        oper.setReturnClass(is.idega.idegaweb.pheidippides.webservice.server.Charity[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "getCharitiesLocalizedReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[6] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getCharity");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "charityPersonalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -128,7 +139,20 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         oper.setReturnQName(new javax.xml.namespace.QName("", "getCharityReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[6] = oper;
+        _operations[7] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("getCharityLocalized");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "charityPersonalID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "locale"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://illuminati.is", "Charity"));
+        oper.setReturnClass(is.idega.idegaweb.pheidippides.webservice.server.Charity.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "getCharityLocalizedReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[8] = oper;
 
     }
 
@@ -265,7 +289,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         }
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.server.CharityInformation getCharityInformation(java.lang.String personalID) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.pheidippides.webservice.server.CharityInformation getCharityInformation(java.lang.String charityPersonalID) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -278,7 +302,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {personalID});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {charityPersonalID});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -327,7 +351,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 }
     }
 
-    public boolean updateUserPassword(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String personalID, java.lang.String password) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
+    public boolean updateUserPassword(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String identifier, java.lang.String password) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -340,7 +364,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, personalID, password});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, identifier, password});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -366,7 +390,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 }
     }
 
-    public boolean updateUserCharity(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String personalID, java.lang.String charityPersonalID) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
+    public boolean updateUserCharity(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String identifier, java.lang.String charityPersonalID) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -379,7 +403,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, personalID, charityPersonalID});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, identifier, charityPersonalID});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -405,7 +429,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 }
     }
 
-    public boolean updateUserEmail(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String personalID, java.lang.String email) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
+    public boolean updateUserEmail(is.idega.idegaweb.pheidippides.webservice.server.Session session, java.lang.String identifier, java.lang.String email) throws java.rmi.RemoteException, is.idega.idegaweb.pheidippides.webservice.server.SessionTimedOutException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -418,7 +442,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, personalID, email});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {session, identifier, email});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -475,7 +499,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
 }
     }
 
-    public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharity(java.lang.String charityPersonalID) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharitiesLocalized(java.lang.String locale) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -484,11 +508,73 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://illuminati.is", "getCharitiesLocalized"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {locale});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (is.idega.idegaweb.pheidippides.webservice.server.Charity[]) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (is.idega.idegaweb.pheidippides.webservice.server.Charity[]) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.pheidippides.webservice.server.Charity[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharity(java.lang.String charityPersonalID) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[7]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://illuminati.is", "getCharity"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
  try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {charityPersonalID});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (is.idega.idegaweb.pheidippides.webservice.server.Charity) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (is.idega.idegaweb.pheidippides.webservice.server.Charity) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.pheidippides.webservice.server.Charity.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharityLocalized(java.lang.String charityPersonalID, java.lang.String locale) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[8]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://illuminati.is", "getCharityLocalized"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {charityPersonalID, locale});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
