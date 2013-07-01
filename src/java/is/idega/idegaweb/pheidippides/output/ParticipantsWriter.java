@@ -361,16 +361,18 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 					nationality = registration2.getNationality() != null ? getCountryHome().findByPrimaryKey(registration2.getNationality()) : null;
 					shirtSize = registration2.getShirtSize();
 
-					dateOfBirth = new IWTimestamp(otherParticipant.getDateOfBirth());
-					if (dateOfBirth != null) {
-						if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
-							continue;
-						}
-						if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
-							continue;
+					if (otherParticipant.getDateOfBirth() != null) {
+						dateOfBirth = new IWTimestamp(otherParticipant.getDateOfBirth());
+						if (dateOfBirth != null) {
+							if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
+								continue;
+							}
+							if (dateTo != null && dateOfBirth.isLaterThan(dateTo)) {
+								continue;
+							}
 						}
 					}
-
+					
 					raceTrinkets = new ArrayList<RaceTrinket>();
 					registrationTrinkets = registration2.getTrinkets();
 					trinketMap = new HashMap<RaceTrinket, RegistrationTrinket>();
@@ -391,8 +393,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 					}
 					row.createCell(iCell++).setCellValue(otherParticipant.getFullName());
 					row.createCell(iCell++).setCellValue(otherParticipant.getPersonalId());
-					row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
-					row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("yyyy"));
+					row.createCell(iCell++).setCellValue(dateOfBirth != null ? dateOfBirth.getDateString("d.M.yyyy") : "");
+					row.createCell(iCell++).setCellValue(dateOfBirth != null ? dateOfBirth.getDateString("yyyy") : "");
 					row.createCell(iCell++).setCellValue(participant.getGender().equals("male") ? "M" : "F");
 					row.createCell(iCell++).setCellValue(otherParticipant.getEmail());
 					row.createCell(iCell++).setCellValue(otherParticipant.getAddress());
