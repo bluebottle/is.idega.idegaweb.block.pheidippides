@@ -215,7 +215,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Participant participant = getService().getParticipant(registration);
 		
-		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
+		bean.setRaces(getService().getRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
 		bean.setProperties(getService().getCountries());
 		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
 
