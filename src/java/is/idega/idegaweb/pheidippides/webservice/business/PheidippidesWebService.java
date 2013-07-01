@@ -224,15 +224,23 @@ public class PheidippidesWebService {
 		return null;
 	}
 
-	public CharityInformation getCharityInformation(String personalID) {
+	public CharityInformation getCharityInformation(String identifier) {
 		User user = null;
 		try {
-			user = getUserBusiness().getUser(personalID);
-		} catch (IBOLookupException e) {
-		} catch (RemoteException e) {
-		} catch (FinderException e) {
-		}
+			user = getUserBusiness().getUser(identifier);
+		} catch (Exception e) {
+		} 
 
+		if (user == null) {
+			try {
+				LoginTable login = LoginDBHandler.getUserLoginByUserName(identifier);
+				if (login != null) {
+					user = login.getUser();
+				}
+			} catch (Exception e) {
+			}
+		}
+		
 		if (user == null) {
 			return null;
 		}
