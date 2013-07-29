@@ -189,7 +189,7 @@ public interface PheidippidesDao extends GenericDao {
 	public Charity getCharity(String personalId);
 
 	public Charity storeCharity(Long charityPK, String name, String personalID,
-			String description);
+			String description, String englishDescription);
 
 	public boolean removeCharity(Long charityPK);
 

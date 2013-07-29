@@ -25,6 +25,10 @@
 				<label for="prm_description"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['description']}" /></label>
 				<textarea class="tinymce" name="prm_description"><h:outputText value="#{pheidippidesBean.charity.description}" /></textarea>
 			</div>
+			<div class="formItem tinyMCE">
+				<label for="prm_english_description"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['english_description']}" /></label>
+				<textarea class="tinymce" name="prm_english_description"><h:outputText value="#{pheidippidesBean.charity.englishDescription}" /></textarea>
+			</div>
 		</fieldset>
 		
 		<div class="submit">

@@ -804,7 +804,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Transactional(readOnly = false)
 	public Charity storeCharity(Long charityPK, String name, String personalID,
-			String description) {
+			String description, String englishDescription) {
 		Charity charity = charityPK != null ? getCharity(charityPK) : null;
 		if (charity == null) {
 			charity = new Charity();
@@ -813,6 +813,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		charity.setName(name);
 		charity.setPersonalId(personalID);
 		charity.setDescription(description);
+		charity.setEnglishDescription(englishDescription);
 
 		getEntityManager().persist(charity);
 

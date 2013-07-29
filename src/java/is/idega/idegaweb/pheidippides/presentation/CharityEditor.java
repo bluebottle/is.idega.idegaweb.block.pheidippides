@@ -36,6 +36,7 @@ public class CharityEditor extends IWBaseComponent implements IWPageEventListene
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DESCRIPTION = "prm_description";
+	private static final String PARAMETER_ENGLISH_DESCRIPTION = "prm_english_description";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -142,7 +143,8 @@ public class CharityEditor extends IWBaseComponent implements IWPageEventListene
 			iwc.isParameterSet(PARAMETER_CHARITY_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_CHARITY_PK)) : null,
 			iwc.getParameter(PARAMETER_NAME),
 			iwc.getParameter(PARAMETER_PERSONAL_ID),
-			iwc.getParameter(PARAMETER_DESCRIPTION)
+			iwc.getParameter(PARAMETER_DESCRIPTION),
+			iwc.getParameter(PARAMETER_ENGLISH_DESCRIPTION)
 		);
 		
 		return true;

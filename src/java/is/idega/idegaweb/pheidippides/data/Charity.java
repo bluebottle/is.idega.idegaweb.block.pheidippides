@@ -29,6 +29,7 @@ public class Charity implements Serializable {
 	private static final String COLUMN_ENTRY_ID = "charity_id";
 	private static final String COLUMN_NAME = "name";
 	private static final String COLUMN_DESCRIPTION = "description";
+	private static final String COLUMN_ENGLISH_DESCRIPTION = "english_description";
 	private static final String COLUMN_PERSONAL_ID = "personal_id";
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -42,6 +43,9 @@ public class Charity implements Serializable {
 
 	@Column(name = Charity.COLUMN_DESCRIPTION, length = 4000)
 	private String description;
+
+	@Column(name = Charity.COLUMN_ENGLISH_DESCRIPTION, length = 4000)
+	private String englishDescription;
 
 	@Column(name = Charity.COLUMN_PERSONAL_ID)
 	private String personalId;
@@ -89,6 +93,14 @@ public class Charity implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getEnglishDescription() {
+		return englishDescription;
+	}
+
+	public void setEnglishDescription(String description) {
+		this.englishDescription = description;
 	}
 
 	@Override
