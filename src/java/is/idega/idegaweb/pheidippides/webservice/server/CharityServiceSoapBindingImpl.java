@@ -40,19 +40,19 @@ public class CharityServiceSoapBindingImpl implements is.idega.idegaweb.pheidipp
     }
 
     public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() throws java.rmi.RemoteException {
-        return getBusiness().getCharities();
+        return getBusiness().getCharities(null);
     }
 
     public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharitiesLocalized(java.lang.String locale) throws java.rmi.RemoteException {
-        return getBusiness().getCharities();
+        return getBusiness().getCharities(locale);
     }
 
     public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharity(java.lang.String charityPersonalID) throws java.rmi.RemoteException {
-        return getBusiness().getCharity(charityPersonalID);
+        return getBusiness().getCharity(charityPersonalID, null);
     }
 
     public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharityLocalized(java.lang.String charityPersonalID, java.lang.String locale) throws java.rmi.RemoteException {
-        return getBusiness().getCharity(charityPersonalID);
+        return getBusiness().getCharity(charityPersonalID, locale);
     }
 
     private PheidippidesWebService getBusiness() throws IBOLookupException {

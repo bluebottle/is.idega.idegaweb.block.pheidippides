@@ -190,7 +190,7 @@ public class PheidippidesWebService {
 		return service.storeWebserviceRegistration(holder, company, loginSession.getUser().getUniqueId(), LocaleUtil.getIcelandicLocale());
 	}
 
-	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities() {
+	public is.idega.idegaweb.pheidippides.webservice.server.Charity[] getCharities(String locale) {
 		List<Charity> charities = dao.getEvent(PheidippidesWebService.RM_ID).getCharities();
 		if (charities != null && !charities.isEmpty()) {
 			is.idega.idegaweb.pheidippides.webservice.server.Charity[] ret = new is.idega.idegaweb.pheidippides.webservice.server.Charity[charities.size()];
@@ -199,7 +199,12 @@ public class PheidippidesWebService {
 				ret[counter] = new is.idega.idegaweb.pheidippides.webservice.server.Charity();
 				ret[counter].setId(charity.getPersonalId());
 				ret[counter].setName(charity.getName());
-				ret[counter++].setDescription(charity.getDescription());
+				if (locale == null || !"en".equalsIgnoreCase(locale)) {
+					ret[counter++].setDescription(charity.getDescription());
+				} else {
+					ret[counter++].setDescription(charity.getEnglishDescription());
+				}
+				
 			}
 			
 			return ret;
@@ -209,12 +214,16 @@ public class PheidippidesWebService {
 	}
 
 	public is.idega.idegaweb.pheidippides.webservice.server.Charity getCharity(
-			String charityPersonalID) {
+			String charityPersonalID, String locale) {
 		Charity charity = dao.getCharity(charityPersonalID);
 		is.idega.idegaweb.pheidippides.webservice.server.Charity ret = null;
 		if (charity != null) {
 			ret = new is.idega.idegaweb.pheidippides.webservice.server.Charity();
-			ret.setDescription(charity.getDescription());
+			if (locale == null || !"en".equalsIgnoreCase(locale)) {
+				ret.setDescription(charity.getDescription());
+			} else {
+				ret.setDescription(charity.getEnglishDescription());
+			}
 			ret.setId(charity.getPersonalId());
 			ret.setName(charity.getName());
 			
@@ -224,7 +233,7 @@ public class PheidippidesWebService {
 		return null;
 	}
 
-	public CharityInformation getCharityInformation(String identifier) {
+	public User getUserFromIdentifier(String identifier) {
 		User user = null;
 		try {
 			user = getUserBusiness().getUser(identifier);
@@ -240,7 +249,13 @@ public class PheidippidesWebService {
 			} catch (Exception e) {
 			}
 		}
-		
+
+		return user;
+	}
+	
+	public CharityInformation getCharityInformation(String identifier) {
+		User user = getUserFromIdentifier(identifier); 
+				
 		if (user == null) {
 			return null;
 		}
