@@ -214,7 +214,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 							showRelayTeam(iwc, bean);
 						}
 						else {
-							if (getSession().getCurrentParticipant().getRace().isCharityRun() && getSession().isRegistrationWithPersonalId()) {
+							if (getSession().getCurrentParticipant().getRace().isCharityRun()) {
 								showCharitySelect(iwc, bean);
 							}
 							else {
