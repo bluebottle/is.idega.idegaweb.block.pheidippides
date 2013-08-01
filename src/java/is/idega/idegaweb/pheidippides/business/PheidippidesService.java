@@ -2308,7 +2308,7 @@ public class PheidippidesService {
 									registration.getRace().getDistance()
 											.getName(), user.getName(),
 									passwordString, userNameString,
-									user.getPersonalID(), Boolean.TRUE);
+									user.getPersonalID() != null && user.getPersonalID().length() > 0 && SocialSecurityNumber.isValidIcelandicSocialSecurityNumber(user.getPersonalID()) ? user.getPersonalID() : userNameString, Boolean.TRUE);
 							port.registerContestant(request);
 						} catch (Exception e) {
 							e.printStackTrace();
