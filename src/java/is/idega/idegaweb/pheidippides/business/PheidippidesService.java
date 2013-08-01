@@ -2284,7 +2284,6 @@ public class PheidippidesService {
 					addUserToRootRunnersGroup(user);
 
 					if (registration.getRace().isCharityRun()
-							&& user.getPersonalID() != null
 							&& registration.getCharity() != null) {
 						try {
 							ContestantServiceLocator locator = new ContestantServiceLocator();
