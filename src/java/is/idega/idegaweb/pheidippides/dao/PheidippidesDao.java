@@ -165,6 +165,9 @@ public interface PheidippidesDao extends GenericDao {
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime);
 
+	public Registration moveRegistrationToCompany(Long registrationID,
+			RegistrationHeader header);
+	
 	public Registration updateRegistration(Long registrationPK, Long racePK,
 			Long shirtSizePK, String nationalityPK);
 

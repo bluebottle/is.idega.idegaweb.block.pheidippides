@@ -674,6 +674,23 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return registration;
 	}
 
+	public Registration moveRegistrationToCompany(Long registrationID,
+			RegistrationHeader header) {
+		Registration registration = registrationID != null ? getRegistration(registrationID)
+				: null;
+		
+		if (registration == null) {
+			return null;
+		}
+		
+		registration.setHeader(header);
+
+		getEntityManager().persist(registration);
+
+		return registration;
+	}
+
+	
 	public Registration updateRegistration(Long registrationPK, Long racePK,
 			Long shirtSizePK, String nationalityPK) {
 		Registration registration = getRegistration(registrationPK);

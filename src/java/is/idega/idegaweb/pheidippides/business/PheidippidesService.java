@@ -3751,5 +3751,38 @@ public class PheidippidesService {
 			System.err.println("Exception when sending mail to address: "
 					+ email + " Message was: " + e.getMessage());
 		}
-	}	
+	}
+	
+	public Registration moveRegistrationToCompany(Registration registration, Company company) {
+		RegistrationHeader header = dao.storeRegistrationHeader(null,
+				RegistrationHeaderStatus.RegisteredWithoutPayment,
+				null, company.getName(), LocaleUtil.getIcelandicLocale().toString(),
+				Currency.ISK, null, null, null, null, null, null, null,
+				null, null, company);
+
+		RegistrationHeader oldHeader = registration.getHeader();
+			
+		registration = dao.moveRegistrationToCompany(registration.getId(), header);
+		
+		//if oldHeader has no registrations we cancel it
+		boolean cancelHeader = true;
+
+		List<Registration> registrations = dao.getRegistrations(oldHeader);
+		for (Registration registration2 : registrations) {
+			if (registration2.getStatus() == RegistrationStatus.Unconfirmed
+					|| registration2.getStatus() == RegistrationStatus.OK) {
+				cancelHeader = false;
+				break;
+			}
+		}
+
+		if (cancelHeader) {
+			dao.storeRegistrationHeader(oldHeader.getId(),
+					RegistrationHeaderStatus.Cancelled, null, null, null, null,
+					null, null, null, null, null, null, null, null, null,
+					oldHeader.getCompany());
+		}
+
+		return registration;
+	}
 }
