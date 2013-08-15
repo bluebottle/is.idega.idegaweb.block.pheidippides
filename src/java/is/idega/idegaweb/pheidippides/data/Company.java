@@ -20,8 +20,8 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @Entity
 @Table(name = Company.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "company.findAll", query = "select c from Company c"),
-	@NamedQuery(name = "company.findByEvent", query = "select c from Company c where c.event = :event"),
+	@NamedQuery(name = "company.findAll", query = "select c from Company c order by c.name"),
+	@NamedQuery(name = "company.findByEvent", query = "select c from Company c where c.event = :event order by c.name"),
 	@NamedQuery(name = "company.findByName", query = "select c from Company c where c.name = :name"),
 	@NamedQuery(name = "company.findByUserUUID", query = "select c from Company c where c.userUUID = :uuid")
 })
