@@ -3754,14 +3754,18 @@ public class PheidippidesService {
 	}
 	
 	public Registration moveRegistrationToCompany(Registration registration, Company company) {
+		RegistrationHeader oldHeader = registration.getHeader();
+		Company oldCompany = oldHeader.getCompany();
+		if (oldCompany != null && oldCompany.equals(company)) {
+			return registration;
+		}
+		
 		RegistrationHeader header = dao.storeRegistrationHeader(null,
 				RegistrationHeaderStatus.RegisteredWithoutPayment,
 				null, company.getName(), LocaleUtil.getIcelandicLocale().toString(),
 				Currency.ISK, null, null, null, null, null, null, null,
 				null, null, company);
 
-		RegistrationHeader oldHeader = registration.getHeader();
-			
 		registration = dao.moveRegistrationToCompany(registration.getId(), header);
 		
 		//if oldHeader has no registrations we cancel it

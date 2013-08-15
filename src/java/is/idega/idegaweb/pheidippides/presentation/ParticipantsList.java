@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
@@ -54,6 +55,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
 	
+	private static final String PARAMETER_COMPANY_PK = "prm_company_pk";
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
@@ -217,6 +219,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		
 		bean.setRaces(getService().getRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
 		bean.setProperties(getService().getCountries());
+		bean.setCompanies(getDao().getCompanies());
 		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
 
 		bean.setRegistration(registration);
@@ -280,6 +283,10 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		}
 		
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
+		if (iwc.isParameterSet(PARAMETER_COMPANY_PK)) {
+			Company company = getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY_PK)));
+			getService().moveRegistrationToCompany(registration, company);
+		}
 		
 		boolean distanceChange = registration.getRace().getId().intValue() != racePK.intValue();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();

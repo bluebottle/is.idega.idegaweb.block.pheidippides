@@ -23,10 +23,15 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_information']}" /></legend>
 			
-			<t:div styleClass="formItem" rendered="#{not empty registration.header.company}">
-				<label for="prm_company"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company']}" /></label>
-				<span><h:outputText value="#{registration.header.company.name}" /></span>
-			</t:div>
+			<div class="formItem">
+				<label for="prm_company_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company']}" /></label>
+				<c:selectOne name="prm_company_pk">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_company']}" content="" />
+					<ui:repeat value="#{pheidippidesBean.companies}" var="company">
+						<c:selectOption name="#{company.name}" content="#{company.id}" selected="#{not empty registration.header.company ? company.id eq registration.header.company.id : false}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
 			<j:choose>
 				<j:when test="#{hasPersonalID}">
 					<div class="formItem">

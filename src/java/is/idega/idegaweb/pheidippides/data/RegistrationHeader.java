@@ -35,6 +35,7 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 	@NamedQuery(name = "registrationHeader.findByUUID", query = "select r from RegistrationHeader r where r.uuid = :uuid"),
 	@NamedQuery(name = "registrationHeader.findByStatus", query = "select r from RegistrationHeader r where r.status = :status"),
 	@NamedQuery(name = "registrationHeader.findByCompany", query = "select r from RegistrationHeader r where r.company = :company"),
+	@NamedQuery(name = "registrationHeader.findByCompanyAndEventAndYear", query = "select r from RegistrationHeader r join r.registrations re where r.company = :company and re.race.event = :event and re.race.year = :year"),
 	@NamedQuery(name = "registrationHeader.findByEventAndYearAndStatus", query = "select distinct r from RegistrationHeader r join r.registrations re where r.status = :status and re.race.event = :event and re.race.year = :year")
 })
 public class RegistrationHeader implements Serializable {

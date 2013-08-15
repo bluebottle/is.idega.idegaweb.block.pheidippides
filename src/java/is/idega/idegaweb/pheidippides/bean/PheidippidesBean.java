@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.bean;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -34,6 +35,9 @@ public class PheidippidesBean {
 	private String eventHandler;
 	private String responseURL;
 	private Class<?> downloadWriter;
+	
+	private Company company;
+	private List<Company> companies;
 	
 	private Event event;
 	private List<Event> events;
@@ -122,6 +126,22 @@ public class PheidippidesBean {
 
 	public void setDownloadWriter(Class<?> downloadWriter) {
 		this.downloadWriter = downloadWriter;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public List<Company> getCompanies() {
+		return companies;
+	}
+
+	public void setCompanies(List<Company> companies) {
+		this.companies = companies;
 	}
 
 	public Event getEvent() {
