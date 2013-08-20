@@ -291,6 +291,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				new Param("currency", currency));
 	}
 
+	public RacePrice getRacePrice(Race race, Date date, Currency currency) {
+		return getSingleResult("racePrice.findByRaceAndDate", RacePrice.class,
+				new Param("race", race),
+				new Param("date", date),
+				new Param("currency", currency));
+	}
+
 	public List<RacePrice> getCurrentRaceTrinketPrice(Race race,
 			Currency currency) {
 		return getResultList("racePrice.findTrinketsByRaceAndDate",

@@ -1799,7 +1799,7 @@ public class PheidippidesService {
 			return null;
 		}
 
-		RacePrice price = dao.getCurrentRacePrice(newDistance, registration
+		RacePrice price = dao.getRacePrice(newDistance, registration.getHeader().getCreatedDate(), registration
 				.getHeader().getCurrency());
 		int amount = price.getPrice() - registration.getAmountPaid();
 
