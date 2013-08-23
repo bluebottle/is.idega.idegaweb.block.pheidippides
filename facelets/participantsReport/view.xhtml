@@ -7,9 +7,8 @@
 		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
 >
 <ui:component>
-	<form class="adminForm" action="/servlet/MediaServlet/" method="post">
+	<form class="adminForm" action="" method="post">
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
-		<input type="hidden" name="wrcls" value="#{pheidippidesBean.responseURL}" />
 
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_report']}" /></legend>
@@ -72,10 +71,18 @@
 				<label for="prm_year_to"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year_to']}" /></label>
 				<input name="prm_year_to" class="maskedYear" value="#{param['prm_year_to']}" />
 			</div>
+			<div class="formItem">
+				<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
+				<input name="prm_email" value="#{param['prm_email']}" />
+			</div>
 			<div class="submit">
 				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
 			</div>
 		</fieldset>
+		
+		<ui:component rendered="#{not empty param['prm_email]}">
+			<p class="info"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_being_created']}" /></p>
+		</ui:component>
 	</form>
 </ui:component>
 </html>

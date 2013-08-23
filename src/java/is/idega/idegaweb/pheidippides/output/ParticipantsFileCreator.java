@@ -16,16 +16,14 @@ import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -41,8 +39,6 @@ import com.idega.core.location.data.Country;
 import com.idega.core.location.data.CountryHome;
 import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWResourceBundle;
-import com.idega.io.DownloadWriter;
-import com.idega.io.MediaWritable;
 import com.idega.io.MemoryFileBuffer;
 import com.idega.io.MemoryInputStream;
 import com.idega.io.MemoryOutputStream;
@@ -51,7 +47,7 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.StringHandler;
 import com.idega.util.expression.ELUtil;
 
-public class ParticipantsWriter extends DownloadWriter implements MediaWritable {
+public class ParticipantsFileCreator {
 
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
@@ -72,58 +68,54 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 	@Autowired
 	private PheidippidesDao dao;
 	
-	@Override
-	public void init(HttpServletRequest req, IWContext iwc) {
+	public File createReport(IWContext iwc) {
 		this.locale = iwc.getCurrentLocale();
 		this.iwrb = iwc.getIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(this.locale);
 
-		Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
-		Integer year = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
-		Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
-		RegistrationStatus status = RegistrationStatus.valueOf(iwc.getParameter(PARAMETER_STATUS));
-		Company company = iwc.isParameterSet(PARAMETER_COMPANY) ? getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY))) : null;
-
-		List<Registration> registrations = null;
-		if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-			registrations = getDao().getRegistrations(company, race, status);
-		}
-		else {
-			registrations = getDao().getRegistrations(company, event, year, status);
-		}
-		Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
-		
-		List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
-
 		try {
+			Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
+			Integer year = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
+			Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
+			RegistrationStatus status = RegistrationStatus.valueOf(iwc.getParameter(PARAMETER_STATUS));
+			Company company = iwc.isParameterSet(PARAMETER_COMPANY) ? getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY))) : null;
+
+			List<Registration> registrations = null;
+			if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
+				registrations = getDao().getRegistrations(company, race, status);
+			}
+			else {
+				registrations = getDao().getRegistrations(company, event, year, status);
+			}
+			Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
+			
+			List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
+
 			this.buffer = writeXLS(iwc, event, year, race, trinkets, registrations, participantsMap, status);
-			setAsDownload(iwc, "participants.xls", this.buffer.length());
+
+			if (this.buffer != null) {
+				File file = File.createTempFile("report-", ".xls");
+				FileOutputStream out = new FileOutputStream(file);
+				
+				MemoryInputStream mis = new MemoryInputStream(this.buffer);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				while (mis.available() > 0) {
+					baos.write(mis.read());
+				}
+				baos.writeTo(out);
+				mis.close();
+				out.close();
+				
+				return file;
+			}
+			else {
+				System.err.println("buffer is null");
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public String getMimeType() {
-		if (this.buffer != null) {
-			return this.buffer.getMimeType();
-		}
-		return super.getMimeType();
-	}
-
-	@Override
-	public void writeTo(OutputStream out) throws IOException {
-		if (this.buffer != null) {
-			MemoryInputStream mis = new MemoryInputStream(this.buffer);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			while (mis.available() > 0) {
-				baos.write(mis.read());
-			}
-			baos.writeTo(out);
-		}
-		else {
-			System.err.println("buffer is null");
-		}
+		
+		return null;
 	}
 
 	public MemoryFileBuffer writeXLS(IWContext iwc, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap, RegistrationStatus status) throws Exception {

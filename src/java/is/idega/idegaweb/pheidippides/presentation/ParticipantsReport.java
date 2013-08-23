@@ -5,12 +5,14 @@ import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.output.ParticipantsFileCreator;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,8 +25,10 @@ import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.util.CoreConstants;
+import com.idega.util.EmailValidator;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
+import com.idega.util.SendMail;
 import com.idega.util.expression.ELUtil;
 
 public class ParticipantsReport extends IWBaseComponent {
@@ -32,6 +36,7 @@ public class ParticipantsReport extends IWBaseComponent {
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
+	private static final String PARAMETER_EMAIL = "prm_email";
 
 	@Autowired
 	private PheidippidesDao dao;
@@ -84,9 +89,31 @@ public class ParticipantsReport extends IWBaseComponent {
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
 
+		String email = iwc.getParameter(PARAMETER_EMAIL);
+		if (email != null && EmailValidator.getInstance().validateEmail(email)) {
+			createReport(iwc, email);
+		}
+		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("participantsReport/view.xhtml"));
 		add(facelet);
+	}
+	
+	private void createReport(final IWContext iwc, final String email) {
+		Thread results = new Thread(new Runnable() {
+
+			public void run() {
+				try {
+					ParticipantsFileCreator writer = new ParticipantsFileCreator();
+					SendMail.send("admin@marathon.is", email, null, null, null, null, "Participants report", "", false, false, writer.createReport(iwc));
+				}
+				catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		results.start();
 	}
 	
 	protected RegistrationStatus getStatus() {
