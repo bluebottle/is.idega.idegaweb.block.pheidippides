@@ -80,9 +80,9 @@
 			</div>
 		</fieldset>
 		
-		<ui:component rendered="#{not empty param['prm_email]}">
+		<ui:fragment rendered="#{not empty param['prm_email']}">
 			<p class="info"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_being_created']}" /></p>
-		</ui:component>
+		</ui:fragment>
 	</form>
 </ui:component>
 </html>

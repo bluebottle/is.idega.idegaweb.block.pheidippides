@@ -1,6 +1,5 @@
 package is.idega.idegaweb.pheidippides.output;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
@@ -22,7 +21,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -42,24 +40,13 @@ import com.idega.idegaweb.IWResourceBundle;
 import com.idega.io.MemoryFileBuffer;
 import com.idega.io.MemoryInputStream;
 import com.idega.io.MemoryOutputStream;
-import com.idega.presentation.IWContext;
 import com.idega.util.IWTimestamp;
 import com.idega.util.StringHandler;
 import com.idega.util.expression.ELUtil;
 
 public class ParticipantsFileCreator {
 
-	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
-	private static final String PARAMETER_YEAR = "prm_year";
-	private static final String PARAMETER_RACE_PK = "prm_race_pk";
-	private static final String PARAMETER_GENDER = "prm_gender";
-	private static final String PARAMETER_STATUS = "prm_status";
-	private static final String PARAMETER_COMPANY = "prm_company";
-	private static final String PARAMETER_YEAR_FROM = "prm_year_from";
-	private static final String PARAMETER_YEAR_TO = "prm_year_to";
-
 	private MemoryFileBuffer buffer = null;
-	private Locale locale;
 	private IWResourceBundle iwrb;
 
 	@Autowired
@@ -68,29 +55,11 @@ public class ParticipantsFileCreator {
 	@Autowired
 	private PheidippidesDao dao;
 	
-	public File createReport(IWContext iwc) {
-		this.locale = iwc.getCurrentLocale();
-		this.iwrb = iwc.getIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(this.locale);
+	public File createReport(IWResourceBundle iwrb, IWTimestamp dateFrom, IWTimestamp dateTo, String gender, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap, RegistrationStatus status) {
+		this.iwrb = iwrb;
 
 		try {
-			Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
-			Integer year = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
-			Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
-			RegistrationStatus status = RegistrationStatus.valueOf(iwc.getParameter(PARAMETER_STATUS));
-			Company company = iwc.isParameterSet(PARAMETER_COMPANY) ? getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY))) : null;
-
-			List<Registration> registrations = null;
-			if (iwc.isParameterSet(PARAMETER_RACE_PK)) {
-				registrations = getDao().getRegistrations(company, race, status);
-			}
-			else {
-				registrations = getDao().getRegistrations(company, event, year, status);
-			}
-			Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
-			
-			List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
-
-			this.buffer = writeXLS(iwc, event, year, race, trinkets, registrations, participantsMap, status);
+			this.buffer = writeXLS(dateFrom, dateTo, gender, event, year, race, trinkets, registrations, participantsMap, status);
 
 			if (this.buffer != null) {
 				File file = File.createTempFile("report-", ".xls");
@@ -118,11 +87,7 @@ public class ParticipantsFileCreator {
 		return null;
 	}
 
-	public MemoryFileBuffer writeXLS(IWContext iwc, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap, RegistrationStatus status) throws Exception {
-		IWTimestamp dateFrom = iwc.isParameterSet(PARAMETER_YEAR_FROM) ? new IWTimestamp(1, 1, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_FROM))) : null;
-		IWTimestamp dateTo = iwc.isParameterSet(PARAMETER_YEAR_TO) ? new IWTimestamp(31, 12, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_TO))) : null;
-		String gender = iwc.isParameterSet(PARAMETER_GENDER) ? iwc.getParameter(PARAMETER_GENDER) : null;
-		
+	public MemoryFileBuffer writeXLS(IWTimestamp dateFrom, IWTimestamp dateTo, String gender, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap, RegistrationStatus status) throws Exception {
 		MemoryFileBuffer buffer = new MemoryFileBuffer();
 		MemoryOutputStream mos = new MemoryOutputStream(buffer);
 
@@ -466,14 +431,6 @@ public class ParticipantsFileCreator {
 		return service;
 	}
 
-	private PheidippidesDao getDao() {
-		if (dao == null) {
-			ELUtil.getInstance().autowire(this);
-		}
-		
-		return dao;
-	}
-	
 	private CountryHome getCountryHome() {
 		try {
 			return (CountryHome) IDOLookup.getHome(Country.class);

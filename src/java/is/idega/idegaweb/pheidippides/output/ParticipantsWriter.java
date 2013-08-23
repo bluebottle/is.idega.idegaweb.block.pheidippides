@@ -120,6 +120,7 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 				baos.write(mis.read());
 			}
 			baos.writeTo(out);
+			mis.close();
 		}
 		else {
 			System.err.println("buffer is null");
