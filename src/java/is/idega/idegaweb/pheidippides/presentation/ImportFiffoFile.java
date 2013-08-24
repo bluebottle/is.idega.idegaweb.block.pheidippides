@@ -6,8 +6,10 @@ import is.idega.idegaweb.pheidippides.business.FiffoImportStatus;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -145,19 +147,28 @@ public class ImportFiffoFile extends IWBaseComponent {
 					}
 
 					if (!hasError) {
+						System.out.println("no errors");
 						participantList = toImport.get(FiffoImportStatus.OK);
 						if (participantList != null && !participantList.isEmpty()) {							
 							List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
+							Event event = dao.getEvent(1L);
+
 							for (Participant participant : participantList) {
 								ParticipantHolder holder = new ParticipantHolder();
 								holder.setParticipant(participant);
 								
+								String distanceString = participant.getDistanceString();
+								Distance distance = dao.getDistance(distanceString);
+								Race race = dao.getRace(event, distance, 2013, false);
+								
+								holder.setRace(race);
+								
 								holders.add(holder);
 							}
 
-							/*if (!holders.isEmpty()) {
+							if (!holders.isEmpty()) {
 								getService().storeFiffoImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
-							}*/
+							}
 							
 							System.out.println("Got " + participantList.size() + " entries to import");
 							participantList = toImport.get(FiffoImportStatus.CHANGED_DISTANCE);
@@ -175,12 +186,16 @@ public class ImportFiffoFile extends IWBaseComponent {
 
 						} else {
 							bean.setUnableToImportFile(true);
-							hasError = true;						
+							hasError = true;		
+							
+							System.out.println("got errors 1");
 						}
 					}					
 				} else {
 					bean.setUnableToImportFile(true);
 					hasError = true;
+
+					System.out.println("got errors 2");
 				}
 
 				try {

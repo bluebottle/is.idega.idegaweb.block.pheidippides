@@ -32,6 +32,7 @@ public class Participant implements Serializable {
 	private String relayLeg;
 	private ShirtSize shirtSize;
 	private Long registrationID;
+	private String distanceString;
 	
 	private Collection<Race> availableRaces;
 
@@ -270,5 +271,13 @@ public class Participant implements Serializable {
 
 	public void setAvailableRaces(Collection<Race> availableRaces) {
 		this.availableRaces = availableRaces;
+	}
+
+	public String getDistanceString() {
+		return distanceString;
+	}
+
+	public void setDistanceString(String distanceString) {
+		this.distanceString = distanceString;
 	}
 }
