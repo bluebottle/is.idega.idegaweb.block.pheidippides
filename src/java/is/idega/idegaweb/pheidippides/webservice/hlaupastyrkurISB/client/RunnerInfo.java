@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class RunnerInfo  implements java.io.Serializable {
-    private java.lang.String charityPersonalID;
+
+	private static final long serialVersionUID = -4289916360454281268L;
+
+	private java.lang.String charityPersonalID;
 
     private java.lang.String distance;
 
@@ -303,7 +307,8 @@ public class RunnerInfo  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof RunnerInfo)) return false;
         RunnerInfo other = (RunnerInfo) obj;
         if (obj == null) return false;
@@ -355,7 +360,8 @@ public class RunnerInfo  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

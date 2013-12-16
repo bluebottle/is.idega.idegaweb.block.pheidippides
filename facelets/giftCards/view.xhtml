@@ -14,15 +14,21 @@
 			<f:param name="prm_action" value="2" />
 			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_gift_card']}" /></span>
 		</h:outputLink>
-	
+		
+		<div class="formItem">
+			<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['filter']}" /></label>
+			<input type="search" class="light-table-filter" data-table="order-table" />
+		</div>
+		
 		<ui:fragment rendered="#{not empty giftCardBean.giftCards}">
-			<table class="adminTable giftCards" width="100%" cellspacing="0" cellpadding="0">
+			<table class="adminTable giftCards order-table" width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['code']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remainder']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_from']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
 						<th class="action lastColumn"></th>
@@ -32,18 +38,26 @@
 				<tbody>
 					<ui:repeat value="#{giftCardBean.giftCards}" var="giftCard">
 						<ui:param value="#{giftCardBean.cardUsage[giftCard]}" name="remainder" />
+						<ui:param value="#{giftCardBean.buyerMap[giftCard.header.buyer]}" name="buyer" />
 						
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{giftCard.code}" /></td>
 							<td><h:outputText value="#{giftCard.amount}" /></td>
 							<td><h:outputText value="#{giftCard.amount - remainder}" /></td>
-							<td><h:outputText value="#{giftCard.header.validFrom}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td><h:outputText value="#{buyer.fullName}" /></td>
+							<td><h:outputText value="#{buyer.personalId}"><c:personalIDConverter /></h:outputText></td>
 							<td><h:outputText value="#{giftCard.header.validTo}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 							<td><h:outputText value="#{giftCard.header.email}" /></td>
 							<td class="action lastColumn">
 								<c:DownloadLink styleClass="pdf" downloadWriter="#{giftCardBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_pdf']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_pdf']}">
 									<f:param name="prm_gift_card_code" value="#{giftCard.code}" />
 								</c:DownloadLink>
+								<ui:fragment rendered="#{not empty giftCard.greeting}">
+									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['confirm_card_delete']}">
+										<f:param name="prm_gift_card" value="#{giftCard.code}" />
+										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['delete']}" /></span>
+									</h:outputLink>
+								</ui:fragment>
 							</td>
 						</tr>
 					</ui:repeat>

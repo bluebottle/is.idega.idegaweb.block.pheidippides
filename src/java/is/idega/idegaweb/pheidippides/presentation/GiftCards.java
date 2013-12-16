@@ -7,6 +7,7 @@ import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.output.GiftCardWriter;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	
+	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 	private static final String PARAMETER_AMOUNT = "prm_amount";
 	private static final String PARAMETER_AMOUNT_TEXT = "prm_amount_text";
 	private static final String PARAMETER_GREETING_TEXT = "prm_greeting_text";
@@ -82,6 +84,10 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		bean.setDownloadWriter(GiftCardWriter.class);
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
 
+		if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+			getService().removeGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD));
+		}
+		
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
@@ -112,9 +118,19 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 				cardUsageMap.put(giftCard, getDao().getGiftCardUsageSum(giftCard));
 			}
 			bean.setCardUsage(cardUsageMap);
+
+			Map<String, Participant> buyer = new HashMap<String, Participant>();
+			for (GiftCard giftCard : giftCards) {
+				String uuid = giftCard.getHeader().getBuyer();
+				if (uuid != null) {
+					buyer.put(uuid, getService().getParticipantByUUID(uuid));
+				}
+			}
+			bean.setBuyerMap(buyer);
 		}		
 	}
 
+	@Override
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		int amount = Integer.parseInt(iwc.getParameter(PARAMETER_AMOUNT));
 		String amountText = iwc.getParameter(PARAMETER_AMOUNT_TEXT);
@@ -131,7 +147,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		List<GiftCardHolder> holders = new ArrayList<GiftCardHolder>();
 		holders.add(holder);
 		
-		getService().storeGiftCard(holders, iwc.getCurrentUser().getUniqueId(), "ibr@ibr.is", iwc.getCurrentLocale(), false);
+		getService().storeGiftCard(holders, iwc.getCurrentUser().getUniqueId(), "skraning@marathon.is", iwc.getCurrentLocale(), false);
 		
 		return true;
 	}

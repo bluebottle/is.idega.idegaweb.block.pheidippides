@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class TeamRequest  extends is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.RegisterRequest  implements java.io.Serializable {
-    private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.TeamMember[] members;
+
+	private static final long serialVersionUID = -2091503953218503664L;
+
+	private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.TeamMember[] members;
 
     private java.lang.String teamID;
 
@@ -76,7 +80,8 @@ public class TeamRequest  extends is.idega.idegaweb.pheidippides.webservice.hlau
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof TeamRequest)) return false;
         TeamRequest other = (TeamRequest) obj;
         if (obj == null) return false;
@@ -98,7 +103,8 @@ public class TeamRequest  extends is.idega.idegaweb.pheidippides.webservice.hlau
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

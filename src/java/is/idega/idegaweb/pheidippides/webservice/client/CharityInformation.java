@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.client;
 
+@SuppressWarnings("rawtypes")
 public class CharityInformation  implements java.io.Serializable {
-    private java.lang.String address;
+
+	private static final long serialVersionUID = 4358133549519775208L;
+
+	private java.lang.String address;
 
     private java.lang.String charityID;
 
@@ -375,10 +379,10 @@ public class CharityInformation  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof CharityInformation)) return false;
         CharityInformation other = (CharityInformation) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -434,7 +438,8 @@ public class CharityInformation  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

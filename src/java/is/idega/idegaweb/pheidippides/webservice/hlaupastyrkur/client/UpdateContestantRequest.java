@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class UpdateContestantRequest  extends is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.UpdateRequest  implements java.io.Serializable {
-    private java.lang.String personID;
+
+	private static final long serialVersionUID = 8607559492722107567L;
+
+	private java.lang.String personID;
 
     private java.lang.Boolean showOnWeb;
 
@@ -72,7 +76,8 @@ public class UpdateContestantRequest  extends is.idega.idegaweb.pheidippides.web
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof UpdateContestantRequest)) return false;
         UpdateContestantRequest other = (UpdateContestantRequest) obj;
         if (obj == null) return false;
@@ -94,7 +99,8 @@ public class UpdateContestantRequest  extends is.idega.idegaweb.pheidippides.web
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

@@ -17,16 +17,20 @@ import com.idega.user.data.User;
 public class WebServiceLoginSessionBMPBean extends GenericEntity implements
 		WebServiceLoginSession {
 
+	private static final long serialVersionUID = 3260409096283784424L;
+
 	public final static String ENTITY_NAME = "ph_ws_session";
 	public final static String COLUMN_USER = "ic_user_id";
 	public final static String COLUMN_CREATED = "created";
 	public final static String COLUMN_LAST_ACCESS = "last_access";
 	public final static String COLUMN_IS_CLOSED = "is_closed";
 
+	@Override
 	public String getEntityName() {
 		return ENTITY_NAME;
 	}
 
+	@Override
 	public void initializeAttributes() {
 		addAttribute(getIDColumnName());
 		addManyToOneRelationship(COLUMN_USER, User.class);
@@ -71,7 +75,7 @@ public class WebServiceLoginSessionBMPBean extends GenericEntity implements
 	}
 
 	// ejb
-	public Collection ejbFindAllByUser(User user) throws FinderException {
+	public Collection<Object> ejbFindAllByUser(User user) throws FinderException {
 		Table table = new Table(this);
 		SelectQuery query = new SelectQuery(table);
 		query.addColumn(new WildCardColumn(table));

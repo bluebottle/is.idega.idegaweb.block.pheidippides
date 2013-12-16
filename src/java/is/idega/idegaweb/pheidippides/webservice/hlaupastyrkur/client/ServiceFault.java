@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class ServiceFault  extends org.apache.axis.AxisFault  implements java.io.Serializable {
-    private java.lang.String message1;
+
+	private static final long serialVersionUID = 7912331334929476832L;
+
+	private java.lang.String message1;
 
     private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ServiceException nestedException;
 
@@ -63,7 +67,8 @@ public class ServiceFault  extends org.apache.axis.AxisFault  implements java.io
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ServiceFault)) return false;
         ServiceFault other = (ServiceFault) obj;
         if (obj == null) return false;
@@ -85,7 +90,8 @@ public class ServiceFault  extends org.apache.axis.AxisFault  implements java.io
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }
@@ -158,7 +164,8 @@ public class ServiceFault  extends org.apache.axis.AxisFault  implements java.io
     /**
      * Writes the exception data to the faultDetails
      */
-    public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
+    @Override
+	public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
         context.serialize(qname, null, this);
     }
 }

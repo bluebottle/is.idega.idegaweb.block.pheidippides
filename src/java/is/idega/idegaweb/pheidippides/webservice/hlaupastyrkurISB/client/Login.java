@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkurISB.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class Login  implements java.io.Serializable {
-    private java.lang.String loginName;
+
+	private static final long serialVersionUID = 7904717389460639800L;
+
+	private java.lang.String loginName;
 
     private java.lang.String password;
 
@@ -63,7 +67,8 @@ public class Login  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Login)) return false;
         Login other = (Login) obj;
         if (obj == null) return false;
@@ -85,7 +90,8 @@ public class Login  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

@@ -43,13 +43,11 @@ import com.idega.core.accesscontrol.data.LoginTable;
 import com.idega.core.accesscontrol.data.LoginTableHome;
 import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.Phone;
-import com.idega.core.location.business.AddressBusiness;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.Country;
 import com.idega.data.IDOLookup;
 import com.idega.data.IDOLookupException;
 import com.idega.idegaweb.IWMainApplication;
-import com.idega.user.business.GroupBusiness;
 import com.idega.user.business.NoPhoneFoundException;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
@@ -357,14 +355,13 @@ public class PheidippidesWebService {
 			LoginTable loginTable = getLoginTableHome().findByLogin(userName);
 			if (loginTable != null) {
 				// check if user is already verified
-				Collection sessions = getWebServiceLoginSessionHome()
+				Collection<WebServiceLoginSession> sessions = getWebServiceLoginSessionHome()
 						.findAllByUser(loginTable.getUser());
 				if (sessions != null && !sessions.isEmpty()) {
 					IWTimestamp now = IWTimestamp.RightNow();
-					Iterator it = sessions.iterator();
+					Iterator<WebServiceLoginSession> it = sessions.iterator();
 					while (it.hasNext()) {
-						WebServiceLoginSession loginSession = (WebServiceLoginSession) it
-								.next();
+						WebServiceLoginSession loginSession = it.next();
 						IWTimestamp lastAccess = new IWTimestamp(
 								loginSession.getLastAccess());
 						if (IWTimestamp.getMilliSecondsBetween(lastAccess, now) <= getSessionTimeout()) {
@@ -478,21 +475,9 @@ public class PheidippidesWebService {
 	}
 
 	private UserBusiness getUserBusiness() throws IBOLookupException {
-		return (UserBusiness) IBOLookup.getServiceInstance(
+		return IBOLookup.getServiceInstance(
 				IWMainApplication.getDefaultIWApplicationContext(),
 				UserBusiness.class);
-	}
-
-	private GroupBusiness getGroupBusiness() throws IBOLookupException {
-		return (GroupBusiness) IBOLookup.getServiceInstance(
-				IWMainApplication.getDefaultIWApplicationContext(),
-				GroupBusiness.class);
-	}
-
-	private AddressBusiness getAddressBusiness() throws IBOLookupException {
-		return (AddressBusiness) IBOLookup.getServiceInstance(
-				IWMainApplication.getDefaultIWApplicationContext(),
-				AddressBusiness.class);
 	}
 
 	public boolean updateUserPassword(Session session, String personalID,

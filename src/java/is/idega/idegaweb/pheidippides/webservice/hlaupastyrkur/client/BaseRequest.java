@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings("rawtypes")
 public class BaseRequest  implements java.io.Serializable {
-    private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login;
+
+	private static final long serialVersionUID = 427638032250888561L;
+
+	private is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login login;
 
     public BaseRequest() {
     }
@@ -39,10 +43,10 @@ public class BaseRequest  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof BaseRequest)) return false;
         BaseRequest other = (BaseRequest) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -58,7 +62,8 @@ public class BaseRequest  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }
@@ -96,7 +101,7 @@ public class BaseRequest  implements java.io.Serializable {
     /**
      * Get Custom Serializer
      */
-    public static org.apache.axis.encoding.Serializer getSerializer(
+	public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  
            javax.xml.namespace.QName _xmlType) {

@@ -7,12 +7,17 @@
 
 package is.idega.idegaweb.pheidippides.webservice.server;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class SessionTimedOutException  extends org.apache.axis.AxisFault  implements java.io.Serializable {
-    public SessionTimedOutException() {
+
+	private static final long serialVersionUID = 2424439851352295786L;
+
+	public SessionTimedOutException() {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SessionTimedOutException)) return false;
         SessionTimedOutException other = (SessionTimedOutException) obj;
         if (obj == null) return false;
@@ -28,7 +33,8 @@ public class SessionTimedOutException  extends org.apache.axis.AxisFault  implem
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }
@@ -81,7 +87,8 @@ public class SessionTimedOutException  extends org.apache.axis.AxisFault  implem
     /**
      * Writes the exception data to the faultDetails
      */
-    public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
+    @Override
+	public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
         context.serialize(qname, null, this);
     }
 }

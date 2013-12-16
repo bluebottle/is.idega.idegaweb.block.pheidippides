@@ -1,0 +1,54 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<fieldset class="formSection noNavigation">
+		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card_list']}" /></legend>
+
+		<div class="printout">
+			<c:DownloadLink downloadWriter="#{giftCardBean.downloadWriter}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_xls']}" />
+		</div>
+	
+		<ui:fragment rendered="#{not empty giftCardBean.giftCardUsage}">
+			<table class="adminTable giftCards" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['code']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['status']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<ui:repeat value="#{giftCardBean.giftCardUsage}" var="usage">
+						<ui:param value="#{usage.card}" name="giftCard" />
+						<ui:param value="#{giftCardBean.buyerMap[giftCard.header.buyer]}" name="buyer" />
+						<ui:param value="#{giftCardBean.raceUsage[usage]}" name="race" />
+						
+						<tr>
+							<td class="firstColumn"><h:outputText value="#{giftCard.code}" /></td>
+							<td><h:outputText value="#{usage.amount}" /></td>
+							<td><h:outputText value="#{usage.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
+							<td><h:outputText value="#{usage.status}" /></td>
+							<td><h:outputText value="#{race.event.name}" /></td>
+							<td><h:outputText value="#{race.year}" /></td>
+							<td><h:outputText value="#{buyer.fullName}" /></td>
+							<td class="lastColumn"><h:outputText value="#{buyer.personalId}"><c:personalIDConverter /></h:outputText></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
+		</ui:fragment>
+	</fieldset>
+</ui:component>
+</html>

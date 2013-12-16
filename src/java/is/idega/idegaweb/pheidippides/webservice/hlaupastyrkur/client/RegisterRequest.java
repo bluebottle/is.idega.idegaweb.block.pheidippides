@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BaseRequest  implements java.io.Serializable {
-    private java.lang.String charityID;
+
+	private static final long serialVersionUID = -6367404936418209167L;
+
+	private java.lang.String charityID;
 
     private java.lang.String distance;
 
@@ -138,7 +142,8 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof RegisterRequest)) return false;
         RegisterRequest other = (RegisterRequest) obj;
         if (obj == null) return false;
@@ -169,7 +174,8 @@ public class RegisterRequest  extends is.idega.idegaweb.pheidippides.webservice.
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

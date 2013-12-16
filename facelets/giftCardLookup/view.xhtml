@@ -1,0 +1,46 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:j="http://java.sun.com/jstl/core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form id="giftCardLookup" class="userForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="send" />
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.gift_card_lookup']}" /></h1>
+	
+		<div class="formItem required">
+			<label for="prm_code"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.code']}" /></label>
+			<input type="text" name="prm_code" class="required" />
+		</div>
+		
+		<div class="submit">
+			<a href="#" class="lookup"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['lookup']}" /></span></a>
+		</div>
+		
+		<ui:fragment rendered="#{not empty pheidippidesBean.action}">
+			<p class="error"><h:outputText value="#{pheidippidesBean.action}" /></p>
+		</ui:fragment>
+		<ui:fragment rendered="#{not empty giftCardBean.giftCard}">
+			<fieldset class="giftCardOverview">
+				<div class="formItem overview">
+					<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></label>
+					<span><h:outputText value="#{giftCardBean.giftCard.amount}" /></span>
+				</div>
+				<div class="formItem overview">
+					<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remainder']}" /></label>
+					<span><h:outputText value="#{giftCardBean.giftCard.amount - giftCardBean.used}" /></span>
+				</div>
+				<div class="formItem overview">
+					<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_to']}" /></label>
+					<span><h:outputText value="#{giftCardBean.giftCard.header.validTo}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></span>
+				</div>
+			</fieldset>
+		</ui:fragment>
+	</form>
+	
+</ui:component>
+</html>

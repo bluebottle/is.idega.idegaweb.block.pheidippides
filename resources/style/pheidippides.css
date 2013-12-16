@@ -949,3 +949,31 @@ table.giftCards tr.childRow>td {
 	border-bottom: 2px #ccc solid !important;
 	border-top: 2px #ccc solid !important;
 }
+
+#giftCardLookup .error, #giftCardLookup .giftCardOverview {
+	margin-top: 1em;
+}
+
+.formSection.noNavigation .formItem {
+	display: block;
+	clear: both;
+	margin-bottom: 1em;
+}
+
+.formSection.noNavigation .formItem label  {
+	font-weight: bold;
+	width: 100px;
+	display: inline-block;
+}
+
+.formSection.noNavigation table.adminTable .action {
+	width: 40px;
+}
+
+.formSection.noNavigation table.adminTable .action a {
+	display: inline-block;
+}
+
+.formSection.noNavigation table.adminTable .action .deleteItem {
+	margin-left: 4px;
+}

@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class Session  implements java.io.Serializable {
-    private java.lang.String sessionID;
+
+	private static final long serialVersionUID = -8892880248896771673L;
+
+	private java.lang.String sessionID;
 
     public Session() {
     }
@@ -39,7 +43,8 @@ public class Session  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Session)) return false;
         Session other = (Session) obj;
         if (obj == null) return false;
@@ -58,7 +63,8 @@ public class Session  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

@@ -271,6 +271,7 @@ public interface PheidippidesDao extends GenericDao {
 	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
 			int amount, String amountText, String greetingText);
 	
+	public List<GiftCardUsage> getGiftCardUsage();
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card);
 	
 	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header, GiftCardUsageStatus status);
@@ -281,9 +282,13 @@ public interface PheidippidesDao extends GenericDao {
 
 	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage, RegistrationHeader header, GiftCardUsageStatus status);
 	
+	public boolean removeGiftCardHeader(GiftCardHeader header);
+	public boolean removeGiftCard(GiftCard giftCard);
 	public boolean removeGiftCardUsage(GiftCardUsage usage);
 	
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID);
 	
+	public boolean removeGiftCardHeader(Long id);
+	public boolean removeGiftCard(String code);
 	public boolean removeGiftCardUsage(Long giftCardUsageID);
 }

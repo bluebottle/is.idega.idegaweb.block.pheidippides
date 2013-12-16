@@ -7,11 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.client;
 
+@SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub implements is.idega.idegaweb.pheidippides.webservice.client.CharityService {
-    private java.util.Vector cachedSerClasses = new java.util.Vector();
-    private java.util.Vector cachedSerQNames = new java.util.Vector();
-    private java.util.Vector cachedSerFactories = new java.util.Vector();
-    private java.util.Vector cachedDeserFactories = new java.util.Vector();
+    private final java.util.Vector cachedSerClasses = new java.util.Vector();
+    private final java.util.Vector cachedSerQNames = new java.util.Vector();
+    private final java.util.Vector cachedSerFactories = new java.util.Vector();
+    private final java.util.Vector cachedDeserFactories = new java.util.Vector();
 
     static org.apache.axis.description.OperationDesc [] _operations;
 
@@ -141,7 +142,7 @@ public class CharityServiceSoapBindingStub extends org.apache.axis.client.Stub i
          super.cachedEndpoint = endpointURL;
     }
 
-    public CharityServiceSoapBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+	public CharityServiceSoapBindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
         if (service == null) {
             super.service = new org.apache.axis.client.Service();
         } else {

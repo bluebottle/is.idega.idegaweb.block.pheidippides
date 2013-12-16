@@ -1,15 +1,20 @@
 package is.idega.idegaweb.pheidippides.webservice.data;
 
 
-import com.idega.data.IDOFactory;
-import javax.ejb.CreateException;
-import com.idega.data.IDOEntity;
-import com.idega.user.data.User;
-import javax.ejb.FinderException;
 import java.util.Collection;
 
-public class WebServiceLoginSessionHomeImpl extends IDOFactory implements
-		WebServiceLoginSessionHome {
+import javax.ejb.CreateException;
+import javax.ejb.FinderException;
+
+import com.idega.data.IDOEntity;
+import com.idega.data.IDOFactory;
+import com.idega.user.data.User;
+
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class WebServiceLoginSessionHomeImpl extends IDOFactory implements WebServiceLoginSessionHome {
+	
+	private static final long serialVersionUID = -3617880117225709211L;
+
 	@Override
 	public Class getEntityInterfaceClass() {
 		return WebServiceLoginSession.class;
@@ -24,7 +29,7 @@ public class WebServiceLoginSessionHomeImpl extends IDOFactory implements
 		return (WebServiceLoginSession) super.findByPrimaryKeyIDO(pk);
 	}
 
-	public Collection findAllByUser(User user) throws FinderException {
+	public Collection<WebServiceLoginSession> findAllByUser(User user) throws FinderException {
 		IDOEntity entity = this.idoCheckOutPooledEntity();
 		Collection ids = ((WebServiceLoginSessionBMPBean) entity)
 				.ejbFindAllByUser(user);

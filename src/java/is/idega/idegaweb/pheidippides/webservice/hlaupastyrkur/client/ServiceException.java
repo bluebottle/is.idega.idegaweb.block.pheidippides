@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class ServiceException  implements java.io.Serializable {
-    private java.lang.String exceptionTypeName;
+
+	private static final long serialVersionUID = 5898965241887163744L;
+
+	private java.lang.String exceptionTypeName;
 
     private java.lang.String exceptionTypeNamespace;
 
@@ -183,7 +187,8 @@ public class ServiceException  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ServiceException)) return false;
         ServiceException other = (ServiceException) obj;
         if (obj == null) return false;
@@ -220,7 +225,8 @@ public class ServiceException  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

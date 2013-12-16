@@ -7,9 +7,13 @@
 
 package is.idega.idegaweb.pheidippides.webservice.server;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CharityServiceSoapBindingSkeleton implements is.idega.idegaweb.pheidippides.webservice.server.CharityService_PortType, org.apache.axis.wsdl.Skeleton {
-    private is.idega.idegaweb.pheidippides.webservice.server.CharityService_PortType impl;
-    private static java.util.Map _myOperations = new java.util.Hashtable();
+
+	private static final long serialVersionUID = 8794282165054218975L;
+
+	private final is.idega.idegaweb.pheidippides.webservice.server.CharityService_PortType impl;
+	private static java.util.Map _myOperations = new java.util.Hashtable();
     private static java.util.Collection _myOperationsList = new java.util.ArrayList();
 
     /**

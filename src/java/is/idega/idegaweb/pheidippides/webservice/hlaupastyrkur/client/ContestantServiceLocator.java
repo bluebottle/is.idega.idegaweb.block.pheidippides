@@ -7,9 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ContestantServiceLocator extends org.apache.axis.client.Service implements is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantService {
 
-    public ContestantServiceLocator() {
+	private static final long serialVersionUID = 1039189263959508881L;
+
+	public ContestantServiceLocator() {
     }
 
 
@@ -70,7 +73,8 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService.class.isAssignableFrom(serviceEndpointInterface)) {
                 is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BasicHttpBinding_IContestantServiceStub _stub = new is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BasicHttpBinding_IContestantServiceStub(new java.net.URL(BasicHttpBinding_IContestantService_address), this);
@@ -89,7 +93,8 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
@@ -104,13 +109,15 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
         }
     }
 
-    public javax.xml.namespace.QName getServiceName() {
+    @Override
+	public javax.xml.namespace.QName getServiceName() {
         return new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "ContestantService");
     }
 
     private java.util.HashSet ports = null;
 
-    public java.util.Iterator getPorts() {
+    @Override
+	public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
             ports.add(new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "BasicHttpBinding_IContestantService"));

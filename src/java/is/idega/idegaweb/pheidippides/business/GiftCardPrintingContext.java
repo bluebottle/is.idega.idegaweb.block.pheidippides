@@ -45,12 +45,18 @@ public class GiftCardPrintingContext extends PrintingContextImpl {
 		props.put("amountText", holder.getAmountText());
 		props.put("key", holder.getCode());
 		props.put("created", holder.getCreated());
+		props.put("greeting", holder.getGreetingText());
+		
+		String template = "gift_card_template.xml";
+		if (holder.getGreetingText() != null && holder.getGreetingText().length() > 0) {
+			template = "gift_card_empty_template.xml";
+		}
 
 		setFileName(getResourceBundle(iwac, locale).getLocalizedString("gift_card_filename", "gift_card") + ".pdf");
 		addDocumentProperties(props);
 		setResourceDirectory(new File(getResourceRealPath(getBundle(iwac), locale)));
 		try {
-			File file = FileUtil.getFileFromWorkspace(getResourceRealPath(getBundle(iwac), locale) + "gift_card_template.xml");
+			File file = FileUtil.getFileFromWorkspace(getResourceRealPath(getBundle(iwac), locale) + template);
 			setTemplateStream(new FileInputStream(file));
 		}
 		catch (IOException e) {

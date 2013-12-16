@@ -297,6 +297,20 @@ public class PheidippidesService {
 
 		return p;
 	}
+	
+	public Participant getParticipantByUUID(String uuid) {
+		Participant p = null;
+
+		try {
+			User user = getUserBusiness().getUserByUniqueId(uuid);
+			p = getParticipant(user);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+		}
+
+		return p;
+	}
 
 	public Map<Registration, Participant> getParticantMap(
 			List<Registration> registrations) {
@@ -678,6 +692,7 @@ public class PheidippidesService {
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	public Map<FiffoImportStatus, List<Participant>> importFiffoExcelFile(
 			FileInputStream input, Event event, int year) {
 		Map<FiffoImportStatus, List<Participant>> map = new HashMap<FiffoImportStatus, List<Participant>>();
@@ -1689,7 +1704,7 @@ public class PheidippidesService {
 
 	public UserBusiness getUserBusiness() {
 		try {
-			return (UserBusiness) IBOLookup.getServiceInstance(
+			return IBOLookup.getServiceInstance(
 					IWMainApplication.getDefaultIWApplicationContext(),
 					UserBusiness.class);
 		} catch (IBOLookupException ile) {
@@ -3861,5 +3876,26 @@ public class PheidippidesService {
 		}
 
 		return registration;
+	}
+	
+	public void removeGiftCard(String code) {
+		GiftCard card = dao.getGiftCard(code);
+		if (card != null) {
+			GiftCardHeader header = card.getHeader();
+
+			List<GiftCard> cards = dao.getGiftCards(header);
+			if (cards != null && !cards.isEmpty()) {
+				for (GiftCard giftCard : cards) {
+					List<GiftCardUsage> usage = dao.getGiftCardUsage(giftCard);
+					if (usage != null && !usage.isEmpty()) {
+						for (GiftCardUsage giftCardUsage : usage) {
+							dao.removeGiftCardUsage(giftCardUsage);
+						}
+					}
+					dao.removeGiftCard(giftCard);
+				}
+			}
+			dao.removeGiftCardHeader(header);
+		}
 	}
 }

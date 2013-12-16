@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.isb.server;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ISBServiceSoapBindingSkeleton implements is.idega.idegaweb.pheidippides.webservice.isb.server.ISBService_PortType, org.apache.axis.wsdl.Skeleton {
-    private is.idega.idegaweb.pheidippides.webservice.isb.server.ISBService_PortType impl;
+
+	private static final long serialVersionUID = -9160996365740026366L;
+
+	private final is.idega.idegaweb.pheidippides.webservice.isb.server.ISBService_PortType impl;
     private static java.util.Map _myOperations = new java.util.Hashtable();
     private static java.util.Collection _myOperationsList = new java.util.ArrayList();
 

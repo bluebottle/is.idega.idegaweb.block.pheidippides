@@ -41,6 +41,7 @@ public class ReceiptWriter extends DownloadWriter implements MediaWritable {
 	private Locale locale;
 	private IWResourceBundle iwrb;
 
+	@Override
 	public void init(HttpServletRequest req, IWContext iwc) {
 		try {
 			this.locale = iwc.getCurrentLocale();
@@ -64,6 +65,7 @@ public class ReceiptWriter extends DownloadWriter implements MediaWritable {
 		return dao;
 	}
 
+	@Override
 	public String getMimeType() {
 		if (this.buffer != null) {
 			return this.buffer.getMimeType();
@@ -71,6 +73,7 @@ public class ReceiptWriter extends DownloadWriter implements MediaWritable {
 		return super.getMimeType();
 	}
 
+	@Override
 	public void writeTo(OutputStream out) throws IOException {
 		if (this.buffer != null) {
 			MemoryInputStream mis = new MemoryInputStream(this.buffer);
@@ -79,6 +82,7 @@ public class ReceiptWriter extends DownloadWriter implements MediaWritable {
 				baos.write(mis.read());
 			}
 			baos.writeTo(out);
+			mis.close();
 		}
 		else {
 			System.err.println("buffer is null");
@@ -104,7 +108,7 @@ public class ReceiptWriter extends DownloadWriter implements MediaWritable {
 	
 	private PrintingService getPrintingService() {
 		try {
-			return (PrintingService) IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
+			return IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
 		}
 		catch (RemoteException e) {
 			throw new IBORuntimeException(e.getMessage());

@@ -7,8 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.server;
 
-public class Charity  implements java.io.Serializable {
-    private java.lang.String description;
+@SuppressWarnings("rawtypes")
+public class Charity implements java.io.Serializable {
+
+	private static final long serialVersionUID = 765523622973592189L;
+
+	private java.lang.String description;
 
     private java.lang.String id;
 
@@ -87,10 +91,10 @@ public class Charity  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Charity)) return false;
         Charity other = (Charity) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -112,7 +116,8 @@ public class Charity  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }
@@ -179,7 +184,7 @@ public class Charity  implements java.io.Serializable {
     /**
      * Get Custom Deserializer
      */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
+	public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  
            javax.xml.namespace.QName _xmlType) {

@@ -7,11 +7,12 @@
 
 package is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client;
 
+@SuppressWarnings("rawtypes")
 public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.client.Stub implements is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService {
-    private java.util.Vector cachedSerClasses = new java.util.Vector();
-    private java.util.Vector cachedSerQNames = new java.util.Vector();
-    private java.util.Vector cachedSerFactories = new java.util.Vector();
-    private java.util.Vector cachedDeserFactories = new java.util.Vector();
+    private final java.util.Vector cachedSerClasses = new java.util.Vector();
+    private final java.util.Vector cachedSerQNames = new java.util.Vector();
+    private final java.util.Vector cachedSerFactories = new java.util.Vector();
+    private final java.util.Vector cachedDeserFactories = new java.util.Vector();
 
     static org.apache.axis.description.OperationDesc [] _operations;
 
@@ -102,7 +103,8 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
          super.cachedEndpoint = endpointURL;
     }
 
-    public BasicHttpBinding_IContestantServiceStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    @SuppressWarnings("unchecked")
+	public BasicHttpBinding_IContestantServiceStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
         if (service == null) {
             super.service = new org.apache.axis.client.Service();
         } else {
@@ -114,14 +116,6 @@ public class BasicHttpBinding_IContestantServiceStub extends org.apache.axis.cli
             javax.xml.namespace.QName qName2;
             java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
             java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
-            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
-            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
-            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
-            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
-            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
-            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
-            java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
-            java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
             qName = new javax.xml.namespace.QName("http://tmsoftware.is/charities/services/", "ArrayOfTeamMember");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.TeamMember[].class;
