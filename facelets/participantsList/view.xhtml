@@ -148,7 +148,11 @@
 															<td><h:outputText value="#{relayPartner.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 														</ui:fragment>
 														<td><h:outputText value="#{relayPartner.email}" /></td>
-														<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', relayRegistration.shirtSize.localizedKey))]}" /></td>
+														<td>
+															<ui:fragment rendered="#{not empty relayRegistration.shirtSize}">
+																<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', relayRegistration.shirtSize.localizedKey))]}" />
+															</ui:fragment>
+														</td>
 														<td><h:outputText value="#{relayRegistration.leg}" /></td>
 													</tr>
 												</ui:repeat>

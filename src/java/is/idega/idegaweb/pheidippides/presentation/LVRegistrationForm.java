@@ -357,6 +357,13 @@ public class LVRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showExtraInformation(IWContext iwc, PheidippidesBean bean) {
+		if (getSession().getCurrentParticipant().getRace() == null) {
+			bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant()));
+			if (bean.getRaces() != null && bean.getRaces().size() == 1) {
+				getSession().getCurrentParticipant().setRace(bean.getRaces().iterator().next());
+				bean.setRaces(null);
+			}
+		}
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/LV/extraInformation.xhtml"));
 		add(facelet);
