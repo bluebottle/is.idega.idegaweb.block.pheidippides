@@ -95,7 +95,9 @@
 					<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
 				</ui:fragment>
 				<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-				<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
+				<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
+					<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
+				</ui:fragment>
 			</ui:fragment>
 			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount eq 0}">
 				<a href="#" class="next" rel="12"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>

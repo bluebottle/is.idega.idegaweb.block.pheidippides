@@ -199,6 +199,40 @@ public class LVRegistrationForm extends IWBaseComponent {
 					break;
 		
 				case ACTION_EXTRA_INFORMATION:
+					if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
+						Participant participant = null;
+						if (getSession().getCurrentParticipant() == null) {
+							ParticipantHolder holder = new ParticipantHolder();
+							getSession().setCurrentParticipant(holder);
+							
+							participant = new Participant();
+						}
+						else {
+							participant = getSession().getCurrentParticipant().getParticipant();
+						}
+
+						if (!getSession().isRegistrationWithPersonalId()) {
+							DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+							
+							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
+							try {
+								participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+							participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
+							participant.setCity(iwc.getParameter(PARAMETER_CITY));
+							participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
+							participant.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
+						}
+						participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
+						participant.setGender(iwc.getParameter(PARAMETER_GENDER));
+						participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+						participant.setPhoneHome(iwc.getParameter(PARAMETER_PHONE));
+						participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
+						getSession().getCurrentParticipant().setParticipant(participant);
+					}
+
 					if (iwc.isParameterSet(PARAMETER_RACE)) {
 						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
 					}
