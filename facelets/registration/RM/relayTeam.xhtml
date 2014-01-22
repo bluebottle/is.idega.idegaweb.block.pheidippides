@@ -35,7 +35,7 @@
 						</ui:fragment>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						<!-- th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th-->
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
 					</tr>
 				</thead>
@@ -51,7 +51,7 @@
 						</ui:fragment>
 						<td><h:outputText value="#{participant.participant.fullName}" /></td>
 						<td><h:outputText value="#{participant.participant.email}" /></td>
-						<td><h:outputText value="#{participant.shirtSize.size}" /></td>
+						<!-- td><h:outputText value="#{participant.shirtSize.size}" /></td-->
 						<td><input type="text" name="prm_relay_leg_first" value="#{participant.leg}" /></td>
 					</tr>
 					
@@ -67,14 +67,14 @@
 							</ui:fragment>
 							<td><input type="text" name="prm_name" value="#{partner.fullName}" /></td>
 							<td><input class="email" type="text" name="prm_email" value="#{partner.email}" /></td>
-							<td>
+							<!-- td>
 								<c:selectOne name="prm_shirt_size">
 									<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
 									<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
 										<c:selectOption name="#{raceShirt.size.size} - #{raceShirt.size.gender}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq partner.shirtSize.id}" />
 									</ui:repeat>
 								</c:selectOne>
-							</td>
+							</td-->
 							<td><input type="text" name="prm_relay_leg" value="#{partner.relayLeg}" /></td>
 						</tr>
 					</ui:repeat>
