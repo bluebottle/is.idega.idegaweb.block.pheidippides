@@ -60,14 +60,14 @@
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td>
+						<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td -->
 						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
 					</tr>
 					<ui:fragment rendered="#{not empty current.relayPartners}">
 						<ui:repeat value="#{current.relayPartners}" var="partner">
 							<tr class="relayPartner">
-								<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
-								<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
+								<td class="firstColumn" colspan="4"><h:outputText value="#{partner.fullName}" /></td>
+								<!-- td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td -->
 							</tr>
 						</ui:repeat>
 					</ui:fragment>
