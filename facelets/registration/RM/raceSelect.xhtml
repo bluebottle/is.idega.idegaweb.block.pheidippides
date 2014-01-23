@@ -29,6 +29,15 @@
 			</div>
 		</fieldset>
 		
+		<fieldset class="formSection">
+			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.needs_assistance_help')]}" /></div>
+
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_needs_assistance" checked="#{pheidippidesRegistrationSession.currentParticipant.needsAssistance}" />
+				<label for="prm_needs_assistance"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['needs_assistance']}" /></label>
+			</div>
+		</fieldset>
+		
 		<fieldset class="submit">
 			<a href="#" class="back" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="4"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>

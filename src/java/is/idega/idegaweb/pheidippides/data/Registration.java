@@ -71,6 +71,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_ESTIMATED_TIME = "estimated_time";
 	private static final String COLUMN_COMMENT = "comment";
 	
+	private static final String COLUMN_NEEDS_ASSISTANCE = "needs_assistance";
+	
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
@@ -144,6 +146,9 @@ public class Registration implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
 	private Date createdDate;
+	
+	@Column(name = Registration.COLUMN_NEEDS_ASSISTANCE)
+	private Boolean needsAssistance;
 
 	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	private List<RegistrationTrinket> trinkets;
@@ -314,6 +319,18 @@ public class Registration implements Serializable {
 	
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	public boolean getNeedsAssistance() {
+		if (needsAssistance != null) {
+			return needsAssistance.booleanValue();
+		}
+		
+		return false;
+	}
+	
+	public void setNeedsAssitance(boolean needsAssistance) {
+		this.needsAssistance = needsAssistance;
 	}
 
 	public List<RegistrationTrinket> getTrinkets() {

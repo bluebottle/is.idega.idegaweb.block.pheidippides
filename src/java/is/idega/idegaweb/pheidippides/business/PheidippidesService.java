@@ -1212,7 +1212,8 @@ public class PheidippidesService {
 							participantHolder.isHasDoneMarathonBefore(),
 							participantHolder.isHasDoneLVBefore(),
 							participantHolder.getBestMarathonTime(),
-							participantHolder.getBestUltraMarathonTime());
+							participantHolder.getBestUltraMarathonTime(),
+							participantHolder.isNeedsAssistance());
 
 					amount += participantHolder.getAmount()
 							- participantHolder.getDiscount();
@@ -1348,7 +1349,7 @@ public class PheidippidesService {
 										participant2.getRelayLeg(), 0, null,
 										participant.getNationality(),
 										user.getUniqueId(), 0, false, false,
-										null, null);
+										null, null, false);
 							}
 						}
 					}
@@ -1859,7 +1860,7 @@ public class PheidippidesService {
 					newHeader, RegistrationStatus.InTransition, newDistance,
 					newShirtSize, null, null, price.getPrice(), null, null,
 					null, 0, registration.isHasDoneMarathonBefore(),
-					registration.isHasDoneLVBefore(), null, null);
+					registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 		} else {
 			changeDistance(registration.getHeader(), registration, newDistance,
 					newShirtSize);
@@ -1878,7 +1879,7 @@ public class PheidippidesService {
 				oldRegistration.getId(), header, null, newDistance,
 				newShirtSize, null, null, 0, null, null, null, 0,
 				oldRegistration.isHasDoneMarathonBefore(),
-				oldRegistration.isHasDoneLVBefore(), null, null);
+				oldRegistration.isHasDoneLVBefore(), null, null, oldRegistration.getNeedsAssistance());
 
 		List<RegistrationTrinket> trinkets = oldRegistration.getTrinkets();
 		for (RegistrationTrinket registrationTrinket : trinkets) {
@@ -2121,7 +2122,7 @@ public class PheidippidesService {
 						RegistrationStatus.Cancelled, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null);
+						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 			}
 		}
 
@@ -2158,7 +2159,7 @@ public class PheidippidesService {
 						header, RegistrationStatus.OK, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null);
+						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 
 				Registration oldRegistration = registration.getMovedFrom();
 				dao.updateRegistrationStatus(oldRegistration.getId(), null,
@@ -2198,7 +2199,7 @@ public class PheidippidesService {
 						RegistrationStatus.Cancelled, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null);
+						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 			}
 		}
 
@@ -2252,7 +2253,7 @@ public class PheidippidesService {
 						header, RegistrationStatus.OK, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null);
+						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 
 				Race race = registration.getRace();
 				List<RegistrationTrinket> trinkets = registration.getTrinkets();
@@ -2773,7 +2774,7 @@ public class PheidippidesService {
 		registration = dao.storeRegistration(registration.getId(), null,
 				RegistrationStatus.Cancelled, null, null, null, null, 0, null,
 				null, null, 0, registration.isHasDoneMarathonBefore(),
-				registration.isHasDoneLVBefore(), null, null);
+				registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 
 		RegistrationHeader header = registration.getHeader();
 		boolean cancelHeader = true;
@@ -2809,7 +2810,7 @@ public class PheidippidesService {
 		registration = dao.storeRegistration(registration.getId(), null,
 				RegistrationStatus.Deregistered, null, null, null, null, 0,
 				null, null, null, 0, registration.isHasDoneMarathonBefore(),
-				registration.isHasDoneLVBefore(), null, null);
+				registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
 
 		RegistrationHeader header = registration.getHeader();
 		boolean cancelHeader = true;
@@ -2978,7 +2979,7 @@ public class PheidippidesService {
 							registration.getRace(), participant.getShirtSize(),
 							registration.getTeam(), participant.getRelayLeg(),
 							0, null, participant.getNationality(),
-							user.getUniqueId(), 0, false, false, null, null);
+							user.getUniqueId(), 0, false, false, null, null, false);
 				}
 			}
 		} catch (RemoteException re) {
@@ -3082,7 +3083,7 @@ public class PheidippidesService {
 										null, 0, null, country.getPrimaryKey()
 												.toString(),
 										user.getUniqueId(), 0, false, false,
-										null, null);
+										null, null, false);
 
 						String userNameString = "";
 						String passwordString = "";
@@ -3281,7 +3282,7 @@ public class PheidippidesService {
 								participantHolder.getRace(),
 								participantHolder.getShirtSize(), null, null,
 								0, null, country.getPrimaryKey().toString(),
-								user.getUniqueId(), 0, false, false, null, null);
+								user.getUniqueId(), 0, false, false, null, null, false);
 
 						if (!getUserBusiness().hasUserLogin(user)) {
 							try {
@@ -3372,7 +3373,7 @@ public class PheidippidesService {
 							holder.getShirtSize(), null, null, 0, holder
 									.getCharity(), country.getPrimaryKey()
 									.toString(), user.getUniqueId(), 0, false,
-							false, null, null);
+							false, null, null, false);
 
 					String userNameString = "";
 					String passwordString = "";

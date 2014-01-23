@@ -22,7 +22,8 @@ public class ParticipantHolder {
 	private int discount;
 	private boolean acceptsWaiver;
 	private boolean hasDoneMarathonBefore = true;	
-	private boolean hasDoneLVBefore = true;	
+	private boolean hasDoneLVBefore = true;
+	private boolean needsAssistance = false;
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
 	private List<RacePrice> trinkets;
@@ -155,6 +156,12 @@ public class ParticipantHolder {
 	}
 	public void setHasDoneLVBefore(boolean hasDoneLVBefore) {
 		this.hasDoneLVBefore = hasDoneLVBefore;
+	}
+	public boolean isNeedsAssistance() {
+		return needsAssistance;
+	}
+	public void setNeedsAssistance(boolean needsAssistance) {
+		this.needsAssistance = needsAssistance;
 	}
 	public Date getBestMarathonTime() {
 		return bestMarathonTime;

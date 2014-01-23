@@ -34,6 +34,8 @@ public class Participant implements Serializable {
 	private Long registrationID;
 	private String distanceString;
 	
+	private Boolean needsAssistance;
+	
 	private Collection<Race> availableRaces;
 
 	public String getFirstName() {
@@ -279,5 +281,13 @@ public class Participant implements Serializable {
 
 	public void setDistanceString(String distanceString) {
 		this.distanceString = distanceString;
+	}
+
+	public Boolean getNeedsAssistance() {
+		return needsAssistance;
+	}
+
+	public void setNeedsAssistance(Boolean needsAssistance) {
+		this.needsAssistance = needsAssistance;
 	}
 }

@@ -78,6 +78,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_USE_CHARITY = "prm_use_charity";
 	private static final String PARAMETER_CHARITY = "prm_charity";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
+	private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -209,6 +210,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 						}
 						if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
 							getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
+						}
+						if (iwc.isParameterSet(PARAMETER_NEEDS_ASSISTANCE)) {
+							getSession().getCurrentParticipant().setNeedsAssistance(true);
 						}
 						if (getSession().getCurrentParticipant().getRace().getNumberOfRelayLegs() > 1) {
 							showRelayTeam(iwc, bean);
