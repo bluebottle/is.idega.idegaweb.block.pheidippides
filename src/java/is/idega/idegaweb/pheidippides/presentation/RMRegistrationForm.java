@@ -270,7 +270,9 @@ public class RMRegistrationForm extends IWBaseComponent {
 											e.printStackTrace();
 										}
 									}
-									participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
+									if (shirtSizes != null && shirtSizes[i] != null && shirtSizes[i].length() > 0) {
+										participant.setShirtSize(getDao().getShirtSize(Long.parseLong(shirtSizes[i])));
+									}
 									participant.setRelayLeg(relayLegs[i]);
 									participant.setEmail(emails[i]);
 									relayPartners.add(participant);
