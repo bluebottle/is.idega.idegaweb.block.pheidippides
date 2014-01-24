@@ -34,7 +34,7 @@
 
 			<div class="formItem checkbox">
 				<c:checkBox name="prm_needs_assistance" checked="#{pheidippidesRegistrationSession.currentParticipant.needsAssistance}" />
-				<label for="prm_needs_assistance"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, 'needs_assistance')]}" /></label>
+				<label for="prm_needs_assistance"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, 'needs_assistance')])}" /></label>
 			</div>
 		</fieldset>
 		
