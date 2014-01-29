@@ -19,7 +19,7 @@
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+					<!-- th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th -->
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration_date']}" /></th>
 					<th class="action"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['actions']}" /></th>
 					<th class="action"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['receipt']}" /></th>
@@ -35,7 +35,7 @@
 						<td><h:outputText value="#{registration.race.event.name}" /></td>
 						<td><h:outputText value="#{registration.race.year}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', p:concat(registration.race.distance.localizedKey, registration.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<td><h:outputText rendered="#{not empty registration.shirtSize}" escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td>
+						<!-- td><h:outputText rendered="#{not empty registration.shirtSize}" escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td -->
 						<td><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 						<td class="action">
 							<!-- h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign eq 'LV'}" value="/pages/sidanmin/vidbotarupplysingar/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" styleClass="extra">
