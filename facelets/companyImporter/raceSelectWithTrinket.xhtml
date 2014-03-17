@@ -19,7 +19,8 @@
 							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
-							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['trinket']}" /></th>
 						</tr>
 					</thead>
 					
@@ -34,11 +35,19 @@
 									<td><h:outputText value="#{participant.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 								</ui:fragment>
 								<td><h:outputText value="#{participant.email}" /></td>
-								<td class="lastColumn">
+								<td>
 									<c:selectOne name="prm_race_pk">
 										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
 										<ui:repeat value="#{participant.availableRaces}" var="race">
 											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', race.distance.localizedKey))])}" content="#{race.id}" />
+										</ui:repeat>
+									</c:selectOne>
+								</td>
+								<td class="lastColumn">
+									<c:selectOne name="prm_trinket">
+										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_trinket']}" content="" />
+										<ui:repeat value="#{pheidippidesCompanyBean.raceTrinkets}" var="raceTrinket">
+											<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesCompanyBean.event.localizedKey, p:concat('.', raceTrinket.localizedKey))])}" content="#{raceTrinket.id}" />
 										</ui:repeat>
 									</c:selectOne>
 								</td>

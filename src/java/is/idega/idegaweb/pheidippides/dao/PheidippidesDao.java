@@ -236,6 +236,10 @@ public interface PheidippidesDao extends GenericDao {
 	public RegistrationTrinket storeRegistrationTrinket(
 			Long registrationTrinketID, Registration registration,
 			RacePrice trinket, int count);
+	
+	public RegistrationTrinket storeCompanyRegistrationTrinket(
+			Long registrationTrinketID, Registration registration,
+			RaceTrinket trinket, int count);
 
 	public void updateRegistrationTrinkets(Registration registration,
 			List<RegistrationTrinket> trinkets);

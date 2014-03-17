@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
@@ -27,6 +28,7 @@ public class ParticipantHolder {
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
 	private List<RacePrice> trinkets;
+	private RaceTrinket trinket;
 	
 	private List<Participant> relayPartners;
 	
@@ -194,5 +196,11 @@ public class ParticipantHolder {
 		}
 		
 		this.trinkets = null;
+	}
+	public RaceTrinket getTrinket() {
+		return trinket;
+	}
+	public void setTrinket(RaceTrinket trinket) {
+		this.trinket = trinket;
 	}
 }

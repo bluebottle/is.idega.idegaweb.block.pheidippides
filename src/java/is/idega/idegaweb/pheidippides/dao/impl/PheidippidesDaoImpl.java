@@ -1092,6 +1092,29 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Override
+	@Transactional(readOnly = false)
+	public RegistrationTrinket storeCompanyRegistrationTrinket(
+			Long registrationTrinketID, Registration registration,
+			RaceTrinket trinket, int count) {
+		RegistrationTrinket registrationTrinket = registrationTrinketID != null ? getRegistrationTrinket(registrationTrinketID)
+				: null;
+		if (registrationTrinket == null) {
+			registrationTrinket = new RegistrationTrinket();
+			registrationTrinket.setCreatedDate(IWTimestamp
+					.getTimestampRightNow());
+		}
+		registrationTrinket.setRegistration(registration);
+		registrationTrinket.setTrinket(trinket);
+		registrationTrinket.setAmountPaid(0);
+		registrationTrinket.setCount(count);
+
+		getEntityManager().persist(registrationTrinket);
+
+		return registrationTrinket;
+	}
+
+	
+	@Override
 	public void updateRegistrationTrinkets(Registration registration,
 			List<RegistrationTrinket> trinkets) {
 		Registration reg = getRegistration(registration.getId());

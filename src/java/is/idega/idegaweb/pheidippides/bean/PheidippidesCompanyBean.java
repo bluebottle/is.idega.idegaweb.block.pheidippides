@@ -5,6 +5,7 @@ import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 
 import java.util.Collection;
@@ -44,6 +45,7 @@ public class PheidippidesCompanyBean {
 	private List<AdvancedProperty> properties;
 
 	private List<RaceShirtSize> raceShirtSizes;
+	private List<RaceTrinket> raceTrinkets;
 
 	private Registration registration;
 	private List<Registration> registrations;
@@ -193,6 +195,14 @@ public class PheidippidesCompanyBean {
 		this.raceShirtSizes = raceShirtSizes;
 	}
 
+	public List<RaceTrinket> getRaceTrinkets() {
+		return raceTrinkets;
+	}
+
+	public void setRaceTrinkets(List<RaceTrinket> raceTrinkets) {
+		this.raceTrinkets = raceTrinkets;
+	}
+		
 	public List<Participant> getMissingRequiredFields() {
 		return missingRequiredFields;
 	}

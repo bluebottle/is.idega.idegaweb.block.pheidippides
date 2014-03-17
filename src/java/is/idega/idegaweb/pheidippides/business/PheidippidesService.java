@@ -3079,12 +3079,17 @@ public class PheidippidesService {
 								.storeRegistration(null, header,
 										RegistrationStatus.OK,
 										participantHolder.getRace(),
-										participantHolder.getShirtSize(), null,
+										null, null,
 										null, 0, null, country.getPrimaryKey()
 												.toString(),
 										user.getUniqueId(), 0, false, false,
 										null, null, false);
 
+						if (participantHolder.getTrinket() != null) {
+							//dao.getracep
+							dao.storeCompanyRegistrationTrinket(null, registration, participantHolder.getTrinket(), 1);
+						}
+						
 						String userNameString = "";
 						String passwordString = "";
 						if (getUserBusiness().hasUserLogin(user)) {
@@ -3131,10 +3136,7 @@ public class PheidippidesService {
 										.getPersonalID() : "",
 								new IWTimestamp(user.getDateOfBirth())
 										.getDateString("dd.MM.yyyy"),
-								getLocalizedShirtName(
-										registration.getRace().getEvent(),
-										registration.getShirtSize(),
-										header.getLocale()).getValue(),
+								"",
 								getLocalizedRaceName(registration.getRace(),
 										header.getLocale()).getValue(),
 								userNameString, passwordString };

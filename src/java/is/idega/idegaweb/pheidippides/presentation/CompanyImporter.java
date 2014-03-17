@@ -10,6 +10,7 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -96,7 +97,12 @@ public class CompanyImporter extends IWBaseComponent {
 		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), false));
 		bean.setRaceShirtSizes(null);
 		bean.setLocale(iwc.getCurrentLocale());
+		List<RaceTrinket> trinkets = new ArrayList<RaceTrinket>();
+		trinkets.add(getDao().getTrinket("MEDAL"));
+		bean.setRaceTrinkets(trinkets);
 
+		boolean showTrinket = bean.getEvent().getReportSign().equals("MH") ? true : false;
+		
 		switch (parseAction(iwc)) {
 		case ACTION_SELECT_FILE:
 			showImportForm(iwc);
@@ -107,7 +113,7 @@ public class CompanyImporter extends IWBaseComponent {
 			break;
 
 		case ACTION_RACE_SELECT:
-			showRaceSelect(iwc);
+			showRaceSelect(iwc, showTrinket);
 			break;
 
 		case ACTION_DONE:
@@ -124,7 +130,7 @@ public class CompanyImporter extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void showRaceSelect(IWContext iwc) {
+	private void showRaceSelect(IWContext iwc, boolean showTrinket) {
 		UploadFile uploadFile = iwc.getUploadedFile();
 		if (uploadFile != null && uploadFile.getName() != null
 				&& uploadFile.getName().length() > 0) {
@@ -202,8 +208,13 @@ public class CompanyImporter extends IWBaseComponent {
 		}
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
-		facelet.setFaceletURI(iwb
-				.getFaceletURI("companyImporter/raceSelect.xhtml"));
+		if (showTrinket) {
+			facelet.setFaceletURI(iwb
+					.getFaceletURI("companyImporter/raceSelectWithTrinket.xhtml"));
+		} else {
+			facelet.setFaceletURI(iwb
+					.getFaceletURI("companyImporter/raceSelect.xhtml"));			
+		}
 		add(facelet);
 	}
 
@@ -211,7 +222,8 @@ public class CompanyImporter extends IWBaseComponent {
 		CompanyImportSession session = getBeanInstance("companyImportSession");
 		PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
 		String races[] = iwc.getParameterValues("prm_race_pk");
-		String shirts[] = iwc.getParameterValues("prm_shirt_size");
+		//String shirts[] = iwc.getParameterValues("prm_shirt_size");
+		String medal[] = iwc.getParameterValues("prm_trinket");
 		
 		List<Participant> participants = session.getParticipantsToImport();
 		List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
@@ -220,7 +232,10 @@ public class CompanyImporter extends IWBaseComponent {
 			ParticipantHolder holder = new ParticipantHolder();
 			holder.setParticipant(participant);
 			holder.setRace(dao.getRace(Long.parseLong(races[counter])));
-			holder.setShirtSize(dao.getShirtSize(Long.parseLong(shirts[counter++])));
+			//holder.setShirtSize(dao.getShirtSize(Long.parseLong(shirts[counter++])));
+			if (medal[counter] != null && !"".equals(medal[counter])) {
+				holder.setTrinket(dao.getTrinket(Long.parseLong(medal[counter++])));
+			}
 			
 			holders.add(holder);
 		}
