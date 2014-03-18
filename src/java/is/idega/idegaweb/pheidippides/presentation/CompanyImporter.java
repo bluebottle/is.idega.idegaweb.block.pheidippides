@@ -117,7 +117,7 @@ public class CompanyImporter extends IWBaseComponent {
 			break;
 
 		case ACTION_DONE:
-			showDone(iwc);
+			showDone(iwc, showTrinket);
 			break;
 
 		}
@@ -218,7 +218,7 @@ public class CompanyImporter extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void showDone(IWContext iwc) {
+	private void showDone(IWContext iwc, boolean raceHasTrinkets) {
 		CompanyImportSession session = getBeanInstance("companyImportSession");
 		PheidippidesCompanyBean bean = getBeanInstance("pheidippidesCompanyBean");
 		String races[] = iwc.getParameterValues("prm_race_pk");
@@ -233,8 +233,10 @@ public class CompanyImporter extends IWBaseComponent {
 			holder.setParticipant(participant);
 			holder.setRace(dao.getRace(Long.parseLong(races[counter])));
 			//holder.setShirtSize(dao.getShirtSize(Long.parseLong(shirts[counter++])));
-			if (medal[counter] != null && !"".equals(medal[counter])) {
-				holder.setTrinket(dao.getTrinket(Long.parseLong(medal[counter++])));
+			if (raceHasTrinkets) {
+				if (medal[counter] != null && !"".equals(medal[counter])) {
+					holder.setTrinket(dao.getTrinket(Long.parseLong(medal[counter++])));
+				}
 			}
 			
 			holders.add(holder);
