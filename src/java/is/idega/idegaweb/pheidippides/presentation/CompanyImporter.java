@@ -235,9 +235,10 @@ public class CompanyImporter extends IWBaseComponent {
 			//holder.setShirtSize(dao.getShirtSize(Long.parseLong(shirts[counter++])));
 			if (raceHasTrinkets) {
 				if (medal[counter] != null && !"".equals(medal[counter])) {
-					holder.setTrinket(dao.getTrinket(Long.parseLong(medal[counter++])));
+					holder.setTrinket(dao.getTrinket(Long.parseLong(medal[counter])));
 				}
 			}
+			counter++;
 			
 			holders.add(holder);
 		}

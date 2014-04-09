@@ -247,10 +247,10 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 	public boolean actionPerformed(IWContext iwc) throws IWException {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Long racePK = Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK));
-		Long shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
+		//Long shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		
-		getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
+		getDao().updateRegistration(registration.getId(), racePK, null, nationalityPK);
 		
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")
