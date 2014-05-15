@@ -3372,7 +3372,7 @@ public class PheidippidesService {
 
 					Registration registration = dao.storeRegistration(null,
 							header, RegistrationStatus.OK, holder.getRace(),
-							holder.getShirtSize(), null, null, 0, holder
+							null, null, null, 0, holder
 									.getCharity(), country.getPrimaryKey()
 									.toString(), user.getUniqueId(), 0, false,
 							false, null, null, false);
@@ -3422,10 +3422,11 @@ public class PheidippidesService {
 									: "",
 							new IWTimestamp(user.getDateOfBirth())
 									.getDateString("dd.MM.yyyy"),
-							getLocalizedShirtName(
+							registration.getShirtSize() != null ? getLocalizedShirtName(
 									registration.getRace().getEvent(),
 									registration.getShirtSize(),
-									header.getLocale()).getValue(),
+									header.getLocale()).getValue()
+									: "",
 							getLocalizedRaceName(registration.getRace(),
 									header.getLocale()).getValue(),
 							userNameString, passwordString };

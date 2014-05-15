@@ -117,7 +117,7 @@ public class PheidippidesWebService {
 			return "ERROR: Could not find distance for the event this company can register to for this year";			
 		}
 
-		ShirtSizeGender gender = null;
+		/*ShirtSizeGender gender = null;
 		if (shirtSizeGender.equalsIgnoreCase("male")) {
 			gender = ShirtSizeGender.Male;
 		} else if (shirtSizeGender.equalsIgnoreCase("female")) {
@@ -163,7 +163,7 @@ public class PheidippidesWebService {
 		RaceShirtSize rss = dao.getRaceShirtSize(race, shirtSizeEntry);
 		if (rss == null) {
 			return "ERROR: Shirt size not available for this distance";
-		}
+		}*/
 		
 		//Add checks and relay handling
 		
@@ -180,7 +180,7 @@ public class PheidippidesWebService {
 		holder.setParticipant(participant);
 		holder.setRace(race);
 		holder.setRelayPartners(null);
-		holder.setShirtSize(shirtSizeEntry);
+		holder.setShirtSize(null);
 		holder.setTeam(null);
 		holder.setTrinkets(null);
 		
