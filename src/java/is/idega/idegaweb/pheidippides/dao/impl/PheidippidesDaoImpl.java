@@ -18,6 +18,7 @@ import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceResult;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
@@ -56,6 +57,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				"eventName", name));
 	}
 
+	@Override
+	public Event getEventByReportSign(String reportSign) {
+		return getSingleResult("event.findByReportSign", Event.class, new Param(
+				"reportSign", reportSign));
+	}
+
+	
 	@Override
 	public List<Event> getEvents() {
 		return getResultList("event.findAll", Event.class);
@@ -210,6 +218,30 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return race;
 	}
 
+	@Override
+	public RaceResult storeRaceResult(String name, String raceTime,
+			String placement, String genderPlacement, String groupPlacement,
+			String group, String gender, String groupEN, String genderEN,
+			Registration registration) {
+		RaceResult result = new RaceResult();
+		result.setName(name);
+		result.setRaceTime(raceTime);
+		result.setPlacement(placement);
+		result.setGenderPlacement(genderPlacement);
+		result.setGroupPlacement(groupPlacement);
+		result.setGroup(group);
+		result.setGender(gender);
+		result.setGroupEN(groupEN);
+		result.setGenderEN(genderEN);
+		result.setRegistration(registration);
+		
+		getEntityManager().persist(result);
+
+		return result;
+
+	}
+
+	
 	@Override
 	@Transactional(readOnly = false)
 	public boolean removeRace(Long raceID) {

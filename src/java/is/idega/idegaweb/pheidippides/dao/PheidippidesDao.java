@@ -17,6 +17,7 @@ import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceResult;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
@@ -35,6 +36,8 @@ public interface PheidippidesDao extends GenericDao {
 	public Event getEvent(Long eventID);
 
 	public Event getEvent(String name);
+
+	public Event getEventByReportSign(String reportSign);
 
 	public List<Event> getEvents();
 
@@ -76,6 +79,11 @@ public interface PheidippidesDao extends GenericDao {
 			boolean teamRun, int currentParticipantNumber,
 			int maxParticipantNumber, int orderNumber);
 
+	public RaceResult storeRaceResult(String name, String raceTime,
+			String placement, String genderPlacement, String groupPlacement,
+			String group, String gender, String groupEN, String genderEN,
+			Registration registration);
+
 	public boolean removeRace(Long raceID);
 
 	public ShirtSize getShirtSize(Long shirtSizeID);
@@ -94,7 +102,7 @@ public interface PheidippidesDao extends GenericDao {
 	public List<RacePrice> getRacePrices(Race race);
 
 	public RacePrice getCurrentRacePrice(Race race, Currency currency);
-	
+
 	public RacePrice getRacePrice(Race race, Date date, Currency currency);
 
 	public List<RaceTrinket> getRaceTrinkets();
@@ -165,11 +173,12 @@ public interface PheidippidesDao extends GenericDao {
 			ShirtSize shirtSize, Team team, String leg, int amount,
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
-			Date bestMarathonTime, Date bestUltraMarathonTime, boolean needsAssistance);
+			Date bestMarathonTime, Date bestUltraMarathonTime,
+			boolean needsAssistance);
 
 	public Registration moveRegistrationToCompany(Long registrationID,
 			RegistrationHeader header);
-	
+
 	public Registration updateRegistration(Long registrationPK, Long racePK,
 			Long shirtSizePK, String nationalityPK);
 
@@ -236,7 +245,7 @@ public interface PheidippidesDao extends GenericDao {
 	public RegistrationTrinket storeRegistrationTrinket(
 			Long registrationTrinketID, Registration registration,
 			RacePrice trinket, int count);
-	
+
 	public RegistrationTrinket storeCompanyRegistrationTrinket(
 			Long registrationTrinketID, Registration registration,
 			RaceTrinket trinket, int count);
@@ -258,41 +267,49 @@ public interface PheidippidesDao extends GenericDao {
 
 	public List<GiftCardHeader> getGiftCardHeaders(GiftCardHeaderStatus status);
 
-	public GiftCardHeader storeGiftCardHeader(
-			Long giftCardHeaderID, GiftCardHeaderStatus status,
-			String buyerUUID, String email, Date validFrom, Date validTo, String locale,
-			Currency currency, String securityString, String cardType,
-			String cardNumber, String paymentDate, String authorizationNumber,
+	public GiftCardHeader storeGiftCardHeader(Long giftCardHeaderID,
+			GiftCardHeaderStatus status, String buyerUUID, String email,
+			Date validFrom, Date validTo, String locale, Currency currency,
+			String securityString, String cardType, String cardNumber,
+			String paymentDate, String authorizationNumber,
 			String transactionNumber, String referenceNumber, String comment,
 			String saleId);
-	
+
 	public GiftCard getGiftCard(String code);
 
 	public List<GiftCard> getGiftCards(GiftCardHeader header);
-	
+
 	public List<GiftCard> getGiftCards(List<GiftCardHeaderStatus> statuses);
 
-	public GiftCard storeGiftCard(GiftCardHeader header, String code, 
+	public GiftCard storeGiftCard(GiftCardHeader header, String code,
 			int amount, String amountText, String greetingText);
-	
+
 	public List<GiftCardUsage> getGiftCardUsage();
+
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card);
-	
-	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header, GiftCardUsageStatus status);
+
+	public List<GiftCardUsage> getGiftCardUsage(RegistrationHeader header,
+			GiftCardUsageStatus status);
 
 	public int getGiftCardUsageSum(GiftCard card);
 
-	public GiftCardUsage storeGiftCardUsage(GiftCard card, RegistrationHeader header, int amount, GiftCardUsageStatus status);
+	public GiftCardUsage storeGiftCardUsage(GiftCard card,
+			RegistrationHeader header, int amount, GiftCardUsageStatus status);
 
-	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage, RegistrationHeader header, GiftCardUsageStatus status);
-	
+	public GiftCardUsage updateGiftCardUsage(GiftCardUsage usage,
+			RegistrationHeader header, GiftCardUsageStatus status);
+
 	public boolean removeGiftCardHeader(GiftCardHeader header);
+
 	public boolean removeGiftCard(GiftCard giftCard);
+
 	public boolean removeGiftCardUsage(GiftCardUsage usage);
-	
+
 	public GiftCardUsage getGiftCardUsage(Long giftCardUsageID);
-	
+
 	public boolean removeGiftCardHeader(Long id);
+
 	public boolean removeGiftCard(String code);
+
 	public boolean removeGiftCardUsage(Long giftCardUsageID);
 }

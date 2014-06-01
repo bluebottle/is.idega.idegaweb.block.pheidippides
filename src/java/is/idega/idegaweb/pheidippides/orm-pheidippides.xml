@@ -13,6 +13,7 @@
     <entity class="is.idega.idegaweb.pheidippides.data.GiftCardHeader" />
     <entity class="is.idega.idegaweb.pheidippides.data.GiftCardUsage" />
     <entity class="is.idega.idegaweb.pheidippides.data.Race" />
+    <entity class="is.idega.idegaweb.pheidippides.data.RaceResult" />
     <entity class="is.idega.idegaweb.pheidippides.data.RacePrice" />
     <entity class="is.idega.idegaweb.pheidippides.data.RaceShirtSize" />
     <entity class="is.idega.idegaweb.pheidippides.data.RaceTrinket" />

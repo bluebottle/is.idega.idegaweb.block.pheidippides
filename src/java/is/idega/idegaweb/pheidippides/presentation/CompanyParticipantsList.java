@@ -49,7 +49,6 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 	
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_REGISTRATION_PK = "prm_registration_pk";
-	private static final String PARAMETER_SHIRT_SIZE_PK = "prm_shirt_size";
 	private static final String PARAMETER_NATIONALITY = "prm_nationality";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";

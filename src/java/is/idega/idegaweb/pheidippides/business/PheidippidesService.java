@@ -10,6 +10,7 @@ import is.idega.idegaweb.pheidippides.data.GiftCard;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.ParticipantResult;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
@@ -297,7 +298,7 @@ public class PheidippidesService {
 
 		return p;
 	}
-	
+
 	public Participant getParticipantByUUID(String uuid) {
 		Participant p = null;
 
@@ -692,7 +693,6 @@ public class PheidippidesService {
 		return null;
 	}
 
-	@SuppressWarnings("unused")
 	public Map<FiffoImportStatus, List<Participant>> importFiffoExcelFile(
 			FileInputStream input, Event event, int year) {
 		Map<FiffoImportStatus, List<Participant>> map = new HashMap<FiffoImportStatus, List<Participant>>();
@@ -745,23 +745,29 @@ public class PheidippidesService {
 				column += 3;
 				String participantNumber = getCellValue(row.getCell(column++));
 
-				if (distance == null || "".equals(distance) || distance.equals("0")) {
+				if (distance == null || "".equals(distance)
+						|| distance.equals("0")) {
 					continue;
 				}
-				
+
 				if (regNum != null && !"".equals(regNum)) {
-					Registration reg = dao.getRegistration(Long.parseLong(regNum));
-					user = getUserBusiness().getUserByUniqueId(reg.getUserUUID());
+					Registration reg = dao.getRegistration(Long
+							.parseLong(regNum));
+					user = getUserBusiness().getUserByUniqueId(
+							reg.getUserUUID());
 					participant = getParticipant(user);
 					participant.setRegistrationID(Long.parseLong(regNum));
 					participant.setDistanceString(distance);
-										
-					if (distance.equals(reg.getRace().getDistance().getName()) || distance.substring(0, 3).equals(reg.getRace().getDistance().getName().substring(0, 3))) {
+
+					if (distance.equals(reg.getRace().getDistance().getName())
+							|| distance.substring(0, 3).equals(
+									reg.getRace().getDistance().getName()
+											.substring(0, 3))) {
 						previousRegistration = true;
 					} else {
 						changeDistance = true;
 					}
-					
+
 				} else {
 
 					// Hmmmm, is this correct?
@@ -894,6 +900,162 @@ public class PheidippidesService {
 		}
 
 		return null;
+	}
+
+	public int storeRaceResults(List<ParticipantResult> participantResults) {
+		int counter = 0;
+		for (ParticipantResult result : participantResults) {
+			dao.storeRaceResult(result.getName(), result.getRaceTime(),
+					result.getPlacement(), result.getGenderPlacement(),
+					result.getGroupPlacement(), result.getGroup(),
+					result.getGender(), result.getGroupEN(),
+					result.getGenderEN(), result.getRegistration());
+
+			counter++;
+		}
+
+		return counter;
+	}
+
+	public Map<LVResultsImportStatus, List<ParticipantResult>> importLVResultsExcelFile(
+			FileInputStream input, Event event, int year) {
+		Map<LVResultsImportStatus, List<ParticipantResult>> map = new HashMap<LVResultsImportStatus, List<ParticipantResult>>();
+
+		try {
+			HSSFWorkbook wb = new HSSFWorkbook(input);
+			HSSFSheet sheet = wb.getSheetAt(0);
+
+			NumberFormat format = NumberFormat.getNumberInstance();
+			format.setGroupingUsed(false);
+			format.setMinimumIntegerDigits(10);
+
+			List<ParticipantResult> ok = new ArrayList<ParticipantResult>();
+			List<ParticipantResult> missing = new ArrayList<ParticipantResult>();
+
+			for (int a = sheet.getFirstRowNum() + 1; a <= sheet.getLastRowNum(); a++) {
+				boolean rowHasError = false;
+
+				HSSFRow row = sheet.getRow(a);
+
+				ParticipantResult result = null;
+
+				int column = 0;
+				String name = getCellValue(row.getCell(column++));
+				String raceTime = getCellValue(row.getCell(column++));
+				String placement = getCellValue(row.getCell(column++));
+				String genderPlacement = getCellValue(row.getCell(column++));
+				String groupPlacement = getCellValue(row.getCell(column++));
+				String group = getCellValue(row.getCell(column++));
+				String gender = getCellValue(row.getCell(column++));
+				String groupEN = getCellValue(row.getCell(column++));
+				String genderEN = getCellValue(row.getCell(column++));
+				String registrationNumber = getCellValue(row.getCell(column));
+
+				if (name != null && !"".equals(name)) {
+					if (registrationNumber != null
+							&& !"".equals(registrationNumber)) {
+						Registration reg = dao.getRegistration(Long
+								.parseLong(registrationNumber));
+
+						result = createParticipantResult(name, raceTime,
+								placement, genderPlacement, groupPlacement,
+								group, gender, groupEN, genderEN, reg);
+						rowHasError = !checkParticipantResultRow(name,
+								raceTime, placement, genderPlacement,
+								groupPlacement, group, gender, groupEN,
+								genderEN);
+					} else {
+						rowHasError = true;
+						result = createParticipantResult(name, raceTime,
+								placement, genderPlacement, groupPlacement,
+								group, gender, groupEN, genderEN, null);
+					}
+
+					if (rowHasError) {
+						missing.add(result);
+					} else {
+						ok.add(result);
+					}
+				}
+			}
+
+			if (!missing.isEmpty()) {
+				map.put(LVResultsImportStatus.MISSING_REQUIRED_FIELD, missing);
+			}
+
+			map.put(LVResultsImportStatus.OK, ok);
+
+			System.out.println("missing size = " + missing.size());
+			System.out.println("ok size = " + ok.size());
+
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private boolean checkParticipantResultRow(String name, String raceTime,
+			String placement, String genderPlacement, String groupPlacement,
+			String group, String gender, String groupEN, String genderEN) {
+
+		if (name == null || "".equals(name)) {
+			return false;
+		}
+
+		if (raceTime == null || "".equals(raceTime)) {
+			return false;
+		}
+
+		if (placement == null || "".equals(placement)) {
+			return false;
+		}
+
+		if (genderPlacement == null || "".equals(genderPlacement)) {
+			return false;
+		}
+
+		if (groupPlacement == null || "".equals(groupPlacement)) {
+			return false;
+		}
+
+		if (group == null || "".equals(group)) {
+			return false;
+		}
+
+		if (gender == null || "".equals(gender)) {
+			return false;
+		}
+
+		if (groupEN == null || "".equals(groupEN)) {
+			return false;
+		}
+
+		if (genderEN == null || "".equals(genderEN)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private ParticipantResult createParticipantResult(String name,
+			String raceTime, String placement, String genderPlacement,
+			String groupPlacement, String group, String gender, String groupEN,
+			String genderEN, Registration registration) {
+		ParticipantResult result = new ParticipantResult();
+		result.setName(name);
+		result.setRaceTime(raceTime);
+		result.setPlacement(placement);
+		result.setGenderPlacement(genderPlacement);
+		result.setGroupPlacement(groupPlacement);
+		result.setGroup(group);
+		result.setGender(gender);
+		result.setGroupEN(groupEN);
+		result.setGenderEN(genderEN);
+		result.setRegistration(registration);
+
+		return result;
 	}
 
 	public boolean isRegistered(User user, Event event, int year) {
@@ -1860,7 +2022,8 @@ public class PheidippidesService {
 					newHeader, RegistrationStatus.InTransition, newDistance,
 					newShirtSize, null, null, price.getPrice(), null, null,
 					null, 0, registration.isHasDoneMarathonBefore(),
-					registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+					registration.isHasDoneLVBefore(), null, null,
+					registration.getNeedsAssistance());
 		} else {
 			changeDistance(registration.getHeader(), registration, newDistance,
 					newShirtSize);
@@ -1879,7 +2042,8 @@ public class PheidippidesService {
 				oldRegistration.getId(), header, null, newDistance,
 				newShirtSize, null, null, 0, null, null, null, 0,
 				oldRegistration.isHasDoneMarathonBefore(),
-				oldRegistration.isHasDoneLVBefore(), null, null, oldRegistration.getNeedsAssistance());
+				oldRegistration.isHasDoneLVBefore(), null, null,
+				oldRegistration.getNeedsAssistance());
 
 		List<RegistrationTrinket> trinkets = oldRegistration.getTrinkets();
 		for (RegistrationTrinket registrationTrinket : trinkets) {
@@ -2122,7 +2286,8 @@ public class PheidippidesService {
 						RegistrationStatus.Cancelled, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+						registration.isHasDoneLVBefore(), null, null,
+						registration.getNeedsAssistance());
 			}
 		}
 
@@ -2159,7 +2324,8 @@ public class PheidippidesService {
 						header, RegistrationStatus.OK, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+						registration.isHasDoneLVBefore(), null, null,
+						registration.getNeedsAssistance());
 
 				Registration oldRegistration = registration.getMovedFrom();
 				dao.updateRegistrationStatus(oldRegistration.getId(), null,
@@ -2199,7 +2365,8 @@ public class PheidippidesService {
 						RegistrationStatus.Cancelled, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+						registration.isHasDoneLVBefore(), null, null,
+						registration.getNeedsAssistance());
 			}
 		}
 
@@ -2253,7 +2420,8 @@ public class PheidippidesService {
 						header, RegistrationStatus.OK, null, null, null, null,
 						0, null, null, null, 0,
 						registration.isHasDoneMarathonBefore(),
-						registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+						registration.isHasDoneLVBefore(), null, null,
+						registration.getNeedsAssistance());
 
 				Race race = registration.getRace();
 				List<RegistrationTrinket> trinkets = registration.getTrinkets();
@@ -2774,7 +2942,8 @@ public class PheidippidesService {
 		registration = dao.storeRegistration(registration.getId(), null,
 				RegistrationStatus.Cancelled, null, null, null, null, 0, null,
 				null, null, 0, registration.isHasDoneMarathonBefore(),
-				registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+				registration.isHasDoneLVBefore(), null, null,
+				registration.getNeedsAssistance());
 
 		RegistrationHeader header = registration.getHeader();
 		boolean cancelHeader = true;
@@ -2810,7 +2979,8 @@ public class PheidippidesService {
 		registration = dao.storeRegistration(registration.getId(), null,
 				RegistrationStatus.Deregistered, null, null, null, null, 0,
 				null, null, null, 0, registration.isHasDoneMarathonBefore(),
-				registration.isHasDoneLVBefore(), null, null, registration.getNeedsAssistance());
+				registration.isHasDoneLVBefore(), null, null,
+				registration.getNeedsAssistance());
 
 		RegistrationHeader header = registration.getHeader();
 		boolean cancelHeader = true;
@@ -2979,7 +3149,8 @@ public class PheidippidesService {
 							registration.getRace(), participant.getShirtSize(),
 							registration.getTeam(), participant.getRelayLeg(),
 							0, null, participant.getNationality(),
-							user.getUniqueId(), 0, false, false, null, null, false);
+							user.getUniqueId(), 0, false, false, null, null,
+							false);
 				}
 			}
 		} catch (RemoteException re) {
@@ -3075,21 +3246,20 @@ public class PheidippidesService {
 											.getCountry());
 						}
 
-						Registration registration = dao
-								.storeRegistration(null, header,
-										RegistrationStatus.OK,
-										participantHolder.getRace(),
-										null, null,
-										null, 0, null, country.getPrimaryKey()
-												.toString(),
-										user.getUniqueId(), 0, false, false,
-										null, null, false);
+						Registration registration = dao.storeRegistration(null,
+								header, RegistrationStatus.OK,
+								participantHolder.getRace(), null, null, null,
+								0, null, country.getPrimaryKey().toString(),
+								user.getUniqueId(), 0, false, false, null,
+								null, false);
 
 						if (participantHolder.getTrinket() != null) {
-							//dao.getracep
-							dao.storeCompanyRegistrationTrinket(null, registration, participantHolder.getTrinket(), 1);
+							// dao.getracep
+							dao.storeCompanyRegistrationTrinket(null,
+									registration,
+									participantHolder.getTrinket(), 1);
 						}
-						
+
 						String userNameString = "";
 						String passwordString = "";
 						if (getUserBusiness().hasUserLogin(user)) {
@@ -3206,7 +3376,7 @@ public class PheidippidesService {
 							continue;
 						}
 					}
-					
+
 					try {
 						if (user == null) {
 							Gender gender = null;
@@ -3215,26 +3385,25 @@ public class PheidippidesService {
 							} else {
 								gender = getGenderHome().getFemaleGender();
 							}
-							
+
 							Country country = null;
 							try {
 								country = getCountryHome().findByCountryName(
 										participant.getCountry());
 							} catch (Exception e) {
-								country = getCountryHome().findByIsoAbbreviation(
-										LocaleUtil.getIcelandicLocale()
-												.getCountry());
+								country = getCountryHome()
+										.findByIsoAbbreviation(
+												LocaleUtil.getIcelandicLocale()
+														.getCountry());
 							}
-							
+
 							user = saveUser(
 									new Name(participant.getFullName()),
 									new IWTimestamp(participant
-											.getDateOfBirth()),
-									gender,
+											.getDateOfBirth()), gender,
 									participant.getAddress(),
 									participant.getPostalCode(),
-									participant.getCity(),
-									country);
+									participant.getCity(), country);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -3284,7 +3453,8 @@ public class PheidippidesService {
 								participantHolder.getRace(),
 								participantHolder.getShirtSize(), null, null,
 								0, null, country.getPrimaryKey().toString(),
-								user.getUniqueId(), 0, false, false, null, null, false);
+								user.getUniqueId(), 0, false, false, null,
+								null, false);
 
 						if (!getUserBusiness().hasUserLogin(user)) {
 							try {
@@ -3372,10 +3542,10 @@ public class PheidippidesService {
 
 					Registration registration = dao.storeRegistration(null,
 							header, RegistrationStatus.OK, holder.getRace(),
-							null, null, null, 0, holder
-									.getCharity(), country.getPrimaryKey()
-									.toString(), user.getUniqueId(), 0, false,
-							false, null, null, false);
+							null, null, null, 0, holder.getCharity(), country
+									.getPrimaryKey().toString(), user
+									.getUniqueId(), 0, false, false, null,
+							null, false);
 
 					String userNameString = "";
 					String passwordString = "";
@@ -3881,7 +4051,7 @@ public class PheidippidesService {
 
 		return registration;
 	}
-	
+
 	public void removeGiftCard(String code) {
 		GiftCard card = dao.getGiftCard(code);
 		if (card != null) {

@@ -21,7 +21,8 @@ import javax.persistence.TemporalType;
 @Table(name = Event.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "event.findAll", query = "select e from Event e"),
-	@NamedQuery(name = "event.findByName", query = "select e from Event e where e.name = :name")
+	@NamedQuery(name = "event.findByName", query = "select e from Event e where e.name = :name"),
+	@NamedQuery(name = "event.findByReportSign", query = "select e from Event e where e.reportSign = :reportSign")
 })
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1146177106821030818L;

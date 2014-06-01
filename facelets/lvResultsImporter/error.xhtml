@@ -1,0 +1,57 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="adminForm" action="" method="post">
+	
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['lvresults_import_error']}" /></h1>
+		
+		<ui:fragment rendered="#{lvResultsImportBean.unableToImportFile}">		
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['unable_to_import_file']}" /></h2>
+		</ui:fragment>
+		
+		<ui:fragment rendered="#{not empty lvResultsImportBean.missingRequiredFields}">		
+			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['missing_required_fields']}" /></h2>
+			<fieldset class="formSection">
+				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_time']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['placement']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender_placement']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['group_placement']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['group']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></th>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['group_en']}" /></th>
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender_en']}" /></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<ui:repeat value="#{lvResultsImportBean.missingRequiredFields}" var="results">
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{results.name}" /></td>
+								<td><h:outputText value="#{results.raceTime}" /></td>
+								<td><h:outputText value="#{results.placement}" /></td>
+								<td><h:outputText value="#{results.genderPlacement}" /></td>
+								<td><h:outputText value="#{results.groupPlacement}" /></td>
+								<td><h:outputText value="#{results.group}" /></td>
+								<td><h:outputText value="#{results.gender}" /></td>
+								<td><h:outputText value="#{results.groupEN}" /></td>								
+								<td class="lastColumn"><h:outputText value="#{results.genderEN}" /></td>								
+
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</fieldset>
+		</ui:fragment>		
+	</form>
+</ui:component>
+</html>
