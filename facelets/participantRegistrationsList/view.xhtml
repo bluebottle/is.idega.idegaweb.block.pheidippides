@@ -54,6 +54,13 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
 							</h:outputLink>
+							<c:DownloadLink rendered="#{registration.race.event.reportSign eq 'LV'}" styleClass="pdf" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}">
+								<f:param name="prm_registration_pk" value="#{registration.id}" />
+							</c:DownloadLink>							
+							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/annarhlaupari/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" styleClass="relayTeam">
+								<f:param name="prm_registration_pk" value="#{registration.id}" />
+								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></span>
+							</h:outputLink>
 						</td>
 						<td class="action">
 							<c:DownloadLink styleClass="pdf" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}">
@@ -71,6 +78,8 @@
 			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_team']}" /></li>
 			<li class="editRelayTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></li>
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
+			<li class="certificate"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['certificate']}" /></li>
+			<li class="changeRunner"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></li>
 		</ul>
 	</ui:fragment>
 </ui:component>

@@ -208,13 +208,13 @@ public class CompanyImporter extends IWBaseComponent {
 		}
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
-		if (showTrinket) {
-			facelet.setFaceletURI(iwb
-					.getFaceletURI("companyImporter/raceSelectWithTrinket.xhtml"));
-		} else {
+		//if (showTrinket) {
+		//	facelet.setFaceletURI(iwb
+		//			.getFaceletURI("companyImporter/raceSelectWithTrinket.xhtml"));
+		//} else {
 			facelet.setFaceletURI(iwb
 					.getFaceletURI("companyImporter/raceSelect.xhtml"));			
-		}
+		//}
 		add(facelet);
 	}
 
