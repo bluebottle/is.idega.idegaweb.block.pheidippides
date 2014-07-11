@@ -768,6 +768,14 @@ table.userTable td.action a.pdf:before {
 	content: 'F';
 }
 
+table.userTable td.action a.certificate:before {
+	content: '^';
+}
+
+table.userTable td.action a.changeRunner:before {
+	content: ';';
+}
+
 table.userTable td.action a span {
 	display: none;
 }
@@ -890,6 +898,14 @@ ul.legend.registrations li.editRelayTeam:before {
 
 ul.legend.registrations li.receipt:before {
 	content: 'F';
+}
+
+ul.legend.registrations li.certificate:before {
+	content: '^';
+}
+
+ul.legend.registrations li.changeRunner:before {
+	content: ';';
 }
 
 form#distanceChanger div.helpText {
