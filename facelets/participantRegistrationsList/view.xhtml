@@ -54,8 +54,8 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
 							</h:outputLink>
-							<ui:fragment rendered="#{registration.race.event.reportSign eq 'LV'">
-								<c:DownloadLinkstyleClass="certificate" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}">
+							<ui:fragment rendered="#{registration.race.event.reportSign eq 'LV'}">
+								<c:DownloadLink styleClass="certificate" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}">
 									<f:param name="prm_registration_pk" value="#{registration.id}" />
 								</c:DownloadLink>
 							</ui:fragment>
