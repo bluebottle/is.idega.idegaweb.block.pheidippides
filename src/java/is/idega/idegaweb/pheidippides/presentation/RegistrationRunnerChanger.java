@@ -72,10 +72,7 @@ public class RegistrationRunnerChanger extends IWBaseComponent {
 					CoreConstants.DWR_UTIL_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
 					"/dwr/interface/PheidippidesService.js");
-/*			PresentationUtil
-					.addJavaScriptSourceLineToHeader(
-							iwc,
-							iwb.getVirtualPathWithFileNameString("javascript/participantDistanceChanger.js"));*/
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/registrationRunnerChanger.js"));
 
 			PresentationUtil
 					.addStyleSheetToHeader(

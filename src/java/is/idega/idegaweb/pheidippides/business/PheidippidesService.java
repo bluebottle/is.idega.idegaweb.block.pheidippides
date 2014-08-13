@@ -2009,7 +2009,7 @@ public class PheidippidesService {
 		
 		dao.changeRegistrationRunner(registration.getId(), registration.getUserUUID(), user.getUniqueId());
 		
-		return false;
+		return true;
 	}
 	
 	public RegistrationAnswerHolder createChangeDistanceRegistration(
