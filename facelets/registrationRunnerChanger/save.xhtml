@@ -8,10 +8,10 @@
 >
 <ui:component>
 	<form class="userForm" action="" method="post">
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance']}" /></h1>
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></h1>
 
 		<div class="receipt">
-			<h:outputFormat escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_distance.receipt')]}">
+			<h:outputFormat escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_runner.receipt')]}">
 				<f:param value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.registration.race.distance.localizedKey))])}" />
 				<f:param value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.race.distance.localizedKey))])}" />
 			</h:outputFormat>

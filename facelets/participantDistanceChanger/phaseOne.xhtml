@@ -8,33 +8,39 @@
 		xmlns:t="http://myfaces.apache.org/tomahawk"
 >
 <ui:component>
-	<form id="registrationRunnerChanger" class="userForm" action="" method="post">
+	<form id="participantDistanceChanger" class="userForm" action="" method="post">
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
 		<input type="hidden" name="prm_action" value="2" />
 		
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></h1>
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance']}" /></h1>
 	
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_runner_help')]}" /></div>
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_distance_help')]}" /></div>
 
 		<ui:fragment rendered="#{not empty pheidippidesBean.registration}">
 			<ui:param value="#{pheidippidesBean.registration}" name="registration" />
 			<input type="hidden" name="prm_registration_pk" value="#{registration.id}" />
 			
-		    <div class="formItem required">
-				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
-				<input type="text" class="required digits validUser hasRaces" name="prm_ssn" value="#{param['prm_ssn']}" />
-			</div>
-			
 			<div class="formItem required">
-				<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
-				<input type="text" class="required" name="prm_email" value="#{param['prm_email']}" />
+				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
+				<c:selectOne name="prm_race_pk" styleClass="required">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
+					<ui:repeat value="#{pheidippidesBean.races}" var="race">
+						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', race.distance.localizedKey))])}" content="#{race.id}" selected="#{race.id eq registration.race.id}" />
+					</ui:repeat>
+				</c:selectOne>
 			</div>
-			
-			<div class="formItem required">
-				<label for="prm_phone"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></label>
-				<input type="text" class="required" name="prm_phone" value="#{param['prm_phone']}" />
-			</div>
-							
+			<ui:fragment rendered="#{not empty pheidippidesBean.raceShirtSizes}">
+				<div class="formItem required">
+					<label for="prm_shirt_size"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></label>
+					<c:selectOne name="prm_shirt_size" styleClass="required">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_shirt_size']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.raceShirtSizes}" var="raceShirt">
+							<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', raceShirt.size.localizedKey))])}" content="#{raceShirt.size.id}" selected="#{raceShirt.size.id eq registration.shirtSize.id}" />
+						</ui:repeat>
+					</c:selectOne>
+				</div>
+			</ui:fragment>
+						
 			<div class="submit">
 				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 			</div>

@@ -52,7 +52,7 @@ public class RegistrationRunnerChanger extends IWBaseComponent {
 
 			Long registrationPK = iwc.isParameterSet(PARAMETER_REGISTRATION) ? Long
 					.parseLong(iwc.getParameter(PARAMETER_REGISTRATION)) : null;
-			Registration registration = dao.getRegistration(registrationPK);
+			Registration registration = getDao().getRegistration(registrationPK);
 			
 			//Display error here when trying to change registration for another user
 			if (!registration.getUserUUID().equals(user.getUniqueId())) {
@@ -86,7 +86,6 @@ public class RegistrationRunnerChanger extends IWBaseComponent {
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistration(registration);
 			bean.setEvent(registration.getRace().getEvent());
-			bean.setDownloadWriter(ReceiptWriter.class);
 
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 					.createComponent(FaceletComponent.COMPONENT_TYPE);
