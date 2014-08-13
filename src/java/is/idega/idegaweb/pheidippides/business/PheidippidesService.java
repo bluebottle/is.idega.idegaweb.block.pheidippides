@@ -1978,6 +1978,40 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
+	public boolean changeRegistrationRunner(Registration registration, String newUserSSN, String email, String phone) {
+		
+		User user = null;
+		try {
+			user = this.getUserBusiness().getUser(newUserSSN);
+		} catch (Exception e) {
+			return false;
+		} 
+		
+		if (email != null && !"".equals(email)) {
+			try {
+				this.getUserBusiness().updateUserMail(user, email);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			} catch (CreateException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (phone != null && !"".equals(phone)) {
+			try {
+				this.getUserBusiness().updateUserMobilePhone(user, phone);
+			} catch (EJBException e) {
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		dao.changeRegistrationRunner(registration.getId(), registration.getUserUUID(), user.getUniqueId());
+		
+		return false;
+	}
+	
 	public RegistrationAnswerHolder createChangeDistanceRegistration(
 			Registration registration, Race newDistance,
 			ShirtSize newShirtSize, String descriptionText) {
@@ -1985,13 +2019,12 @@ public class PheidippidesService {
 		// new registration entry in same header and mark the old one as moved
 		RegistrationHeader oldHeader = registration.getHeader();
 
-		if (registration.getRace().equals(newDistance)
-				&& newShirtSize.equals(registration.getShirtSize())) {
+		if (registration.getRace().equals(newDistance)) {
 			return null;
 		}
 
 		if (registration.getRace().equals(newDistance)
-				&& !newShirtSize.equals(registration.getShirtSize())) {
+				) {
 			dao.updateRegistration(registration.getId(), registration.getRace()
 					.getId(), newShirtSize.getId(), null);
 			return null;

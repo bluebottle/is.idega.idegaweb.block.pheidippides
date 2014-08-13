@@ -297,12 +297,17 @@ public class PheidippidesWebService {
 					if (registration.getCharity() != null) {
 						info.setCharityID(registration.getCharity().getPersonalId());
 						info.setCharityName(registration.getCharity().getName());
+					} else {
+						info.setCharityID("");
+						info.setCharityName("");
 					}
 					info.setCity(address.getCity());
 					info.setCountry(address.getCountry().getName());
 					info.setDistance(registration.getRace().getDistance().getName());
 					if (email != null) {
 						info.setEmail(email.getEmailAddress());
+					} else {
+						info.setEmail("");
 					}
 					info.setEmployee(false);
 					if (user.getGender().isFemaleGender()) {
@@ -312,7 +317,10 @@ public class PheidippidesWebService {
 					}
 					if (mobile != null) {
 						info.setMobile(mobile.getNumber());						
+					} else {
+						info.setMobile("");
 					}
+					
 					info.setName(user.getName());
 					
 					Country country = null;
@@ -324,11 +332,17 @@ public class PheidippidesWebService {
 					
 					if (country != null) {
 						info.setNationality(country.getName());
+					} else {
+						info.setNationality("");
 					}
+					
 					info.setPersonalID(user.getPersonalID());
 					if (phone != null) {
 						info.setPhone(phone.getNumber());
+					} else {
+						info.setPhone("");
 					}
+					
 					if (address.getPostalCode() != null) {
 						info.setPostalCode(address.getPostalCode().getPostalCode());
 					} else {

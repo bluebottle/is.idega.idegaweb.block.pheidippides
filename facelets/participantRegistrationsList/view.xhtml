@@ -54,11 +54,6 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
 							</h:outputLink>
-							<ui:fragment rendered="#{registration.race.event.reportSign eq 'LV'}">
-								<c:DownloadLink styleClass="certificate" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}">
-									<f:param name="prm_registration_pk" value="#{registration.id}" />
-								</c:DownloadLink>
-							</ui:fragment>
 							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/annarhlaupari/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" styleClass="changeRunner">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></span>
@@ -80,7 +75,6 @@
 			<li class="editTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_team']}" /></li>
 			<li class="editRelayTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></li>
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
-			<li class="certificate"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['certificate']}" /></li>
 			<li class="changeRunner"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></li>
 		</ul>
 	</ui:fragment>

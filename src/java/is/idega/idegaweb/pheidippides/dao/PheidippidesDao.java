@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.RegistrationHistoryType;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
@@ -182,6 +183,10 @@ public interface PheidippidesDao extends GenericDao {
 	public Registration updateRegistration(Long registrationPK, Long racePK,
 			Long shirtSizePK, String nationalityPK);
 
+	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter);
+	
+	public void storeRegistrationHistory(Registration registration, RegistrationHistoryType type, String valueBefore, String valueAfter);
+	
 	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
 			ShirtSize shirtSize, RegistrationStatus status);
 

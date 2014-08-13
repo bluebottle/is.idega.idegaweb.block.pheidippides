@@ -4,6 +4,7 @@ import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.RegistrationHistoryType;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
@@ -23,6 +24,7 @@ import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationHistory;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
@@ -838,6 +840,30 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		}
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter) {
+		Registration registration = getRegistration(registrationPK);
+		registration.setUserUUID(userUUIDAfter);
+		
+		getEntityManager().persist(registration);
+		
+		storeRegistrationHistory(registration, RegistrationHistoryType.ChangeUser, userUUIDBefore, userUUIDAfter);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void storeRegistrationHistory(Registration registration, RegistrationHistoryType type, String valueBefore, String valueAfter) {
+		RegistrationHistory history = new RegistrationHistory();
+		history.setCreatedDate(IWTimestamp.getTimestampRightNow());
+		history.setRegistration(registration);
+		history.setType(type);
+		history.setBeforeValue(valueBefore);
+		history.setAfterValue(valueAfter);
+
+		getEntityManager().persist(history);
+	}
+	
 	@Override
 	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
 			ShirtSize shirtSize, RegistrationStatus status) {

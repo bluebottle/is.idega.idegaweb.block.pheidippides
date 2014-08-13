@@ -1,0 +1,46 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form id="distanceChanger" class="userForm" action="" method="post">
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_distance']}" /></h1>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.change_distance_payment_help')]}" /></div>
+
+		<fieldset class="formSection">
+			<table class="userTable" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_distance']}" /></th>
+						<ui:fragment rendered="{not empty pheidippidesBean.shirtSize}">
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
+						</ui:fragment>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr>
+						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.registration.race.distance.localizedKey))]}" /></td>
+						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.race.distance.localizedKey))]}" /></td>
+						<ui:fragment rendered="{not empty pheidippidesBean.shirtSize}">
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', pheidippidesBean.shirtSize.localizedKey))]}" /></td>
+						</ui:fragment>
+						<td class="lastColumn"><h:outputText value="#{pheidippidesBean.answer.amount}" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+
+		<div class="submit">
+			<a href="#{pheidippidesBean.answer.valitorURL}" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

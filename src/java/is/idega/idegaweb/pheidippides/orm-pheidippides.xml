@@ -19,6 +19,7 @@
     <entity class="is.idega.idegaweb.pheidippides.data.RaceTrinket" />
     <entity class="is.idega.idegaweb.pheidippides.data.Registration" />
     <entity class="is.idega.idegaweb.pheidippides.data.RegistrationHeader" />
+    <entity class="is.idega.idegaweb.pheidippides.data.RegistrationHistory" />
     <entity class="is.idega.idegaweb.pheidippides.data.RegistrationTrinket" />
     <entity class="is.idega.idegaweb.pheidippides.data.ShirtSize" />
     <entity class="is.idega.idegaweb.pheidippides.data.Team" />
