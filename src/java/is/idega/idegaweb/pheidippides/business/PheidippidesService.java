@@ -1978,7 +1978,11 @@ public class PheidippidesService {
 								+ size.getGender().toString())));
 	}
 
-	public boolean changeRegistrationRunner(Registration registration, String newUserSSN, String email, String phone) {
+	public boolean changeRegistrationRunner(Registration registration, String newUserSSN, String emailString, String phone) {
+		Locale locale = LocaleUtil.getLocale(registration.getHeader().getLocale());
+		IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
+				.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER)
+				.getResourceBundle(locale);
 		
 		User user = null;
 		try {
@@ -1987,9 +1991,9 @@ public class PheidippidesService {
 			return false;
 		} 
 		
-		if (email != null && !"".equals(email)) {
+		if (emailString != null && !"".equals(emailString)) {
 			try {
-				this.getUserBusiness().updateUserMail(user, email);
+				this.getUserBusiness().updateUserMail(user, emailString);
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			} catch (CreateException e) {
@@ -2008,6 +2012,113 @@ public class PheidippidesService {
 		}
 		
 		dao.changeRegistrationRunner(registration.getId(), registration.getUserUUID(), user.getUniqueId());
+		
+		try {
+			String userNameString = "";
+			String passwordString = "";
+			if (getUserBusiness().hasUserLogin(user)) {
+				try {
+					LoginTable login = LoginDBHandler
+							.getUserLogin(user);
+					userNameString = login.getUserLogin();
+					passwordString = LoginDBHandler
+							.getGeneratedPasswordForUser();
+					LoginDBHandler
+							.changePassword(login, passwordString);
+				} catch (Exception e) {
+					System.out
+							.println("Error re-generating password for user: "
+									+ user.getName());
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					LoginTable login = getUserBusiness()
+							.generateUserLogin(user);
+					userNameString = login.getUserLogin();
+					passwordString = login.getUnencryptedUserPassword();
+				} catch (Exception e) {
+					System.out
+							.println("Error creating login for user: "
+									+ user.getName());
+					e.printStackTrace();
+				}
+			}
+
+			addUserToRootRunnersGroup(user);
+
+			if (registration.getRace().isCharityRun()
+					&& registration.getCharity() != null) {
+				try {
+					ContestantServiceLocator locator = new ContestantServiceLocator();
+					IContestantService port = locator
+							.getBasicHttpBinding_IContestantService(new URL(
+									"http://www.hlaupastyrkur.is/services/contestantservice.svc"));
+
+					String passwd = IWMainApplication
+							.getDefaultIWApplicationContext()
+							.getApplicationSettings()
+							.getProperty(HLAUPASTYRKUR_PASSWORD,
+									"password");
+					String userID = IWMainApplication
+							.getDefaultIWApplicationContext()
+							.getApplicationSettings()
+							.getProperty(HLAUPASTYRKUR_USER_ID,
+									"user_id");
+
+					ContestantRequest request = new ContestantRequest(
+							new Login(passwd, userID),
+							registration.getCharity().getPersonalId(),
+							registration.getRace().getDistance()
+									.getName(),
+							user.getName(),
+							passwordString,
+							userNameString,
+							user.getPersonalID() != null
+									&& user.getPersonalID().length() > 0
+									&& SocialSecurityNumber
+											.isValidIcelandicSocialSecurityNumber(user
+													.getPersonalID()) ? user
+									.getPersonalID() : userNameString,
+							Boolean.TRUE);
+					port.registerContestant(request);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			Email email = getUserBusiness().getUserMail(user);
+			Object[] args = {
+					user.getName(),
+					user.getPersonalID() != null ? user.getPersonalID()
+							: "",
+					getLocalizedRaceName(registration.getRace(),
+							registration.getHeader().getLocale()).getValue(),
+					userNameString, passwordString,
+					"" };
+			String subject = PheidippidesUtil.escapeXML(iwrb
+					.getLocalizedString(registration.getRace()
+							.getEvent().getLocalizedKey()
+							+ "."
+							+ "registration_changed_runner_subject_mail",
+							"Your registration has been received."));
+			String body = MessageFormat.format(StringEscapeUtils
+					.unescapeHtml(iwrb.getLocalizedString(registration
+							.getRace().getEvent().getLocalizedKey()
+							+ "." + "registration_changed_runner_body_mail",
+							"Your registration has been received.")),
+					args);
+
+			body = body.replaceAll("<p>", "")
+					.replaceAll("<strong>", "")
+					.replaceAll("</strong>", "");
+			body = body.replaceAll("</p>", "\r\n");
+			body = body.replaceAll("<br />", "\r\n");
+
+			sendMessage(email.getEmailAddress(), subject, body);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} 
 		
 		return true;
 	}
