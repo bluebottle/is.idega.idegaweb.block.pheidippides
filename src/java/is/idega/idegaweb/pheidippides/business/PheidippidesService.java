@@ -769,13 +769,6 @@ public class PheidippidesService {
 					}
 
 				} else {
-
-					// Hmmmm, is this correct?
-					if (personalID == null
-							|| (name == null && dateOfBirth == null)) {
-						continue;
-					}
-
 					if (personalID != null) {
 						try {
 							personalID = format.format(format.parse(personalID
@@ -796,8 +789,8 @@ public class PheidippidesService {
 							}
 						}
 
+						Date dob = null;
 						if (user == null) {
-							Date dob = null;
 							if (name == null || "".equals(name.trim())) {
 								rowHasError = true;
 							}
@@ -815,7 +808,16 @@ public class PheidippidesService {
 									rowHasError = true;
 								}
 							}
-
+							
+							if (!rowHasError) {
+								try {
+									user = getUserBusiness().getUserHome().findByDateOfBirthAndName(new IWTimestamp(dob).getDate(), name);
+								} catch(Exception e) {
+								}
+							}
+						}
+						
+						if (user == null) {
 							if (gender == null || "".equals(gender.trim())) {
 								rowHasError = true;
 							}
@@ -3516,7 +3518,8 @@ public class PheidippidesService {
 					}
 
 					if (user != null) {
-						if (isRegistered(user, event, 2013)) {
+						if (isRegistered(user, event, 2014)) {
+							System.out.println("User " + user.getName() + " is already registered");
 							continue;
 						}
 					}

@@ -159,7 +159,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 								
 								String distanceString = participant.getDistanceString();
 								Distance distance = dao.getDistance(distanceString);
-								Race race = dao.getRace(event, distance, 2013, false);
+								Race race = dao.getRace(event, distance, 2014, false);
 								
 								holder.setRace(race);
 								
@@ -175,7 +175,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 							if (participantList != null) {
 								System.out.println("Got " + participantList.size() + " entries to move");								
 							} else {
-								System.out.println("Got 0 entries to import");
+								System.out.println("Got 0 entries to move");
 							}
 							participantList = toImport.get(FiffoImportStatus.ALREADY_REGISTERED);
 							if (participantList != null) {
