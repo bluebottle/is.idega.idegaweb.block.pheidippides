@@ -13,12 +13,21 @@
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.waiver_help')]}" /></div>
+		<fieldset class="formSection waiver">
+			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.waiver_help')]}" /></div>
 
-		<fieldset class="formSection">
 			<div class="formItem required checkbox">
 				<c:checkBox name="prm_waiver" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
 				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
+			</div>
+		</fieldset>
+		
+		<fieldset class="formSection showRegistration">
+			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_help')]}" /></div>
+
+x			<div class="formItem checkbox">
+				<c:checkBox name="prm_show_registration" checked="#{!pheidippidesRegistrationSession.currentParticipant.showRegistration}" />
+				<label for="prm_show_registration"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_decline')]}" /></label>
 			</div>
 		</fieldset>
 		

@@ -72,6 +72,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_COMMENT = "comment";
 	
 	private static final String COLUMN_NEEDS_ASSISTANCE = "needs_assistance";
+	private static final String COLUMN_FACEBOOK = "facebook";
+	private static final String COLUMN_SHOW_REGISTRATION = "show_registration";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
 
@@ -149,6 +151,12 @@ public class Registration implements Serializable {
 	
 	@Column(name = Registration.COLUMN_NEEDS_ASSISTANCE)
 	private Boolean needsAssistance;
+
+	@Column(name = Registration.COLUMN_FACEBOOK)
+	private Boolean facebook;
+	
+	@Column(name = Registration.COLUMN_SHOW_REGISTRATION)
+	private Boolean showRegistration;
 
 	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	private List<RegistrationTrinket> trinkets;
@@ -331,6 +339,30 @@ public class Registration implements Serializable {
 	
 	public void setNeedsAssitance(boolean needsAssistance) {
 		this.needsAssistance = needsAssistance;
+	}
+
+	public boolean getFacebook() {
+		if (facebook != null) {
+			return facebook.booleanValue();
+		}
+		
+		return true;
+	}
+	
+	public void setFacebook(boolean facebook) {
+		this.facebook = facebook;
+	}
+	
+	public boolean getShowRegistration() {
+		if (showRegistration != null) {
+			return showRegistration.booleanValue();
+		}
+		
+		return true;
+	}
+	
+	public void setShowRegistration(boolean showRegistration) {
+		this.showRegistration = showRegistration;
 	}
 
 	public List<RegistrationTrinket> getTrinkets() {

@@ -74,6 +74,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_BEST_ULTRA_MARATHON_TIME = "prm_best_ultra_marathon_time";
 	private static final String PARAMETER_BEST_MARATHON_YEAR = "prm_best_marathon_year";
 	private static final String PARAMETER_BEST_ULTRA_MARATHON_YEAR = "prm_best_ultra_marathon_year";
+	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -263,6 +264,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 				case ACTION_OVERVIEW:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
+						getSession().getCurrentParticipant().setShowRegistration(!iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION));
 						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
 						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), null);
 					}

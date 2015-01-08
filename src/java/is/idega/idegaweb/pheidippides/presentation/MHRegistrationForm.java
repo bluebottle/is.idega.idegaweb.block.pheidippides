@@ -68,6 +68,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
+	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
 	
 	@Autowired
 	private PheidippidesService service;
@@ -231,6 +232,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 				case ACTION_OVERVIEW:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
+						getSession().getCurrentParticipant().setShowRegistration(!iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION));
 						getSession().getCurrentParticipant().setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName() + ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - " + getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(), iwc.getCurrentLocale().toString()).getValue());
 						getService().calculatePrices(getSession().getCurrentParticipant(), getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(), null);
 					}

@@ -19,14 +19,20 @@ public class ParticipantHolder {
 	private Charity charity;
 	private String leg;
 	private Team team;
+	
 	private int amount;
 	private int discount;
+	
 	private boolean acceptsWaiver;
 	private boolean hasDoneMarathonBefore = true;	
 	private boolean hasDoneLVBefore = true;
 	private boolean needsAssistance = false;
+	private boolean facebook = true;
+	private boolean showRegistration = true;
+	
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
+	
 	private List<RacePrice> trinkets;
 	private RaceTrinket trinket;
 	
@@ -164,6 +170,18 @@ public class ParticipantHolder {
 	}
 	public void setNeedsAssistance(boolean needsAssistance) {
 		this.needsAssistance = needsAssistance;
+	}
+	public boolean isFacebook() {
+		return facebook;
+	}
+	public void setFacebook(boolean facebook) {
+		this.facebook = facebook;
+	}
+	public boolean isShowRegistration() {
+		return showRegistration;
+	}
+	public void setShowRegistration(boolean showRegistration) {
+		this.showRegistration = showRegistration;
 	}
 	public Date getBestMarathonTime() {
 		return bestMarathonTime;

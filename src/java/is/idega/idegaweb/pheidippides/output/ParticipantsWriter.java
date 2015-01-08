@@ -234,6 +234,12 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("needs_assistance", "Needs assistance"));
 		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("facebook", "Facebook"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("show_registration", "Show registration"));
+		cell.setCellStyle(style);
 		
 		for (RaceTrinket trinket : trinkets) {
 			cell = row.createCell(iCell++);
@@ -342,6 +348,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(registration.getEstimatedTime() != null ? new IWTimestamp(registration.getEstimatedTime()).getDateString("HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getCharity() != null ? registration.getCharity().getName() : "");
 			row.createCell(iCell++).setCellValue(registration.getNeedsAssistance() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+			row.createCell(iCell++).setCellValue(registration.getFacebook() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
+			row.createCell(iCell++).setCellValue(registration.getShowRegistration() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			
 			for (RaceTrinket trinket : trinkets) {
 				RegistrationTrinket raceTrinket = trinketMap.get(trinket);

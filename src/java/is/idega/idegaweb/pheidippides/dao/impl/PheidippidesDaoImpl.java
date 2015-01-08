@@ -657,7 +657,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			ShirtSize shirtSize, Team team, String leg, int amount,
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
-			Date bestMarathonTime, Date bestUltraMarathonTime, boolean needsAssistance) {
+			Date bestMarathonTime, Date bestUltraMarathonTime,
+			boolean needsAssistance, boolean facebook, boolean showRegistration) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {
@@ -751,6 +752,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		registration.setHasDoneLVBefore(hasDoneLVBefore);
 		registration.setHasDoneMarathonBefore(hasDoneMarathonBefore);
 		registration.setNeedsAssitance(needsAssistance);
+		registration.setFacebook(facebook);
+		registration.setShowRegistration(showRegistration);
 
 		if (bestMarathonTime != null) {
 			registration.setBestMarathonTime(bestMarathonTime);
