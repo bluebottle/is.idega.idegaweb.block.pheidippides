@@ -535,6 +535,11 @@ form.registrationForm fieldset.formSection div.formItem .error,form.userForm div
 	padding-right: 32px;
 }
 
+form.registrationForm fieldSet.formSection div.formItem.checkbox label.error + label, form.userForm div.formItem.checkbox label.error + label {
+	color: #a00;
+	border-bottom: 1px #a00 dotted;
+}
+
 form.registrationForm fieldset.formSection table,table.relayTeam {
 	font-size: 0.85em;
 }
