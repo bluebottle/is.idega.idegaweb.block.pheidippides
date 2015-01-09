@@ -18,7 +18,7 @@
 
 			<div class="formItem required checkbox">
 				<c:checkBox name="prm_waiver" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
-				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['accept_waiver']}" /></label>
+				<label for="prm_waiver"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.accept_waiter')]}" /></label>
 			</div>
 		</fieldset>
 		
