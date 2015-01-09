@@ -68,6 +68,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
+	private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
 	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
 	
 	@Autowired
@@ -203,6 +204,9 @@ public class MHRegistrationForm extends IWBaseComponent {
 						if (iwc.isParameterSet(PARAMETER_RACE)) {
 							getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
 							bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().getCurrency()));
+						}
+						if (iwc.isParameterSet(PARAMETER_NEEDS_ASSISTANCE)) {
+							getSession().getCurrentParticipant().setNeedsAssistance(true);
 						}
 						
 						showTrinketsSelect(iwc, bean);

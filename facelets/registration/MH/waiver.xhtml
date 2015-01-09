@@ -25,7 +25,7 @@
 		<fieldset class="formSection showRegistration">
 			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_help')]}" /></div>
 
-x			<div class="formItem checkbox">
+			<div class="formItem checkbox">
 				<c:checkBox name="prm_show_registration" checked="#{!pheidippidesRegistrationSession.currentParticipant.showRegistration}" />
 				<label for="prm_show_registration"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_decline')]}" /></label>
 			</div>
