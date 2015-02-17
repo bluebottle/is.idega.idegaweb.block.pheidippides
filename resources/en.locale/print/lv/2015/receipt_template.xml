@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="70" margin-right="70" margin-top="40" margin-bottom="70">
+	
+	<font-def name="small" family="Helvetica" size="8" style="normal"/>
+	<font-def name="normal" family="Helvetica" size="12" style="normal"/>
+	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
+	
+	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
+		<cell><image source="logo.jpg" width="150" scale-to-fit="true" /></cell>
+		<cell halign="right">
+			Reykjavik Marathon<br />
+			ID number: 590493-2369<br />
+			Engjavegi 6, 104 Reykjavik, Iceland<br />
+			Telephone: +354 535 3700<br />
+			<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
+		</cell>
+	</table>
+    
+	<paragraph font="bold" spacing-after="18.0">
+		Receipt for registration for Laugavegur Ultra Marathon, July 18th 2015.
+	</paragraph>
+
+	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
+		<cell>Name:</cell>
+		<cell font="bold">${name}</cell>
+		<cell>Distance:</cell>
+		<cell font="bold">${distance}</cell>
+		<cell>Price:</cell>
+		<cell font="bold">${price}</cell>
+	</table>
+	
+	<paragraph font="normal" spacing-after="18.0">
+		You will get an email as the event draws closer with information about race material as well as offers for a bus ride etc.
+	</paragraph>
+	<paragraph font="normal" spacing-after="18.0">
+		Please study all race information on the website <anchor reference="http://www.marathon.is/ultramarathon">www.marathon.is/ultramarathon</anchor>.
+	</paragraph>
+	
+	<paragraph font="small" halign="right">
+		Receipt number: ${id}
+	</paragraph>
+</document>
