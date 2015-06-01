@@ -1,0 +1,92 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="adminForm" action="#{pheidippidesBean.action}" method="post">
+		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
+
+		<fieldset class="navigation">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['public_participants_list']}" /></legend>
+			
+			<div class="formItem">
+				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race']}" /></label>
+				<c:selectOne name="prm_race_pk">
+					<ui:repeat value="#{pheidippidesBean.races}" var="race">
+						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq param['prm_race_pk']}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
+			<div class="submit">
+				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
+			</div>
+		</fieldset>
+
+		<ui:fragment rendered="#{not empty pheidippidesBean.registrations}">		
+			<fieldset class="formSection">
+				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+							<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_name']}" /></th>
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+							</ui:fragment>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></th>							
+							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
+							<ui:param value="#{pheidippidesBean.participantsMap[registration]}" name="participant" />
+							
+							<tr>
+								<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
+								<ui:fragment rendered="#{pheidippidesBean.race.numberOfRelayLegs > 1}">
+									<td><h:outputText value="#{registration.team.name}" /></td>
+									<td><h:outputText value="#{registration.leg}" /></td>
+								</ui:fragment>
+								<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][participant.gender]}" /></td>								
+								<td class="lastColumn"><h:outputText value="#{participant.nationality}" /></td>
+							</tr>
+							
+							<ui:fragment rendered="#{registration.race.numberOfRelayLegs > 1}">
+								<tr class="childRow">
+									<td class="childCell" colspan="5">
+										<table class="subTable relayPartners" width="100%" cellpadding="0" cellspacing="0">
+											<colgroup>
+												<col span="1" class="firstColumn name" />
+												<col span="1" class="lastColumn leg" />
+											</colgroup>
+											<thead>
+												<tr>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
+													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
+												</tr>
+											</thead>
+											<tbody>
+												<ui:repeat value="#{pheidippidesBean.relayPartnersMap[registration]}" var="relayRegistration">
+													<ui:param value="#{pheidippidesBean.participantsMap[relayRegistration]}" name="relayPartner" />
+													<tr>
+														<td><h:outputText value="#{relayPartner.fullName}" /></td>
+														<td><h:outputText value="#{relayRegistration.leg}" /></td>
+													</tr>
+												</ui:repeat>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</ui:fragment>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</fieldset>
+		</ui:fragment>
+	</form>
+</ui:component>
+</html>

@@ -285,6 +285,25 @@ public class PheidippidesService {
 		return p;
 	}
 
+	public Participant getPublicParticipant(Registration registration) {
+		Participant p = null;
+
+		try {
+			User user = getUserBusiness().getUserByUniqueId(
+					registration.getUserUUID());
+			p = getPublicParticipant(user);
+			Country country = getCountryHome().findByPrimaryKey(
+					new Integer(registration.getNationality()));
+			
+			p.setNationality(country.getName());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+		}
+
+		return p;
+	}
+
 	public Participant getParticipant(String personalID) {
 		Participant p = null;
 
@@ -321,6 +340,22 @@ public class PheidippidesService {
 			Participant participant = getParticipant(registration);
 			if (participant != null) {
 				participants.put(registration, participant);
+			}
+		}
+
+		return participants;
+	}
+
+	public Map<Registration, Participant> getPublicParticantMap(
+			List<Registration> registrations) {
+		Map<Registration, Participant> participants = new HashMap<Registration, Participant>();
+
+		for (Registration registration : registrations) {
+			if (registration.getShowRegistration()) {
+				Participant participant = getPublicParticipant(registration);
+				if (participant != null) {
+					participants.put(registration, participant);
+				}
 			}
 		}
 
@@ -490,6 +525,19 @@ public class PheidippidesService {
 				p.setLogin(loginTable.getUserLogin());
 			}
 		} catch (Exception e) {
+		}
+
+		return p;
+	}
+
+	public Participant getPublicParticipant(User user) {
+		Participant p = new Participant();
+		p.setFirstName(user.getFirstName());
+		p.setMiddleName(user.getMiddleName());
+		p.setLastName(user.getLastName());
+		p.setFullName(user.getName());
+		if (user.getGender() != null) {
+			p.setGender(user.getGender().getName());
 		}
 
 		return p;
