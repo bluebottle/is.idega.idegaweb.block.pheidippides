@@ -3,7 +3,6 @@ package is.idega.idegaweb.pheidippides.presentation;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.Participant;
@@ -109,7 +108,7 @@ public class PublicParticipantsList extends IWBaseComponent {
 	
 	private void showView(IWContext iwc, PheidippidesBean bean) {
 		if (bean.getRace() != null) {
-			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), RegistrationStatus.OK));
+			bean.setRegistrations(getDao().getPublicRegistrations(bean.getRace()));
 			bean.setParticipantsMap(getService().getPublicParticantMap(bean.getRegistrations()));
 			
 			if (bean.getRace().getNumberOfRelayLegs() > 1) {

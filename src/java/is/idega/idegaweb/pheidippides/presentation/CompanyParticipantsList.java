@@ -249,7 +249,7 @@ public class CompanyParticipantsList extends IWBaseComponent implements IWPageEv
 		//Long shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		
-		getDao().updateRegistration(registration.getId(), racePK, null, nationalityPK);
+		getDao().updateRegistration(registration.getId(), racePK, null, nationalityPK, null);
 		
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")

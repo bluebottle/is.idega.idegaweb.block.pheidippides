@@ -152,6 +152,9 @@ public interface PheidippidesDao extends GenericDao {
 	public List<Registration> getRegistrations(Race race,
 			RegistrationStatus status);
 
+	public List<Registration> getPublicRegistrations(Race race);
+
+	
 	public List<Registration> getRegistrations(Company company, Race race,
 			RegistrationStatus status);
 
@@ -181,7 +184,7 @@ public interface PheidippidesDao extends GenericDao {
 			RegistrationHeader header);
 
 	public Registration updateRegistration(Long registrationPK, Long racePK,
-			Long shirtSizePK, String nationalityPK);
+			Long shirtSizePK, String nationalityPK, Boolean showRegistration);
 
 	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter);
 	

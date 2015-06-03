@@ -61,11 +61,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Override
 	public Event getEventByReportSign(String reportSign) {
-		return getSingleResult("event.findByReportSign", Event.class, new Param(
-				"reportSign", reportSign));
+		return getSingleResult("event.findByReportSign", Event.class,
+				new Param("reportSign", reportSign));
 	}
 
-	
 	@Override
 	public List<Event> getEvents() {
 		return getResultList("event.findAll", Event.class);
@@ -236,14 +235,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		result.setGroupEN(groupEN);
 		result.setGenderEN(genderEN);
 		result.setRegistration(registration);
-		
+
 		getEntityManager().persist(result);
 
 		return result;
 
 	}
 
-	
 	@Override
 	@Transactional(readOnly = false)
 	public boolean removeRace(Long raceID) {
@@ -354,9 +352,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Override
 	public RacePrice getRacePrice(Race race, Date date, Currency currency) {
 		return getSingleResult("racePrice.findByRaceAndDate", RacePrice.class,
-				new Param("race", race),
-				new Param("date", date),
-				new Param("currency", currency));
+				new Param("race", race), new Param("date", date), new Param(
+						"currency", currency));
 	}
 
 	@Override
@@ -585,6 +582,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	}
 
 	@Override
+	public List<Registration> getPublicRegistrations(Race race) {
+		return getResultList("registration.findPublicByRaceAndStatus",
+				Registration.class, new Param("race", race), new Param(
+						"status", RegistrationStatus.OK));
+	}
+
+	@Override
 	public List<Registration> getRegistrations(Company company, Race race,
 			RegistrationStatus status) {
 		if (status != null && company != null) {
@@ -773,11 +777,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			RegistrationHeader header) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
-		
+
 		if (registration == null) {
 			return null;
 		}
-		
+
 		registration.setHeader(header);
 
 		getEntityManager().persist(registration);
@@ -785,10 +789,9 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return registration;
 	}
 
-	
 	@Override
 	public Registration updateRegistration(Long registrationPK, Long racePK,
-			Long shirtSizePK, String nationalityPK) {
+			Long shirtSizePK, String nationalityPK, Boolean showRegistration) {
 		Registration registration = getRegistration(registrationPK);
 
 		Race newRace = getRace(racePK);
@@ -825,7 +828,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setEstimatedTime(registration.getEstimatedTime());
 			newReg.setComment(registration.getComment());
 			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
+			newReg.setShowRegistration(registration.getShowRegistration());
 
+			if (showRegistration != null) {
+				newReg.setShowRegistration(showRegistration);
+			}
+			
 			getEntityManager().persist(newReg);
 
 			return newReg;
@@ -837,6 +845,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 				registration.setNationality(nationalityPK);
 			}
 
+			if (showRegistration != null) {
+				registration.setShowRegistration(showRegistration);
+			}
+
 			getEntityManager().persist(registration);
 
 			return registration;
@@ -845,18 +857,22 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Override
 	@Transactional(readOnly = false)
-	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter) {
+	public void changeRegistrationRunner(Long registrationPK,
+			String userUUIDBefore, String userUUIDAfter) {
 		Registration registration = getRegistration(registrationPK);
 		registration.setUserUUID(userUUIDAfter);
-		
+
 		getEntityManager().persist(registration);
-		
-		storeRegistrationHistory(registration, RegistrationHistoryType.ChangeUser, userUUIDBefore, userUUIDAfter);
+
+		storeRegistrationHistory(registration,
+				RegistrationHistoryType.ChangeUser, userUUIDBefore,
+				userUUIDAfter);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void storeRegistrationHistory(Registration registration, RegistrationHistoryType type, String valueBefore, String valueAfter) {
+	public void storeRegistrationHistory(Registration registration,
+			RegistrationHistoryType type, String valueBefore, String valueAfter) {
 		RegistrationHistory history = new RegistrationHistory();
 		history.setCreatedDate(IWTimestamp.getTimestampRightNow());
 		history.setRegistration(registration);
@@ -866,7 +882,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 		getEntityManager().persist(history);
 	}
-	
+
 	@Override
 	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
 			ShirtSize shirtSize, RegistrationStatus status) {
@@ -1174,7 +1190,6 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return registrationTrinket;
 	}
 
-	
 	@Override
 	public void updateRegistrationTrinkets(Registration registration,
 			List<RegistrationTrinket> trinkets) {
@@ -1336,11 +1351,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return getResultList("giftCard.findAll", GiftCard.class, new Param(
 				"header", header));
 	}
-	
+
 	@Override
 	public List<GiftCard> getGiftCards(List<GiftCardHeaderStatus> statuses) {
-		return getResultList("giftCard.findByHeaderStatus", GiftCard.class, new Param(
-				"statuses", statuses));
+		return getResultList("giftCard.findByHeaderStatus", GiftCard.class,
+				new Param("statuses", statuses));
 	}
 
 	@Override
@@ -1363,7 +1378,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	public List<GiftCardUsage> getGiftCardUsage() {
 		return getResultList("giftCardUsage.findAll", GiftCardUsage.class);
 	}
-	
+
 	@Override
 	public List<GiftCardUsage> getGiftCardUsage(GiftCard card) {
 		return getResultList("giftCardUsage.findAllByGiftCard",
@@ -1381,13 +1396,13 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Override
 	public int getGiftCardUsageSum(GiftCard card) {
-		Long sum = getSingleResult("giftCardUsage.sumByGiftCard",
-				Long.class, new Param("card", card));
-		
+		Long sum = getSingleResult("giftCardUsage.sumByGiftCard", Long.class,
+				new Param("card", card));
+
 		if (sum != null) {
 			return sum.intValue();
 		}
-		
+
 		return 0;
 	}
 

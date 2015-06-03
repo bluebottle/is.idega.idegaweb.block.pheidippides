@@ -296,6 +296,7 @@ public class PheidippidesService {
 					new Integer(registration.getNationality()));
 			
 			p.setNationality(country.getName());
+			p.setYearOfBirth(new IWTimestamp(user.getDateOfBirth()).getYear());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (FinderException e) {
@@ -2189,7 +2190,7 @@ public class PheidippidesService {
 		if (registration.getRace().equals(newDistance)
 				) {
 			dao.updateRegistration(registration.getId(), registration.getRace()
-					.getId(), newShirtSize.getId(), null);
+					.getId(), newShirtSize.getId(), null, null);
 			return null;
 		}
 

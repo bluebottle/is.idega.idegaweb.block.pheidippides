@@ -11,6 +11,7 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 import is.idega.idegaweb.pheidippides.data.Registration;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.UpdateRequest;
 
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -68,6 +69,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
 	private static final String PARAMETER_CITY = "prm_city";
 	private static final String PARAMETER_COUNTRY_PK = "prm_country";
+	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
 	private static final String PARAMETER_GENDER = "prm_gender";
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
@@ -287,10 +289,12 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			Company company = getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY_PK)));
 			getService().moveRegistrationToCompany(registration, company);
 		}
-		
+
+		boolean showRegistration = iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION);
+
 		boolean distanceChange = registration.getRace().getId().intValue() != racePK.intValue();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
-		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK);
+		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK, showRegistration);
 
 		if (distanceChange) {
 			for (RegistrationTrinket registrationTrinket : trinkets) {

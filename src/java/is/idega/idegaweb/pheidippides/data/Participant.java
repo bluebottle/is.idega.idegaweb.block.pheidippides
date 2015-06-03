@@ -29,6 +29,8 @@ public class Participant implements Serializable {
 	private String imageURL;
 	private String login;
 	
+	private int yearOfBirth;
+	
 	private String relayLeg;
 	private ShirtSize shirtSize;
 	private Long registrationID;
@@ -289,5 +291,13 @@ public class Participant implements Serializable {
 
 	public void setNeedsAssistance(Boolean needsAssistance) {
 		this.needsAssistance = needsAssistance;
+	}
+
+	public int getYearOfBirth() {
+		return yearOfBirth;
+	}
+
+	public void setYearOfBirth(int yearOfBirth) {
+		this.yearOfBirth = yearOfBirth;
 	}
 }

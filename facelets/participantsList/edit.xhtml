@@ -73,6 +73,10 @@
 							</ui:repeat>
 						</c:selectOne>
 					</div>
+					<div class="formItem checkbox">
+						<c:checkBox name="prm_show_registration" content="true" checked="#{pheidippidesBean.registration.showRegistration}" />
+						<label for="prm_show_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['show_registration']}" /></label>
+					</div>
 				</j:otherwise>
 			</j:choose>
 			<div class="formItem required">
