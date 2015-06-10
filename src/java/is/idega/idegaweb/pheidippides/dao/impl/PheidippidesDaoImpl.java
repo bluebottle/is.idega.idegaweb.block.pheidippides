@@ -8,6 +8,7 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHistoryType;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.business.TeamCategory;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
@@ -662,7 +663,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
-			boolean needsAssistance, boolean facebook, boolean showRegistration) {
+			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {
@@ -767,6 +768,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			registration.setBestUltraMarathonTime(bestUltraMarathonTime);
 		}
 
+		if (runningGroup != null) {
+			registration.setRunningGroup(runningGroup);
+		}
+		
 		getEntityManager().persist(registration);
 
 		return registration;
@@ -791,7 +796,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 	@Override
 	public Registration updateRegistration(Long registrationPK, Long racePK,
-			Long shirtSizePK, String nationalityPK, Boolean showRegistration) {
+			Long shirtSizePK, String nationalityPK, Boolean showRegistration, String runningGroup) {
 		Registration registration = getRegistration(registrationPK);
 
 		Race newRace = getRace(racePK);
@@ -829,9 +834,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setComment(registration.getComment());
 			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
 			newReg.setShowRegistration(registration.getShowRegistration());
+			newReg.setRunningGroup(registration.getRunningGroup());
 
 			if (showRegistration != null) {
 				newReg.setShowRegistration(showRegistration);
+			}
+			
+			if (runningGroup != null) {
+				newReg.setRunningGroup(runningGroup);
 			}
 			
 			getEntityManager().persist(newReg);
@@ -847,6 +857,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 
 			if (showRegistration != null) {
 				registration.setShowRegistration(showRegistration);
+			}
+			
+			if (runningGroup != null) {
+				registration.setRunningGroup(runningGroup);
 			}
 
 			getEntityManager().persist(registration);
@@ -1234,6 +1248,16 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		persist(reg);
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public void updateTeamCategory(Team team, TeamCategory teamCategory, boolean isValid) {
+		Team theTeam = getTeam(team.getId());
+		theTeam.setCategory(teamCategory);
+		theTeam.setValid(isValid);
+		persist(theTeam);
+	}
+
+	
 	/* Gift card methods */
 	@Override
 	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID) {

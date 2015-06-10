@@ -76,6 +76,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_FACEBOOK = "facebook";
 	private static final String COLUMN_SHOW_REGISTRATION = "show_registration";
 	
+	private static final String COLUMN_RUNNING_GROUP = "running_group";
+	
 	private static final String COLUMN_CREATED_DATE = "created";
 
 	@Id
@@ -158,6 +160,9 @@ public class Registration implements Serializable {
 	
 	@Column(name = Registration.COLUMN_SHOW_REGISTRATION)
 	private Boolean showRegistration;
+
+	@Column(name = Registration.COLUMN_RUNNING_GROUP)
+	private String runningGroup;
 
 	@OneToMany(mappedBy = "registration", fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	private List<RegistrationTrinket> trinkets;
@@ -413,5 +418,13 @@ public class Registration implements Serializable {
 
 	public void setMovedTo(Registration movedTo) {
 		this.movedTo = movedTo;
+	}
+
+	public String getRunningGroup() {
+		return runningGroup;
+	}
+
+	public void setRunningGroup(String runningGroup) {
+		this.runningGroup = runningGroup;
 	}
 }

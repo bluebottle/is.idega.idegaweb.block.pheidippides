@@ -48,6 +48,7 @@ public class Race implements Serializable, Comparable<Race> {
 	private static final String COLUMN_CURRENT_PARTICIPANT_NUMBER = "current_participant_number";
 	private static final String COLUMN_MAX_PARTICIPANT_NUMBER = "max_participant_number";
 	private static final String COLUMN_ORDER_NUMBER = "order_number";
+	private static final String COLUMN_SEND_REGISTRATION_CC_TO = "send_registration_cc_to";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,7 +69,6 @@ public class Race implements Serializable, Comparable<Race> {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Race.COLUMN_OPEN_REGISTRATION)
 	private Date openRegistrationDate;
-
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Race.COLUMN_CLOSE_REGISTRATION)
@@ -105,6 +105,9 @@ public class Race implements Serializable, Comparable<Race> {
 	@Column(name = Race.COLUMN_ORDER_NUMBER)
 	private int orderNumber;
 
+	@Column(name = Race.COLUMN_SEND_REGISTRATION_CC_TO)
+	private String sendRegistrationCCTo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -260,5 +263,13 @@ public class Race implements Serializable, Comparable<Race> {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getSendRegistrationCCTo() {
+		return sendRegistrationCCTo;
+	}
+
+	public void setSendRegistrationCCTo(String sendRegistrationCCTo) {
+		this.sendRegistrationCCTo = sendRegistrationCCTo;
 	}
 }

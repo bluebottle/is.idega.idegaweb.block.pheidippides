@@ -1,10 +1,14 @@
 package is.idega.idegaweb.pheidippides.data;
 
+import is.idega.idegaweb.pheidippides.business.TeamCategory;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +26,8 @@ public class Team implements Serializable {
 	private static final String COLUMN_NAME = "name";
 	private static final String COLUMN_RELAY_TEAM = "relay_team";
 	private static final String COLUMN_CREATED_DATE = "created";
+	private static final String COLUMN_TEAM_CATEGORY = "category";
+	private static final String COLUMN_IS_VALID = "is_valid";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +44,13 @@ public class Team implements Serializable {
 	@Column(name = Team.COLUMN_CREATED_DATE)
 	private Date createdDate;
 
+	@Column(name = Team.COLUMN_TEAM_CATEGORY)
+	@Enumerated(EnumType.STRING)
+	private TeamCategory category;
+	
+	@Column(name = Team.COLUMN_IS_VALID)
+	private Boolean isValid;
+	
 	public Long getId() {
 		return id;
 	}
@@ -69,5 +82,21 @@ public class Team implements Serializable {
 
 	public void setRelayTeam(boolean isRelayTeam) {
 		this.isRelayTeam = isRelayTeam;
+	}
+
+	public TeamCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(TeamCategory category) {
+		this.category = category;
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
 	}
 }

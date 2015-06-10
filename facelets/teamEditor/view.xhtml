@@ -31,6 +31,17 @@
 					<label for="prm_team_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team.name']}" /></label>
 					<input type="text" class="required" name="prm_team_name" value="#{registration.team.name}" />
 				</div>
+
+				<div class="formItem">
+					<label for="prm_team_category"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team.category']}" /></label>
+					<h:outputText name="prm_team_category" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat('team_category.', registration.team.category)]}" />
+				</div>
+
+				<div class="formItem">
+					<label for="prm_team_isvalid"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team.is_valid']}" /></label>
+					<td class="discount_#{team.isValid}"><span></span></td>
+				</div>
+
 				
 				<table class="relayTeam" width="100%" cellspacing="0" cellpadding="0">
 					<thead>

@@ -42,6 +42,10 @@
 							</ui:fragment>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></th>
 							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year_of_birth']}" /></th>
+							<ui:fragment rendered="#{pheidippidesBean.race.teamRun}">
+								<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team']}" /></th>
+							</ui:fragment>
+							<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></th>
 							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
 						</tr>
 					</thead>
@@ -57,7 +61,11 @@
 									<td><h:outputText value="#{registration.leg}" /></td>
 								</ui:fragment>
 								<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][participant.gender]}" /></td>
-								<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][participant.yearOfBirth]}" /></td>
+								<td><h:outputText value="#{participant.yearOfBirth}" /></td>
+								<ui:fragment rendered="#{pheidippidesBean.race.teamRun}">
+									<th><h:outputText value="#{participant.teamName}" /></th>
+								</ui:fragment>
+								<th><h:outputText value="#{participant.runningGroup}" /></th>
 								<td class="lastColumn"><h:outputText value="#{participant.nationality}" /></td>
 							</tr>
 							

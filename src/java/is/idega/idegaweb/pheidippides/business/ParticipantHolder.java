@@ -40,6 +40,8 @@ public class ParticipantHolder {
 	
 	private String valitorDescription = null;
 	
+	private String runningGroup = null;
+	
 	
 	public Participant getParticipant() {
 		return participant;
@@ -220,5 +222,11 @@ public class ParticipantHolder {
 	}
 	public void setTrinket(RaceTrinket trinket) {
 		this.trinket = trinket;
+	}
+	public String getRunningGroup() {
+		return runningGroup;
+	}
+	public void setRunningGroup(String runningGroup) {
+		this.runningGroup = runningGroup;
 	}
 }

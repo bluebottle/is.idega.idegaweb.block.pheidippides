@@ -8,6 +8,7 @@ import is.idega.idegaweb.pheidippides.business.RegistrationHistoryType;
 import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
 import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.business.TeamCategory;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
@@ -178,13 +179,13 @@ public interface PheidippidesDao extends GenericDao {
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
-			boolean needsAssistance, boolean facebook, boolean showRegistration);
+			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup);
 
 	public Registration moveRegistrationToCompany(Long registrationID,
 			RegistrationHeader header);
 
 	public Registration updateRegistration(Long registrationPK, Long racePK,
-			Long shirtSizePK, String nationalityPK, Boolean showRegistration);
+			Long shirtSizePK, String nationalityPK, Boolean showRegistration, String runningGroup);
 
 	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter);
 	
@@ -267,6 +268,8 @@ public interface PheidippidesDao extends GenericDao {
 	public void updateTeamName(Team team, String name);
 
 	public void updateTeam(Registration registration, Team team);
+
+	public void updateTeamCategory(Team team, TeamCategory teamCategory, boolean isValid);
 
 	// Gift cards
 	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID);

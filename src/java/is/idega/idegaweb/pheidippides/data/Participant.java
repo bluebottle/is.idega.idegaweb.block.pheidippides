@@ -36,6 +36,9 @@ public class Participant implements Serializable {
 	private Long registrationID;
 	private String distanceString;
 	
+	private String teamName;
+	private String runningGroup;
+	
 	private Boolean needsAssistance;
 	
 	private Collection<Race> availableRaces;
@@ -299,5 +302,21 @@ public class Participant implements Serializable {
 
 	public void setYearOfBirth(int yearOfBirth) {
 		this.yearOfBirth = yearOfBirth;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+
+	public String getRunningGroup() {
+		return runningGroup;
+	}
+
+	public void setRunningGroup(String runningGroup) {
+		this.runningGroup = runningGroup;
 	}
 }

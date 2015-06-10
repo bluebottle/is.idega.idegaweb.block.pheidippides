@@ -13,9 +13,7 @@
 		<table class="userTable" width="100%" cellspacing="0" cellpadding="0">
 			<thead>
 				<tr>
-					<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration_id']}" /></th>
-					</ui:fragment>
+					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration_id']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></th>
 					<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
@@ -29,9 +27,7 @@
 			<tbody>
 				<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
 					<tr>
-						<ui:fragment rendered="#{p:isEnglishLocale(pheidippidesBean.locale)}">
-							<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
-						</ui:fragment>
+						<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
 						<td><h:outputText value="#{registration.race.event.name}" /></td>
 						<td><h:outputText value="#{registration.race.year}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', p:concat(registration.race.distance.localizedKey, registration.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
