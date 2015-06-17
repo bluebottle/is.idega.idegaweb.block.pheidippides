@@ -49,6 +49,7 @@ public class Race implements Serializable, Comparable<Race> {
 	private static final String COLUMN_MAX_PARTICIPANT_NUMBER = "max_participant_number";
 	private static final String COLUMN_ORDER_NUMBER = "order_number";
 	private static final String COLUMN_SEND_REGISTRATION_CC_TO = "send_registration_cc_to";
+	private static final String COLUMN_SHOW_EXTRA_INFORMATION = "show_extra_information";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -107,6 +108,9 @@ public class Race implements Serializable, Comparable<Race> {
 
 	@Column(name = Race.COLUMN_SEND_REGISTRATION_CC_TO)
 	private String sendRegistrationCCTo;
+
+	@Column(name = Race.COLUMN_SHOW_EXTRA_INFORMATION)
+	private Boolean showExtraInformation;
 	
 	public Long getId() {
 		return id;
@@ -271,5 +275,13 @@ public class Race implements Serializable, Comparable<Race> {
 
 	public void setSendRegistrationCCTo(String sendRegistrationCCTo) {
 		this.sendRegistrationCCTo = sendRegistrationCCTo;
+	}
+
+	public Boolean getShowExtraInformation() {
+		return showExtraInformation;
+	}
+
+	public void setShowExtraInformation(Boolean showExtraInformation) {
+		this.showExtraInformation = showExtraInformation;
 	}
 }

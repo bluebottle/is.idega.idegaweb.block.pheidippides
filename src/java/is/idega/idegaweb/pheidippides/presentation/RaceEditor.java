@@ -54,6 +54,7 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 	private static final String PARAMETER_NEXT_PARTICIPANT_NUMBER = "prm_next_participant_number";
 	private static final String PARAMETER_MAX_PARTICIPANT_NUMBER = "prm_maximum_participant_number";
 	private static final String PARAMETER_ORDER_NUMBER = "prm_order_number";
+	private static final String PARAMETER_SHOW_EXTRA_INFORMATION = "prm_show_extra_information";
 	
 	@Autowired
 	private PheidippidesDao dao;

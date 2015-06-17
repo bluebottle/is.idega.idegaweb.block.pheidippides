@@ -325,6 +325,21 @@ public class PheidippidesService {
 		return p;
 	}
 
+	public Participant getParticipantStripped(String personalID) {
+		Participant p = null;
+
+		try {
+			User user = getUserBusiness().getUser(personalID);
+			p = getParticipantStripped(user);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+		}
+
+		return p;
+	}
+
+	
 	public Participant getParticipantByUUID(String uuid) {
 		Participant p = null;
 
@@ -537,6 +552,54 @@ public class PheidippidesService {
 		return p;
 	}
 
+	public Participant getParticipantStripped(User user) {
+		Participant p = new Participant();
+		p.setFirstName(user.getFirstName());
+		p.setMiddleName(user.getMiddleName());
+		p.setLastName(user.getLastName());
+		p.setFullName(user.getName());
+		p.setPersonalId(user.getPersonalID());
+		p.setDateOfBirth(user.getDateOfBirth());
+		p.setUuid(user.getUniqueId());
+		if (user.getGender() != null) {
+			p.setGender(user.getGender().getName());
+		}
+		p.setForeigner(p.getPersonalId() == null);
+
+		try {
+			Address address = user.getUsersMainAddress();
+			if (address != null) {
+				Country country = address.getCountry();
+				if (country != null) {
+					p.setCountry(country.getPrimaryKey().toString());
+				}
+			}
+		} catch (EJBException e) {
+		} catch (RemoteException e) {
+		}
+
+		if (user.getSystemImageID() != -1) {
+			try {
+				String URI = ICFileSystemFactory.getFileSystem(
+						IWMainApplication.getDefaultIWApplicationContext())
+						.getFileURI(user.getSystemImageID());
+				p.setImageURL(URI);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			LoginTable loginTable = LoginDBHandler.getUserLogin(user);
+			if (loginTable != null) {
+				p.setLogin(loginTable.getUserLogin());
+			}
+		} catch (Exception e) {
+		}
+
+		return p;
+	}
+	
 	public Participant getPublicParticipant(User user) {
 		Participant p = new Participant();
 		p.setFirstName(user.getFirstName());

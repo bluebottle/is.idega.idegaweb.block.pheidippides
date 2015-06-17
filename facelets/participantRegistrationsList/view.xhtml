@@ -34,10 +34,10 @@
 						<!-- td><h:outputText rendered="#{not empty registration.shirtSize}" escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td -->
 						<td><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 						<td class="action">
-							<!-- h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign eq 'LV'}" value="/pages/sidanmin/vidbotarupplysingar/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" styleClass="extra">
+							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign eq 'LV'}" value="/pages/sidanmin/vidbotarupplysingar/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" styleClass="extra">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></span>
-							</h:outputLink -->
+							</h:outputLink>
 							<h:outputLink rendered="#{registration.race.numberOfRelayLegs lt 2 and p:isOpenForRegistration(registration.race) and registration.race.event.reportSign ne 'LV'}" value="/pages/sidanmin/breytavegalengd/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" styleClass="edit">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_distance']}" /></span>
@@ -72,6 +72,7 @@
 			<li class="editRelayTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></li>
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
 			<li class="changeRunner"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></li>
+			<li class="runningGroup"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></li>
 		</ul>
 	</ui:fragment>
 </ui:component>

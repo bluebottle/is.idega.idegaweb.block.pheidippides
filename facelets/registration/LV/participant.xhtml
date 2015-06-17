@@ -80,6 +80,11 @@
 						</ui:repeat>
 					</c:selectOne>
 				</div>
+			    <div class="formItem">
+					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
+					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
+				</div>
+				
 			</ui:fragment>
 			
 			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and not empty pheidippidesRegistrationSession.currentParticipant}">
@@ -123,6 +128,10 @@
 				<div class="formItem">
 					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
+				</div>
+			    <div class="formItem">
+					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
+					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
 				</div>
 			</ui:fragment>			
 		</fieldset>

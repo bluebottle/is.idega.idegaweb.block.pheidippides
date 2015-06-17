@@ -67,6 +67,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
+	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 	private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
 	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
@@ -148,7 +149,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		
 				case ACTION_PARTICIPANT:
 					if (iwc.isParameterSet(PARAMETER_PERSONAL_ID)) {
-						Participant participant = getService().getParticipant(iwc.getParameter(PARAMETER_PERSONAL_ID));
+						Participant participant = getService().getParticipantStripped(iwc.getParameter(PARAMETER_PERSONAL_ID));
 						ParticipantHolder holder = new ParticipantHolder();
 						holder.setParticipant(participant);
 						
@@ -193,6 +194,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 						participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
 						participant.setPhoneHome(iwc.getParameter(PARAMETER_PHONE));
 						participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
+						participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
 						getSession().getCurrentParticipant().setParticipant(participant);
 					}
 					

@@ -913,6 +913,10 @@ ul.legend.registrations li.changeRunner:before {
 	content: ';';
 }
 
+ul.legend.registrations li.runningGroup:before {
+	content: 'j';
+}
+
 form#distanceChanger div.helpText {
 	border: 0;
 	padding: 0;
