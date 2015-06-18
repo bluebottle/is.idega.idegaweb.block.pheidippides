@@ -493,8 +493,7 @@ form.registrationForm fieldset.formSection div.formItem label.error,form.userFor
 	display: none !important;
 }
 
-form.registrationForm fieldset.formSection div.formItem.required label:not
-	  (.error   ):after {
+form.registrationForm fieldset.formSection div.formItem.required label:not(.error):after {
 	content: '*';
 	color: #a00;
 	padding-left: 4px;
@@ -681,7 +680,7 @@ div.userInformation {
 	margin-bottom: 32px;
 	width: auto;
 	overflow: hidden;
-	min-height: 80px;
+	min-height: 120px;
 }
 
 div.userInformation img {
