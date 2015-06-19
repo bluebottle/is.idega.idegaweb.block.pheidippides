@@ -298,7 +298,7 @@ public class PheidippidesService {
 			p.setNationality(country.getName());
 			p.setYearOfBirth(new IWTimestamp(user.getDateOfBirth()).getYear());
 			if (registration.getTeam() != null) {
-				p.setTeamName(registration.getTeam().getName());
+				p.setTeamName(registration.getTeam().getName() == null ? "" : registration.getTeam().getName());
 			} else {
 				p.setTeamName("");
 			}

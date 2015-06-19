@@ -63,9 +63,9 @@
 								<td><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][participant.gender]}" /></td>
 								<td><h:outputText value="#{participant.yearOfBirth}" /></td>
 								<ui:fragment rendered="#{pheidippidesBean.race.teamRun}">
-									<th><h:outputText value="#{participant.teamName}" /></th>
+									<td><h:outputText value="#{participant.teamName}" /></td>
 								</ui:fragment>
-								<th><h:outputText value="#{participant.runningGroup}" /></th>
+								<td><h:outputText value="#{participant.runningGroup}" /></td>
 								<td class="lastColumn"><h:outputText value="#{participant.nationality}" /></td>
 							</tr>
 							
