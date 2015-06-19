@@ -194,7 +194,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Date openRegistrationDate, Date closeRegistrationDate,
 			boolean familyDiscount, int relayLegs, boolean charityRun,
 			boolean teamRun, int currentParticipantNumber,
-			int maxParticipantNumber, int orderNumber) {
+			int maxParticipantNumber, int orderNumber, boolean showExtraInformation) {
 		Race race = raceID != null ? getRace(raceID) : null;
 		if (race == null) {
 			race = new Race();
@@ -214,6 +214,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		race.setCurrentParticipantNumber(currentParticipantNumber);
 		race.setMaxParticipantNumber(maxParticipantNumber);
 		race.setOrderNumber(orderNumber);
+		race.setShowExtraInformation(showExtraInformation);
 
 		getEntityManager().persist(race);
 

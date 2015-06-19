@@ -79,7 +79,7 @@ public interface PheidippidesDao extends GenericDao {
 			Date openRegistration, Date closeRegistration,
 			boolean familyDiscount, int relayLegs, boolean charityRun,
 			boolean teamRun, int currentParticipantNumber,
-			int maxParticipantNumber, int orderNumber);
+			int maxParticipantNumber, int orderNumber,  boolean showExtraInfo);
 
 	public RaceResult storeRaceResult(String name, String raceTime,
 			String placement, String genderPlacement, String groupPlacement,

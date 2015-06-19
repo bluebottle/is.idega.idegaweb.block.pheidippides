@@ -34,7 +34,7 @@
 						<!-- td><h:outputText rendered="#{not empty registration.shirtSize}" escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(registration.race.event.localizedKey, p:concat('.', registration.shirtSize.localizedKey))]}" /></td -->
 						<td><h:outputText value="#{registration.createdDate}"><f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm:ss"/></h:outputText></td>
 						<td class="action">
-							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign eq 'LV'}" value="/pages/sidanmin/vidbotarupplysingar/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" styleClass="extra">
+							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign eq 'LV' and registration.race.showExtraInformation}" value="/pages/sidanmin/vidbotarupplysingar/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" styleClass="extra">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></span>
 							</h:outputLink>
@@ -54,6 +54,10 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></span>
 							</h:outputLink>
+							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race)}" value="/pages/sidanmin/hlaupahopur/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['web_info']}" styleClass="runningGroup">
+								<f:param name="prm_registration_pk" value="#{registration.id}" />
+								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['web_info']}" /></span>
+							</h:outputLink>
 						</td>
 						<td class="action">
 							<c:DownloadLink styleClass="pdf" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}">
@@ -72,7 +76,7 @@
 			<li class="editRelayTeam"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></li>
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
 			<li class="changeRunner"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></li>
-			<li class="runningGroup"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></li>
+			<li class="runningGroup"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['web_info']}" /></li>
 		</ul>
 	</ui:fragment>
 </ui:component>

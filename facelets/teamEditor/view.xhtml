@@ -24,6 +24,11 @@
 			<ui:fragment rendered="#{not empty param['prm_action']}">
 				<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_stored']}" /></div>
 			</ui:fragment>
+
+			<ui:fragment rendered="#{not empty param['prm_action'] and not pheidippidesBean.registration.team.valid}">
+				<div class="failure"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_stored_not_full']}" /></div>
+			</ui:fragment>
+
 	
 			<fieldset class="formSection">
 				

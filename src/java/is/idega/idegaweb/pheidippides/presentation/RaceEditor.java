@@ -192,7 +192,8 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 			iwc.isParameterSet(PARAMETER_TEAM_RUN),
 			iwc.isParameterSet(PARAMETER_NEXT_PARTICIPANT_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_NEXT_PARTICIPANT_NUMBER)) : 0,
 			iwc.isParameterSet(PARAMETER_MAX_PARTICIPANT_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_MAX_PARTICIPANT_NUMBER)) : 0,
-			iwc.isParameterSet(PARAMETER_ORDER_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_ORDER_NUMBER)) : 0
+			iwc.isParameterSet(PARAMETER_ORDER_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_ORDER_NUMBER)) : 0,
+			iwc.isParameterSet(PARAMETER_SHOW_EXTRA_INFORMATION)
 		);
 		
 		return true;

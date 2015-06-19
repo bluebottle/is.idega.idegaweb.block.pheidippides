@@ -1,0 +1,48 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form id="runningGroup" class="userForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
+		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
+		<input type="hidden" name="prm_action" value="store" />
+		<input type="hidden" name="prm_registration_pk" value="#{pheidippidesBean.registration.id}" />
+		
+		<h1><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.running_info_misc')]}" /></h1>
+
+		<ui:fragment rendered="#{not empty param['prm_action']}">
+			<div class="success"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.running_info_misc_stored')]}" /></div>
+		</ui:fragment>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.running_info_misc_help_text')]}" /></div>
+			
+		<fieldset class="formSection runningGroup">
+			<p><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group_help']}" /></p>
+
+			<div class="formItem">
+				<label for="prm_running_group"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides']['running_group'])}" /></label>
+				<input type="text" name="prm_running_group" value="#{pheidippidesBean.registration.runningGroup}" />
+			</div>
+		</fieldset>
+
+		<fieldset class="formSection showRegistration">
+			<p><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['show_registration_help']}" /></p>
+
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_show_registration" content="true" checked="#{pheidippidesBean.registration.showRegistration}" />
+				<label for="prm_show_registration"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['show_registration']}" /></label>
+			</div>
+		</fieldset>
+
+		<div class="submit">
+			<a href="/pages/sidanmin/minsida/"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['my_page']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

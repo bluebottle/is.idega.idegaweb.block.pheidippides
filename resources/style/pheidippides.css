@@ -780,6 +780,10 @@ table.userTable td.action a.changeRunner:before {
 	content: ';';
 }
 
+table.userTable td.action a.runningGroup:before {
+	content: 'j';
+}
+
 table.userTable td.action a span {
 	display: none;
 }

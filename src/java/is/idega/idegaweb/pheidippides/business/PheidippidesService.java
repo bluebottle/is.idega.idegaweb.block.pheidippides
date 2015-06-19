@@ -299,9 +299,13 @@ public class PheidippidesService {
 			p.setYearOfBirth(new IWTimestamp(user.getDateOfBirth()).getYear());
 			if (registration.getTeam() != null) {
 				p.setTeamName(registration.getTeam().getName());
+			} else {
+				p.setTeamName("");
 			}
 			if (registration.getRunningGroup() != null) {
 				p.setRunningGroup(registration.getRunningGroup());
+			} else {
+				p.setRunningGroup("");
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -3331,7 +3335,7 @@ public class PheidippidesService {
 		
 		List<Registration> newTeamMembers = new ArrayList<Registration>();
 		List<Registration> currentTeamMembers = getOtherTeamMembers(registration);
-
+		
 		for (String id : ids) {
 			if (id != null && id.length() > 0) {
 				Registration teamRegistration = dao.getRegistration(Long
@@ -3357,7 +3361,9 @@ public class PheidippidesService {
 			dao.updateTeam(registration2, team);
 		}
 		
-		dao.updateTeamCategory(team, teamCategory, ids.length == 3);
+		int memberCount = 1 + currentTeamMembers.size() + newTeamMembers.size();
+		
+		dao.updateTeamCategory(team, memberCount == 4 ? teamCategory : TeamCategory.NotFullTeam, memberCount == 4);
 	}
 
 	private Gender getGenderForRegistration(Registration registration) {

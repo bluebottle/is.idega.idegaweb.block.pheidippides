@@ -76,6 +76,11 @@
 				<c:checkBox name="prm_team_run" content="true" checked="#{pheidippidesBean.race.teamRun}" />
 				<label for="prm_team_run"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['team_run']}" /></label>
 			</div>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_show_extra_information" content="true" checked="#{pheidippidesBean.race.showExtraInformation}" />
+				<label for="prm_show_extra_information"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['show_extra_information']}" /></label>
+			</div>
+			
 		</fieldset>
 		
 		<div class="submit">
