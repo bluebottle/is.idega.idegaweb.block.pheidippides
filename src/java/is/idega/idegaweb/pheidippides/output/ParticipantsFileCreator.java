@@ -51,10 +51,10 @@ public class ParticipantsFileCreator {
 
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	public File createReport(IWResourceBundle iwrb, IWTimestamp dateFrom, IWTimestamp dateTo, String gender, Event event, Integer year, Race race, List<RaceTrinket> trinkets, List<Registration> registrations, Map<Registration, Participant> participantsMap, RegistrationStatus status) {
 		this.iwrb = iwrb;
 
@@ -64,7 +64,7 @@ public class ParticipantsFileCreator {
 			if (this.buffer != null) {
 				File file = File.createTempFile("report-", ".xls");
 				FileOutputStream out = new FileOutputStream(file);
-				
+
 				MemoryInputStream mis = new MemoryInputStream(this.buffer);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				while (mis.available() > 0) {
@@ -73,7 +73,7 @@ public class ParticipantsFileCreator {
 				baos.writeTo(out);
 				mis.close();
 				out.close();
-				
+
 				return file;
 			}
 			else {
@@ -83,7 +83,7 @@ public class ParticipantsFileCreator {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -98,14 +98,14 @@ public class ParticipantsFileCreator {
 		else {
 			sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + ".name", event.getName()) + " - " + year);
 		}
-		
+
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet(StringHandler.shortenToLength(sheetname, 30));
 
 		HSSFFont font = wb.createFont();
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		font.setFontHeightInPoints((short) 12);
-		
+
 		HSSFCellStyle style = wb.createCellStyle();
 		style.setFont(font);
 
@@ -167,6 +167,9 @@ public class ParticipantsFileCreator {
 		cell.setCellValue(this.iwrb.getLocalizedString("team_name", "Team name"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("running_group", "Running group"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("relay_leg", "Leg"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
@@ -196,19 +199,19 @@ public class ParticipantsFileCreator {
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("show_registration", "Show registration"));
 		cell.setCellStyle(style);
-		
+
 		for (RaceTrinket trinket : trinkets) {
 			cell = row.createCell(iCell++);
 			cell.setCellValue(this.iwrb.getLocalizedString("trinket." + trinket.getCode(), trinket.getCode()));
 			cell.setCellStyle(style);
-			
+
 			if (trinket.getMultiple()) {
 				cell = row.createCell(iCell++);
 				cell.setCellValue(this.iwrb.getLocalizedString("count", "Count"));
 				cell.setCellStyle(style);
 			}
 		}
-		
+
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("comment", "Comment"));
 		cell.setCellStyle(style);
@@ -216,7 +219,7 @@ public class ParticipantsFileCreator {
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("created", "Created"));
 		cell.setCellStyle(style);
-		
+
 		if (status.equals(RegistrationStatus.Moved)) {
 			cell = row.createCell(iCell++);
 			cell.setCellValue(this.iwrb.getLocalizedString("moved", "Moved"));
@@ -233,7 +236,7 @@ public class ParticipantsFileCreator {
 			Country nationality = registration.getNationality() != null ? getCountryHome().findByPrimaryKey(registration.getNationality()) : null;
 			ShirtSize shirtSize = registration.getShirtSize();
 			Team team = registration.getTeam();
-			
+
 			List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 			List<RegistrationTrinket> registrationTrinkets = registration.getTrinkets();
 			Map<RaceTrinket, RegistrationTrinket> trinketMap = new HashMap<RaceTrinket, RegistrationTrinket>();
@@ -243,7 +246,7 @@ public class ParticipantsFileCreator {
 					trinketMap.put(registrationTrinket.getTrinket(), registrationTrinket);
 				}
 			}
-			
+
 			IWTimestamp dateOfBirth = new IWTimestamp(participant.getDateOfBirth());
 			if (dateOfBirth != null) {
 				if (dateFrom != null && dateOfBirth.isEarlierThan(dateFrom)) {
@@ -256,11 +259,11 @@ public class ParticipantsFileCreator {
 			if (gender != null && !participant.getGender().equals(gender)) {
 				continue;
 			}
-			
+
 			RegistrationHeader header = registration.getHeader();
 			Company company = header.getCompany();
-			
-			
+
+
 			row = sheet.createRow(cellRow++);
 			iCell = 0;
 
@@ -289,16 +292,17 @@ public class ParticipantsFileCreator {
 				row.createCell(iCell++).setCellValue("");
 			}
 			row.createCell(iCell++).setCellValue(team != null ? team.getName() : "");
+			row.createCell(iCell++).setCellValue(registration.getRunningGroup());
 			row.createCell(iCell++).setCellValue(registration.getLeg());
 			row.createCell(iCell++).setCellValue(registration.getAmountPaid() - registration.getAmountDiscount());
-			
+
 			if (header.getAuthorizationNumber() != null) {
 				row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.credit_card", "Credit card"));
 			}
 			else {
 				row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.bank_transfer", "Bank transfer"));
 			}
-			
+
 			row.createCell(iCell++).setCellValue(registration.getBestMarathonTime() != null ? new IWTimestamp(registration.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getBestUltraMarathonTime() != null ? new IWTimestamp(registration.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
 			row.createCell(iCell++).setCellValue(registration.getEstimatedTime() != null ? new IWTimestamp(registration.getEstimatedTime()).getDateString("HH:mm") : "");
@@ -306,7 +310,7 @@ public class ParticipantsFileCreator {
 			row.createCell(iCell++).setCellValue(registration.getNeedsAssistance() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			row.createCell(iCell++).setCellValue(registration.getFacebook() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			row.createCell(iCell++).setCellValue(registration.getShowRegistration() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
-			
+
 			for (RaceTrinket trinket : trinkets) {
 				RegistrationTrinket raceTrinket = trinketMap.get(trinket);
 				if (raceTrinket != null) {
@@ -322,7 +326,7 @@ public class ParticipantsFileCreator {
 					}
 				}
 			}
-			
+
 			row.createCell(iCell++).setCellValue(registration.getComment() != null ? registration.getComment() : "");
 			row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
 			if (status.equals(RegistrationStatus.Moved)) {
@@ -331,13 +335,13 @@ public class ParticipantsFileCreator {
 					row.createCell(iCell++).setCellValue(movedTo.getCreatedDate() != null ? new IWTimestamp(movedTo.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
 				}
 			}
-			
+
 			if (registrationRace.getNumberOfRelayLegs() > 1) {
 				List<Registration> teamMembers = getService().getRelayPartners(registration);
 
 				for (Registration registration2 : teamMembers) {
 					Participant otherParticipant = getService().getParticipant(registration2);
-					
+
 					country = otherParticipant.getCountry() != null ? getCountryHome().findByPrimaryKey(otherParticipant.getCountry()) : null;
 					nationality = registration2.getNationality() != null ? getCountryHome().findByPrimaryKey(registration2.getNationality()) : null;
 					shirtSize = registration2.getShirtSize();
@@ -353,7 +357,7 @@ public class ParticipantsFileCreator {
 							}
 						}
 					}
-					
+
 					raceTrinkets = new ArrayList<RaceTrinket>();
 					registrationTrinkets = registration2.getTrinkets();
 					trinketMap = new HashMap<RaceTrinket, RegistrationTrinket>();
@@ -394,19 +398,19 @@ public class ParticipantsFileCreator {
 					row.createCell(iCell++).setCellValue(team != null ? team.getName() : "");
 					row.createCell(iCell++).setCellValue(registration2.getLeg());
 					row.createCell(iCell++).setCellValue(registration2.getAmountPaid() - registration2.getAmountDiscount());
-					
+
 					if (header.getAuthorizationNumber() != null) {
 						row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.credit_card", "Credit card"));
 					}
 					else {
 						row.createCell(iCell++).setCellValue(iwrb.getLocalizedString("payment_method.bank_transfer", "Bank transfer"));
 					}
-					
+
 					row.createCell(iCell++).setCellValue(registration2.getBestMarathonTime() != null ? new IWTimestamp(registration2.getBestMarathonTime()).getDateString("yyyy - HH:mm") : "");
 					row.createCell(iCell++).setCellValue(registration2.getBestUltraMarathonTime() != null ? new IWTimestamp(registration2.getBestUltraMarathonTime()).getDateString("yyyy: HH:mm") : "");
 					row.createCell(iCell++).setCellValue(registration2.getEstimatedTime() != null ? new IWTimestamp(registration2.getEstimatedTime()).getDateString("HH:mm") : "");
 					row.createCell(iCell++).setCellValue(registration2.getCharity() != null ? registration2.getCharity().getName() : "");
-					
+
 					for (RaceTrinket trinket : trinkets) {
 						RegistrationTrinket raceTrinket = trinketMap.get(trinket);
 						if (raceTrinket != null) {
@@ -422,13 +426,13 @@ public class ParticipantsFileCreator {
 							}
 						}
 					}
-					
+
 					row.createCell(iCell++).setCellValue(registration.getComment() != null ? registration.getComment() : "");
 					row.createCell(iCell++).setCellValue(registration.getCreatedDate() != null ? new IWTimestamp(registration2.getCreatedDate()).getDateString("d.M.yyyy H:mm") : "");
 				}
 			}
 		}
-		
+
 		wb.write(mos);
 
 		buffer.setMimeType(MimeTypeUtil.MIME_TYPE_EXCEL_2);
@@ -439,7 +443,7 @@ public class ParticipantsFileCreator {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
