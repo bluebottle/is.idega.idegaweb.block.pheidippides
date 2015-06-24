@@ -243,7 +243,10 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("show_registration", "Show registration"));
 		cell.setCellStyle(style);
-
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("runnig_group", "Running group"));
+		cell.setCellStyle(style);
+		
 		for (RaceTrinket trinket : trinkets) {
 			cell = row.createCell(iCell++);
 			cell.setCellValue(this.iwrb.getLocalizedString("trinket." + trinket.getCode(), trinket.getCode()));
@@ -354,7 +357,8 @@ public class ParticipantsWriter extends DownloadWriter implements MediaWritable 
 			row.createCell(iCell++).setCellValue(registration.getNeedsAssistance() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			row.createCell(iCell++).setCellValue(registration.getFacebook() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 			row.createCell(iCell++).setCellValue(registration.getShowRegistration() ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
-
+			row.createCell(iCell++).setCellValue(registration.getRunningGroup() != null ? registration.getRunningGroup() : "");
+			
 			for (RaceTrinket trinket : trinkets) {
 				RegistrationTrinket raceTrinket = trinketMap.get(trinket);
 				if (raceTrinket != null) {
