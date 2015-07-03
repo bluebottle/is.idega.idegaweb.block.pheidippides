@@ -43,7 +43,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 	private static final String PARAMETER_RELAY_LEG = "prm_relay_leg";
 	private static final String PARAMETER_RELAY_LEG_FIRST = "prm_relay_leg_first";
 	private static final String PARAMETER_EMAIL = "prm_email";
-	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
+//	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
 	
@@ -79,7 +79,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 				String[] personalIDs = iwc.getParameterValues(PARAMETER_PERSONAL_ID_RELAY);
 				String[] datesOfBirth = iwc.getParameterValues(PARAMETER_DATE_OF_BIRTH);
 				String[] names = iwc.getParameterValues(PARAMETER_NAME);
-				String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
+				//String[] shirtSizes = iwc.getParameterValues(PARAMETER_SHIRT_SIZE);
 				String[] relayLegs = iwc.getParameterValues(PARAMETER_RELAY_LEG);
 				String[] emails = iwc.getParameterValues(PARAMETER_EMAIL);
 				
@@ -100,7 +100,7 @@ public class RelayTeamEditor extends IWBaseComponent {
 								e.printStackTrace();
 							}
 						}
-						participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
+						//participant.setShirtSize(shirtSizes[i] != null && shirtSizes[i].length() > 0 ? getDao().getShirtSize(Long.parseLong(shirtSizes[i])) : null);
 						participant.setRelayLeg(relayLegs[i]);
 						participant.setEmail(emails[i]);
 						relayPartners.add(participant);

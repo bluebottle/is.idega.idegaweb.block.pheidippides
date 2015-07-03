@@ -124,7 +124,6 @@
 												<col span="1" class="firstColumn name" />
 												<col span="1" class="personalID" />
 												<col span="1" class="email" />
-												<col span="1" class="shirtSize" />
 												<col span="1" class="lastColumn leg" />
 											</colgroup>
 											<thead>
@@ -132,7 +131,6 @@
 													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></th>
 													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></th>
 													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></th>
-													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
 													<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['relay_leg']}" /></th>
 												</tr>
 											</thead>
@@ -148,11 +146,6 @@
 															<td><h:outputText value="#{relayPartner.dateOfBirth}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
 														</ui:fragment>
 														<td><h:outputText value="#{relayPartner.email}" /></td>
-														<td>
-															<ui:fragment rendered="#{not empty relayRegistration.shirtSize}">
-																<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', relayRegistration.shirtSize.localizedKey))]}" />
-															</ui:fragment>
-														</td>
 														<td><h:outputText value="#{relayRegistration.leg}" /></td>
 													</tr>
 												</ui:repeat>

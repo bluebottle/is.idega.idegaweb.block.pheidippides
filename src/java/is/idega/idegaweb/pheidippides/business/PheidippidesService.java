@@ -3361,7 +3361,7 @@ public class PheidippidesService {
 			dao.updateTeam(registration2, team);
 		}
 		
-		int memberCount = 1 + currentTeamMembers.size() + newTeamMembers.size();
+		int memberCount = 1 + getOtherTeamMembers(registration).size();
 		
 		dao.updateTeamCategory(team, memberCount == 4 ? teamCategory : TeamCategory.NotFullTeam, memberCount == 4);
 	}
