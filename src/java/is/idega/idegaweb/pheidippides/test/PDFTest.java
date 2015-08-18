@@ -11,22 +11,22 @@ import org.ujac.print.DocumentHandlerException;
 import org.ujac.print.DocumentPrinter;
 import org.ujac.util.io.FileResourceLoader;
 
-import com.idega.util.IWTimestamp;
-import com.idega.util.LocaleUtil;
-
 public class PDFTest {
 
 	public static void main(String[] args) {
 		try {
 			// defining the document properties, this map is used for dynamical content evaluation.
 			Map<String, String> documentProperties = new HashMap<String, String>();
-			documentProperties.put("amount", "4.000 kr.");
-			documentProperties.put("amountText", "fjögur þúsund krónur");
-			documentProperties.put("key", "QAXOEVXSPHEUQI2E");
-			documentProperties.put("created", new IWTimestamp(9, 1, 2013).getDateString("d. MMMM yyyy", LocaleUtil.getIcelandicLocale()));
-			
+			documentProperties.put("name", "Þorbergur Ingi Jónsson");
+			documentProperties.put("finishTime", "4:07:47");
+			documentProperties.put("placement", "1");
+			documentProperties.put("genderPlacement", "1");
+			documentProperties.put("groupPlacement", "1");
+			documentProperties.put("ageGroup", "30 - 39 ára");
+			documentProperties.put("gender", "karlar");
+						
 			// instantiating the document printer
-			FileInputStream templateStream = new FileInputStream("/Users/laddi/Development/idega/git-repo-v4/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/src/java/is/idega/idegaweb/pheidippides/test/template.xml");
+			FileInputStream templateStream = new FileInputStream("/illuminati/git/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/resources/is_IS.locale/print/lv/2014/certificate.xml");
 			DocumentPrinter documentPrinter = new DocumentPrinter(templateStream, documentProperties);
 			// in case you'd like to use a XML parser different from the default implementation
 			// you can specify it here (apache xerces in this case).
@@ -35,7 +35,7 @@ public class PDFTest {
 			// dynamically load resources like images during template processing.
 			documentPrinter.setResourceLoader(new FileResourceLoader("./src/java/is/idega/idegaweb/pheidippides/test/"));
 			// generating the document output
-			FileOutputStream pdfStream = new FileOutputStream("/Users/laddi/Development/idega/git-repo-v4/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/src/java/is/idega/idegaweb/pheidippides/test/output.pdf");
+			FileOutputStream pdfStream = new FileOutputStream("/Users/palli/output.pdf");
 			documentPrinter.printDocument(pdfStream);
 		}
 		catch (FileNotFoundException fnfe) {
