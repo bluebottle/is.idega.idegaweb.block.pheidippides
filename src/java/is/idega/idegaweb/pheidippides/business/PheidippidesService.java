@@ -1,32 +1,5 @@
 package is.idega.idegaweb.pheidippides.business;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.BankReference;
-import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Distance;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.GiftCard;
-import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.ParticipantResult;
-import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-import is.idega.idegaweb.pheidippides.data.ShirtSize;
-import is.idega.idegaweb.pheidippides.data.Team;
-import is.idega.idegaweb.pheidippides.util.GiftCardUtil;
-import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
-import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantRequest;
-import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantServiceLocator;
-import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService;
-import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
@@ -96,6 +69,34 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.LocaleUtil;
 import com.idega.util.text.Name;
 import com.idega.util.text.SocialSecurityNumber;
+
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.BankReference;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Distance;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.ParticipantResult;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceResult;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
+import is.idega.idegaweb.pheidippides.util.GiftCardUtil;
+import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantRequest;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.ContestantServiceLocator;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService;
+import is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.Login;
 
 @Scope("singleton")
 @Service("pheidippidesService")
@@ -1237,12 +1238,13 @@ public class PheidippidesService {
 	public int storeRaceResults(List<ParticipantResult> participantResults) {
 		int counter = 0;
 		for (ParticipantResult result : participantResults) {
-			dao.storeRaceResult(result.getName(), result.getRaceTime(),
+			RaceResult raceResult = dao.storeRaceResult(result.getName(), result.getRaceTime(),
 					result.getPlacement(), result.getGenderPlacement(),
 					result.getGroupPlacement(), result.getGroup(),
 					result.getGender(), result.getGroupEN(),
-					result.getGenderEN(), result.getRegistration());
+					result.getGenderEN());
 
+			dao.setRaceResult(result.getRegistration().getId(), raceResult);
 			counter++;
 		}
 

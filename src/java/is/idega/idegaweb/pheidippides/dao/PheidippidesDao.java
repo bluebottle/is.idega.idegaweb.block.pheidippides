@@ -83,8 +83,9 @@ public interface PheidippidesDao extends GenericDao {
 
 	public RaceResult storeRaceResult(String name, String raceTime,
 			String placement, String genderPlacement, String groupPlacement,
-			String group, String gender, String groupEN, String genderEN,
-			Registration registration);
+			String group, String gender, String groupEN, String genderEN);
+	
+	public Registration setRaceResult(Long registrationPK, RaceResult result);
 
 	public boolean removeRace(Long raceID);
 

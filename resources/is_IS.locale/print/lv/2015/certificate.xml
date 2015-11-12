@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
+	
+	<register-font family="chancery" source="apple_chancery.ttf"/>
+	<register-font family="corsiva" source="corsiva.ttf"/>
+
+	<color-def name="darkBlue" color-space="RGB" value="2,68,140"/>
+
+	<font-def name="normal" color="darkBlue" family="Helvetica" size="17.26" style="normal"/>
+	<font-def name="amount" color="darkBlue" family="corsiva" size="39.25" style="normal"/>
+	<font-def name="amountText" color="darkBlue" family="chancery" size="17.26" style="normal"/>
+	<font-def name="small" color="darkBlue" family="chancery" size="12" style="normal"/>
+
+	<overlay source="lv/2015/Laugavegur_vidurk_2015.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
+
+	<box x="25" y="150" width="580" valign="top" height="260" padding="10.0">
+		<paragraph font="amount" halign="center" spacing-after="12.0">
+			${name}
+		</paragraph>
+
+		<paragraph font="amountText" halign="center" spacing-after="6.0">
+			Lauk 55 km ultra maraþoni með eftirfarandi árangri:
+		</paragraph>
+		
+		<paragraph font="amountText" halign="center" spacing-after="6.0">
+			Lokatími: ${finishTime}
+		</paragraph>
+
+		<paragraph font="amountText" halign="center" spacing-after="6.0">
+			${placement}. sæti af 330 þátttakendum
+		</paragraph>
+
+		<paragraph font="amountText" halign="center" spacing-after="6.0">
+			${genderPlacement}. sæti kynjaskipt, 231 karl og 99 konur luku hlaupi
+		</paragraph>
+
+		<paragraph font="amountText" halign="center" spacing-after="6.0">
+			${groupPlacement}. sæti í flokknum ${ageGroup} ${gender}
+		</paragraph>
+	</box>	
+</document>

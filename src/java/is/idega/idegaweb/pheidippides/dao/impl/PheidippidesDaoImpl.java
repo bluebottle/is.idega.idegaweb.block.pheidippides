@@ -224,8 +224,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Override
 	public RaceResult storeRaceResult(String name, String raceTime,
 			String placement, String genderPlacement, String groupPlacement,
-			String group, String gender, String groupEN, String genderEN,
-			Registration registration) {
+			String group, String gender, String groupEN, String genderEN) {
 		RaceResult result = new RaceResult();
 		result.setName(name);
 		result.setRaceTime(raceTime);
@@ -236,12 +235,24 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		result.setGender(gender);
 		result.setGroupEN(groupEN);
 		result.setGenderEN(genderEN);
-		result.setRegistration(registration);
 
 		getEntityManager().persist(result);
 
 		return result;
 
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public Registration setRaceResult(Long registrationPK, RaceResult raceResult) {
+		Registration registration = getRegistration(registrationPK);
+
+		if (registration != null) {
+			registration.setRaceResult(raceResult);
+			getEntityManager().persist(registration);
+		}
+
+		return registration;
 	}
 
 	@Override

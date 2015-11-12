@@ -1,11 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.output.ReceiptWriter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +14,13 @@ import com.idega.presentation.IWContext;
 import com.idega.user.data.User;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.output.CertificateWriter;
+import is.idega.idegaweb.pheidippides.output.ReceiptWriter;
 
 public class ParticipantRegistrationsList extends IWBaseComponent {
 
@@ -44,6 +45,7 @@ public class ParticipantRegistrationsList extends IWBaseComponent {
 			bean.setLocale(iwc.getCurrentLocale());
 			bean.setRegistrations(getDao().getRegistrations(user.getUniqueId(), statuses));
 			bean.setDownloadWriter(ReceiptWriter.class);
+			bean.setCertificateWriter(CertificateWriter.class);
 	
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 			facelet.setFaceletURI(iwb.getFaceletURI("participantRegistrationsList/view.xhtml"));

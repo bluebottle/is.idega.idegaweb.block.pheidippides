@@ -58,6 +58,10 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['web_info']}" /></span>
 							</h:outputLink>
+							<c:DownloadLink rendered="#{registration.race.event.reportSign eq 'LV' and registration.raceResult.id gt 0}" styleClass="certificate" downloadWriter="#{pheidippidesBean.certificateWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_certificate']}">
+								<f:param name="prm_registration_pk" value="#{registration.id}" />
+							</c:DownloadLink>
+							
 						</td>
 						<td class="action">
 							<c:DownloadLink styleClass="pdf" downloadWriter="#{pheidippidesBean.downloadWriter}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fetch_receipt']}">
@@ -77,6 +81,7 @@
 			<li class="extra"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['extra_information']}" /></li>
 			<li class="changeRunner"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></li>
 			<li class="runningGroup"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['web_info']}" /></li>
+			<li class="certificate"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['certificate']}" /></li>
 		</ul>
 	</ui:fragment>
 </ui:component>

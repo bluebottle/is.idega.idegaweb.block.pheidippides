@@ -16,13 +16,11 @@ import javax.persistence.Table;
 @Table(name = RaceResult.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "raceResult.findAll", query = "select r from RaceResult r"),
-	@NamedQuery(name = "raceResult.findByRegistration", query = "select r from RaceResult r where r.registration = :registration")
 })
 public class RaceResult {
 	public static final String ENTITY_NAME = "ph_race_result";
 
 	private static final String COLUMN_RACE_RESULT_ID = "race_result_id";	
-	private static final String COLUMN_REGISTRATION_ID = "registration_id";
 	
 	private static final String COLUMN_NAME = "name";
 	private static final String COLUMN_RACE_TIME = "race_time";
@@ -38,10 +36,6 @@ public class RaceResult {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = RaceResult.COLUMN_RACE_RESULT_ID)
 	private Long id;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = RaceResult.COLUMN_REGISTRATION_ID)
-	private Registration registration;
 
 	@Column(name = RaceResult.COLUMN_NAME)
 	private String name;
@@ -148,13 +142,5 @@ public class RaceResult {
 
 	public void setGenderEN(String genderEN) {
 		this.genderEN = genderEN;
-	}
-
-	public Registration getRegistration() {
-		return registration;
-	}
-
-	public void setRegistration(Registration registration) {
-		this.registration = registration;
 	}
 }

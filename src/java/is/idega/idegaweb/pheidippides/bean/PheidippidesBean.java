@@ -35,6 +35,7 @@ public class PheidippidesBean {
 	private String eventHandler;
 	private String responseURL;
 	private Class<?> downloadWriter;
+	private Class<?> certificateWriter;
 	
 	private Company company;
 	private List<Company> companies;
@@ -126,6 +127,14 @@ public class PheidippidesBean {
 
 	public void setDownloadWriter(Class<?> downloadWriter) {
 		this.downloadWriter = downloadWriter;
+	}
+
+	public Class<?> getCertificateWriter() {
+		return certificateWriter;
+	}
+
+	public void setCertificateWriter(Class<?> certificateWriter) {
+		this.certificateWriter = certificateWriter;
 	}
 
 	public Company getCompany() {

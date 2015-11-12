@@ -1,11 +1,5 @@
 package is.idega.idegaweb.pheidippides.util;
 
-import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
-import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
-import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
-import is.idega.idegaweb.pheidippides.data.Race;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -22,9 +17,19 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeGender;
+import is.idega.idegaweb.pheidippides.business.ShirtSizeSizes;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Race;
+
 @Service("pheidippidesUtil")
 @Scope(BeanDefinition.SCOPE_SINGLETON)
 public class PheidippidesUtil {
+
+	@Autowired
+	private PheidippidesDao dao;
 
 	public static String concat(String arg1, String arg2) {
 		return arg1.concat(arg2);
@@ -103,5 +108,13 @@ public class PheidippidesUtil {
 		}
 		
 		return builder.toString();
+	}
+
+	public PheidippidesDao getDao() {
+		return dao;
+	}
+
+	public void setDao(PheidippidesDao dao) {
+		this.dao = dao;
 	}
 }

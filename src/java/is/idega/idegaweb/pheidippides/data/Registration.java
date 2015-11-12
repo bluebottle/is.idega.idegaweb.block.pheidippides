@@ -79,6 +79,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_RUNNING_GROUP = "running_group";
 	
 	private static final String COLUMN_CREATED_DATE = "created";
+	
+	private static final String COLUMN_RACE_RESULT = "result_id";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -174,7 +176,11 @@ public class Registration implements Serializable {
 	@OneToOne
 	@JoinColumn(name = Registration.COLUMN_MOVED_TO)
 	private Registration movedTo;
-	
+
+	@OneToOne
+	@JoinColumn(name = Registration.COLUMN_RACE_RESULT)
+	private RaceResult raceResult;
+
 	public Long getId() {
 		return id;
 	}
@@ -426,5 +432,13 @@ public class Registration implements Serializable {
 
 	public void setRunningGroup(String runningGroup) {
 		this.runningGroup = runningGroup;
+	}
+
+	public RaceResult getRaceResult() {
+		return raceResult;
+	}
+
+	public void setRaceResult(RaceResult raceResult) {
+		this.raceResult = raceResult;
 	}
 }
