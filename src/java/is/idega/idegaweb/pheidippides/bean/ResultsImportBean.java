@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.idega.builder.bean.AdvancedProperty;
 
-@Service("lvResultsImportBean")
+@Service("resultsImportBean")
 @Scope("request")
-public class LVResultsImportBean {
+public class ResultsImportBean {
 
 	private Event event;
 	private Locale locale;

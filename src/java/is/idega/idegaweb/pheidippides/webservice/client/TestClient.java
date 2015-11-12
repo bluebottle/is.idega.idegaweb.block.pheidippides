@@ -19,7 +19,7 @@ public class TestClient {
 			CharityService port = locator.getCharityService(new URL("http://skraning.marathon.is/services/CharityService"));
 			
 			//Session session = port.authenticateUser("isb", "ch4r1tys3rv1c3");//getCharities();//getCharityInformation("0610703899");
-			CharityInformation charity = port.getCharityInformation("2704536199");
+			CharityInformation charity = port.getCharityInformation("0208032580");
 
 			/*Charity info[] = port.getCharities();
 			

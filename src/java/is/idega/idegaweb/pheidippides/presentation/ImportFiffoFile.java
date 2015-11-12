@@ -127,7 +127,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 				FileInputStream input = new FileInputStream(
 						uploadFile.getRealPath());
 				Map<FiffoImportStatus, List<Participant>> toImport = getService()
-						.importFiffoExcelFile(input, bean.getEvent(), IWTimestamp.RightNow().getYear());
+						.importFiffoUpdateExcelFile(input, bean.getEvent(), IWTimestamp.RightNow().getYear());
 
 				boolean hasError = false;
 				List<Participant> errors = null;
@@ -158,8 +158,11 @@ public class ImportFiffoFile extends IWBaseComponent {
 								holder.setParticipant(participant);
 								
 								String distanceString = participant.getDistanceString();
+								if (!distanceString.endsWith("km")) {
+									distanceString += "km";
+								}
 								Distance distance = dao.getDistance(distanceString);
-								Race race = dao.getRace(event, distance, 2014, false);
+								Race race = dao.getRace(event, distance, IWTimestamp.RightNow().getYear(), false);
 								
 								holder.setRace(race);
 								
@@ -167,7 +170,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 							}
 
 							if (!holders.isEmpty()) {
-								getService().storeFiffoImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
+								getService().storeFiffoUpdateImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
 							}
 							
 							System.out.println("Got " + participantList.size() + " entries to import");

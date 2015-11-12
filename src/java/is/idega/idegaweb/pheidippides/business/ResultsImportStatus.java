@@ -1,6 +1,6 @@
 package is.idega.idegaweb.pheidippides.business;
 
-public enum LVResultsImportStatus {
+public enum ResultsImportStatus {
 	OK,
 	MISSING_REQUIRED_FIELD
 }

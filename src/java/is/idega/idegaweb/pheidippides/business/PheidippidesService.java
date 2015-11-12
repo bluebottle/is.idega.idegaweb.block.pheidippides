@@ -815,7 +815,210 @@ public class PheidippidesService {
 		return null;
 	}
 
-	public Map<FiffoImportStatus, List<Participant>> importFiffoExcelFile(
+	public Map<FiffoImportStatus, List<Participant>> importFiffoUpdateExcelFile(
+			FileInputStream input, Event event, int year) {
+		Map<FiffoImportStatus, List<Participant>> map = new HashMap<FiffoImportStatus, List<Participant>>();
+
+		try {
+			HSSFWorkbook wb = new HSSFWorkbook(input);
+			HSSFSheet sheet = wb.getSheetAt(0);
+
+			NumberFormat format = NumberFormat.getNumberInstance();
+			format.setGroupingUsed(false);
+			format.setMinimumIntegerDigits(10);
+
+			List<Participant> ok = new ArrayList<Participant>();
+			List<Participant> missing = new ArrayList<Participant>();
+			List<Participant> errorInPID = new ArrayList<Participant>();
+			List<Participant> alreadyRegistered = new ArrayList<Participant>();
+			List<Participant> changedDistance = new ArrayList<Participant>();
+
+			for (int a = sheet.getFirstRowNum() + 1; a <= sheet.getLastRowNum(); a++) {
+				boolean rowHasError = false;
+				boolean errorInPersonalID = false;
+				boolean previousRegistration = false;
+				boolean changeDistance = false;
+
+				HSSFRow row = sheet.getRow(a);
+
+				User user = null;
+				Participant participant = new Participant();
+
+				int column = 0;
+				String regNum = getCellValue(row.getCell(column++));
+				column++;
+				String gender = getCellValue(row.getCell(column++));
+				String dateOfBirth = getCellValue(row.getCell(column++));
+				String name = getCellValue(row.getCell(column++));
+				String personalID = getCellValue(row.getCell(column++));
+				String nationality = getCellValue(row.getCell(column++));
+				column+=3;
+				String distance = getCellValue(row.getCell(column++));
+
+				if (distance == null || "".equals(distance)
+						|| distance.equals("0")) {
+					continue;
+				}
+
+				if (regNum != null && !"".equals(regNum)) {
+					Registration reg = dao.getRegistration(Long
+							.parseLong(regNum));
+					user = getUserBusiness().getUserByUniqueId(
+							reg.getUserUUID());
+					participant = getParticipant(user);
+					participant.setRegistrationID(Long.parseLong(regNum));
+					participant.setDistanceString(distance);
+
+					if (distance.equals(reg.getRace().getDistance().getName())
+							|| distance.equals(
+									reg.getRace().getDistance().getName()
+											.substring(0, 3))) {
+						previousRegistration = true;
+					} else {
+						changeDistance = true;
+					}
+
+				} else {
+					if (personalID != null) {
+						try {
+							personalID = format.format(format.parse(personalID
+									.replaceAll("-", "")));
+						} catch (ParseException e1) {
+							rowHasError = true;
+							errorInPersonalID = true;
+						}
+					}
+
+					if (!rowHasError) {
+						if (personalID != null) {
+							try {
+								user = getUserBusiness().getUser(personalID);
+							} catch (Exception e) {
+								rowHasError = true;
+								errorInPersonalID = true;
+							}
+						}
+
+						Date dob = null;
+						if (user == null) {
+							if (name == null || "".equals(name.trim())) {
+								rowHasError = true;
+							}
+
+							if (dateOfBirth == null
+									|| "".equals(dateOfBirth.trim())) {
+								rowHasError = true;
+							} else {
+								try {
+									DateFormat dateFormat = new SimpleDateFormat(
+											"dd.MM.yyyy");
+									dob = dateFormat.parse(dateOfBirth);
+								} catch (Exception e) {
+									e.printStackTrace();
+									rowHasError = true;
+								}
+							}
+
+							if (!rowHasError) {
+								try {
+									user = getUserBusiness()
+											.getUserHome()
+											.findByDateOfBirthAndName(
+													new IWTimestamp(dob)
+															.getDate(),
+													name);
+								} catch (Exception e) {
+								}
+							}
+						}
+
+						if (user == null) {
+							if (gender == null || "".equals(gender.trim())) {
+								rowHasError = true;
+							}
+
+							if (nationality == null
+									|| "".equals(nationality.trim())) {
+								rowHasError = true;
+							}
+
+							if (distance == null || "".equals(distance.trim())) {
+								rowHasError = true;
+							}
+
+							if (!rowHasError) {
+								participant.setFullName(name);
+								participant.setDateOfBirth(dob);
+								participant.setAddress(null);
+								participant.setCity(null);
+								participant.setPostalCode(null);
+								participant.setCountry(null);
+								participant.setGender(gender);
+								participant.setEmail(null);
+								participant.setNationality(nationality);
+								participant.setDistanceString(distance);
+							}
+						} else {
+							if (distance == null || "".equals(distance.trim())) {
+								rowHasError = true;
+							}
+
+							participant = getParticipant(user);
+							participant.setDistanceString(distance);
+						}
+					}
+				}
+
+				if (rowHasError) {
+					if (errorInPersonalID) {
+						errorInPID
+								.add(createErrorParticipant(personalID, null,
+										name, dateOfBirth, null, null,
+										null, null, gender, null,
+										null, null, nationality));
+					} else {
+						missing.add(createErrorParticipant(personalID, null,
+								name, dateOfBirth, null, null, null,
+								null, gender, null, null, null, nationality));
+					}
+				} else {
+					if (previousRegistration) {
+						alreadyRegistered.add(participant);
+					} else if (changeDistance) {
+						changedDistance.add(participant);
+					} else {
+						ok.add(participant);
+					}
+				}
+			}
+
+			if (!errorInPID.isEmpty()) {
+				map.put(FiffoImportStatus.ERROR_IN_PERSONAL_ID, errorInPID);
+			}
+
+			if (!missing.isEmpty()) {
+				map.put(FiffoImportStatus.MISSING_REQUIRED_FIELD, missing);
+			}
+
+			if (!alreadyRegistered.isEmpty()) {
+				map.put(FiffoImportStatus.ALREADY_REGISTERED, alreadyRegistered);
+			}
+
+			if (!changedDistance.isEmpty()) {
+				map.put(FiffoImportStatus.CHANGED_DISTANCE, changedDistance);
+			}
+
+			map.put(FiffoImportStatus.OK, ok);
+
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public Map<FiffoImportStatus, List<Participant>> importFiffoFullExcelFile(
 			FileInputStream input, Event event, int year) {
 		Map<FiffoImportStatus, List<Participant>> map = new HashMap<FiffoImportStatus, List<Participant>>();
 
@@ -1030,7 +1233,7 @@ public class PheidippidesService {
 
 		return null;
 	}
-
+	
 	public int storeRaceResults(List<ParticipantResult> participantResults) {
 		int counter = 0;
 		for (ParticipantResult result : participantResults) {
@@ -1046,9 +1249,9 @@ public class PheidippidesService {
 		return counter;
 	}
 
-	public Map<LVResultsImportStatus, List<ParticipantResult>> importLVResultsExcelFile(
+	public Map<ResultsImportStatus, List<ParticipantResult>> importResultsExcelFile(
 			FileInputStream input, Event event, int year) {
-		Map<LVResultsImportStatus, List<ParticipantResult>> map = new HashMap<LVResultsImportStatus, List<ParticipantResult>>();
+		Map<ResultsImportStatus, List<ParticipantResult>> map = new HashMap<ResultsImportStatus, List<ParticipantResult>>();
 
 		try {
 			HSSFWorkbook wb = new HSSFWorkbook(input);
@@ -1109,10 +1312,10 @@ public class PheidippidesService {
 			}
 
 			if (!missing.isEmpty()) {
-				map.put(LVResultsImportStatus.MISSING_REQUIRED_FIELD, missing);
+				map.put(ResultsImportStatus.MISSING_REQUIRED_FIELD, missing);
 			}
 
-			map.put(LVResultsImportStatus.OK, ok);
+			map.put(ResultsImportStatus.OK, ok);
 
 			System.out.println("missing size = " + missing.size());
 			System.out.println("ok size = " + ok.size());
@@ -3666,7 +3869,7 @@ public class PheidippidesService {
 		}
 	}
 
-	public void storeFiffoImportRegistration(List<ParticipantHolder> holders,
+	public void storeFiffoUpdateImportRegistration(List<ParticipantHolder> holders,
 			String registrantUUID, Locale locale) {
 
 		if (holders != null && !holders.isEmpty()) {
@@ -3693,7 +3896,113 @@ public class PheidippidesService {
 					}
 
 					if (user != null) {
-						if (isRegistered(user, event, 2014)) {
+						if (isRegistered(user, event, IWTimestamp.RightNow().getYear())) {
+							System.out.println("User " + user.getName()
+									+ " is already registered");
+							continue;
+						}
+					}
+
+					if (user == null) {
+						System.out.println("User " + participant.getPersonalId()
+							+ " was not found");
+						continue;
+					}
+
+					if (user != null) {
+						if (participant.getPhoneMobile() != null
+								&& !"".equals(participant.getPhoneMobile())) {
+							try {
+								getUserBusiness().updateUserMobilePhone(user,
+										participant.getPhoneMobile());
+							} catch (Exception e) {
+							}
+						}
+
+						if (participant.getPhoneHome() != null
+								&& !"".equals(participant.getPhoneHome())) {
+							try {
+								getUserBusiness().updateUserHomePhone(user,
+										participant.getPhoneHome());
+							} catch (Exception e) {
+							}
+						}
+
+						if (participant.getEmail() != null
+								&& !"".equals(participant.getEmail())) {
+							try {
+								getUserBusiness().updateUserMail(user,
+										participant.getEmail());
+							} catch (Exception e) {
+							}
+						}
+
+						Country country = null;
+						try {
+							country = getCountryHome().findByCountryName(
+									participant.getNationality());
+						} catch (Exception e) {
+							country = getCountryHome().findByIsoAbbreviation(
+									LocaleUtil.getIcelandicLocale()
+											.getCountry());
+						}
+
+						dao.storeRegistration(null, header,
+								RegistrationStatus.OK,
+								participantHolder.getRace(),
+								participantHolder.getShirtSize(), null, null,
+								0, null, country.getPrimaryKey().toString(),
+								user.getUniqueId(), 0, false, false, null,
+								null, false, true, true, null);
+
+						if (!getUserBusiness().hasUserLogin(user)) {
+							try {
+								getUserBusiness().generateUserLogin(user);
+							} catch (Exception e) {
+								System.out
+										.println("Error creating login for user: "
+												+ user.getName());
+								e.printStackTrace();
+							}
+						}
+
+						addUserToRootRunnersGroup(user);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void storeFiffoFullImportRegistration(List<ParticipantHolder> holders,
+			String registrantUUID, Locale locale) {
+
+		if (holders != null && !holders.isEmpty()) {
+			RegistrationHeader header = dao.storeRegistrationHeader(null,
+					RegistrationHeaderStatus.RegisteredWithoutPayment,
+					registrantUUID, "Fiffo import", locale.toString(),
+					Currency.ISK, null, null, null, null, null, null, null,
+					null, null, null);
+
+			Event event = dao.getEvent(1L);
+
+			for (ParticipantHolder participantHolder : holders) {
+				try {
+					User user = null;
+					Participant participant = participantHolder
+							.getParticipant();
+					if (participant.getUuid() != null) {
+						try {
+							user = getUserBusiness().getUserByUniqueId(
+									participant.getUuid());
+						} catch (RemoteException e) {
+						} catch (FinderException e) {
+						}
+					}
+
+					if (user != null) {
+						if (isRegistered(user, event, IWTimestamp.RightNow().getYear())) {
 							System.out.println("User " + user.getName()
 									+ " is already registered");
 							continue;

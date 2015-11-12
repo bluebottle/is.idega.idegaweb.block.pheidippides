@@ -1,8 +1,8 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.LVResultsImportBean;
-import is.idega.idegaweb.pheidippides.business.LVResultsImportStatus;
+import is.idega.idegaweb.pheidippides.bean.ResultsImportBean;
+import is.idega.idegaweb.pheidippides.business.ResultsImportStatus;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -32,7 +32,7 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
-public class LVResultsImporter extends IWBaseComponent {
+public class ResultsImporter extends IWBaseComponent {
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_SELECT_FILE = 1;
 	private static final int ACTION_DONE = 2;
@@ -78,7 +78,7 @@ public class LVResultsImporter extends IWBaseComponent {
 		PresentationUtil.addStyleSheetToHeader(iwc,
 				iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
-		LVResultsImportBean bean = getBeanInstance("lvResultsImportBean");
+		ResultsImportBean bean = getBeanInstance("resultsImportBean");
 		bean.setLocale(iwc.getCurrentLocale());
 		bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp
 				.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow()
@@ -86,7 +86,7 @@ public class LVResultsImporter extends IWBaseComponent {
 
 		Event event = getDao().getEventByReportSign("LV");
 		bean.setEvent(event);
-		List<Race> races = getDao().getRaces(event, 2013);
+		List<Race> races = getDao().getRaces(event, 2015);
 		/**
 		 * @TODO make the year selectable
 		 */
@@ -122,12 +122,12 @@ public class LVResultsImporter extends IWBaseComponent {
 		if (uploadFile != null && uploadFile.getName() != null
 				&& uploadFile.getName().length() > 0) {
 			try {
-				LVResultsImportBean bean = getBeanInstance("lvResultsImportBean");
+				ResultsImportBean bean = getBeanInstance("resultsImportBean");
 
 				FileInputStream input = new FileInputStream(
 						uploadFile.getRealPath());
-				Map<LVResultsImportStatus, List<ParticipantResult>> toImport = getService()
-						.importLVResultsExcelFile(input, bean.getEvent(),
+				Map<ResultsImportStatus, List<ParticipantResult>> toImport = getService()
+						.importResultsExcelFile(input, bean.getEvent(),
 								IWTimestamp.RightNow().getYear());
 
 				boolean hasError = false;
@@ -135,7 +135,7 @@ public class LVResultsImporter extends IWBaseComponent {
 				List<ParticipantResult> participantResults = null;
 				if (toImport != null && !toImport.isEmpty()) {
 					errors = toImport
-							.get(LVResultsImportStatus.MISSING_REQUIRED_FIELD);
+							.get(ResultsImportStatus.MISSING_REQUIRED_FIELD);
 					if (errors != null && !errors.isEmpty()) {
 						bean.setMissingRequiredFields(errors);
 						hasError = true;
@@ -143,7 +143,7 @@ public class LVResultsImporter extends IWBaseComponent {
 
 					if (!hasError) {
 						participantResults = toImport
-								.get(LVResultsImportStatus.OK);
+								.get(ResultsImportStatus.OK);
 						if (participantResults != null
 								&& !participantResults.isEmpty()) {
 
