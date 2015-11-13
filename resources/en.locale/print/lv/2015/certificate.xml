@@ -4,41 +4,38 @@
 	"http://ujac.sourceforge.net/ujac-print-document.dtd">
 
 <document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
-	
-	<register-font family="chancery" source="apple_chancery.ttf"/>
-	<register-font family="corsiva" source="corsiva.ttf"/>
+	<register-font family="antiqua" source="antiqua.tff"/>
 
-	<color-def name="darkBlue" color-space="RGB" value="2,68,140"/>
+	<color-def name="black" color-space="RGB" value="0,0,0"/>
+    <color-def name="silver" color-space="RGB" value="192,192,192"/>
 
-	<font-def name="normal" color="darkBlue" family="Helvetica" size="17.26" style="normal"/>
-	<font-def name="amount" color="darkBlue" family="corsiva" size="39.25" style="normal"/>
-	<font-def name="amountText" color="darkBlue" family="chancery" size="17.26" style="normal"/>
-	<font-def name="small" color="darkBlue" family="chancery" size="12" style="normal"/>
-
+    <font-def name="header" color="silver" family="antiqua" size="39.25" style="normal"/>
+    <font-def name="text" color="black" family="antiqua" size="17.26" style="normal"/>
+    
 	<overlay source="lv/2015/Laugavegur_vidurk_2015.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
 
 	<box x="25" y="150" width="580" valign="top" height="260" padding="10.0">
-		<paragraph font="amount" halign="center" spacing-after="12.0">
+		<paragraph font="header" halign="center" spacing-after="12.0">
 			${name}
 		</paragraph>
 
-		<paragraph font="amountText" halign="center" spacing-after="6.0">
+		<paragraph font="text" halign="center" spacing-after="6.0">
 			completed a 55 km Ultra Marathon with the following results
 		</paragraph>
 		
-		<paragraph font="amountText" halign="center" spacing-after="6.0">
+		<paragraph font="text" halign="center" spacing-after="6.0">
 			Finish time: ${finishTime}
 		</paragraph>
 
-		<paragraph font="amountText" halign="center" spacing-after="6.0">
+		<paragraph font="text" halign="center" spacing-after="6.0">
 			${placement}. place of 361 finishers
 		</paragraph>
 
-		<paragraph font="amountText" halign="center" spacing-after="6.0">
+		<paragraph font="text" halign="center" spacing-after="6.0">
 			Placement ${genderPlacement} by gender, 249 male and 112 female runners
 		</paragraph>
 
-		<paragraph font="amountText" halign="center" spacing-after="6.0">
+		<paragraph font="text" halign="center" spacing-after="6.0">
 			Place  ${groupPlacement} in the age group ${ageGroup} ${gender}
 		</paragraph>
 	</box>	
