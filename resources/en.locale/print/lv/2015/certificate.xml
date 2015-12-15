@@ -4,7 +4,7 @@
 	"http://ujac.sourceforge.net/ujac-print-document.dtd">
 
 <document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
-	<register-font family="antiqua" source="antiqua.tff"/>
+	<register-font family="antiqua" source="antiqua.ttf"/>
 
 	<color-def name="black" color-space="RGB" value="0,0,0"/>
     <color-def name="silver" color-space="RGB" value="192,192,192"/>
