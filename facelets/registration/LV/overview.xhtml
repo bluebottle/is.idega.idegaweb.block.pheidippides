@@ -10,9 +10,9 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="6" />
 		<input type="hidden" name="prm_gift_card" value="" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 6" /></h2>
 
 		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.overview_help')]}" /></div>
 
@@ -24,17 +24,17 @@
 					</ui:repeat>
 				</ul>
 			</ui:fragment>
-	
+
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-						<!-- th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th -->
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 					</tr>
 				</thead>
-			
+
 				<tbody>
 					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 
@@ -43,24 +43,24 @@
 							<tr>
 								<td class="firstColumn"><h:outputText value="#{holder.participant.fullName}" /></td>
 								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-								<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td -->
+								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
 								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
 							</tr>
 							<ui:fragment rendered="#{not empty holder.relayPartners}">
 								<ui:repeat value="#{holder.relayPartners}" var="partner">
 									<tr class="relayPartner">
 										<td class="firstColumn" colspan="3"><h:outputText value="#{partner.fullName}" /></td>
-										<!-- td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td -->
+										<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
 									</tr>
 								</ui:repeat>
 							</ui:fragment>
 						</ui:fragment>
 					</ui:repeat>
-					
+
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td -->
+						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td>
 						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
 					</tr>
 					<ui:fragment rendered="#{not empty current.relayPartners}">
@@ -71,7 +71,7 @@
 							</tr>
 						</ui:repeat>
 					</ui:fragment>
-					
+
 					<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
 						<tr class="giftCard">
 							<td class="firstColumn" colspan="3">
@@ -86,7 +86,7 @@
 				</tbody>
 			</table>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<a href="#" class="back" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>

@@ -41,7 +41,8 @@ public class LVRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_PERSON_SELECT = 1;
 	private static final int ACTION_PARTICIPANT = 2;
-	private static final int ACTION_RACE_SELECT = 3;
+//	private static final int ACTION_RACE_SELECT = 3;
+    private static final int ACTION_SHIRT_SELECT = 3;
 	private static final int ACTION_EXTRA_INFORMATION = 4;
 	private static final int ACTION_WAIVER = 5;
 	private static final int ACTION_OVERVIEW = 6;
@@ -53,7 +54,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 	private static final int ACTION_FINISH_REGISTRATION = 12;
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
-	private static final String PARAMETER_RACE = "prm_race_pk";
+//	private static final String PARAMETER_RACE = "prm_race_pk";
 	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
 	private static final String PARAMETER_NAME = "prm_name";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
@@ -162,7 +163,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 					showParticipant(iwc, bean);
 					break;
 		
-				case ACTION_RACE_SELECT:
+/*				case ACTION_RACE_SELECT:
 					if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
 						Participant participant = null;
 						if (getSession().getCurrentParticipant() == null) {
@@ -199,47 +200,51 @@ public class LVRegistrationForm extends IWBaseComponent {
 					}
 					
 					showRaceSelect(iwc, bean);
-					break;
-		
+					break;*/
+
+	               case ACTION_SHIRT_SELECT:
+	                    if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
+	                        Participant participant = null;
+	                        if (getSession().getCurrentParticipant() == null) {
+	                            ParticipantHolder holder = new ParticipantHolder();
+	                            getSession().setCurrentParticipant(holder);
+	                            
+	                            participant = new Participant();
+	                        }
+	                        else {
+	                            participant = getSession().getCurrentParticipant().getParticipant();
+	                        }
+
+	                        if (!getSession().isRegistrationWithPersonalId()) {
+	                            DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+	                            
+	                            participant.setFullName(iwc.getParameter(PARAMETER_NAME));
+	                            try {
+	                                participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
+	                            } catch (ParseException e) {
+	                                e.printStackTrace();
+	                            }
+	                            participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
+	                            participant.setCity(iwc.getParameter(PARAMETER_CITY));
+	                            participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
+	                            participant.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
+	                        }
+	                        participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
+	                        participant.setGender(iwc.getParameter(PARAMETER_GENDER));
+	                        participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+	                        participant.setPhoneHome(iwc.getParameter(PARAMETER_PHONE));
+	                        participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
+	                        participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
+	                        getSession().getCurrentParticipant().setParticipant(participant);
+	                    }
+	                    
+	                    showShirtSelect(iwc, bean);
+	                    break;
+
 				case ACTION_EXTRA_INFORMATION:
-					if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
-						Participant participant = null;
-						if (getSession().getCurrentParticipant() == null) {
-							ParticipantHolder holder = new ParticipantHolder();
-							getSession().setCurrentParticipant(holder);
-							
-							participant = new Participant();
-						}
-						else {
-							participant = getSession().getCurrentParticipant().getParticipant();
-						}
-
-						if (!getSession().isRegistrationWithPersonalId()) {
-							DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-							
-							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
-							try {
-								participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
-							participant.setCity(iwc.getParameter(PARAMETER_CITY));
-							participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
-							participant.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
-						}
-						participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
-						participant.setGender(iwc.getParameter(PARAMETER_GENDER));
-						participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
-						participant.setPhoneHome(iwc.getParameter(PARAMETER_PHONE));
-						participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
-						participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
-						getSession().getCurrentParticipant().setParticipant(participant);
-					}
-
-					if (iwc.isParameterSet(PARAMETER_RACE)) {
+					/*if (iwc.isParameterSet(PARAMETER_RACE)) {
 						getSession().getCurrentParticipant().setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
-					}
+					}*/
 					if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
 						getSession().getCurrentParticipant().setShirtSize(getDao().getShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE))));
 					}
@@ -382,7 +387,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
+/*	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant()));
 		if (bean.getRaces() != null && bean.getRaces().size() == 1) {
 			getSession().getCurrentParticipant().setRace(bean.getRaces().iterator().next());
@@ -393,7 +398,20 @@ public class LVRegistrationForm extends IWBaseComponent {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/LV/raceSelect.xhtml"));
 		add(facelet);
-	}
+	}*/
+
+	   private void showShirtSelect(IWContext iwc, PheidippidesBean bean) {
+	        bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant()));
+	        if (bean.getRaces() != null && bean.getRaces().size() == 1) {
+	            getSession().getCurrentParticipant().setRace(bean.getRaces().iterator().next());
+	            bean.setRaces(null);
+	        }
+	        bean.setRaceShirtSizes(/*iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : */(getSession().getCurrentParticipant().getRace() != null ? getDao().getRaceShirtSizes(getDao().getRace(getSession().getCurrentParticipant().getRace().getId())) : null));
+	        
+	        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+	        facelet.setFaceletURI(iwb.getFaceletURI("registration/LV/shirtSelect.xhtml"));
+	        add(facelet);
+	    }
 
 	private void showExtraInformation(IWContext iwc, PheidippidesBean bean) {
 		if (getSession().getCurrentParticipant().getRace() == null) {

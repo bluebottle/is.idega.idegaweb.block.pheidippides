@@ -9,7 +9,7 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 6" /></h2>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
 
 		<ui:fragment rendered="#{pheidippidesBean.answer.amount gt 0}">
 			<div class="receipt"><h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" /></div>
