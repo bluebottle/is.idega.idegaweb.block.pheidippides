@@ -81,6 +81,8 @@ public class Registration implements Serializable {
 	private static final String COLUMN_CREATED_DATE = "created";
 	
 	private static final String COLUMN_RACE_RESULT = "result_id";
+	
+	private static final String COLUMN_EXTERNAL_CHARITY_ID = "external_charity_id";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -180,6 +182,9 @@ public class Registration implements Serializable {
 	@OneToOne
 	@JoinColumn(name = Registration.COLUMN_RACE_RESULT)
 	private RaceResult raceResult;
+
+    @Column(name = Registration.COLUMN_EXTERNAL_CHARITY_ID)
+    private String externalCharityId;
 
 	public Long getId() {
 		return id;
@@ -441,4 +446,12 @@ public class Registration implements Serializable {
 	public void setRaceResult(RaceResult raceResult) {
 		this.raceResult = raceResult;
 	}
+
+    public String getExternalCharityId() {
+        return externalCharityId;
+    }
+
+    public void setExternalCharityId(String externalCharityId) {
+        this.externalCharityId = externalCharityId;
+    }
 }

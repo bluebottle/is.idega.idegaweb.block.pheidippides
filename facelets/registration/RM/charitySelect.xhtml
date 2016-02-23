@@ -22,10 +22,10 @@
 			</div>
 			<br />
 			<div class="formItem">
-				<c:selectOne id="prm_charity" styleClass="required" name="prm_charity" disabled="#{empty pheidippidesRegistrationSession.currentParticipant.charity}">
+				<c:selectOne id="prm_charity" styleClass="required" name="prm_charity" disabled="#{empty pheidippidesRegistrationSession.currentParticipant.externalCharity}">
 					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_charity']}" content="" />
-					<ui:repeat value="#{pheidippidesBean.charities}" var="charity">
-						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationSession.currentParticipant.charity.id}" />
+					<ui:repeat value="#{pheidippidesBean.externalCharities}" var="charity">
+						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationSession.currentParticipant.externalCharity.id}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>

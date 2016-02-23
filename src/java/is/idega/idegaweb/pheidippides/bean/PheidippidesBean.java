@@ -1,21 +1,5 @@
 package is.idega.idegaweb.pheidippides.bean;
 
-import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
-import is.idega.idegaweb.pheidippides.data.BankReference;
-import is.idega.idegaweb.pheidippides.data.Charity;
-import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Distance;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-import is.idega.idegaweb.pheidippides.data.ShirtSize;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +10,23 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.idega.builder.bean.AdvancedProperty;
+
+import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
+import is.idega.idegaweb.pheidippides.data.BankReference;
+import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Distance;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.ExternalCharity;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
 
 @Service("pheidippidesBean")
 @Scope("request")
@@ -66,6 +67,9 @@ public class PheidippidesBean {
 	
 	private Charity charity;
 	private List<Charity> charities;
+	
+	private ExternalCharity externalCharity;
+	private List<ExternalCharity> externalCharities;
 	
 	private Registration registration;
 	private Participant participant;
@@ -487,4 +491,20 @@ public class PheidippidesBean {
 		
 		errors.add(error);
 	}
+
+    public ExternalCharity getExternalCharity() {
+        return externalCharity;
+    }
+
+    public void setExternalCharity(ExternalCharity externalCharity) {
+        this.externalCharity = externalCharity;
+    }
+
+    public List<ExternalCharity> getExternalCharities() {
+        return externalCharities;
+    }
+
+    public void setExternalCharities(List<ExternalCharity> externalCharities) {
+        this.externalCharities = externalCharities;
+    }
 }

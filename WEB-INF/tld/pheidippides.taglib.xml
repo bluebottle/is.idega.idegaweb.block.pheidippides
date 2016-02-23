@@ -71,6 +71,12 @@
 		<function-signature>boolean isOpenForRegistration(is.idega.idegaweb.pheidippides.data.Race)</function-signature>
 	</function>
 
+    <function>
+        <function-name>registrantHasPersonalId</function-name>
+        <function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>
+        <function-signature>boolean registrantHasPersonalId(is.idega.idegaweb.pheidippides.data.Registration)</function-signature>
+    </function>
+
 	<function>
 		<function-name>getCounterList</function-name>
 		<function-class>is.idega.idegaweb.pheidippides.util.PheidippidesUtil</function-class>

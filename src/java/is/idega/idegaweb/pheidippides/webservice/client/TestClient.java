@@ -2,6 +2,10 @@ package is.idega.idegaweb.pheidippides.webservice.client;
 
 import java.net.URL;
 
+import is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityList;
+import is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceLocator;
+import is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType;
+
 public class TestClient {
 
 	/**
@@ -9,9 +13,28 @@ public class TestClient {
 	 */
 	public static void main(String[] args) {
 		TestClient client = new TestClient();
-		client.doStuff();
+		client.doStuff2();
 	}
 
+	private void doStuff2() {
+	    try {
+	        CharityWebServiceLocator locator = new CharityWebServiceLocator();
+	        CharityWebServiceSoap_PortType port = locator.getCharityWebServiceSoap();
+	        CharityList[] charities = port.getCharitiesLocalized("is");
+	        for (int i = 0; i < charities.length; i++) {
+                System.out.println(i + ", id = " + charities[i].getID() + ", name = " + charities[i].getName() + ", ssn = " + charities[i].getSSN());
+            }
+	        
+           charities = port.getCharitiesLocalized("en");
+            for (int i = 0; i < charities.length; i++) {
+                System.out.println(i + ", id = " + charities[i].getID() + ", name = " + charities[i].getName() + ", ssn = " + charities[i].getSSN());
+            }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 	private void doStuff() {
 		try {
 			CharityServiceServiceLocator locator = new CharityServiceServiceLocator();

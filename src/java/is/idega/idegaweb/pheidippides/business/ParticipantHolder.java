@@ -1,6 +1,11 @@
 package is.idega.idegaweb.pheidippides.business;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import is.idega.idegaweb.pheidippides.data.Charity;
+import is.idega.idegaweb.pheidippides.data.ExternalCharity;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.Race;
 import is.idega.idegaweb.pheidippides.data.RacePrice;
@@ -8,15 +13,12 @@ import is.idega.idegaweb.pheidippides.data.RaceTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class ParticipantHolder {
 	private Participant participant;
 	private Race race;
 	private ShirtSize shirtSize;
 	private Charity charity;
+	private ExternalCharity externalCharity;
 	private String leg;
 	private Team team;
 	
@@ -229,4 +231,10 @@ public class ParticipantHolder {
 	public void setRunningGroup(String runningGroup) {
 		this.runningGroup = runningGroup;
 	}
+    public ExternalCharity getExternalCharity() {
+        return externalCharity;
+    }
+    public void setExternalCharity(ExternalCharity externalCharity) {
+        this.externalCharity = externalCharity;
+    }
 }

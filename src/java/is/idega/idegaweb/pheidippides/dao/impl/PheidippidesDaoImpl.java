@@ -675,7 +675,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
-			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup) {
+			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup, String exernalCharityId) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {

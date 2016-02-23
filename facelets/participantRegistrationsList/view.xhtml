@@ -50,7 +50,7 @@
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['edit_relay_team']}" /></span>
 							</h:outputLink>
-							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and registration.race.event.reportSign ne 'LV'}" value="/pages/sidanmin/annarhlaupari/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" styleClass="changeRunner">
+							<h:outputLink rendered="#{p:isOpenForRegistration(registration.race) and p:registrantHasPersonalId(registration) and registration.race.event.reportSign ne 'LV'}" value="/pages/sidanmin/annarhlaupari/" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" styleClass="changeRunner">
 								<f:param name="prm_registration_pk" value="#{registration.id}" />
 								<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['change_runner']}" /></span>
 							</h:outputLink>

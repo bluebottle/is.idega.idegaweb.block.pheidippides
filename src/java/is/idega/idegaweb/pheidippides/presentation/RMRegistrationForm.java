@@ -301,7 +301,8 @@ public class RMRegistrationForm extends IWBaseComponent {
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_USE_CHARITY) && iwc.isParameterSet(PARAMETER_CHARITY)) {
-							getSession().getCurrentParticipant().setCharity(getDao().getCharity(Long.parseLong(iwc.getParameter(PARAMETER_CHARITY))));
+						    String locale = iwc.getCurrentLocale().equals(LocaleUtil.getIcelandicLocale()) ? "is" : "en";
+							getSession().getCurrentParticipant().setExternalCharity(getService().getExternalCharity(iwc.getParameter(PARAMETER_CHARITY), locale));
 						}
 						else {
 							getSession().getCurrentParticipant().setCharity(null);
@@ -467,7 +468,8 @@ public class RMRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showCharitySelect(IWContext iwc, PheidippidesBean bean) {
-		bean.setCharities(bean.getEvent().getCharities());
+	    String locale = iwc.getCurrentLocale().equals(LocaleUtil.getIcelandicLocale()) ? "is" : "en";
+		bean.setExternalCharities(getService().getExternalCharities(locale));
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/charitySelect.xhtml"));
