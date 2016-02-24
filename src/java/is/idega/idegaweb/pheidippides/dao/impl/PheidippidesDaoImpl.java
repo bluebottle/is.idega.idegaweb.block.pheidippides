@@ -675,7 +675,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			Charity charity, String nationality, String userUUID, int discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
-			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup, String exernalCharityId) {
+			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup, String externalCharityId) {
 		Registration registration = registrationID != null ? getRegistration(registrationID)
 				: null;
 		if (registration == null) {
@@ -696,6 +696,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setCreatedDate(IWTimestamp.getTimestampRightNow());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
+			newReg.setExternalCharityId(registration.getExternalCharityId());
 			if (header != null) {
 				newReg.setHeader(header);
 			} else {
@@ -754,6 +755,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			registration.setCharity(charity);
 		}
 
+		if (externalCharityId != null) {
+		    registration.setExternalCharityId(externalCharityId);
+		}
+		
 		if (nationality != null) {
 			registration.setNationality(nationality);
 		}
@@ -821,6 +826,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHeader(registration.getHeader());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
+			newReg.setExternalCharityId(registration.getExternalCharityId());			
 			newReg.setHeader(registration.getHeader());
 			newReg.setLeg(registration.getLeg());
 			if (nationalityPK != null) {
