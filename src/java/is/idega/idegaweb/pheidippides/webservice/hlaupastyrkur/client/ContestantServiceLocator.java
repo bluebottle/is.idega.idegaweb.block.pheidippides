@@ -25,8 +25,9 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
     }
 
     // Use to get a proxy class for BasicHttpBinding_IContestantService
-    private java.lang.String BasicHttpBinding_IContestantService_address = "http://www.hlaupastyrkur.is/services/ContestantService.svc";
+    private java.lang.String BasicHttpBinding_IContestantService_address = "https://www.hlaupastyrkur.is/services/ContestantService.svc";
 
+    @Override
     public java.lang.String getBasicHttpBinding_IContestantServiceAddress() {
         return BasicHttpBinding_IContestantService_address;
     }
@@ -42,6 +43,7 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
         BasicHttpBinding_IContestantServiceWSDDServiceName = name;
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService getBasicHttpBinding_IContestantService() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
@@ -53,6 +55,7 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
         return getBasicHttpBinding_IContestantService(endpoint);
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.IContestantService getBasicHttpBinding_IContestantService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BasicHttpBinding_IContestantServiceStub _stub = new is.idega.idegaweb.pheidippides.webservice.hlaupastyrkur.client.BasicHttpBinding_IContestantServiceStub(portAddress, this);
@@ -129,11 +132,11 @@ public class ContestantServiceLocator extends org.apache.axis.client.Service imp
     * Set the endpoint address for the specified port name.
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
-        
+
 if ("BasicHttpBinding_IContestantService".equals(portName)) {
             setBasicHttpBinding_IContestantServiceEndpointAddress(address);
         }
-        else 
+        else
 { // Unknown Port Name
             throw new javax.xml.rpc.ServiceException(" Cannot set Endpoint Address for Unknown Port" + portName);
         }

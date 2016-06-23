@@ -22,8 +22,9 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
     }
 
     // Use to get a proxy class for CharityWebServiceSoap
-    private java.lang.String CharityWebServiceSoap_address = "http://www.hlaupastyrkur.is/charitywebservice.asmx";
+    private java.lang.String CharityWebServiceSoap_address = "https://www.hlaupastyrkur.is/charitywebservice.asmx";
 
+    @Override
     public java.lang.String getCharityWebServiceSoapAddress() {
         return CharityWebServiceSoap_address;
     }
@@ -39,6 +40,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
         CharityWebServiceSoapWSDDServiceName = name;
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType getCharityWebServiceSoap() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
@@ -50,6 +52,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
         return getCharityWebServiceSoap(endpoint);
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType getCharityWebServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_BindingStub _stub = new is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_BindingStub(portAddress, this);
@@ -67,8 +70,9 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
 
 
     // Use to get a proxy class for CharityWebServiceSoap12
-    private java.lang.String CharityWebServiceSoap12_address = "http://www.hlaupastyrkur.is/charitywebservice.asmx";
+    private java.lang.String CharityWebServiceSoap12_address = "https://www.hlaupastyrkur.is/charitywebservice.asmx";
 
+    @Override
     public java.lang.String getCharityWebServiceSoap12Address() {
         return CharityWebServiceSoap12_address;
     }
@@ -84,6 +88,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
         CharityWebServiceSoap12WSDDServiceName = name;
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType getCharityWebServiceSoap12() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
@@ -95,6 +100,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
         return getCharityWebServiceSoap12(endpoint);
     }
 
+    @Override
     public is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType getCharityWebServiceSoap12(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap12Stub _stub = new is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap12Stub(portAddress, this);
@@ -117,6 +123,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
      * This service has multiple ports for a given interface;
      * the proxy implementation returned may be indeterminate.
      */
+    @Override
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebServiceSoap_PortType.class.isAssignableFrom(serviceEndpointInterface)) {
@@ -141,6 +148,7 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
+    @Override
     public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
@@ -159,12 +167,14 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
         }
     }
 
+    @Override
     public javax.xml.namespace.QName getServiceName() {
         return new javax.xml.namespace.QName("http://tempuri.org/", "CharityWebService");
     }
 
     private java.util.HashSet ports = null;
 
+    @Override
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
@@ -178,15 +188,15 @@ public class CharityWebServiceLocator extends org.apache.axis.client.Service imp
     * Set the endpoint address for the specified port name.
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
-        
+
 if ("CharityWebServiceSoap".equals(portName)) {
             setCharityWebServiceSoapEndpointAddress(address);
         }
-        else 
+        else
 if ("CharityWebServiceSoap12".equals(portName)) {
             setCharityWebServiceSoap12EndpointAddress(address);
         }
-        else 
+        else
 { // Unknown Port Name
             throw new javax.xml.rpc.ServiceException(" Cannot set Endpoint Address for Unknown Port" + portName);
         }
