@@ -34,6 +34,7 @@ public class Event implements Serializable {
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
 	private static final String COLUMN_REPORT_SIGN = "report_sign";
 	private static final String COLUMN_CREATED_DATE = "created";
+	private static final String COLUMN_EVENT_EMAIL_FROM = "from_email";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,17 +46,21 @@ public class Event implements Serializable {
 
 	@Column(name = Event.COLUMN_DESCRIPTION)
 	private String description;
-	
+
 	@Column(name = Event.COLUMN_LOCALIZED_KEY)
 	private String localizedKey;
 
 	@Column(name = Event.COLUMN_REPORT_SIGN)
 	private String reportSign;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Event.COLUMN_CREATED_DATE)
 	private Date createdDate;
-	
+
+	@Column(name = Event.COLUMN_EVENT_EMAIL_FROM)
+	private String fromEmail;
+
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Charity> charities;
 
@@ -139,4 +144,12 @@ public class Event implements Serializable {
 			return false;
 		return true;
 	}
+
+    public String getFromEmail() {
+        return fromEmail;
+    }
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
 }

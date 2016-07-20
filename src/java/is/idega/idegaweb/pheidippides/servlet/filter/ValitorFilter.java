@@ -1,8 +1,4 @@
 package is.idega.idegaweb.pheidippides.servlet.filter;
-import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
-
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -19,29 +15,49 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.idega.presentation.IWContext;
 import com.idega.servlet.filter.BaseFilter;
 
+import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
+
 
 public class ValitorFilter extends BaseFilter {
 
-	public void destroy() {
+	@Override
+    public void destroy() {
 	}
 
-	public void init(FilterConfig config) throws ServletException {
+	@Override
+    public void init(FilterConfig config) throws ServletException {
 	}
 
-	public void doFilter(ServletRequest srequest, ServletResponse sresponse, FilterChain chain) throws IOException, ServletException {
+	@Override
+    public void doFilter(ServletRequest srequest, ServletResponse sresponse, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) srequest;
 		HttpServletResponse response = (HttpServletResponse) sresponse;
-		
+
 		IWContext iwc = new IWContext(request, response, request.getSession().getServletContext());
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		PheidippidesRegistrationSession session = (PheidippidesRegistrationSession) springContext.getBean("pheidippidesRegistrationSession");
-		
+
+	    //PheidippidesDao dao = (PheidippidesDao) springContext.getBean("pheidippidesDao");
+
 		session.addParticipantHolder(session.getCurrentParticipant());
-		
-		RegistrationAnswerHolder holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards());
+
+		RegistrationAnswerHolder holder = null;
+		if (session.getValitorShopId() != null) {
+            holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards(), session.getValitorShopId(), session.getValitorSecurityNumber(), session.getValitorEURShopId(), session.getValitorEURSecurityNumber(), session.getValitorReturnURLText(), session.getValitorReturnURL());
+		} else {
+		    holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards());
+		}
+
+        /*List<Registration> registrations = dao.getRegistrations(holder.getHeader());
+        for (Registration registration : registrations) {
+            System.out.println("registration = " + registration.getId());
+        }*/
+
 		session.empty();
-		
+
 		response.sendRedirect(holder.getValitorURL());
 	}
 }

@@ -15,6 +15,7 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
+import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
@@ -27,7 +28,6 @@ import com.idega.util.expression.ELUtil;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.business.GiftCardService;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
@@ -64,19 +64,20 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_EMAIL = "prm_email";
     private static final String PARAMETER_PHONE = "prm_phone";
     private static final String PARAMETER_MOBILE = "prm_mobile";
-    private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
-    private static final String PARAMETER_USE_CHARITY = "prm_use_charity";
-    private static final String PARAMETER_CHARITY = "prm_charity";
+    private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+
+    private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
+    private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
+    private static final String VALITOR_TOUR_RETURN_URL_TEXT = "VALITOR_TOUR_RETURN_URL_TEXT";
+    private static final String VALITOR_TOUR_RETURN_URL = "VALITOR_TOUR_RETURN_URL";
+
 
     @Autowired
     private PheidippidesService service;
 
     @Autowired
     private PheidippidesRegistrationSession session;
-
-    @Autowired
-    private GiftCardService giftCardService;
 
     @Autowired
     private PheidippidesDao dao;
@@ -103,6 +104,26 @@ public class TourRegistrationForm extends IWBaseComponent {
             getSession().empty();
             getSession().setLocale(iwc.getCurrentLocale());
         }
+
+        getSession().setCurrency(Currency.ISK);
+
+        String valitorShopID = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_SHOP_ID, "1");
+        String valitorSecurityNumber = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");
+        String valitorReturnURLText = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT, "tourofreykjavik.is");
+        String valitorReturnURL = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_RETURN_URL, "http://tourofreykjavik.is");
+
+        getSession().setValitorShopId(valitorShopID);
+        getSession().setValitorSecurityNumber(valitorSecurityNumber);
+        getSession().setValitorReturnURLText(valitorReturnURLText);
+        getSession().setValitorReturnURL(valitorReturnURL);
 
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
@@ -217,7 +238,7 @@ public class TourRegistrationForm extends IWBaseComponent {
                         participant.setPhoneMobile(
                                 iwc.getParameter(PARAMETER_MOBILE));
                         participant.setRunningGroup(
-                                iwc.getParameter(PARAMETER_RUNNING_GROUP));
+                                iwc.getParameter(PARAMETER_BICYCLE_GROUP));
                         getSession().getCurrentParticipant()
                                 .setParticipant(participant);
                     }
@@ -318,7 +339,7 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        Currency.ISK, getSession().getGiftCards());
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -364,7 +385,7 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        Currency.ISK, getSession().getGiftCards());
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);

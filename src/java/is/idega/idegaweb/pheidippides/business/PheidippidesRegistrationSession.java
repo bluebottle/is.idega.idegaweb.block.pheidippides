@@ -1,7 +1,5 @@
 package is.idega.idegaweb.pheidippides.business;
 
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -9,10 +7,12 @@ import java.util.Locale;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+
 @Scope("session")
 @Service("pheidippidesRegistrationSession")
 public class PheidippidesRegistrationSession {
-	
+
 	private Boolean registrationWithPersonalId = false;
 	private String registrantUUID = null;
 	private List<ParticipantHolder> holders = null;
@@ -20,6 +20,13 @@ public class PheidippidesRegistrationSession {
 	private Locale locale;
 	private Currency currency;
 	private List<GiftCardUsage> giftCards = null;
+
+	private String valitorShopId = null;
+	private String valitorSecurityNumber = null;
+    private String valitorEURShopId = null;
+    private String valitorEURSecurityNumber = null;
+    private String valitorReturnURLText = null;
+    private String valitorReturnURL = null;
 
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
@@ -79,45 +86,93 @@ public class PheidippidesRegistrationSession {
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
 	}
-	
+
 	public void addGiftCard(GiftCardUsage card) {
 		if (giftCards == null) {
 			giftCards = new ArrayList<GiftCardUsage>();
 		}
-		
+
 		giftCards.add(card);
 	}
-	
+
 	public void removeGiftCard(GiftCardUsage card) {
 		giftCards.remove(card);
 	}
-	
+
 	public List<GiftCardUsage> getGiftCards() {
 		return giftCards;
 	}
-	
+
 	public int getTotalAmount() {
 		int amount = 0;
-		
+
 		if (holders != null) {
 			for (ParticipantHolder holder : holders) {
 				amount += holder.getAmount() - holder.getDiscount();
 			}
 		}
-		
+
 		ParticipantHolder current = getCurrentParticipant();
 		amount += current.getAmount() - current.getDiscount();
-		
+
 		if (giftCards != null) {
 			for (GiftCardUsage usage : giftCards) {
 				amount -= usage.getAmount();
 			}
 		}
-		
+
 		if (amount < 0) {
 			amount = 0;
 		}
-		
+
 		return amount;
 	}
+
+    public String getValitorShopId() {
+        return valitorShopId;
+    }
+
+    public void setValitorShopId(String valitorShopId) {
+        this.valitorShopId = valitorShopId;
+    }
+
+    public String getValitorEURShopId() {
+        return valitorEURShopId;
+    }
+
+    public void setValitorEURShopId(String valitorEURShopId) {
+        this.valitorEURShopId = valitorEURShopId;
+    }
+
+    public String getValitorSecurityNumber() {
+        return valitorSecurityNumber;
+    }
+
+    public void setValitorSecurityNumber(String valitorSecurityNumber) {
+        this.valitorSecurityNumber = valitorSecurityNumber;
+    }
+
+    public String getValitorEURSecurityNumber() {
+        return valitorEURSecurityNumber;
+    }
+
+    public void setValitorEURSecurityNumber(String valitorEURSecurityNumber) {
+        this.valitorEURSecurityNumber = valitorEURSecurityNumber;
+    }
+
+    public String getValitorReturnURLText() {
+        return valitorReturnURLText;
+    }
+
+    public void setValitorReturnURLText(String valitorReturnURLText) {
+        this.valitorReturnURLText = valitorReturnURLText;
+    }
+
+    public String getValitorReturnURL() {
+        return valitorReturnURL;
+    }
+
+    public void setValitorReturnURL(String valitorReturnURL) {
+        this.valitorReturnURL = valitorReturnURL;
+    }
 }

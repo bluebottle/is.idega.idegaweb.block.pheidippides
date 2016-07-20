@@ -1471,12 +1471,6 @@ public class PheidippidesService {
             String registrantUUID, boolean createUsers, Locale locale,
             String paymentGroup, boolean isBankTransfer, Currency fixedCurrency,
             List<GiftCardUsage> giftCardUsage) {
-
-        RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
-
-        String valitorURL = IWMainApplication.getDefaultIWApplicationContext()
-                .getApplicationSettings().getProperty(VALITOR_URL,
-                        "https://testvefverslun.valitor.is/default.aspx");
         String valitorShopID = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SHOP_ID, "1");
@@ -1489,14 +1483,35 @@ public class PheidippidesService {
         String valitorSecurityNumberEUR = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
-
+        String valitorReturnURLText = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
         String valitorReturnURL = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_RETURN_URL,
                         "http://skraning.marathon.is/pages/valitor");
-        String valitorReturnURLText = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
+
+
+        return storeRegistration(holders, doPayment, registrantUUID,
+                createUsers, locale, paymentGroup, isBankTransfer,
+                fixedCurrency, giftCardUsage, valitorShopID,
+                valitorSecurityNumber, valitorShopIDEUR, valitorSecurityNumberEUR, valitorReturnURLText, valitorReturnURL);
+    }
+
+    public RegistrationAnswerHolder storeRegistration(
+            List<ParticipantHolder> holders, boolean doPayment,
+            String registrantUUID, boolean createUsers, Locale locale,
+            String paymentGroup, boolean isBankTransfer, Currency fixedCurrency,
+            List<GiftCardUsage> giftCardUsage, String valitorShopID,
+            String valitorSecurityNumber, String valitorShopIDEUR,
+            String valitorSecurityNumberEUR, String valitorReturnURLText, String valitorReturnURL) {
+
+        RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
+
+        String valitorURL = IWMainApplication.getDefaultIWApplicationContext()
+                .getApplicationSettings().getProperty(VALITOR_URL,
+                        "https://testvefverslun.valitor.is/default.aspx");
+
         String valitorReturnURLServerSide = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_RETURN_URL_SERVER_SIDE,
@@ -1720,7 +1735,7 @@ public class PheidippidesService {
                             participantHolder.isNeedsAssistance(),
                             participantHolder.isFacebook(),
                             participantHolder.isShowRegistration(),
-                            participantHolder.getRunningGroup(),
+                            participant.getRunningGroup(),
                             participantHolder.getExternalCharity() == null
                                     ? null
                                     : participantHolder.getExternalCharity()
@@ -1892,17 +1907,14 @@ public class PheidippidesService {
             url.append("NafnSkylda");
             url.append("=");
             url.append("1");
-            if (!createUsers) {
-                url.append("&");
-                url.append("KennitalaSkylda");
-                url.append("=");
-                url.append("1");
-            } else {
-                url.append("&");
-                url.append("FelaKennitala");
-                url.append("=");
-                url.append("1");
-            }
+            url.append("&");
+            url.append("FelaKennitala");
+            url.append("=");
+            url.append("1");
+            url.append("&");
+            url.append("FelaSimi");
+            url.append("=");
+            url.append("1");
             url.append("&");
             url.append("FelaHeimilisfang");
             url.append("=");
@@ -1957,44 +1969,6 @@ public class PheidippidesService {
         }
 
         return holder;
-    }
-
-    public static void main(String args[]) {
-        /*
-         * PheidippidesService service = new PheidippidesService(); String uuid
-         * = service .createValitorSecurityString(
-         * "12345011999018536035056191428820http://www.mbl.ishttp://www.visir.isISK"
-         * ); uuid = service .createValitorSecurityString(
-         * "2ef8ec654c0215000110000207456http://www.minsida.is/takkfyrirhttp://www.minsida.is/sale.aspx?c=82 82&ref=232ISK"
-         * );
-         *
-         * StringBuilder builder = new StringBuilder(
-         * "https://testvefverslun.valitor.is/default.aspx");
-         * builder.append("?VefverslunID=1").append("&Lang=is")
-         * .append("&Gjaldmidill=ISK").append("&Adeinsheimild=0")
-         * .append("&Vara_1_Lysing=Palli");
-         * builder.append("&Vara_1_Fjoldi=1").append("&Vara_1_Verd=1999")
-         * .append("&Vara_1_Afslattur=0").append("&KaupandaUpplysingar=0")
-         * .append("&Tilvisunarnumer=8536035056191428820");
-         * builder.append("&SlodTokstAdGjaldfaera=http://www.mbl.is")
-         * .append("&SlodTokstAdGjaldfaeraTexti=Eureka")
-         * .append("&SlodTokstAdGjaldfaeraServerSide=http://www.visir.is");
-         * builder.append("&SlodNotandiHaettirVid=http://www.bleikt.is")
-         * .append("&RafraenUndirskrift=").append(uuid);
-         *
-         * System.out.println("url = " + builder.toString());
-         */
-
-        IWTimestamp endOfYear = new IWTimestamp();
-        endOfYear.setMonth(12);
-        endOfYear.setDay(31);
-
-        IWTimestamp dob = new IWTimestamp(25, 1, 1996);
-        Age age = new Age(dob.getDate());
-        System.out.println("date = " + endOfYear.getDateString("dd.MM.yyyy"));
-        System.out.println("age = " + age.getYears());
-        System.out.println("age = " + age.getYears(endOfYear.getDate()));
-
     }
 
     public User saveUser(Name fullName, IWTimestamp dateOfBirth, Gender gender,
@@ -2464,7 +2438,7 @@ public class PheidippidesService {
             body = body.replaceAll("<br />", "\r\n");
 
             sendMessage(email.getEmailAddress(), subject, body,
-                    registration.getRace().getSendRegistrationCCTo());
+                    registration.getRace().getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -2694,17 +2668,14 @@ public class PheidippidesService {
         url.append("NafnSkylda");
         url.append("=");
         url.append("1");
-        if (!header.getCurrency().equals(Currency.ISK)) {
-            url.append("&");
-            url.append("KennitalaSkylda");
-            url.append("=");
-            url.append("1");
-        } else {
-            url.append("&");
-            url.append("FelaKennitala");
-            url.append("=");
-            url.append("1");
-        }
+        url.append("&");
+        url.append("FelaKennitala");
+        url.append("=");
+        url.append("1");
+        url.append("&");
+        url.append("FelaSimi");
+        url.append("=");
+        url.append("1");
         url.append("&");
         url.append("FelaHeimilisfang");
         url.append("=");
@@ -3037,7 +3008,7 @@ public class PheidippidesService {
                                     new Login(passwd, userID),
                                     registration.getExternalCharityId(),
                                     registration.getRace().getDistance()
-                                    .getName(),
+                                            .getName(),
                                     user.getName(), passwordString,
                                     userNameString,
                                     user.getPersonalID() != null
@@ -3092,7 +3063,7 @@ public class PheidippidesService {
                     body = body.replaceAll("<br />", "\r\n");
 
                     sendMessage(email.getEmailAddress(), subject, body,
-                            race.getSendRegistrationCCTo());
+                            race.getSendRegistrationCCTo(), race.getEvent().getFromEmail());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 } catch (FinderException e) {
@@ -3141,7 +3112,7 @@ public class PheidippidesService {
             body = body.replaceAll("<br />", "\r\n");
 
             sendMessage(email.getEmailAddress(), subject, body,
-                    holder.getRace().getSendRegistrationCCTo());
+                    holder.getRace().getSendRegistrationCCTo(), holder.getRace().getEvent().getFromEmail());
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (FinderException e) {
@@ -3173,7 +3144,7 @@ public class PheidippidesService {
                             "A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"),
                     arguments);
 
-            sendMessage(participant.getEmail(), subject, body, null);
+            sendMessage(participant.getEmail(), subject, body, null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -3226,10 +3197,10 @@ public class PheidippidesService {
     }
 
     private void sendMessage(String email, String subject, String body,
-            String bcc) {
+            String bcc, String overrideFromAddress) {
         String mailServer = DEFAULT_SMTP_MAILSERVER;
-        String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
         String cc = DEFAULT_CC_ADDRESS;
+        String fromAddress = DEFAULT_MESSAGEBOX_FROM_ADDRESS;
         // String bcc = DEFAULT_BCC_ADDRESS;
         try {
             MessagingSettings messagingSetting = IWMainApplication
@@ -3238,15 +3209,14 @@ public class PheidippidesService {
             fromAddress = messagingSetting.getFromMailAddress();
             cc = IWMainApplication.getDefaultIWMainApplication().getSettings()
                     .getProperty("messagebox_cc_receiver_address", "");
-            /*
-             * bcc = IWMainApplication .getDefaultIWMainApplication()
-             * .getSettings() .getProperty("messagebox_bcc_receiver_address",
-             * "reykjavikmarathon@inbound.basno.com");
-             */
         } catch (Exception e) {
             System.err.println(
                     "MessageBusinessBean: Error getting mail property from bundle");
             e.printStackTrace();
+        }
+
+        if (overrideFromAddress != null) {
+            fromAddress = overrideFromAddress;
         }
 
         try {
@@ -3894,7 +3864,7 @@ public class PheidippidesService {
 
                         sendMessage(email.getEmailAddress(), subject, body,
                                 registration.getRace()
-                                        .getSendRegistrationCCTo());
+                                        .getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -4294,7 +4264,7 @@ public class PheidippidesService {
                     body = body.replaceAll("<br />", "\r\n");
 
                     sendMessage(email.getEmailAddress(), subject, body,
-                            registration.getRace().getSendRegistrationCCTo());
+                            registration.getRace().getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
 
                     return passwordString;
                 }
@@ -4482,6 +4452,10 @@ public class PheidippidesService {
             url.append("1");
             url.append("&");
             url.append("FelaKennitala");
+            url.append("=");
+            url.append("1");
+            url.append("&");
+            url.append("FelaSimi");
             url.append("=");
             url.append("1");
             url.append("&");

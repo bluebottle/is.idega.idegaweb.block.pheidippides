@@ -21,30 +21,30 @@ public class ParticipantHolder {
 	private ExternalCharity externalCharity;
 	private String leg;
 	private Team team;
-	
+
 	private int amount;
 	private int discount;
-	
+
 	private boolean acceptsWaiver;
-	private boolean hasDoneMarathonBefore = true;	
-	private boolean hasDoneLVBefore = true;
+	private boolean hasDoneMarathonBefore = false;
+	private boolean hasDoneLVBefore = false;
 	private boolean needsAssistance = false;
 	private boolean facebook = true;
 	private boolean showRegistration = true;
-	
+
 	private Date bestMarathonTime;
 	private Date bestUltraMarathonTime;
-	
+
 	private List<RacePrice> trinkets;
 	private RaceTrinket trinket;
-	
+
 	private List<Participant> relayPartners;
-	
+
 	private String valitorDescription = null;
-	
+
 	private String runningGroup = null;
-	
-	
+
+
 	public Participant getParticipant() {
 		return participant;
 	}
@@ -115,24 +115,24 @@ public class ParticipantHolder {
 		if (this.relayPartners == null) {
 			this.relayPartners = new ArrayList<Participant>();
 		}
-		
+
 		this.relayPartners.add(relayPartner);
 	}
 	public void removeRelayPartner(Participant relayPartner) {
 		if (this.relayPartners == null) {
 			return;
 		}
-		
+
 		this.relayPartners.remove(relayPartner);
 	}
 	public void clearRelayPartners() {
 		if (this.relayPartners != null) {
 			this.relayPartners.clear();
 		}
-		
+
 		this.relayPartners = null;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -209,14 +209,14 @@ public class ParticipantHolder {
 		if (this.trinkets == null) {
 			this.trinkets = new ArrayList<RacePrice>();
 		}
-		
+
 		this.trinkets.add(trinket);
 	}
 	public void clearTrinkets() {
 		if (this.trinkets != null) {
 			this.trinkets.clear();
 		}
-		
+
 		this.trinkets = null;
 	}
 	public RaceTrinket getTrinket() {

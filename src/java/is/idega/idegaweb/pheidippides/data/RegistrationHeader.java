@@ -1,8 +1,5 @@
 package is.idega.idegaweb.pheidippides.data;
 
-import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +24,9 @@ import javax.persistence.TemporalType;
 
 import com.idega.core.idgenerator.business.UUIDGenerator;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
+
 @Entity
 @Table(name = RegistrationHeader.ENTITY_NAME)
 @NamedQueries({
@@ -48,7 +48,7 @@ public class RegistrationHeader implements Serializable {
 	private static final String COLUMN_REGISTRANT_UUID = "registrant_uuid";
 	private static final String COLUMN_PAYMENT_GROUP = "payment_group";
 	private static final String COLUMN_LOCALE = "locale";
-	
+
 	private static final String COLUMN_SECURITY_STRING = "security_string";
 	private static final String COLUMN_CARD_TYPE = "card_type";
 	private static final String COLUMN_CARD_NUMBER = "card_number";
@@ -58,13 +58,13 @@ public class RegistrationHeader implements Serializable {
 	private static final String COLUMN_REFERENCE_NUMBER = "reference_number";
 	private static final String COLUMN_COMMENT = "comment";
 	private static final String COLUMN_SALE_ID = "sale_id";
-	
+
 	private static final String COLUMN_CURRENCY = "currency";
-	
+
 	private static final String COLUMN_COMPANY = "company_id";
-	
+
 	private static final String COLUMN_CREATED_DATE = "created";
-	
+
 	@PrePersist
 	public void setDefaultValues() {
 		if (getUuid() == null || "".equals(getUuid().trim())) {
@@ -72,71 +72,71 @@ public class RegistrationHeader implements Serializable {
 			setUuid(uuid);
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = RegistrationHeader.COLUMN_ENTRY_ID)
 	private Long id;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_UUID)
 	private String uuid;
 
 	@Column(name = RegistrationHeader.COLUMN_STATUS)
 	@Enumerated(EnumType.STRING)
 	private RegistrationHeaderStatus status;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_REGISTRANT_UUID)
 	private String registrantUUID;
 
 	@Column(name = RegistrationHeader.COLUMN_PAYMENT_GROUP)
-	private String paymentGroup;	
-	
+	private String paymentGroup;
+
 	@Column(name = RegistrationHeader.COLUMN_LOCALE)
-	private String locale;	
+	private String locale;
 
 	@Column(name = RegistrationHeader.COLUMN_SECURITY_STRING)
 	private String securityString;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_CARD_TYPE)
 	private String cardType;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_CARD_NUMBER)
 	private String cardNumber;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_PAYMENT_DATE)
 	private String paymentDate;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_AUTHORIZATION_NUMBER)
 	private String authorizationNumber;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_TRANSACTION_NUMBER)
 	private String transactionNumber;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_REFERENCE_NUMBER)
 	private String referenceNumber;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_COMMENT)
 	private String comment;
-	
+
 	@Column(name = RegistrationHeader.COLUMN_SALE_ID)
-	private String saleId;	
+	private String saleId;
 
 	@Column(name = RegistrationHeader.COLUMN_CURRENCY)
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = RegistrationHeader.COLUMN_COMPANY)
 	private Company company;
 
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = RegistrationHeader.COLUMN_CREATED_DATE)
 	private Date createdDate;
-	
+
 	@OneToMany(mappedBy = "header")
 	private List<Registration> registrations;
-	
+
 	public Long getId() {
 		return id;
 	}
