@@ -1,16 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.FiffoImportBean;
-import is.idega.idegaweb.pheidippides.business.FiffoImportStatus;
-import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Distance;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -35,6 +24,17 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.FiffoImportBean;
+import is.idega.idegaweb.pheidippides.business.FiffoImportStatus;
+import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Distance;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+
 public class ImportFiffoFile extends IWBaseComponent {
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_SELECT_FILE = 1;
@@ -48,7 +48,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 	private JQuery jQuery;
 
 	private IWBundle iwb;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
 
@@ -88,7 +88,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 				.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow()
 				.getYear())));
 
-		
+
 		Event event = getDao().getEventByReportSign("RM");
 		bean.setEvent(event);
 		bean.setRaces(getService().getRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
@@ -149,51 +149,51 @@ public class ImportFiffoFile extends IWBaseComponent {
 					if (!hasError) {
 						System.out.println("no errors");
 						participantList = toImport.get(FiffoImportStatus.OK);
-						if (participantList != null && !participantList.isEmpty()) {							
+						if (participantList != null && !participantList.isEmpty()) {
 							List<ParticipantHolder> holders = new ArrayList<ParticipantHolder>();
 							Event event = dao.getEvent(1L);
 
 							for (Participant participant : participantList) {
 								ParticipantHolder holder = new ParticipantHolder();
 								holder.setParticipant(participant);
-								
+
 								String distanceString = participant.getDistanceString();
-								if (!distanceString.endsWith("km")) {
+								if (!distanceString.endsWith("km") && !distanceString.startsWith("Krakka")) {
 									distanceString += "km";
 								}
 								Distance distance = dao.getDistance(distanceString);
 								Race race = dao.getRace(event, distance, IWTimestamp.RightNow().getYear(), false);
-								
+
 								holder.setRace(race);
-								
+
 								holders.add(holder);
 							}
 
 							if (!holders.isEmpty()) {
 								getService().storeFiffoUpdateImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
 							}
-							
+
 							System.out.println("Got " + participantList.size() + " entries to import");
 							participantList = toImport.get(FiffoImportStatus.CHANGED_DISTANCE);
 							if (participantList != null) {
-								System.out.println("Got " + participantList.size() + " entries to move");								
+								System.out.println("Got " + participantList.size() + " entries to move");
 							} else {
 								System.out.println("Got 0 entries to move");
 							}
 							participantList = toImport.get(FiffoImportStatus.ALREADY_REGISTERED);
 							if (participantList != null) {
-								System.out.println("Got " + participantList.size() + " already registered");								
+								System.out.println("Got " + participantList.size() + " already registered");
 							} else {
 								System.out.println("Got 0 entries already registered");
 							}
 
 						} else {
+						    System.out.println("No new entries in file");
+
 							bean.setUnableToImportFile(true);
-							hasError = true;		
-							
-							System.out.println("got errors 1");
+							hasError = true;
 						}
-					}					
+					}
 				} else {
 					bean.setUnableToImportFile(true);
 					hasError = true;
@@ -255,7 +255,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 

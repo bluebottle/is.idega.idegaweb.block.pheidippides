@@ -3946,7 +3946,7 @@ public class PheidippidesService {
 
                         Country country = null;
                         try {
-                            country = getCountryHome().findByCountryName(
+                            country = getCountryHome().findByIsoAbbreviation(
                                     participant.getNationality());
                         } catch (Exception e) {
                             country = getCountryHome()

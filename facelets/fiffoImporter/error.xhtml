@@ -8,14 +8,14 @@
 >
 <ui:component>
 	<form class="adminForm" action="" method="post">
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['fiffo_import_error']}" /></h1>
-		
-		<ui:fragment rendered="#{fiffoImportBean.unableToImportFile}">		
+
+		<ui:fragment rendered="#{fiffoImportBean.unableToImportFile}">
 			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['unable_to_import_file']}" /></h2>
 		</ui:fragment>
-		
-		<ui:fragment rendered="#{not empty fiffoImportBean.missingRequiredFields}">		
+
+		<ui:fragment rendered="#{not empty fiffoImportBean.missingRequiredFields}">
 			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['missing_required_fields']}" /></h2>
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
@@ -32,7 +32,7 @@
 							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						<ui:repeat value="#{fiffoImportBean.missingRequiredFields}" var="participant">
 							<tr>
@@ -49,15 +49,15 @@
 								<td><h:outputText value="#{participant.postalCode}" /></td>
 								<td><h:outputText value="#{participant.country}" /></td>
 								<td><h:outputText value="#{participant.gender}" /></td>
-								<td><h:outputText value="#{participant.nationality}" /></td>								
+								<td><h:outputText value="#{participant.nationality}" /></td>
 							</tr>
 						</ui:repeat>
 					</tbody>
 				</table>
 			</fieldset>
 		</ui:fragment>
-		
-		<ui:fragment rendered="#{not empty fiffoImportBean.invalidPersonalID}">		
+
+		<ui:fragment rendered="#{not empty fiffoImportBean.invalidPersonalID}">
 			<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['invalid_personal_id']}" /></h2>
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
@@ -74,9 +74,9 @@
 							<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
-						<ui:repeat value="#{pheidippidesCompanyBean.invalidPersonalID}" var="participant">
+						<ui:repeat value="#{fiffoImportBean.invalidPersonalID}" var="participant">
 							<tr>
 								<td class="firstColumn"><h:outputText value="#{participant.fullName}" /></td>
 								<ui:fragment rendered="#{not empty participant.personalId}">
@@ -91,7 +91,7 @@
 								<td><h:outputText value="#{participant.postalCode}" /></td>
 								<td><h:outputText value="#{participant.country}" /></td>
 								<td><h:outputText value="#{participant.gender}" /></td>
-								<td><h:outputText value="#{participant.nationality}" /></td>								
+								<td><h:outputText value="#{participant.nationality}" /></td>
 							</tr>
 						</ui:repeat>
 					</tbody>
