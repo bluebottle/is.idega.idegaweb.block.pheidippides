@@ -1,5 +1,10 @@
 package is.idega.idegaweb.pheidippides.dao;
 
+import java.util.Date;
+import java.util.List;
+
+import com.idega.core.persistence.GenericDao;
+
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
@@ -27,11 +32,6 @@ import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
-
-import java.util.Date;
-import java.util.List;
-
-import com.idega.core.persistence.GenericDao;
 
 public interface PheidippidesDao extends GenericDao {
 
@@ -84,7 +84,7 @@ public interface PheidippidesDao extends GenericDao {
 	public RaceResult storeRaceResult(String name, String raceTime,
 			String placement, String genderPlacement, String groupPlacement,
 			String group, String gender, String groupEN, String genderEN);
-	
+
 	public Registration setRaceResult(Long registrationPK, RaceResult result);
 
 	public boolean removeRace(Long raceID);
@@ -148,6 +148,8 @@ public interface PheidippidesDao extends GenericDao {
 	public List<Registration> getRegistrationForUser(Event event, Integer year,
 			String userUUID);
 
+	public List<Registration> getAllValidRegistrationsForUser(String userUUID);
+
 	public List<Registration> getRelayPartnerRegistrationForUser(Event event,
 			Integer year, String userUUID);
 
@@ -156,7 +158,7 @@ public interface PheidippidesDao extends GenericDao {
 
 	public List<Registration> getPublicRegistrations(Race race);
 
-	
+
 	public List<Registration> getRegistrations(Company company, Race race,
 			RegistrationStatus status);
 
@@ -176,8 +178,8 @@ public interface PheidippidesDao extends GenericDao {
 
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
-			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String nationality, String userUUID, int discount,
+			ShirtSize shirtSize, Team team, String leg, long amount,
+			Charity charity, String nationality, String userUUID, long discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
 			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup, String externalCharityId);
@@ -189,9 +191,9 @@ public interface PheidippidesDao extends GenericDao {
 			Long shirtSizePK, String nationalityPK, Boolean showRegistration, String runningGroup);
 
 	public void changeRegistrationRunner(Long registrationPK, String userUUIDBefore, String userUUIDAfter);
-	
+
 	public void storeRegistrationHistory(Registration registration, RegistrationHistoryType type, String valueBefore, String valueAfter);
-	
+
 	public void updateRegistrationStatus(Long registrationPK, String relayLeg,
 			ShirtSize shirtSize, RegistrationStatus status);
 

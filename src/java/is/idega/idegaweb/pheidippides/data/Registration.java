@@ -1,7 +1,5 @@
 package is.idega.idegaweb.pheidippides.data;
 
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +23,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+
 @Entity
 @Table(name = Registration.ENTITY_NAME)
 @NamedQueries({
@@ -43,7 +43,8 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name = "registration.countByParticipantAndRaceAndStatus", query = "select count(r) from Registration r where r.userUUID = :uuid and r.race = :race and r.status = :status"),
 	@NamedQuery(name = "registration.countByCompanyAndAventAndYear", query = "select count(r) from Registration r where r.header.company = :company and r.race.event = :event and r.race.year = :year and r.status = :status"),
 	@NamedQuery(name = "registration.findByHeader", query = "select r from Registration r where r.header = :header"),
-	@NamedQuery(name = "registration.findByParticipantAndEventAndYearAndStatus", query = "select r from Registration r where r.userUUID = :uuid and r.race.event = :event and r.race.year = :year and r.status = :status")
+	@NamedQuery(name = "registration.findByParticipantAndEventAndYearAndStatus", query = "select r from Registration r where r.userUUID = :uuid and r.race.event = :event and r.race.year = :year and r.status = :status"),
+    @NamedQuery(name = "registration.findByParticipantAndStatus", query = "select r from Registration r where r.userUUID = :uuid and r.status = :status")
 })
 public class Registration implements Serializable {
 	private static final long serialVersionUID = -1263634010602700985L;
@@ -64,24 +65,24 @@ public class Registration implements Serializable {
 	private static final String COLUMN_STATUS = "status";
 	private static final String COLUMN_MOVED_FROM = "moved_from";
 	private static final String COLUMN_MOVED_TO = "moved_to";
-	
+
 	private static final String COLUMN_HAS_DONE_MARATHON_BEFORE = "done_marathon_before";
 	private static final String COLUMN_BEST_MARATHON_TIME = "best_marathon_time";
 	private static final String COLUMN_HAS_DONE_LV_BEFORE = "done_ultra_marathon_before";
 	private static final String COLUMN_BEST_ULTRA_MARATHON_TIME = "best_ultra_marathon_time";
 	private static final String COLUMN_ESTIMATED_TIME = "estimated_time";
 	private static final String COLUMN_COMMENT = "comment";
-	
+
 	private static final String COLUMN_NEEDS_ASSISTANCE = "needs_assistance";
 	private static final String COLUMN_FACEBOOK = "facebook";
 	private static final String COLUMN_SHOW_REGISTRATION = "show_registration";
-	
+
 	private static final String COLUMN_RUNNING_GROUP = "running_group";
-	
+
 	private static final String COLUMN_CREATED_DATE = "created";
-	
+
 	private static final String COLUMN_RACE_RESULT = "result_id";
-	
+
 	private static final String COLUMN_EXTERNAL_CHARITY_ID = "external_charity_id";
 
 	@Id
@@ -118,10 +119,10 @@ public class Registration implements Serializable {
 	private int participantNumber;
 
 	@Column(name = Registration.COLUMN_AMOUNT_PAID)
-	private int amountPaid;
+	private long amountPaid;
 
 	@Column(name = Registration.COLUMN_AMOUNT_DISCOUNT)
-	private int amountDiscount;
+	private long amountDiscount;
 
 	@ManyToOne
 	@JoinColumn(name = Registration.COLUMN_CHARITY)
@@ -133,14 +134,14 @@ public class Registration implements Serializable {
 
 	@Column(name = Registration.COLUMN_HAS_DONE_MARATHON_BEFORE)
 	private boolean hasDoneMarathonBefore;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_BEST_MARATHON_TIME)
 	private Date bestMarathonTime;
 
 	@Column(name = Registration.COLUMN_HAS_DONE_LV_BEFORE)
 	private boolean hasDoneLVBefore;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_BEST_ULTRA_MARATHON_TIME)
 	private Date bestUltraMarathonTime;
@@ -148,20 +149,20 @@ public class Registration implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_ESTIMATED_TIME)
 	private Date estimatedTime;
-	
+
 	@Column(name = Registration.COLUMN_COMMENT, length = 4000)
 	private String comment;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = Registration.COLUMN_CREATED_DATE)
 	private Date createdDate;
-	
+
 	@Column(name = Registration.COLUMN_NEEDS_ASSISTANCE)
 	private Boolean needsAssistance;
 
 	@Column(name = Registration.COLUMN_FACEBOOK)
 	private Boolean facebook;
-	
+
 	@Column(name = Registration.COLUMN_SHOW_REGISTRATION)
 	private Boolean showRegistration;
 
@@ -189,7 +190,7 @@ public class Registration implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -242,11 +243,11 @@ public class Registration implements Serializable {
 		this.participantNumber = participantNumber;
 	}
 
-	public int getAmountPaid() {
+	public long getAmountPaid() {
 		return amountPaid;
 	}
 
-	public void setAmountPaid(int amountPaid) {
+	public void setAmountPaid(long amountPaid) {
 		this.amountPaid = amountPaid;
 	}
 
@@ -290,11 +291,11 @@ public class Registration implements Serializable {
 		this.leg = leg;
 	}
 
-	public int getAmountDiscount() {
+	public long getAmountDiscount() {
 		return amountDiscount;
 	}
 
-	public void setAmountDiscount(int amountDiscount) {
+	public void setAmountDiscount(long amountDiscount) {
 		this.amountDiscount = amountDiscount;
 	}
 
@@ -337,23 +338,23 @@ public class Registration implements Serializable {
 	public void setEstimatedTime(Date estimatedTime) {
 		this.estimatedTime = estimatedTime;
 	}
-	
+
 	public String getComment() {
 		return comment;
 	}
-	
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
 	public boolean getNeedsAssistance() {
 		if (needsAssistance != null) {
 			return needsAssistance.booleanValue();
 		}
-		
+
 		return false;
 	}
-	
+
 	public void setNeedsAssitance(boolean needsAssistance) {
 		this.needsAssistance = needsAssistance;
 	}
@@ -362,22 +363,22 @@ public class Registration implements Serializable {
 		if (facebook != null) {
 			return facebook.booleanValue();
 		}
-		
+
 		return true;
 	}
-	
+
 	public void setFacebook(boolean facebook) {
 		this.facebook = facebook;
 	}
-	
+
 	public boolean getShowRegistration() {
 		if (showRegistration != null) {
 			return showRegistration.booleanValue();
 		}
-		
+
 		return true;
 	}
-	
+
 	public void setShowRegistration(boolean showRegistration) {
 		this.showRegistration = showRegistration;
 	}

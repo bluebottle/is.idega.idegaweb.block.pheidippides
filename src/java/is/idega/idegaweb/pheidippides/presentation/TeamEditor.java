@@ -1,13 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Registration;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +20,21 @@ import com.idega.util.CoreConstants;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Registration;
+
 public class TeamEditor extends IWBaseComponent {
 
 	private static final String PARAMETER_REGISTRATION = "prm_registration_pk";
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final String PARAMETER_TEAM_NAME = "prm_team_name";
 	private static final String PARAMETER_TEAM_REGISTRATION = "prm_other_registration_pk";
-	
+
 	@Autowired
 	private PheidippidesService service;
 
@@ -87,11 +87,11 @@ public class TeamEditor extends IWBaseComponent {
 			bean.setEvent(registration.getRace().getEvent());
 
 			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-			for (int i = 1; i <= 3; i++) {
+			for (int i = 1; i <= 4; i++) {
 				properties.add(new AdvancedProperty(String.valueOf(i), String.valueOf(i)));
 			}
 			bean.setProperties(properties);
-			
+
 			if (registration != null) {
 				bean.setParticipant(getService().getParticipant(registration));
 
@@ -110,7 +110,7 @@ public class TeamEditor extends IWBaseComponent {
 					bean.setParticipantsMap(participantsMap);
 				}
 			}
-			
+
 			FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 			facelet.setFaceletURI(iwb.getFaceletURI("teamEditor/view.xhtml"));
 			add(facelet);

@@ -1,10 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -33,18 +28,23 @@ import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+
 public class RacePriceEditor extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
-	
+
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_RACE_PRICE_PK = "prm_race_price_pk";
-	
+
 	private static final String PARAMETER_VALID_FROM = "prm_valid_from";
 	private static final String PARAMETER_VALID_TO = "prm_valid_to";
 	private static final String PARAMETER_PRICE = "prm_price";
@@ -53,19 +53,19 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 	private static final String PARAMETER_SHIRT_PRICE = "prm_shirt_price";
 	private static final String PARAMETER_CURRENCY = "prm_currency";
 	private static final String PARAMETER_TRINKET_PK = "prm_trinket_pk";
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private BuilderLogicWrapper builderLogicWrapper;
-	
+
 	@Autowired
 	private Web2Business web2Business;
-	
+
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 
 	@Override
@@ -77,7 +77,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
-		
+
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
@@ -102,20 +102,20 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-		int year = new IWTimestamp().getYear();
+		int year = new IWTimestamp().getYear() + 1;
 		while (year >= 2005) {
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
-		
+
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RacePriceEditor.class, new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RacePriceEditor.class));
 		bean.setLocale(iwc.getCurrentLocale());
-		
+
 		/* Events */
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
-		
+
 		/* Years */
 		bean.setProperties(years);
 		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
@@ -125,13 +125,13 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
-		
+
 		/* Race price */
 		bean.setRacePrice(iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? getDao().getRacePrice(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK))) : null);
-		
+
 		/* Trinkets */
 		bean.setTrinkets(getDao().getTrinkets());
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
@@ -141,7 +141,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			case ACTION_EDIT:
 				facelet.setFaceletURI(iwb.getFaceletURI("racePriceEditor/editor.xhtml"));
 				break;
-				
+
 			case ACTION_DELETE:
 				getDao().removeRacePrice(bean.getRacePrice().getId());
 				bean.setRacePrice(null);
@@ -163,12 +163,12 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -176,7 +176,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		if (builderLogicWrapper == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return builderLogicWrapper;
 	}
 
@@ -184,7 +184,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		if (web2Business == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return web2Business;
 	}
 
@@ -192,11 +192,12 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
 
-	public boolean actionPerformed(IWContext iwc) throws IWException {
+	@Override
+    public boolean actionPerformed(IWContext iwc) throws IWException {
 		getDao().storeRacePrice(
 			iwc.isParameterSet(PARAMETER_RACE_PRICE_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_PRICE_PK)) : null,
 			getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))),
@@ -209,7 +210,7 @@ public class RacePriceEditor extends IWBaseComponent implements IWPageEventListe
 			Currency.valueOf(iwc.getParameter(PARAMETER_CURRENCY)),
 			iwc.getParameter(PARAMETER_TRINKET_PK).equals("") ? null : getDao().getTrinket(Long.parseLong(iwc.getParameter(PARAMETER_TRINKET_PK)))
 		);
-		
+
 		return true;
 	}
 }

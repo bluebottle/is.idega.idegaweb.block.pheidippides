@@ -6,9 +6,9 @@ import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
 public class RegistrationAnswerHolder {
 	private BankReference bankReference;
 	private RegistrationHeader header;
-	private int amount;
+	private long amount;
 	private String valitorURL;
-	
+
 	public BankReference getBankReference() {
 		return bankReference;
 	}
@@ -21,10 +21,10 @@ public class RegistrationAnswerHolder {
 	public void setHeader(RegistrationHeader header) {
 		this.header = header;
 	}
-	public int getAmount() {
+	public long getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(long amount) {
 		this.amount = amount;
 	}
 	public String getValitorURL() {

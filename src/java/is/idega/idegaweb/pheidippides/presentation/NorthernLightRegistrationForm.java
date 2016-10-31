@@ -3,6 +3,7 @@ package is.idega.idegaweb.pheidippides.presentation;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -15,6 +16,7 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
+import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
@@ -26,34 +28,30 @@ import com.idega.util.expression.ELUtil;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.GiftCardService;
+import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
 
-public class LVRegistrationForm extends IWBaseComponent {
+public class NorthernLightRegistrationForm extends IWBaseComponent {
 
     private static final String PARAMETER_ACTION = "prm_action";
     private static final int ACTION_PERSON_SELECT = 1;
     private static final int ACTION_PARTICIPANT = 2;
-    private static final int ACTION_SHIRT_SELECT = 3;
-    private static final int ACTION_EXTRA_INFORMATION = 4;
+    private static final int ACTION_RACE_SELECT = 3;
     private static final int ACTION_WAIVER = 5;
     private static final int ACTION_OVERVIEW = 6;
     private static final int ACTION_RECEIPT = 7;
     private static final int ACTION_REGISTER_ANOTHER = 8;
-    private static final int ACTION_GIFT_CARD = 9;
-    private static final int ACTION_ADD_GIFT_CARD = 10;
-    private static final int ACTION_REMOVE_GIFT_CARD = 11;
-    private static final int ACTION_FINISH_REGISTRATION = 12;
+    private static final int ACTION_FINISH_REGISTRATION = 9;
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
-    private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
+    private static final String PARAMETER_RACE = "prm_race_pk";
     private static final String PARAMETER_NAME = "prm_name";
     private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
     private static final String PARAMETER_ADDRESS = "prm_address";
@@ -65,25 +63,20 @@ public class LVRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_EMAIL = "prm_email";
     private static final String PARAMETER_PHONE = "prm_phone";
     private static final String PARAMETER_MOBILE = "prm_mobile";
-    private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
-    private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
-
-    private static final String PARAMETER_HAS_NOT_RUN_MARATHON = "prm_has_not_run_marathon";
-    private static final String PARAMETER_HAS_NOT_RUN_ULTRA_MARATHON = "prm_has_not_run_ultra_marathon";
-    private static final String PARAMETER_BEST_MARATHON_TIME = "prm_best_marathon_time";
-    private static final String PARAMETER_BEST_ULTRA_MARATHON_TIME = "prm_best_ultra_marathon_time";
-    private static final String PARAMETER_BEST_MARATHON_YEAR = "prm_best_marathon_year";
-    private static final String PARAMETER_BEST_ULTRA_MARATHON_YEAR = "prm_best_ultra_marathon_year";
+    private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+
+    private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
+    private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
+    private static final String VALITOR_TOUR_RETURN_URL_TEXT = "VALITOR_TOUR_RETURN_URL_TEXT";
+    private static final String VALITOR_TOUR_RETURN_URL = "VALITOR_TOUR_RETURN_URL";
+
 
     @Autowired
     private PheidippidesService service;
 
     @Autowired
     private PheidippidesRegistrationSession session;
-
-    @Autowired
-    private GiftCardService giftCardService;
 
     @Autowired
     private PheidippidesDao dao;
@@ -110,6 +103,26 @@ public class LVRegistrationForm extends IWBaseComponent {
             getSession().empty();
             getSession().setLocale(iwc.getCurrentLocale());
         }
+
+        getSession().setCurrency(Currency.ISK);
+
+        String valitorShopID = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_SHOP_ID, "1");
+        String valitorSecurityNumber = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");
+        String valitorReturnURLText = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT, "tourofreykjavik.is");
+        String valitorReturnURL = IWMainApplication
+                .getDefaultIWApplicationContext().getApplicationSettings()
+                .getProperty(VALITOR_TOUR_RETURN_URL, "http://tourofreykjavik.is");
+
+        getSession().setValitorShopId(valitorShopID);
+        getSession().setValitorSecurityNumber(valitorSecurityNumber);
+        getSession().setValitorReturnURLText(valitorReturnURLText);
+        getSession().setValitorReturnURL(valitorReturnURL);
 
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
@@ -179,7 +192,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                     showParticipant(iwc, bean);
                     break;
 
-                case ACTION_SHIRT_SELECT :
+                case ACTION_RACE_SELECT :
                     if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
                         Participant participant = null;
                         if (getSession().getCurrentParticipant() == null) {
@@ -224,52 +237,26 @@ public class LVRegistrationForm extends IWBaseComponent {
                         participant.setPhoneMobile(
                                 iwc.getParameter(PARAMETER_MOBILE));
                         participant.setRunningGroup(
-                                iwc.getParameter(PARAMETER_RUNNING_GROUP));
+                                iwc.getParameter(PARAMETER_BICYCLE_GROUP));
                         getSession().getCurrentParticipant()
                                 .setParticipant(participant);
                     }
 
-                    showShirtSelect(iwc, bean);
-                    break;
-
-                case ACTION_EXTRA_INFORMATION :
-                    if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
-                        getSession().getCurrentParticipant().setShirtSize(
-                                getDao().getShirtSize(Long.parseLong(iwc
-                                        .getParameter(PARAMETER_SHIRT_SIZE))));
-                    }
-
-                    showExtraInformation(iwc, bean);
+                    showRaceSelect(iwc, bean);
                     break;
 
                 case ACTION_WAIVER :
-                    getSession().getCurrentParticipant()
-                            .setHasDoneMarathonBefore(!iwc.isParameterSet(
-                                    PARAMETER_HAS_NOT_RUN_MARATHON));
-                    if (getSession().getCurrentParticipant()
-                            .isHasDoneMarathonBefore()) {
-                        IWTimestamp stamp = new IWTimestamp(
-                                iwc.getParameter(PARAMETER_BEST_MARATHON_TIME)
-                                        + ":00");
-                        stamp.setYear(Integer.parseInt(iwc
-                                .getParameter(PARAMETER_BEST_MARATHON_YEAR)));
-                        getSession().getCurrentParticipant()
-                                .setBestMarathonTime(stamp.getDate());
-                    }
-                    getSession().getCurrentParticipant()
-                            .setHasDoneLVBefore(!iwc.isParameterSet(
-                                    PARAMETER_HAS_NOT_RUN_ULTRA_MARATHON));
-                    if (getSession().getCurrentParticipant()
-                            .isHasDoneLVBefore()) {
-                        IWTimestamp stamp = new IWTimestamp(iwc.getParameter(
-                                PARAMETER_BEST_ULTRA_MARATHON_TIME) + ":00");
-                        stamp.setYear(Integer.parseInt(iwc.getParameter(
-                                PARAMETER_BEST_ULTRA_MARATHON_YEAR)));
-                        getSession().getCurrentParticipant()
-                                .setBestUltraMarathonTime(stamp.getDate());
-                    }
+                    if (getSession().getCurrentParticipant() != null) {
+                        if (iwc.isParameterSet(PARAMETER_RACE)) {
+                            getSession().getCurrentParticipant()
+                                    .setRace(getDao().getRace(Long.parseLong(
+                                            iwc.getParameter(PARAMETER_RACE))));
+                        }
 
-                    showWaiver(iwc, bean);
+                        showWaiver(iwc, bean);
+                    } else {
+                        showPersonSelect(iwc, bean);
+                    }
                     break;
 
                 case ACTION_OVERVIEW :
@@ -301,7 +288,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                null);
+                                Currency.ISK);
                     } else {
                         getSession().setCurrentParticipant(
                                 getSession().getParticipantHolders()
@@ -309,7 +296,6 @@ public class LVRegistrationForm extends IWBaseComponent {
                                                 .getParticipantHolders().size()
                                                 - 1));
                     }
-
                     showOverview(iwc, bean);
                     break;
 
@@ -329,7 +315,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        null, getSession().getGiftCards());
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -360,43 +346,6 @@ public class LVRegistrationForm extends IWBaseComponent {
                     }
                     break;
 
-                case ACTION_GIFT_CARD :
-                    showGiftCard(iwc, bean);
-                    break;
-
-                case ACTION_ADD_GIFT_CARD :
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getGiftCardService()
-                                .reserveGiftCard(
-                                        iwc.getParameter(PARAMETER_GIFT_CARD),
-                                        getSession().getTotalAmount(), null);
-                        if (usage != null) {
-                            getSession().addGiftCard(usage);
-                        } else {
-                            bean.addError(iwb.getResourceBundle(iwc)
-                                    .getLocalizedString("no_gift_card_found",
-                                            "No gift card was found or already used"));
-                        }
-                    }
-
-                    showOverview(iwc, bean);
-                    break;
-
-                case ACTION_REMOVE_GIFT_CARD :
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getDao()
-                                .getGiftCardUsage(Long.parseLong(
-                                        iwc.getParameter(PARAMETER_GIFT_CARD)));
-                        if (usage != null) {
-                            getGiftCardService()
-                                    .releaseGiftCardReservation(usage);
-                            getSession().removeGiftCard(usage);
-                        }
-                    }
-
-                    showOverview(iwc, bean);
-                    break;
-
                 case ACTION_FINISH_REGISTRATION :
                     if (getSession().getCurrentParticipant() != null
                             && getSession().getCurrentParticipant()
@@ -412,7 +361,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        null, getSession().getGiftCards());
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);
@@ -437,10 +386,13 @@ public class LVRegistrationForm extends IWBaseComponent {
     }
 
     private void showPersonSelect(IWContext iwc, PheidippidesBean bean) {
+        bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(),
+                IWTimestamp.RightNow().getYear()));
+
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/personSelect.xhtml"));
+                iwb.getFaceletURI("registration/NLH/personSelect.xhtml"));
         add(facelet);
     }
 
@@ -455,48 +407,25 @@ public class LVRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/participant.xhtml"));
+                iwb.getFaceletURI("registration/NLH/participant.xhtml"));
         add(facelet);
     }
 
-    private void showShirtSelect(IWContext iwc, PheidippidesBean bean) {
-        bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(),
+    private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
+        Collection<Race> races = getService().getAvailableRaces(bean.getEvent().getId(),
                 IWTimestamp.RightNow().getYear(),
-                getSession().getCurrentParticipant().getParticipant()));
-        if (bean.getRaces() != null && bean.getRaces().size() == 1) {
-            getSession().getCurrentParticipant()
-                    .setRace(bean.getRaces().iterator().next());
-            bean.setRaces(null);
+                getSession().getCurrentParticipant().getParticipant());
+        if (races.isEmpty()) {
+            races = getService().getAvailableRaces(bean.getEvent().getId(),
+                    IWTimestamp.RightNow().getYear()+1,
+                    getSession().getCurrentParticipant().getParticipant());
         }
-        bean.setRaceShirtSizes(
-                (getSession().getCurrentParticipant().getRace() != null
-                        ? getDao().getRaceShirtSizes(getDao()
-                                .getRace(getSession().getCurrentParticipant()
-                                        .getRace().getId()))
-                        : null));
+        bean.setRaces(races);
 
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/shirtSelect.xhtml"));
-        add(facelet);
-    }
-
-    private void showExtraInformation(IWContext iwc, PheidippidesBean bean) {
-        if (getSession().getCurrentParticipant().getRace() == null) {
-            bean.setRaces(getService().getAvailableRaces(
-                    bean.getEvent().getId(), IWTimestamp.RightNow().getYear(),
-                    getSession().getCurrentParticipant().getParticipant()));
-            if (bean.getRaces() != null && bean.getRaces().size() == 1) {
-                getSession().getCurrentParticipant()
-                        .setRace(bean.getRaces().iterator().next());
-                bean.setRaces(null);
-            }
-        }
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/extraInformation.xhtml"));
+                iwb.getFaceletURI("registration/NLH/raceSelect.xhtml"));
         add(facelet);
     }
 
@@ -504,7 +433,7 @@ public class LVRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/waiver.xhtml"));
+                iwb.getFaceletURI("registration/NLH/waiver.xhtml"));
         add(facelet);
     }
 
@@ -512,7 +441,7 @@ public class LVRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/overview.xhtml"));
+                iwb.getFaceletURI("registration/NLH/overview.xhtml"));
         add(facelet);
     }
 
@@ -520,15 +449,7 @@ public class LVRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/receipt.xhtml"));
-        add(facelet);
-    }
-
-    private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/LV/giftCard.xhtml"));
+                iwb.getFaceletURI("registration/NLH/receipt.xhtml"));
         add(facelet);
     }
 
@@ -550,14 +471,6 @@ public class LVRegistrationForm extends IWBaseComponent {
         }
 
         return session;
-    }
-
-    private GiftCardService getGiftCardService() {
-        if (giftCardService == null) {
-            ELUtil.getInstance().autowire(this);
-        }
-
-        return giftCardService;
     }
 
     private PheidippidesDao getDao() {

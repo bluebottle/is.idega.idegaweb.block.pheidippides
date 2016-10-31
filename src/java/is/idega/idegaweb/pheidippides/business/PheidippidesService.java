@@ -262,6 +262,19 @@ public class PheidippidesService {
                     hasRaces = true;
                 }
             }
+            //Check if next year is open
+            if (!hasRaces) {
+                year++;
+                races = getAvailableRaces(eventPK, year,
+                        participant.getDateOfBirth());
+                for (Race race : races) {
+                    if (dao.getNumberOfRegistrations(participant.getUuid(), race,
+                            RegistrationStatus.OK) == 0) {
+                        hasRaces = true;
+                    }
+                }
+
+            }
         }
 
         return hasRaces;
@@ -2109,6 +2122,14 @@ public class PheidippidesService {
                                         - price.getFamilyDiscount());
                     }
                 }
+
+                //Only for tour of reykjavík (for now)
+                if (true) {
+                    List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
+                    if (allRegistrations != null && allRegistrations.size() > 0) {
+                        participantHolder.setAmount(Math.round(participantHolder.getAmount() * 0.8));
+                    }
+                }
             }
         }
 
@@ -2141,6 +2162,16 @@ public class PheidippidesService {
                 if (childCount > 1 && price.getFamilyDiscount() > 0) {
                     current.setDiscount(
                             current.getAmount() - price.getFamilyDiscount());
+                }
+            }
+
+            //Only for tour of reykjavík (for now)
+            if (true) {
+                if (participant != null && participant.getUuid() != null && !participant.getUuid().equals("")) {
+                    List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
+                    if (allRegistrations != null && allRegistrations.size() > 0) {
+                        current.setAmount(Math.round(current.getAmount() * 0.8));
+                    }
                 }
             }
         }
@@ -2476,7 +2507,7 @@ public class PheidippidesService {
         RacePrice price = dao.getRacePrice(newDistance,
                 registration.getHeader().getCreatedDate(),
                 registration.getHeader().getCurrency());
-        int amount = price.getPrice() - registration.getAmountPaid();
+        long amount = price.getPrice() - registration.getAmountPaid();
 
         if (amount > 0) {
             RegistrationHeader newHeader = dao.storeRegistrationHeader(null,
@@ -2533,7 +2564,7 @@ public class PheidippidesService {
     }
 
     private RegistrationAnswerHolder getValitorURLForChangeDistance(
-            Registration registration, int amountToPay,
+            Registration registration, long amountToPay,
             String descriptionText) {
         RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
@@ -3551,7 +3582,7 @@ public class PheidippidesService {
                         teamRegistration);
                 if (!registrantGender.getName()
                         .equals(memberGender.getName())) {
-                    teamCategory = TeamCategory.Mixed;
+                    teamCategory = TeamCategory.NotFullTeam;
                 }
 
                 if (currentTeamMembers.contains(teamRegistration)) {
@@ -3572,7 +3603,7 @@ public class PheidippidesService {
         int memberCount = 1 + getOtherTeamMembers(registration).size();
 
         dao.updateTeamCategory(team,
-                memberCount == 4 ? teamCategory : TeamCategory.NotFullTeam,
+                memberCount >= 3 && memberCount <= 5 ? teamCategory : TeamCategory.NotFullTeam,
                 memberCount == 4);
     }
 

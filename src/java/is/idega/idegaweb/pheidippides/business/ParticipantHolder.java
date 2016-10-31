@@ -22,8 +22,8 @@ public class ParticipantHolder {
 	private String leg;
 	private Team team;
 
-	private int amount;
-	private int discount;
+	private long amount;
+	private long discount;
 
 	private boolean acceptsWaiver;
 	private boolean hasDoneMarathonBefore = false;
@@ -81,10 +81,10 @@ public class ParticipantHolder {
 	public void setTeam(Team team) {
 		this.team = team;
 	}
-	public int getAmount() {
+	public long getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(long amount) {
 		this.amount = amount;
 	}
 	public String getValitorDescription() {
@@ -93,10 +93,10 @@ public class ParticipantHolder {
 	public void setValitorDescription(String valitorDescription) {
 		this.valitorDescription = valitorDescription;
 	}
-	public int getDiscount() {
+	public long getDiscount() {
 		return discount;
 	}
-	public void setDiscount(int discount) {
+	public void setDiscount(long discount) {
 		this.discount = discount;
 	}
 	public boolean isAcceptsWaiver() {

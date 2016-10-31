@@ -1,17 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
-
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -48,13 +36,25 @@ import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
+import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
+
 public class ParticipantsList extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
-	
+
 	private static final String PARAMETER_COMPANY_PK = "prm_company_pk";
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
@@ -79,19 +79,19 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private BuilderLogicWrapper builderLogicWrapper;
-	
+
 	@Autowired
 	private Web2Business web2Business;
-	
+
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 	private String responseURL;
 
@@ -121,7 +121,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/pheidippides.js"));
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
-	
+
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.theme.css"));
@@ -133,7 +133,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		while (year >= 2005) {
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
-		
+
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setAction(iwc.getRequestURI());
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
@@ -145,7 +145,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		/* Events */
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
-		
+
 		/* Years */
 		bean.setProperties(years);
 		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
@@ -167,7 +167,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
 				showEdit(iwc, bean);
 				break;
-				
+
 			case ACTION_DELETE:
 				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
 				handleDelete(iwc, bean);
@@ -176,11 +176,11 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		add(facelet);
 	}
-	
+
 	protected RegistrationStatus getStatus() {
 		return RegistrationStatus.OK;
 	}
-	
+
 	private int parseAction(IWContext iwc) {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
 		return action;
@@ -189,36 +189,36 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private void showView(IWContext iwc, PheidippidesBean bean) {
 		if (bean.getRace() != null) {
 			bean.setRegistrations(getDao().getRegistrations(bean.getRace(), getStatus()));
 			bean.setParticipantsMap(getService().getParticantMap(bean.getRegistrations()));
-			
+
 			if (bean.getRace().getNumberOfRelayLegs() > 1) {
 				Map<Registration, Participant> participantsMap = bean.getParticipantsMap();
 				Map<Registration, List<Registration>> relayPartnersMap = new HashMap<Registration, List<Registration>>();
-				
+
 				for (Registration registration : bean.getRegistrations()) {
 					List<Registration> relayRegistrations = getService().getRelayPartners(registration);
 					relayPartnersMap.put(registration, relayRegistrations);
-					
+
 					for (Registration relayRegistration : relayRegistrations) {
 						Participant participant = getService().getParticipant(relayRegistration);
 						participantsMap.put(relayRegistration, participant);
 					}
 				}
-				
+
 				bean.setParticipantsMap(participantsMap);
 				bean.setRelayPartnersMap(relayPartnersMap);
 			}
 		}
 	}
-	
+
 	private void showEdit(IWContext iwc, PheidippidesBean bean) {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Participant participant = getService().getParticipant(registration);
-		
+
 		bean.setRaces(getService().getRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
 		bean.setProperties(getService().getCountries());
 		bean.setCompanies(getDao().getCompanies());
@@ -228,19 +228,19 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		bean.setParticipant(participant);
 		bean.setRaceShirtSizes(getDao().getRaceShirtSizes(registration.getRace()));
 	}
-	
+
 	private void handleDelete(IWContext iwc, PheidippidesBean bean) {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		getService().deregister(registration);
-		
+
 		showView(iwc, bean);
 	}
-	
+
 	private PheidippidesService getService() {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
@@ -248,7 +248,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -256,7 +256,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		if (builderLogicWrapper == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return builderLogicWrapper;
 	}
 
@@ -264,7 +264,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		if (web2Business == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return web2Business;
 	}
 
@@ -272,30 +272,31 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
-	
-	public boolean actionPerformed(IWContext iwc) throws IWException {
+
+	@Override
+    public boolean actionPerformed(IWContext iwc) throws IWException {
 		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Long racePK = Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK));
 		Long shirtSizePK = null;
 		if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE_PK)) {
-			shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));	
+			shirtSizePK = Long.parseLong(iwc.getParameter(PARAMETER_SHIRT_SIZE_PK));
 		}
-		
+
 		String nationalityPK = iwc.getParameter(PARAMETER_NATIONALITY);
 		if (iwc.isParameterSet(PARAMETER_COMPANY_PK)) {
 			Company company = getDao().getCompany(Long.parseLong(iwc.getParameter(PARAMETER_COMPANY_PK)));
 			getService().moveRegistrationToCompany(registration, company);
 		}
 
-		boolean showRegistration = iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION);
-		String runningGroup = iwc.getParameter(PARAMETER_RUNNING_GROUP);
+		//boolean showRegistration = iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION);
+		//String runningGroup = iwc.getParameter(PARAMETER_RUNNING_GROUP);
 
 		boolean distanceChange = registration.getRace().getId().intValue() != racePK.intValue();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
-		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK, showRegistration, runningGroup);
+		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK, null, null);
 
 		if (distanceChange) {
 			for (RegistrationTrinket registrationTrinket : trinkets) {
@@ -305,7 +306,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 				dao.storeRegistrationTrinket(null, registration, trinket, registrationTrinket.getCount());
 			}
 		}
-		
+
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")
 		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), LocaleUtil.getIcelandicLocale())).getSQLDate() : null;
@@ -317,7 +318,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		String email = iwc.getParameter(PARAMETER_EMAIL);
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
-		
+
 		User user = getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
 
 		if (iwc.isParameterSet(PARAMETER_PASSWORD) || iwc.isParameterSet(PARAMETER_LOGIN)) {
@@ -356,7 +357,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			}
 		}
 
-		
+
 		return true;
 	}
 

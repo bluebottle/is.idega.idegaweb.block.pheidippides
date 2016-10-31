@@ -1,5 +1,17 @@
 package is.idega.idegaweb.pheidippides.dao.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.idega.core.persistence.Param;
+import com.idega.core.persistence.impl.GenericDaoImpl;
+import com.idega.util.IWTimestamp;
+
 import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
@@ -29,18 +41,6 @@ import is.idega.idegaweb.pheidippides.data.RegistrationHistory;
 import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 import is.idega.idegaweb.pheidippides.data.ShirtSize;
 import is.idega.idegaweb.pheidippides.data.Team;
-
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.idega.core.persistence.Param;
-import com.idega.core.persistence.impl.GenericDaoImpl;
-import com.idega.util.IWTimestamp;
 
 @Repository("pheidippidesDao")
 @Transactional(readOnly = true)
@@ -241,7 +241,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		return result;
 
 	}
-	
+
 	@Override
 	@Transactional(readOnly = false)
 	public Registration setRaceResult(Long registrationPK, RaceResult raceResult) {
@@ -578,6 +578,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 						"status", RegistrationStatus.OK));
 	}
 
+   @Override
+    public List<Registration> getAllValidRegistrationsForUser(String userUUID) {
+        return getResultList(
+                "registration.findByParticipantAndStatus",
+                Registration.class, new Param("uuid", userUUID), new Param(
+                        "status", RegistrationStatus.OK));
+    }
+
 	@Override
 	public List<Registration> getRelayPartnerRegistrationForUser(Event event,
 			Integer year, String userUUID) {
@@ -671,8 +679,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Transactional(readOnly = false)
 	public Registration storeRegistration(Long registrationID,
 			RegistrationHeader header, RegistrationStatus status, Race race,
-			ShirtSize shirtSize, Team team, String leg, int amount,
-			Charity charity, String nationality, String userUUID, int discount,
+			ShirtSize shirtSize, Team team, String leg, long amount,
+			Charity charity, String nationality, String userUUID, long discount,
 			boolean hasDoneMarathonBefore, boolean hasDoneLVBefore,
 			Date bestMarathonTime, Date bestUltraMarathonTime,
 			boolean needsAssistance, boolean facebook, boolean showRegistration, String runningGroup, String externalCharityId) {
@@ -758,7 +766,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (externalCharityId != null) {
 		    registration.setExternalCharityId(externalCharityId);
 		}
-		
+
 		if (nationality != null) {
 			registration.setNationality(nationality);
 		}
@@ -788,7 +796,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		if (runningGroup != null) {
 			registration.setRunningGroup(runningGroup);
 		}
-		
+
 		getEntityManager().persist(registration);
 
 		return registration;
@@ -826,7 +834,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			newReg.setHeader(registration.getHeader());
 			newReg.setAmountPaid(registration.getAmountPaid());
 			newReg.setCharity(registration.getCharity());
-			newReg.setExternalCharityId(registration.getExternalCharityId());			
+			newReg.setExternalCharityId(registration.getExternalCharityId());
 			newReg.setHeader(registration.getHeader());
 			newReg.setLeg(registration.getLeg());
 			if (nationalityPK != null) {
@@ -857,11 +865,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			if (showRegistration != null) {
 				newReg.setShowRegistration(showRegistration);
 			}
-			
+
 			if (runningGroup != null) {
 				newReg.setRunningGroup(runningGroup);
 			}
-			
+
 			getEntityManager().persist(newReg);
 
 			return newReg;
@@ -876,7 +884,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 			if (showRegistration != null) {
 				registration.setShowRegistration(showRegistration);
 			}
-			
+
 			if (runningGroup != null) {
 				registration.setRunningGroup(runningGroup);
 			}
@@ -1275,7 +1283,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 		persist(theTeam);
 	}
 
-	
+
 	/* Gift card methods */
 	@Override
 	public GiftCardHeader getGiftCardHeader(Long giftCardHeaderID) {

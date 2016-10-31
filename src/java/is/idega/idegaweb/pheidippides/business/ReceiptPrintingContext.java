@@ -1,18 +1,5 @@
 package is.idega.idegaweb.pheidippides.business;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-import is.idega.idegaweb.pheidippides.data.ShirtSize;
-import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,15 +23,28 @@ import com.idega.util.LocaleUtil;
 import com.idega.util.PersonalIDFormatter;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.util.PheidippidesUtil;
+
 
 public class ReceiptPrintingContext extends PrintingContextImpl {
 
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	private IWBundle iwb;
 	private IWResourceBundle iwrb;
 
@@ -54,25 +54,25 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 
 	private void init(IWApplicationContext iwac, Registration registration, Locale locale) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		
+
 		props.put(PrintingContext.IW_BUNDLE_ROPERTY_NAME, getBundle(iwac));
 		props.put("iwrb", getResourceBundle(iwac, locale));
-		
+
 		Race race = registration.getRace();
 		Event event = race.getEvent();
 		Participant participant = getService().getParticipant(registration);
 		ShirtSize size = registration.getShirtSize();
-		int price = registration.getAmountPaid() - registration.getAmountDiscount();
+		long price = registration.getAmountPaid() - registration.getAmountDiscount();
 		RegistrationHeader header = registration.getHeader();
-		
-		NumberFormat nf = NumberFormat.getCurrencyInstance(LocaleUtil.getIcelandicLocale()); 
+
+		NumberFormat nf = NumberFormat.getCurrencyInstance(LocaleUtil.getIcelandicLocale());
 		nf.setMaximumFractionDigits(0);
 		nf.setMinimumFractionDigits(0);
 		nf.setParseIntegerOnly(true);
 		if (header.getCurrency().equals(Currency.EUR)) {
 			nf.setCurrency(java.util.Currency.getInstance("EUR"));
 		}
-		
+
 		List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
 		if (trinkets != null && !trinkets.isEmpty()) {
@@ -87,7 +87,7 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		if (trinketPrices != null && !trinketPrices.isEmpty()) {
 			for (RacePrice racePrice : trinketPrices) {
 				RaceTrinket raceTrinket = racePrice.getTrinket();
-				
+
 				AdvancedProperty property = new AdvancedProperty();
 				property.setId(PheidippidesUtil.escapeXML(iwrb
 						.getLocalizedString(race.getEvent().getLocalizedKey()
@@ -97,10 +97,10 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 				property.setValue(raceTrinkets.contains(raceTrinket) ? iwrb.getLocalizedString("yes", "Yes") : iwrb.getLocalizedString("no", "No"));
 				properties.add(property);
 			}
-			
+
 			props.put("trinkets", properties);
 		}
-		
+
 		props.put("raceName", PheidippidesUtil.escapeXML(getResourceBundle(iwac, locale).getLocalizedString(event.getLocalizedKey() + ".name", event.getName())));
 		props.put("name", participant.getFullName());
 		if (participant.getPersonalId() != null) {
@@ -124,7 +124,7 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected String getResourceRealPath(IWBundle iwb, Locale locale) {
 		String printFolder = "/print/";
 
@@ -140,7 +140,7 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
@@ -148,7 +148,7 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
