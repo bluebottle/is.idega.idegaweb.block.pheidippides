@@ -2124,12 +2124,12 @@ public class PheidippidesService {
                 }
 
                 //Only for tour of reykjavík (for now)
-                if (true) {
+                /*if (true) {
                     List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
                     if (allRegistrations != null && allRegistrations.size() > 0) {
                         participantHolder.setAmount(Math.round(participantHolder.getAmount() * 0.8));
                     }
-                }
+                }*/
             }
         }
 
@@ -2166,14 +2166,14 @@ public class PheidippidesService {
             }
 
             //Only for tour of reykjavík (for now)
-            if (true) {
+            /*if (true) {
                 if (participant != null && participant.getUuid() != null && !participant.getUuid().equals("")) {
                     List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
                     if (allRegistrations != null && allRegistrations.size() > 0) {
                         current.setAmount(Math.round(current.getAmount() * 0.8));
                     }
                 }
-            }
+            }*/
         }
     }
 

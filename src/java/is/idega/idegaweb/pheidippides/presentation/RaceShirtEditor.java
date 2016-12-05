@@ -1,9 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,33 +24,37 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+
 public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
 	private static final int ACTION_DELETE = 3;
-	
+
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
 	private static final String PARAMETER_RACE_PK = "prm_race_pk";
 	private static final String PARAMETER_YEAR = "prm_year";
 	private static final String PARAMETER_RACE_SHIRT_PK = "prm_race_shirt_pk";
-	
+
 	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
 	private static final String PARAMETER_ORDER_NUMBER = "prm_order_number";
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private BuilderLogicWrapper builderLogicWrapper;
-	
+
 	@Autowired
 	private Web2Business web2Business;
-	
+
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 
 	@Override
@@ -66,7 +66,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
-		
+
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
@@ -88,20 +88,20 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-		int year = new IWTimestamp().getYear();
+		int year = new IWTimestamp().getYear() + 1;
 		while (year >= 2005) {
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
-		
+
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RaceShirtEditor.class, new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceShirtEditor.class));
 		bean.setLocale(iwc.getCurrentLocale());
-		
+
 		/* Events */
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
-		
+
 		/* Years */
 		bean.setProperties(years);
 		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
@@ -112,12 +112,12 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		}
 		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
 
-		/* Shirt sizes */ 
+		/* Shirt sizes */
 		bean.setShirtSizes(getDao().getShirtSizes());
-		
+
 		/* Race shirt */
 		bean.setRaceShirtSize(iwc.isParameterSet(PARAMETER_RACE_SHIRT_PK) ? getDao().getRaceShirtSize(Long.parseLong(iwc.getParameter(PARAMETER_RACE_SHIRT_PK))) : null);
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
@@ -127,7 +127,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 			case ACTION_EDIT:
 				facelet.setFaceletURI(iwb.getFaceletURI("raceShirtEditor/editor.xhtml"));
 				break;
-				
+
 			case ACTION_DELETE:
 				if (bean.getRaceShirtSize() != null) {
 					getDao().removeRaceShirtSize(bean.getRaceShirtSize().getId());
@@ -151,12 +151,12 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -164,7 +164,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		if (builderLogicWrapper == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return builderLogicWrapper;
 	}
 
@@ -172,7 +172,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		if (web2Business == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return web2Business;
 	}
 
@@ -180,11 +180,12 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
 
-	public boolean actionPerformed(IWContext iwc) throws IWException {
+	@Override
+    public boolean actionPerformed(IWContext iwc) throws IWException {
 		getDao().storeRaceShirtSize(
 			iwc.isParameterSet(PARAMETER_RACE_SHIRT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_RACE_SHIRT_PK)) : null,
 			getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))),
@@ -192,7 +193,7 @@ public class RaceShirtEditor extends IWBaseComponent implements IWPageEventListe
 			null,
 			iwc.isParameterSet(PARAMETER_ORDER_NUMBER) ? Integer.parseInt(iwc.getParameter(PARAMETER_ORDER_NUMBER)) : 0
 		);
-		
+
 		return true;
 	}
 }

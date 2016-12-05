@@ -129,7 +129,7 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-		int year = new IWTimestamp().getYear();
+		int year = new IWTimestamp().getYear() + 1;
 		while (year >= 2005) {
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}

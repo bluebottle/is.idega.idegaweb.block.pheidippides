@@ -1,20 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.output.ParticipantsFileCreator;
-import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +26,21 @@ import com.idega.util.PresentationUtil;
 import com.idega.util.SendMail;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesCompanyBean;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.output.ParticipantsFileCreator;
+import is.idega.idegaweb.pheidippides.output.ParticipantsWriter;
+
 public class ParticipantsReport extends IWBaseComponent {
 
 	private static final String PARAMETER_EVENT_PK = "prm_event_pk";
@@ -56,13 +56,13 @@ public class ParticipantsReport extends IWBaseComponent {
 
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 
 	@Override
@@ -78,26 +78,26 @@ public class ParticipantsReport extends IWBaseComponent {
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsReport.js"));
-	
+
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
-		int year = new IWTimestamp().getYear();
+		int year = new IWTimestamp().getYear() + 1;
 		while (year >= 2005) {
 			years.add(new AdvancedProperty(String.valueOf(year), String.valueOf(year--)));
 		}
-		
+
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setResponseURL(IWMainApplication.getEncryptedClassName(ParticipantsWriter.class));
 		bean.setLocale(iwc.getCurrentLocale());
-		
+
 		PheidippidesCompanyBean cBean = getBeanInstance("pheidippidesCompanyBean");
 		cBean.setCompanies(getDao().getCompanies());
 
 		/* Events */
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
-		
+
 		/* Years */
 		bean.setProperties(years);
 		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
@@ -113,7 +113,7 @@ public class ParticipantsReport extends IWBaseComponent {
 			IWTimestamp dateFrom = iwc.isParameterSet(PARAMETER_YEAR_FROM) ? new IWTimestamp(1, 1, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_FROM))) : null;
 			IWTimestamp dateTo = iwc.isParameterSet(PARAMETER_YEAR_TO) ? new IWTimestamp(31, 12, Integer.parseInt(iwc.getParameter(PARAMETER_YEAR_TO))) : null;
 			String gender = iwc.isParameterSet(PARAMETER_GENDER) ? iwc.getParameter(PARAMETER_GENDER) : null;
-			
+
 			Event event = getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)));
 			Integer theYear = Integer.parseInt(iwc.getParameter(PARAMETER_YEAR));
 			Race race = iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null;
@@ -124,16 +124,17 @@ public class ParticipantsReport extends IWBaseComponent {
 
 			createReport(email, iwrb, dateFrom, dateTo, gender, event, theYear, race, company, status);
 		}
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("participantsReport/view.xhtml"));
 		add(facelet);
 	}
-	
+
 	private void createReport(final String email, final IWResourceBundle iwrb, final IWTimestamp dateFrom, final IWTimestamp dateTo, final String gender, final Event event, final Integer year, final Race race, final Company company, final RegistrationStatus status) {
 		Thread results = new Thread(new Runnable() {
 
-			public void run() {
+			@Override
+            public void run() {
 				try {
 					System.out.println("Starting report creation...");
 
@@ -145,7 +146,7 @@ public class ParticipantsReport extends IWBaseComponent {
 						registrations = getDao().getRegistrations(company, event, year, status);
 					}
 					Map<Registration, Participant> participantsMap = getService().getParticantMap(registrations);
-					
+
 					List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
 					ParticipantsFileCreator writer = new ParticipantsFileCreator();
 					File file = writer.createReport(iwrb, dateFrom, dateTo, gender,event, year, race, trinkets, registrations, participantsMap, status);
@@ -158,23 +159,23 @@ public class ParticipantsReport extends IWBaseComponent {
 				}
 			}
 		});
-		
+
 		results.start();
 	}
-	
+
 	protected RegistrationStatus getStatus() {
 		return RegistrationStatus.OK;
 	}
-	
+
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesService getService() {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
@@ -182,7 +183,7 @@ public class ParticipantsReport extends IWBaseComponent {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -190,7 +191,7 @@ public class ParticipantsReport extends IWBaseComponent {
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
 }
