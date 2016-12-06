@@ -11,7 +11,7 @@
 		<input type="hidden" name="prm_action" value="2" />
 
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_cards']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 3" /></h2>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 2" /></h2>
 
 		<div class="helpText">
 			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.gift_cards_help']}" />
@@ -35,7 +35,8 @@
 					</ui:repeat>
 				</c:selectOne>
 			</div>
-			<div class="formItem required">
+			<div class="formItem">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['template']}" /></label>
 				<ul class="image-selection">
           <li>
             <input type="radio" name="prm_number" value="1" id="gc_template_1" />

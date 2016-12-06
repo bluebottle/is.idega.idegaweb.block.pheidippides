@@ -1005,3 +1005,27 @@ table.giftCards tr.childRow>td {
 .formSection.noNavigation table.adminTable .action .deleteItem {
 	margin-left: 4px;
 }
+
+ul.image-selection {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+ul.image-selection li {
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+ul.image-selection li label {
+    width: auto !important;
+    margin-bottom: 0 !important;
+}
+
+ul.image-selection li input:checked + label {
+    border: 5px #aa0000 solid;
+    margin: -5px;
+}
+
+ul.image-selection li input {
+    display: none;
+}
