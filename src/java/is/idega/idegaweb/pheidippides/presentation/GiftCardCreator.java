@@ -1,14 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
-import is.idega.idegaweb.pheidippides.business.GiftCardSession;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.GiftCard;
-import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
-import is.idega.idegaweb.pheidippides.data.Participant;
-
 import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,6 +23,15 @@ import com.idega.util.CoreConstants;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
+import is.idega.idegaweb.pheidippides.business.GiftCardSession;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
+import is.idega.idegaweb.pheidippides.data.Participant;
+
 public class GiftCardCreator extends IWBaseComponent {
 
 	private static final String PARAMETER_ACTION = "prm_action";
@@ -40,6 +40,7 @@ public class GiftCardCreator extends IWBaseComponent {
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_AMOUNT = "prm_amount";
 	private static final String PARAMETER_COUNT = "prm_count";
+    private static final String PARAMETER_TEMPLATE_NUMBER = "prm_number";
 
 	private static final int ACTION_PERSON_SELECT = 1;
 	private static final int ACTION_GIFT_CARDS = 2;
@@ -51,24 +52,24 @@ public class GiftCardCreator extends IWBaseComponent {
 
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private GiftCardSession session;
 
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 	private IWResourceBundle iwrb;
-	
+
 	@Override
 	protected void initializeComponent(FacesContext context) {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
 		iwrb = iwb.getResourceBundle(iwc.getCurrentLocale());
-		
+
 		getSession().setCurrency(null);
-		
+
 		if (getSession().getLocale() == null) {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
@@ -83,7 +84,7 @@ public class GiftCardCreator extends IWBaseComponent {
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
-		
+
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/giftCardCreator.js"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
@@ -95,7 +96,7 @@ public class GiftCardCreator extends IWBaseComponent {
 				getSession().empty();
 				showPersonSelect(iwc, bean);
 				break;
-				
+
 			case ACTION_GIFT_CARDS:
 				if (iwc.isParameterSet(PARAMETER_PERSONAL_ID)) {
 					Participant participant = getService().getParticipant(iwc.getParameter(PARAMETER_PERSONAL_ID));
@@ -104,7 +105,7 @@ public class GiftCardCreator extends IWBaseComponent {
 				}
 				showGiftCards(iwc, bean);
 				break;
-				
+
 			case ACTION_OVERVIEW:
 				if (iwc.isParameterSet(PARAMETER_AMOUNT)) {
 					NumberFormat formatter = NumberFormat.getCurrencyInstance(iwc.getCurrentLocale());
@@ -114,8 +115,9 @@ public class GiftCardCreator extends IWBaseComponent {
 					String amountText = iwrb.getLocalizedString("gift_card_amount." + String.valueOf(amount), String.valueOf(amount));
 					String valitorText = iwrb.getLocalizedString("gift_card", "Gift card") + ": " + formatter.format(amount).replaceAll(",", "");
 					int count = Integer.parseInt(iwc.getParameter(PARAMETER_COUNT));
-					
-					getSession().addGiftCard(amount, amountText, valitorText, count);
+					String templateNumber = iwc.getParameter(PARAMETER_TEMPLATE_NUMBER);
+
+					getSession().addGiftCard(amount, amountText, valitorText, count, templateNumber);
 				}
 				if (iwc.isParameterSet(PARAMETER_REMOVE)) {
 					int index = Integer.parseInt(iwc.getParameter(PARAMETER_REMOVE));
@@ -128,20 +130,20 @@ public class GiftCardCreator extends IWBaseComponent {
 					showOverview(iwc, bean);
 				}
 				break;
-				
+
 			case ACTION_SAVE:
 				if (iwc.isParameterSet("Tilvisunarnumer")) {
 					try {
 						String referenceNumber = iwc.getParameter("Tilvisunarnumer");
 						GiftCardHeader header = getDao().getGiftCardHeader(referenceNumber);
 						Participant participant = getService().getParticipant(getService().getUserBusiness().getUserByUniqueId(header.getBuyer()));
-						
+
 						bean.setHeader(header);
 						bean.setName(participant.getFullName());
-						
+
 						List<GiftCard> cards = getDao().getGiftCards(header);
 						bean.setCount(cards.size());
-						
+
 						int amount = 0;
 						for (GiftCard giftCard : cards) {
 							amount += giftCard.getAmount();
@@ -159,17 +161,17 @@ public class GiftCardCreator extends IWBaseComponent {
 				break;
 		}
 	}
-	
+
 	private void showPersonSelect(IWContext iwc, GiftCardBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/personSelect.xhtml"));
 		add(facelet);
 	}
-	
+
 	private void showGiftCards(IWContext iwc, GiftCardBean bean) {
 		NumberFormat formatter = NumberFormat.getCurrencyInstance(iwc.getCurrentLocale());
 		formatter.setParseIntegerOnly(true);
-		
+
 		List<AdvancedProperty> amounts = new ArrayList<AdvancedProperty>();
 		amounts.add(new AdvancedProperty("1000", formatter.format(1000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("2000", formatter.format(2000).replaceAll(",", "")));
@@ -184,14 +186,16 @@ public class GiftCardCreator extends IWBaseComponent {
 		amounts.add(new AdvancedProperty("15000", formatter.format(15000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("20000", formatter.format(20000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("25000", formatter.format(25000).replaceAll(",", "")));
+        amounts.add(new AdvancedProperty("30000", formatter.format(30000).replaceAll(",", "")));
+        amounts.add(new AdvancedProperty("35000", formatter.format(35000).replaceAll(",", "")));
 		bean.setAmounts(amounts);
-		
+
 		List<AdvancedProperty> counts = new ArrayList<AdvancedProperty>();
 		for (int i = 1; i <= 20; i++) {
 			counts.add(new AdvancedProperty(String.valueOf(i)));
 		}
 		bean.setCounts(counts);
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/giftCards.xhtml"));
 		add(facelet);
@@ -202,7 +206,7 @@ public class GiftCardCreator extends IWBaseComponent {
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/overview.xhtml"));
 		add(facelet);
 	}
-	
+
 	private void save(IWContext iwc, GiftCardBean bean) {
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("giftCardCreator/save.xhtml"));
@@ -213,24 +217,24 @@ public class GiftCardCreator extends IWBaseComponent {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_PERSON_SELECT;
 		return action;
 	}
-	
+
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesService getService() {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
-	
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -238,7 +242,7 @@ public class GiftCardCreator extends IWBaseComponent {
 		if (session == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return session;
 	}
 
@@ -246,7 +250,7 @@ public class GiftCardCreator extends IWBaseComponent {
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
 }

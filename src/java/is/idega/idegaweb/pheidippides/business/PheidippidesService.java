@@ -4424,7 +4424,8 @@ public class PheidippidesService {
                     dao.storeGiftCard(header, getGiftCardCode(),
                             giftCardHolder.getAmount(),
                             giftCardHolder.getAmountText(),
-                            giftCardHolder.getGreetingText());
+                            giftCardHolder.getGreetingText(),
+                            giftCardHolder.getTemplateNumber());
                 }
 
                 securityString.append(giftCardHolder.getCount());

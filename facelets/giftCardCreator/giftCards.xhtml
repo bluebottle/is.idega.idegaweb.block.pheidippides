@@ -9,14 +9,14 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="2" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_cards']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 3" /></h2>
 
 		<div class="helpText">
 			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.gift_cards_help']}" />
 		</div>
-		
+
 		<fieldset class="formSection">
 			<div class="formItem required">
 				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></label>
@@ -35,8 +35,52 @@
 					</ui:repeat>
 				</c:selectOne>
 			</div>
+			<div class="formItem required">
+				<ul class="image-selection">
+          <li>
+            <input type="radio" name="prm_number" value="1" id="gc_template_1" />
+            <label for="gc_template_1"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-1.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="2" id="gc_template_2" />
+            <label for="gc_template_2"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-2.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="3" id="gc_template_3" />
+            <label for="gc_template_3"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-3.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="4" id="gc_template_4" />
+            <label for="gc_template_4"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-4.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="5" id="gc_template_5" />
+            <label for="gc_template_5"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-5.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="6" id="gc_template_6" />
+            <label for="gc_template_6"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-6.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="7" id="gc_template_7" />
+            <label for="gc_template_7"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-7.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="8" id="gc_template_8" />
+            <label for="gc_template_8"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-8.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="9" id="gc_template_9" />
+            <label for="gc_template_9"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-9.jpg" alt="" /></label>
+          </li>
+					<li>
+            <input type="radio" name="prm_number" value="10" id="gc_template_10" />
+            <label for="gc_template_10"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-10.jpg" alt="" /></label>
+          </li>
+				</ul>
+			</div>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<ui:fragment rendered="#{empty giftCardSession.cards}">
 				<a href="#" class="back" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>

@@ -55,11 +55,11 @@ public class GiftCardSession {
 		return cards;
 	}
 
-	public void addGiftCard(int amount, String amountText, String valitorDescriptionText, int count) {
+	public void addGiftCard(int amount, String amountText, String valitorDescriptionText, int count, String templateNumber) {
 		if (cards == null) {
 			cards = new ArrayList<GiftCardHolder>();
 		}
-		
+
 		GiftCardHolder holder = new GiftCardHolder();
 		holder.setAmount(amount);
 		holder.setAmountText(amountText);
@@ -68,26 +68,26 @@ public class GiftCardSession {
 		holder.setIndex(cards.size());
 
 		cards.add(holder);
-		
+
 		this.totalAmount += amount * count;
 		this.count += count;
 	}
-	
+
 	public void removeGiftCard(int index) {
 		cards.remove(index);
-		
+
 		List<GiftCardHolder> holder = getCards();
 		empty();
-		
+
 		for (GiftCardHolder giftCardHolder : holder) {
-			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getValitorDescriptionText(), giftCardHolder.getCount());
+			addGiftCard(giftCardHolder.getAmount(), giftCardHolder.getAmountText(), giftCardHolder.getValitorDescriptionText(), giftCardHolder.getCount(), giftCardHolder.getTemplateNumber());
 		}
 	}
-	
+
 	public int getTotalAmount() {
 		return this.totalAmount;
 	}
-	
+
 	public int getCount() {
 		return this.count;
 	}

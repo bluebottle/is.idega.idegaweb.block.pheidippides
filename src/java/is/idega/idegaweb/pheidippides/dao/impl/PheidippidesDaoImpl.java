@@ -1411,13 +1411,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 	@Override
 	@Transactional(readOnly = false)
 	public GiftCard storeGiftCard(GiftCardHeader header, String code,
-			int amount, String amountText, String greetingText) {
+			int amount, String amountText, String greetingText, String templateNumber) {
 		GiftCard giftCard = new GiftCard();
 		giftCard.setHeader(header);
 		giftCard.setCode(code);
 		giftCard.setAmount(amount);
 		giftCard.setAmountText(amountText);
 		giftCard.setGreeting(greetingText);
+		giftCard.setTemplateNumber(templateNumber);
 
 		getEntityManager().persist(giftCard);
 

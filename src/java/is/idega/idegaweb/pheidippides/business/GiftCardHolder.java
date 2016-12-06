@@ -10,6 +10,7 @@ public class GiftCardHolder {
 	private String valitorDescriptionText;
 	private String code;
 	private String created;
+	private String templateNumber;
 
 	public int getCount() {
 		return count;
@@ -74,4 +75,12 @@ public class GiftCardHolder {
 	public void setCreated(String created) {
 		this.created = created;
 	}
+
+    public String getTemplateNumber() {
+        return templateNumber;
+    }
+
+    public void setTemplateNumber(String templateNumber) {
+        this.templateNumber = templateNumber;
+    }
 }

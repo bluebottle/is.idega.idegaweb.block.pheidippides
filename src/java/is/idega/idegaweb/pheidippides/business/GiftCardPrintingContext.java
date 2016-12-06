@@ -1,8 +1,5 @@
 package is.idega.idegaweb.pheidippides.business;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,15 +16,18 @@ import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWResourceBundle;
 import com.idega.util.FileUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+
 
 public class GiftCardPrintingContext extends PrintingContextImpl {
 
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	private IWBundle iwb;
 	private IWResourceBundle iwrb;
 
@@ -37,17 +37,20 @@ public class GiftCardPrintingContext extends PrintingContextImpl {
 
 	private void init(IWApplicationContext iwac, GiftCardHolder holder, Locale locale) {
 		Map<String, Object> props = new HashMap<String, Object>();
-		
+
 		props.put(PrintingContext.IW_BUNDLE_ROPERTY_NAME, getBundle(iwac));
 		props.put("iwrb", getResourceBundle(iwac, locale));
-		
+
 		props.put("amount", holder.getAmount());
 		props.put("amountText", holder.getAmountText());
 		props.put("key", holder.getCode());
 		props.put("created", holder.getCreated());
 		props.put("greeting", holder.getGreetingText());
-		
+
 		String template = "gift_card_template.xml";
+		if (holder.getTemplateNumber() != null) {
+		    template = "gift_card_template_" + holder.getTemplateNumber() + ".xml";
+		}
 		if (holder.getGreetingText() != null && holder.getGreetingText().length() > 0) {
 			template = "gift_card_empty_template.xml";
 		}
@@ -63,7 +66,7 @@ public class GiftCardPrintingContext extends PrintingContextImpl {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected String getResourceRealPath(IWBundle iwb, Locale locale) {
 		String printFolder = "/print/";
 

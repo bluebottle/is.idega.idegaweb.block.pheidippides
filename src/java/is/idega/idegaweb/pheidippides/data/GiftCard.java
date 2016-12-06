@@ -29,15 +29,15 @@ public class GiftCard implements Serializable {
 	private static final String COLUMN_AMOUNT = "amount";
 	private static final String COLUMN_AMOUNT_TEXT = "amount_text";
 	private static final String COLUMN_GREETING_TEXT = "greeting_text";
-	
+    private static final String COLUMN_TEMPLATE_NUMBER = "template_number";
+
 	@Id
 	@Column(name = GiftCard.COLUMN_CODE, length = 20)
 	private String code;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = GiftCard.COLUMN_GIFT_CARD_HEADER)
 	private GiftCardHeader header;
-
 
 	@Column(name = GiftCard.COLUMN_AMOUNT)
 	private int amount;
@@ -48,6 +48,8 @@ public class GiftCard implements Serializable {
 	@Column(name = GiftCard.COLUMN_GREETING_TEXT)
 	private String greeting;
 
+    @Column(name = GiftCard.COLUMN_TEMPLATE_NUMBER)
+    private String templateNumber;
 
 	public String getCode() {
 		return code;
@@ -56,7 +58,7 @@ public class GiftCard implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
 	public int getAmount() {
 		return amount;
 	}
@@ -88,4 +90,12 @@ public class GiftCard implements Serializable {
 	public void setAmountText(String amountText) {
 		this.amountText = amountText;
 	}
+
+    public String getTemplateNumber() {
+        return templateNumber;
+    }
+
+    public void setTemplateNumber(String templateNumber) {
+        this.templateNumber = templateNumber;
+    }
 }

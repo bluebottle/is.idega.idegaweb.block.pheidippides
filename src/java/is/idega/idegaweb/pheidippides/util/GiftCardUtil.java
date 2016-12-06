@@ -1,9 +1,5 @@
 package is.idega.idegaweb.pheidippides.util;
 
-import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
-import is.idega.idegaweb.pheidippides.business.GiftCardPrintingContext;
-import is.idega.idegaweb.pheidippides.data.GiftCard;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,6 +23,10 @@ import com.idega.idegaweb.IWMainApplication;
 import com.idega.io.MemoryFileBuffer;
 import com.idega.io.MemoryOutputStream;
 import com.idega.util.IWTimestamp;
+
+import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
+import is.idega.idegaweb.pheidippides.business.GiftCardPrintingContext;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
 
 public class GiftCardUtil {
 
@@ -56,30 +56,31 @@ public class GiftCardUtil {
         b[3] = (byte) (l >>> 8);
         b[4] = (byte) (l >>> 0);
     }
-    
+
     public static void main(String args[]) {
     	GiftCardUtil util = new GiftCardUtil();
     	System.out.println(util.generateCode());
     }
-    
+
     public File createPDFFile(IWApplicationContext iwac, GiftCard card, Locale locale) {
     	NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
 		formatter.setParseIntegerOnly(true);
-		
+
 		GiftCardHolder holder = new GiftCardHolder();
 		holder.setAmount(card.getAmount());
 		holder.setAmountText(card.getAmountText());
 		holder.setCode(card.getCode());
 		holder.setCreated(new IWTimestamp(card.getHeader().getValidFrom()).getDateString("d. MMMM yyyy", locale));
-		
-		try {			
+		holder.setTemplateNumber(card.getTemplateNumber());
+
+		try {
 			final File temp = File.createTempFile("GiftCertificate", card.getCode() + ".pdf");
-		    
+
 			FileOutputStream pdfStream = new FileOutputStream(temp);
-			
+
 			pdfStream.write(getDocumentBuffer(new GiftCardPrintingContext(iwac, holder, locale)).buffer());
 			pdfStream.close();
-						
+
 			return temp;
 		}
 		catch (FileNotFoundException fnfe) {
@@ -91,7 +92,7 @@ public class GiftCardUtil {
 
 		return null;
     }
-    
+
     private MemoryFileBuffer getDocumentBuffer(PrintingContext pcx) {
 		try {
 			MemoryFileBuffer buffer = new MemoryFileBuffer();
@@ -101,23 +102,23 @@ public class GiftCardUtil {
 			pcx.setDocumentStream(mos);
 
 			getPrintingService().printDocument(pcx);
-			
+
 			return buffer;
 		}
 		catch (RemoteException re) {
 			throw new IBORuntimeException(re);
 		}
 	}
-	
+
 	private PrintingService getPrintingService() {
 		try {
-			return (PrintingService) IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
+			return IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
 		}
 		catch (RemoteException e) {
 			throw new IBORuntimeException(e.getMessage());
 		}
 	}
-	
+
 	private IWApplicationContext getIWApplicationContext() {
 		return IWMainApplication.getDefaultIWApplicationContext();
 	}
