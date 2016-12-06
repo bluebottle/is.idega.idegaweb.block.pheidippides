@@ -6,13 +6,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(name = "giftCard", propOrder = { "code", "validTo", "amount", "remainder" })
+@XmlType(name = "giftCard", propOrder = { "code", "validTo", "amount", "remainder", "templateNumber" })
 public class GiftCard {
 
 	private String code;
 	private Date validTo;
 	private int amount;
 	private int remainder;
+	private String templateNumber;
 
 	public String getCode() {
 		return code;
@@ -45,4 +46,12 @@ public class GiftCard {
 	public void setRemainder(int remainder) {
 		this.remainder = remainder;
 	}
+
+    public String getTemplateNumber() {
+        return templateNumber;
+    }
+
+    public void setTemplateNumber(String templateNumber) {
+        this.templateNumber = templateNumber;
+    }
 }

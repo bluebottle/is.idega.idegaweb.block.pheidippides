@@ -9,10 +9,10 @@
 <ui:component>
 	<form class="smallAdminForm" id="giftCardCreatorForm" action="" method="post">
 		<input type="hidden" name="idegaweb_event_classname" value="#{giftCardBean.eventHandler}" />
-		
+
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_gift_card']}" /></legend>
-			
+
 			<div class="formItem required">
 				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></label>
 				<input type="text" class="required number" name="prm_amount" />
@@ -29,8 +29,25 @@
 				<label for="prm_count"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['count']}" /></label>
 				<input type="text" class="required number" name="prm_count" />
 			</div>
+			<div class="formItem required">
+				<label for="prm_number"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['template']}" /></label>
+				<c:selectOne styleClass="required" name="prm_number">
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_template']}" content="" />
+					<c:selectOption name="1" content="1" />
+					<c:selectOption name="2" content="2" />
+					<c:selectOption name="3" content="3" />
+					<c:selectOption name="4" content="4" />
+					<c:selectOption name="5" content="5" />
+					<c:selectOption name="6" content="6" />
+					<c:selectOption name="7" content="7" />
+					<c:selectOption name="8" content="8" />
+					<c:selectOption name="9" content="9" />
+					<c:selectOption name="10" content="10" />
+				</c:selectOne>
+			</div>
+
 		</fieldset>
-		
+
 		<div class="submit">
 			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
 			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>

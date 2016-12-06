@@ -1,8 +1,5 @@
 package is.idega.idegaweb.pheidippides.rest;
 
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.rest.pojo.GiftCard;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.rest.pojo.GiftCard;
+
 @Path("/giftCards/")
 public class GiftCards {
 
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@GET
 	@Path("/{code}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -29,21 +29,22 @@ public class GiftCards {
 		}
 
 		int used = getDao().getGiftCardUsageSum(giftCard);
-		
+
 		GiftCard card = new GiftCard();
 		card.setAmount(giftCard.getAmount());
 		card.setCode(code);
 		card.setRemainder(giftCard.getAmount() - used);
 		card.setValidTo(giftCard.getHeader().getValidTo());
-		
+		card.setTemplateNumber(giftCard.getTemplateNumber());
+
 		return card;
 	}
-	
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 }

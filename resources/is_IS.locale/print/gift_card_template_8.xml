@@ -15,7 +15,7 @@
 	<font-def name="amountText" color="darkBlue" family="chancery" size="17.26" style="normal"/>
 	<font-def name="small" color="darkBlue" family="chancery" size="12" style="normal"/>
 
-	<overlay source="giftcard_background/IBR-giftcertificate-8.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="-109" y="-199" />
+	<overlay source="giftcard_background/IBR-giftcertificate-8.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
 
 	<box x="0" y="280" width="580" valign="top" height="160" padding="10.0">
 		<paragraph font="amount" halign="center" spacing-after="12.0">

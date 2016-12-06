@@ -1,10 +1,5 @@
 package is.idega.idegaweb.pheidippides.output;
 
-import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
-import is.idega.idegaweb.pheidippides.business.GiftCardPrintingContext;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.GiftCard;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,13 +25,18 @@ import com.idega.presentation.IWContext;
 import com.idega.util.IWTimestamp;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
+import is.idega.idegaweb.pheidippides.business.GiftCardPrintingContext;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+
 public class GiftCardWriter extends DownloadWriter implements MediaWritable {
 
 	private static final String PARAMETER_GIFT_CARD_CODE = "prm_gift_card_code";
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	private MemoryFileBuffer buffer = null;
 	private Locale locale;
 
@@ -46,14 +46,15 @@ public class GiftCardWriter extends DownloadWriter implements MediaWritable {
 			this.locale = iwc.getCurrentLocale();
 
 			GiftCard giftCard = getDao().getGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD_CODE));
-			
+
 			GiftCardHolder holder = new GiftCardHolder();
 			holder.setAmount(giftCard.getAmount());
 			holder.setAmountText(giftCard.getAmountText());
 			holder.setGreetingText(giftCard.getGreeting());
 			holder.setCode(giftCard.getCode());
 			holder.setCreated(new IWTimestamp(giftCard.getHeader().getValidFrom()).getDateString("d. MMMM yyyy", locale));
-			
+			holder.setTemplateNumber(giftCard.getTemplateNumber());
+
 			this.buffer = getDocumentBuffer(new GiftCardPrintingContext(iwc, holder, locale));
 			setAsDownload(iwc, giftCard.getCode() + ".pdf", this.buffer.length());
 		}
@@ -61,12 +62,12 @@ public class GiftCardWriter extends DownloadWriter implements MediaWritable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private PheidippidesDao getDao() {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -103,23 +104,23 @@ public class GiftCardWriter extends DownloadWriter implements MediaWritable {
 			pcx.setDocumentStream(mos);
 
 			getPrintingService().printDocument(pcx);
-			
+
 			return buffer;
 		}
 		catch (RemoteException re) {
 			throw new IBORuntimeException(re);
 		}
 	}
-	
+
 	private PrintingService getPrintingService() {
 		try {
-			return (PrintingService) IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
+			return IBOLookup.getServiceInstance(getIWApplicationContext(), PrintingService.class);
 		}
 		catch (RemoteException e) {
 			throw new IBORuntimeException(e.getMessage());
 		}
 	}
-	
+
 	private IWApplicationContext getIWApplicationContext() {
 		return IWMainApplication.getDefaultIWApplicationContext();
 	}

@@ -1,15 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
-import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
-import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.GiftCard;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.output.GiftCardWriter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,34 +23,45 @@ import com.idega.presentation.IWContext;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.GiftCardBean;
+import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
+import is.idega.idegaweb.pheidippides.business.GiftCardHolder;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.GiftCard;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.output.GiftCardWriter;
+
 public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 
 	private static final String PARAMETER_ACTION = "prm_action";
-	
+
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 	private static final String PARAMETER_AMOUNT = "prm_amount";
 	private static final String PARAMETER_AMOUNT_TEXT = "prm_amount_text";
 	private static final String PARAMETER_GREETING_TEXT = "prm_greeting_text";
 	private static final String PARAMETER_COUNT = "prm_count";
-	
+    private static final String PARAMETER_TEMPLATE_NUMBER = "prm_number";
+
 	private static final int ACTION_VIEW = 1;
 	private static final int ACTION_EDIT = 2;
-	
+
 	@Autowired
 	private PheidippidesService service;
-	
+
 	@Autowired
 	private PheidippidesDao dao;
-	
+
 	@Autowired
 	private BuilderLogicWrapper builderLogicWrapper;
-	
+
 	@Autowired
 	private Web2Business web2Business;
-	
+
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
 
 	@Override
@@ -76,7 +77,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-		
+
 		GiftCardBean bean = getBeanInstance("giftCardBean");
 		bean.setAction(iwc.getRequestURI());
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
@@ -87,7 +88,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
 			getService().removeGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD));
 		}
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
@@ -102,13 +103,13 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 
 		add(facelet);
 	}
-	
+
 	private void showView(IWContext iwc, GiftCardBean bean) {
 		List<GiftCardHeaderStatus> statuses = new ArrayList<GiftCardHeaderStatus>();
 		statuses.add(GiftCardHeaderStatus.Paid);
 		statuses.add(GiftCardHeaderStatus.ManualPayment);
 		statuses.add(GiftCardHeaderStatus.RegisteredWithoutPayment);
-		
+
 		List<GiftCard> giftCards = getDao().getGiftCards(statuses);
 		if (giftCards != null) {
 			bean.setGiftCards(giftCards);
@@ -127,7 +128,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 				}
 			}
 			bean.setBuyerMap(buyer);
-		}		
+		}
 	}
 
 	@Override
@@ -136,19 +137,21 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		String amountText = iwc.getParameter(PARAMETER_AMOUNT_TEXT);
 		String greetingText = iwc.getParameter(PARAMETER_GREETING_TEXT);
 		int count = Integer.parseInt(iwc.getParameter(PARAMETER_COUNT));
-		
+		String templateNumber = iwc.getParameter(PARAMETER_TEMPLATE_NUMBER);
+
 		GiftCardHolder holder = new GiftCardHolder();
 		holder.setAmount(amount);
 		holder.setAmountText(amountText);
 		holder.setGreetingText(greetingText);
 		holder.setValitorDescriptionText("");
+		holder.setTemplateNumber(templateNumber);
 		holder.setCount(count);
-		
+
 		List<GiftCardHolder> holders = new ArrayList<GiftCardHolder>();
 		holders.add(holder);
-		
+
 		getService().storeGiftCard(holders, iwc.getCurrentUser().getUniqueId(), "skraning@marathon.is", iwc.getCurrentLocale(), false);
-		
+
 		return true;
 	}
 
@@ -160,12 +163,12 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesService getService() {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
@@ -173,7 +176,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (builderLogicWrapper == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return builderLogicWrapper;
 	}
 
@@ -181,7 +184,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -189,7 +192,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (web2Business == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return web2Business;
 	}
 
@@ -197,7 +200,7 @@ public class GiftCards extends IWBaseComponent implements IWPageEventListener {
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
 }

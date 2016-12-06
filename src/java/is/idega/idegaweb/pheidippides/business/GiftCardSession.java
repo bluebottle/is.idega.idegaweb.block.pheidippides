@@ -66,6 +66,7 @@ public class GiftCardSession {
 		holder.setValitorDescriptionText(valitorDescriptionText);
 		holder.setCount(count);
 		holder.setIndex(cards.size());
+		holder.setTemplateNumber(templateNumber);
 
 		cards.add(holder);
 
