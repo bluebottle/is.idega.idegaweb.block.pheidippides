@@ -19,27 +19,27 @@
 
 		<fieldset class="formSection">
 			<div class="formItem required">
-				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></label>
+				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.amount']}" /></label>
 				<c:selectOne styleClass="required" name="prm_amount">
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_amount']}" content="" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.select_amount']}" content="" />
 					<ui:repeat value="#{giftCardBean.amounts}" var="amount">
 						<c:selectOption name="#{amount.value}" content="#{amount.id}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
 			<div class="formItem required">
-				<label for="prm_count"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['count']}" /></label>
+				<label for="prm_count"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.count']}" /></label>
 				<c:selectOne styleClass="required" name="prm_count">
 					<ui:repeat value="#{giftCardBean.counts}" var="count">
 						<c:selectOption name="#{count.id}" content="#{count.id}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
-			<div class="formItem">
-				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['template']}" /></label>
+			<div class="formItem required">
+				<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.template']}" /></label>
 				<ul class="image-selection">
           <li>
-            <input type="radio" name="prm_number" value="1" id="gc_template_1" />
+            <input type="radio" name="prm_number" value="1" id="gc_template_1" checked="checked"/>
             <label for="gc_template_1"><img src="/idegaweb/bundles/is.idega.idegaweb.pheidippides.bundle/resources/images/gift_certificates/IBR-giftcertificate-1.jpg" alt="" /></label>
           </li>
 					<li>

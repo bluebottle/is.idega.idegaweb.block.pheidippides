@@ -1029,3 +1029,7 @@ ul.image-selection li input:checked + label {
 ul.image-selection li input {
     display: none;
 }
+
+ul.image-selection li input + label:after {
+    display: none;
+}
