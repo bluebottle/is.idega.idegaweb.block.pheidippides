@@ -1033,3 +1033,7 @@ ul.image-selection li input {
 ul.image-selection li input + label:after {
     display: none;
 }
+
+ul.image-selection li label img {
+    pointer-events: none;
+}
