@@ -10,7 +10,7 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="7" />
 		<input type="hidden" name="prm_gift_card" value="" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
 
@@ -24,7 +24,7 @@
 					</ui:repeat>
 				</ul>
 			</ui:fragment>
-	
+
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
@@ -34,7 +34,7 @@
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 					</tr>
 				</thead>
-			
+
 				<tbody>
 					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 
@@ -55,8 +55,17 @@
 								</ui:repeat>
 							</ui:fragment>
 						</ui:fragment>
+						<ui:fragment rendered="#{not empty holder.trinkets}">
+							<ui:repeat value="#{holder.trinkets}" var="racePrice">
+								<tr class="trinket">
+									<td class="firstColumn" ><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.code))])}" /></td>
+									<td><h:outputText escape="false" value="" /></td>
+									<td class="lastColumn"><h:outputText value="#{racePrice.price}" /></td>
+								</tr>
+							</ui:repeat>
+						</ui:fragment>
 					</ui:repeat>
-					
+
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
@@ -71,7 +80,7 @@
 							</tr>
 						</ui:repeat>
 					</ui:fragment>
-					
+
 					<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
 						<tr class="giftCard">
 							<td class="firstColumn" colspan="3">
@@ -86,7 +95,7 @@
 				</tbody>
 			</table>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>

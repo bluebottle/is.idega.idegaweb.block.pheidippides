@@ -9,10 +9,10 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="2" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 2" /></h2>
-		
+
 		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.participant_help')]}" /></div>
 
 		<fieldset class="formSection">
@@ -64,10 +64,6 @@
 					<input id="prm_email" type="text" class="required email" name="prm_email_repeat" />
 				</div>
 				<div class="formItem">
-					<label for="prm_phone"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></label>
-					<input type="text" name="prm_phone" value="#{participant.phoneHome}" />
-				</div>
-				<div class="formItem">
 					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 				</div>
@@ -84,9 +80,9 @@
 					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
 					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
 				</div>
-				
+
 			</ui:fragment>
-			
+
 			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and not empty pheidippidesRegistrationSession.currentParticipant}">
 				<div class="formItem required">
 					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
@@ -122,10 +118,6 @@
 					<input id="prm_email" type="text" class="required email" name="prm_email_repeat" />
 				</div>
 				<div class="formItem">
-					<label for="prm_phone"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></label>
-					<input type="text" name="prm_phone" value="#{participant.phoneHome}" />
-				</div>
-				<div class="formItem">
 					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 				</div>
@@ -133,9 +125,9 @@
 					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
 					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
 				</div>
-			</ui:fragment>			
+			</ui:fragment>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<a href="#" class="back" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>

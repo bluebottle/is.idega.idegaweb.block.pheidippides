@@ -37,40 +37,40 @@ public class PheidippidesBean {
 	private String responseURL;
 	private Class<?> downloadWriter;
 	private Class<?> certificateWriter;
-	
+
 	private Company company;
 	private List<Company> companies;
-	
+
 	private Event event;
 	private List<Event> events;
-	
+
 	private Distance distance;
 	private List<Distance> distances;
 
 	private RaceTrinket trinket;
 	private List<RaceTrinket> trinkets;
 	private Map<RaceTrinket, RegistrationTrinket> registrationTrinkets;
-	
+
 	private List<RacePrice> raceTrinkets;
 
 	private Race race;
 	private Collection<Race> races;
-	
+
 	private ShirtSize shirtSize;
 	private List<ShirtSize> shirtSizes;
-	
+
 	private RaceShirtSize raceShirtSize;
 	private List<RaceShirtSize> raceShirtSizes;
-	
+
 	private RacePrice racePrice;
 	private List<RacePrice> racePrices;
-	
+
 	private Charity charity;
 	private List<Charity> charities;
-	
+
 	private ExternalCharity externalCharity;
 	private List<ExternalCharity> externalCharities;
-	
+
 	private Registration registration;
 	private Participant participant;
 	private List<Registration> registrations;
@@ -78,10 +78,10 @@ public class PheidippidesBean {
 	private Map<Registration, Participant> participantsMap;
 	private Map<Participant, List<Registration>> registrationsMap;
 	private Map<Registration, List<Registration>> relayPartnersMap;
-	
+
 	private RegistrationHeader registrationHeader;
 	private List<RegistrationHeader> registrationHeaders;
-	
+
 	private Locale locale;
 	private List<AdvancedProperty> locales;
 	private String styleClass;
@@ -89,16 +89,16 @@ public class PheidippidesBean {
 
 	private AdvancedProperty property;
 	private List<AdvancedProperty> properties;
-	
+
 	private RegistrationAnswerHolder answer;
 	private Map<String, Registration> registrationMap;
 	private Map<String, Participant> participantMap;
 	private Map<RegistrationHeader, BankReference> bankReferencesMap;
-	
+
 	private Map<Event, List<Race>> eventRacesMap;
 	private Map<Race, Long> participantCountMap;
 	private Map<Race, Long> deregisteredCountMap;
-	
+
 	private List<String> errors;
 
 	public String getAction() {
@@ -398,7 +398,7 @@ public class PheidippidesBean {
 	public void setAnswer(RegistrationAnswerHolder answer) {
 		this.answer = answer;
 	}
-	
+
 	public Map<String, Registration> getRegistrationMap() {
 		return registrationMap;
 	}
@@ -479,16 +479,16 @@ public class PheidippidesBean {
 			Map<RaceTrinket, RegistrationTrinket> registrationTrinkets) {
 		this.registrationTrinkets = registrationTrinkets;
 	}
-	
+
 	public List<String> getErrors() {
 		return errors;
 	}
-	
+
 	public void addError(String error) {
 		if (errors == null) {
 			errors = new ArrayList<String>();
 		}
-		
+
 		errors.add(error);
 	}
 

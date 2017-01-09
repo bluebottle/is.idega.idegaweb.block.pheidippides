@@ -1,0 +1,39 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="registrationForm" action="" method="post">
+		<input type="hidden" name="prm_action" value="5" />
+
+		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
+		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
+
+		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_charity_trinket_help')]}" /></div>
+
+		<div class="formItem required">
+			<fieldset class="formSection">
+				<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="racePrice">
+					<div class="formItem radioButtonItem">
+						<c:radioButton styleClass="required" name="prm_charity_trinket" content="#{racePrice.trinket.id}" />
+						<label for="prm_charity_trinket"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></label>
+					</div>
+				</ui:repeat>
+				<div class="formItem radioButtonItem">
+					<c:radioButton styleClass="required" name="prm_charity_trinket" content="-1" />
+					<label for="prm_charity_trinket"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.no_charity_trinket')])}" /></label>
+				</div>
+			</fieldset>
+  	</div>
+
+		<fieldset class="submit">
+			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="next" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+		</fieldset>
+	</form>
+</ui:component>
+</html>
