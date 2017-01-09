@@ -1,19 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.business.GiftCardService;
-import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
-import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +23,20 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardService;
+import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
+import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
 
 public class MHRegistrationForm extends IWBaseComponent {
 
@@ -65,13 +65,12 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_NATIONALITY = "prm_nationality";
 	private static final String PARAMETER_GENDER = "prm_gender";
 	private static final String PARAMETER_EMAIL = "prm_email";
-	private static final String PARAMETER_PHONE = "prm_phone";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
 	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 	private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
 	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
-	
+
 	@Autowired
 	private PheidippidesService service;
 
@@ -86,16 +85,16 @@ public class MHRegistrationForm extends IWBaseComponent {
 
 	@Autowired
 	private JQuery jQuery;
-	
+
 	private IWBundle iwb;
-	
+
 	private Long eventPK;
 
 	@Override
 	protected void initializeComponent(FacesContext context) {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
-		
+
 		if (getSession().getLocale() == null) {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
@@ -104,12 +103,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 			getSession().setLocale(iwc.getCurrentLocale());
 		}
 
-		if (getSession().getLocale().equals(LocaleUtil.getIcelandicLocale()) || getSession().isRegistrationWithPersonalId()) {
-			getSession().setCurrency(Currency.ISK);
-		}
-		else {
-			getSession().setCurrency(Currency.EUR);
-		}
+		getSession().setCurrency(Currency.ISK);
 
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
@@ -122,7 +116,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 					}
 				}
 			}
-			
+
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
@@ -130,10 +124,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
-			
+
 			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/registration.js"));
 			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
-			
+
 			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 			bean.setEvent(event);
 			bean.setLocale(iwc.getCurrentLocale());
@@ -146,13 +140,13 @@ public class MHRegistrationForm extends IWBaseComponent {
 					}
 					showPersonSelect(iwc, bean);
 					break;
-		
+
 				case ACTION_PARTICIPANT:
 					if (iwc.isParameterSet(PARAMETER_PERSONAL_ID)) {
 						Participant participant = getService().getParticipantStripped(iwc.getParameter(PARAMETER_PERSONAL_ID));
 						ParticipantHolder holder = new ParticipantHolder();
 						holder.setParticipant(participant);
-						
+
 						getSession().setCurrentParticipant(holder);
 						getSession().setRegistrationWithPersonalId(true);
 					}
@@ -161,14 +155,14 @@ public class MHRegistrationForm extends IWBaseComponent {
 					}
 					showParticipant(iwc, bean);
 					break;
-		
+
 				case ACTION_RACE_SELECT:
 					if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
 						Participant participant = null;
 						if (getSession().getCurrentParticipant() == null) {
 							ParticipantHolder holder = new ParticipantHolder();
 							getSession().setCurrentParticipant(holder);
-							
+
 							participant = new Participant();
 						}
 						else {
@@ -177,7 +171,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 
 						if (!getSession().isRegistrationWithPersonalId()) {
 							DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-							
+
 							participant.setFullName(iwc.getParameter(PARAMETER_NAME));
 							try {
 								participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
@@ -192,15 +186,14 @@ public class MHRegistrationForm extends IWBaseComponent {
 						participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
 						participant.setGender(iwc.getParameter(PARAMETER_GENDER));
 						participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
-						participant.setPhoneHome(iwc.getParameter(PARAMETER_PHONE));
 						participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
 						participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
 						getSession().getCurrentParticipant().setParticipant(participant);
 					}
-					
+
 					showRaceSelect(iwc, bean);
 					break;
-		
+
 				case ACTION_TRINKET_SELECT:
 					if (getSession().getCurrentParticipant() != null) {
 						if (iwc.isParameterSet(PARAMETER_RACE)) {
@@ -210,14 +203,14 @@ public class MHRegistrationForm extends IWBaseComponent {
 						if (iwc.isParameterSet(PARAMETER_NEEDS_ASSISTANCE)) {
 							getSession().getCurrentParticipant().setNeedsAssistance(true);
 						}
-						
+
 						showTrinketsSelect(iwc, bean);
 					}
 					else {
 						showPersonSelect(iwc, bean);
 					}
 					break;
-		
+
 				case ACTION_WAIVER:
 					if (getSession().getCurrentParticipant() != null) {
 						List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(getSession().getCurrentParticipant().getRace(), getSession().getCurrency());
@@ -234,7 +227,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 						showPersonSelect(iwc, bean);
 					}
 					break;
-					
+
 				case ACTION_OVERVIEW:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().getCurrentParticipant().setAcceptsWaiver(true);
@@ -247,18 +240,18 @@ public class MHRegistrationForm extends IWBaseComponent {
 					}
 					showOverview(iwc, bean);
 					break;
-					
+
 				case ACTION_RECEIPT:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null) {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
 						ParticipantHolder holder = getSession().getParticipantHolders().get(0);
-						
+
 						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null, getSession().getGiftCards());
 						bean.setAnswer(answer);
 						getSession().empty();
-						
+
 						getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
-						
+
 						showReceipt(iwc, bean);
 					}
 					else {
@@ -280,11 +273,11 @@ public class MHRegistrationForm extends IWBaseComponent {
 						showParticipant(iwc, bean);
 					}
 					break;
-					
+
 				case ACTION_GIFT_CARD:
 					showGiftCard(iwc, bean);
 					break;
-					
+
 				case ACTION_ADD_GIFT_CARD:
 					if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
 						GiftCardUsage usage = getGiftCardService().reserveGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD), getSession().getTotalAmount(), null);
@@ -295,10 +288,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 							bean.addError(iwb.getResourceBundle(iwc).getLocalizedString("no_gift_card_found", "No gift card was found or already used"));
 						}
 					}
-					
+
 					showOverview(iwc, bean);
 					break;
-					
+
 				case ACTION_REMOVE_GIFT_CARD:
 					if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
 						GiftCardUsage usage = getDao().getGiftCardUsage(Long.parseLong(iwc.getParameter(PARAMETER_GIFT_CARD)));
@@ -307,19 +300,19 @@ public class MHRegistrationForm extends IWBaseComponent {
 							getSession().removeGiftCard(usage);
 						}
 					}
-					
+
 					showOverview(iwc, bean);
 					break;
-					
+
 				case ACTION_FINISH_REGISTRATION:
 					if (getSession().getCurrentParticipant() != null && getSession().getCurrentParticipant().getRace() != null && getSession().getTotalAmount() == 0) {
 						getSession().addParticipantHolder(getSession().getCurrentParticipant());
-						
+
 						RegistrationAnswerHolder answer = getService().storeRegistration(getSession().getParticipantHolders(), true, null, !getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, null, getSession().getGiftCards());
 						getService().markRegistrationAsPaid(answer.getHeader(), true, false, null, null, null, null, null, null, null, null, null);
 						bean.setAnswer(answer);
 						getSession().empty();
-						
+
 						showReceipt(iwc, bean);
 					}
 					else {
@@ -336,10 +329,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_PERSON_SELECT;
 		return action;
 	}
-	
+
 	private void showPersonSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/personSelect.xhtml"));
 		add(facelet);
@@ -348,7 +341,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
 		bean.setProperties(getService().getCountries());
 		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/participant.xhtml"));
 		add(facelet);
@@ -357,7 +350,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
 		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(), getSession().getCurrentParticipant().getParticipant()));
 		bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE)))) : (getSession().getCurrentParticipant().getRace() != null ? getDao().getRaceShirtSizes(getDao().getRace(getSession().getCurrentParticipant().getRace().getId())) : null));
-		
+
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
 		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/raceSelect.xhtml"));
 		add(facelet);
@@ -396,12 +389,12 @@ public class MHRegistrationForm extends IWBaseComponent {
 	private String getBundleIdentifier() {
 		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
 	}
-	
+
 	private PheidippidesService getService() {
 		if (service == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return service;
 	}
 
@@ -409,7 +402,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		if (session == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return session;
 	}
 
@@ -417,7 +410,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		if (giftCardService == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return giftCardService;
 	}
 
@@ -425,7 +418,7 @@ public class MHRegistrationForm extends IWBaseComponent {
 		if (dao == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return dao;
 	}
 
@@ -433,10 +426,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 		if (jQuery == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		
+
 		return jQuery;
 	}
-	
+
 	public void setEventPK(String eventPK) {
 		this.eventPK = Long.parseLong(eventPK);
 	}

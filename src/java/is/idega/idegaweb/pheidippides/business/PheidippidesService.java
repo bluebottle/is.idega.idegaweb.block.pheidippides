@@ -132,8 +132,6 @@ public class PheidippidesService {
     private static final String HLAUPASTYRKUR_USER_ID = "HLAUPASTYRKUR_USER_ID";
     private static final String HLAUPASTYRKUR_PASSWORD = "HLAUPASTYRKUR_PASSWORD";
 
-    private static final String VALITOR_SECURITY_NUMBER_EUR = "VALITOR_SECURITY_NUMBER_EUR";
-    private static final String VALITOR_SHOP_ID_EUR = "VALITOR_SHOP_ID_EUR";
     private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
     private static final String VALITOR_SHOP_ID = "VALITOR_SHOP_ID";
     private static final String ADEINSHEIMILD = "Adeinsheimild";
@@ -262,14 +260,14 @@ public class PheidippidesService {
                     hasRaces = true;
                 }
             }
-            //Check if next year is open
+            // Check if next year is open
             if (!hasRaces) {
                 year++;
                 races = getAvailableRaces(eventPK, year,
                         participant.getDateOfBirth());
                 for (Race race : races) {
-                    if (dao.getNumberOfRegistrations(participant.getUuid(), race,
-                            RegistrationStatus.OK) == 0) {
+                    if (dao.getNumberOfRegistrations(participant.getUuid(),
+                            race, RegistrationStatus.OK) == 0) {
                         hasRaces = true;
                     }
                 }
@@ -1490,12 +1488,6 @@ public class PheidippidesService {
         String valitorSecurityNumber = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SECURITY_NUMBER, "12345");
-        String valitorShopIDEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SHOP_ID_EUR, "1");
-        String valitorSecurityNumberEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
         String valitorReturnURLText = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
@@ -1504,11 +1496,10 @@ public class PheidippidesService {
                 .getProperty(VALITOR_RETURN_URL,
                         "http://skraning.marathon.is/pages/valitor");
 
-
         return storeRegistration(holders, doPayment, registrantUUID,
                 createUsers, locale, paymentGroup, isBankTransfer,
                 fixedCurrency, giftCardUsage, valitorShopID,
-                valitorSecurityNumber, valitorShopIDEUR, valitorSecurityNumberEUR, valitorReturnURLText, valitorReturnURL);
+                valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
     }
 
     public RegistrationAnswerHolder storeRegistration(
@@ -1516,8 +1507,8 @@ public class PheidippidesService {
             String registrantUUID, boolean createUsers, Locale locale,
             String paymentGroup, boolean isBankTransfer, Currency fixedCurrency,
             List<GiftCardUsage> giftCardUsage, String valitorShopID,
-            String valitorSecurityNumber, String valitorShopIDEUR,
-            String valitorSecurityNumberEUR, String valitorReturnURLText, String valitorReturnURL) {
+            String valitorSecurityNumber, String valitorReturnURLText,
+            String valitorReturnURL) {
 
         RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
@@ -1534,34 +1525,13 @@ public class PheidippidesService {
                 .getProperty(VALITOR_RETURN_URL_CANCEL,
                         "http://skraning.marathon.is/pages/valitor");
 
-        StringBuilder securityString = null;
-        if (fixedCurrency != null) {
-            if (fixedCurrency.equals(Currency.ISK)) {
-                securityString = new StringBuilder(valitorSecurityNumber);
-            } else {
-                securityString = new StringBuilder(valitorSecurityNumberEUR);
-            }
-        } else if (createUsers) {
-            securityString = new StringBuilder(valitorSecurityNumberEUR);
-        } else {
-            securityString = new StringBuilder(valitorSecurityNumber);
-        }
+        StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
 
         StringBuilder url = new StringBuilder(valitorURL);
         url.append("?");
         url.append(VEFVERSLUN_ID);
         url.append("=");
-        if (fixedCurrency != null) {
-            if (fixedCurrency.equals(Currency.ISK)) {
-                url.append(valitorShopID);
-            } else {
-                url.append(valitorShopIDEUR);
-            }
-        } else if (createUsers) {
-            url.append(valitorShopIDEUR);
-        } else {
-            url.append(valitorShopID);
-        }
+        url.append(valitorShopID);
         url.append("&");
         url.append(LANG);
         url.append("=");
@@ -1571,17 +1541,6 @@ public class PheidippidesService {
             url.append("is");
         }
         String currency = "ISK";
-        if (createUsers) {
-            currency = "EUR";
-        }
-
-        if (fixedCurrency != null) {
-            if (fixedCurrency.equals(Currency.ISK)) {
-                currency = "ISK";
-            } else {
-                currency = "EUR";
-            }
-        }
         url.append("&");
         url.append(GJALDMIDILL);
         url.append("=");
@@ -1598,20 +1557,14 @@ public class PheidippidesService {
                 header = dao.storeRegistrationHeader(null,
                         RegistrationHeaderStatus.WaitingForPayment,
                         registrantUUID, paymentGroup, locale.toString(),
-                        fixedCurrency != null
-                                ? fixedCurrency
-                                : createUsers ? Currency.EUR : Currency.ISK,
-                        null, null, null, null, null, null, null, null, null,
-                        null);
+                        Currency.ISK, null, null, null, null, null, null, null,
+                        null, null, null);
             } else {
                 header = dao.storeRegistrationHeader(null,
                         RegistrationHeaderStatus.RegisteredWithoutPayment,
                         registrantUUID, paymentGroup, locale.toString(),
-                        fixedCurrency != null
-                                ? fixedCurrency
-                                : createUsers ? Currency.EUR : Currency.ISK,
-                        null, null, null, null, null, null, null, null, null,
-                        null);
+                        Currency.ISK, null, null, null, null, null, null, null,
+                        null, null, null);
             }
             holder.setHeader(header);
 
@@ -1896,17 +1849,7 @@ public class PheidippidesService {
                 }
             }
 
-            if (fixedCurrency != null) {
-                if (fixedCurrency.equals(Currency.ISK)) {
-                    securityString.append(valitorShopID);
-                } else {
-                    securityString.append(valitorShopIDEUR);
-                }
-            } else if (createUsers) {
-                securityString.append(valitorShopIDEUR);
-            } else {
-                securityString.append(valitorShopID);
-            }
+            securityString.append(valitorShopID);
             securityString.append(header.getUuid());
             securityString.append(valitorReturnURL);
             securityString.append(valitorReturnURLServerSide);
@@ -2091,12 +2034,7 @@ public class PheidippidesService {
         if (holder != null && !holder.isEmpty()) {
             for (ParticipantHolder participantHolder : holder) {
                 Race race = participantHolder.getRace();
-                RacePrice price = dao.getCurrentRacePrice(race,
-                        fixedCurrency != null
-                                ? fixedCurrency
-                                : isRegistrationWithPersonalID
-                                        ? Currency.ISK
-                                        : Currency.EUR);
+                RacePrice price = dao.getCurrentRacePrice(race, Currency.ISK);
                 Participant participant = participantHolder.getParticipant();
 
                 Age age = new Age(participant.getDateOfBirth());
@@ -2123,24 +2061,20 @@ public class PheidippidesService {
                     }
                 }
 
-                //Only for tour of reykjavík (for now)
-                /*if (true) {
-                    List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
-                    if (allRegistrations != null && allRegistrations.size() > 0) {
-                        participantHolder.setAmount(Math.round(participantHolder.getAmount() * 0.8));
-                    }
-                }*/
+                // Only for tour of reykjavík (for now)
+                /*
+                 * if (true) { List<Registration> allRegistrations =
+                 * dao.getAllValidRegistrationsForUser(participant.getUuid());
+                 * if (allRegistrations != null && allRegistrations.size() > 0)
+                 * { participantHolder.setAmount(Math.round(participantHolder.
+                 * getAmount() * 0.8)); } }
+                 */
             }
         }
 
         if (current != null) {
             Race race = current.getRace();
-            RacePrice price = dao.getCurrentRacePrice(race,
-                    fixedCurrency != null
-                            ? fixedCurrency
-                            : isRegistrationWithPersonalID
-                                    ? Currency.ISK
-                                    : Currency.EUR);
+            RacePrice price = dao.getCurrentRacePrice(race, Currency.ISK);
             Participant participant = current.getParticipant();
 
             Age age = new Age(participant.getDateOfBirth());
@@ -2165,15 +2099,15 @@ public class PheidippidesService {
                 }
             }
 
-            //Only for tour of reykjavík (for now)
-            /*if (true) {
-                if (participant != null && participant.getUuid() != null && !participant.getUuid().equals("")) {
-                    List<Registration> allRegistrations = dao.getAllValidRegistrationsForUser(participant.getUuid());
-                    if (allRegistrations != null && allRegistrations.size() > 0) {
-                        current.setAmount(Math.round(current.getAmount() * 0.8));
-                    }
-                }
-            }*/
+            // Only for tour of reykjavík (for now)
+            /*
+             * if (true) { if (participant != null && participant.getUuid() !=
+             * null && !participant.getUuid().equals("")) { List<Registration>
+             * allRegistrations =
+             * dao.getAllValidRegistrationsForUser(participant.getUuid()); if
+             * (allRegistrations != null && allRegistrations.size() > 0) {
+             * current.setAmount(Math.round(current.getAmount() * 0.8)); } } }
+             */
         }
     }
 
@@ -2292,13 +2226,14 @@ public class PheidippidesService {
 
         return new AdvancedProperty(String.valueOf(race.getId()),
                 PheidippidesUtil
-                        .escapeXML(iwrb.getLocalizedString(
-                                event.getLocalizedKey() + "."
-                                        + distance.getLocalizedKey()
-                                        + (race.getNumberOfRelayLegs() > 1
-                                                ? ".relay"
-                                                : ""),
-                                distance.getName())));
+                        .escapeXML(
+                                iwrb.getLocalizedString(
+                                        event.getLocalizedKey() + "."
+                                                + distance.getLocalizedKey()
+                                                + (race.getNumberOfRelayLegs() > 1
+                                                        ? ".relay"
+                                                        : ""),
+                                        distance.getName())));
     }
 
     public List<AdvancedProperty> getLocalizedShirts(Long racePK,
@@ -2336,7 +2271,8 @@ public class PheidippidesService {
 
         return new AdvancedProperty(String.valueOf(size.getId()),
                 PheidippidesUtil.escapeXML(iwrb.getLocalizedString(
-                        event.getLocalizedKey() + "." + size.getLocalizedKey(),
+                        event.getLocalizedKey() + "."
+                                + size.getLocalizedKey(),
                         size.getSize().toString() + " - "
                                 + size.getGender().toString())));
     }
@@ -2469,7 +2405,8 @@ public class PheidippidesService {
             body = body.replaceAll("<br />", "\r\n");
 
             sendMessage(email.getEmailAddress(), subject, body,
-                    registration.getRace().getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
+                    registration.getRace().getSendRegistrationCCTo(),
+                    registration.getRace().getEvent().getFromEmail());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -2577,13 +2514,6 @@ public class PheidippidesService {
         String valitorSecurityNumber = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SECURITY_NUMBER, "12345");
-        String valitorShopIDEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SHOP_ID_EUR, "1");
-        String valitorSecurityNumberEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
-
         String valitorReturnURL = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE,
@@ -2601,22 +2531,13 @@ public class PheidippidesService {
                 .getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_CANCEL,
                         "http://skraning.marathon.is/pages/valitor");
 
-        StringBuilder securityString = null;
-        if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
-            securityString = new StringBuilder(valitorSecurityNumber);
-        } else {
-            securityString = new StringBuilder(valitorSecurityNumberEUR);
-        }
+        StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
 
         StringBuilder url = new StringBuilder(valitorURL);
         url.append("?");
         url.append(VEFVERSLUN_ID);
         url.append("=");
-        if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
-            url.append(valitorShopID);
-        } else {
-            url.append(valitorShopIDEUR);
-        }
+        url.append(valitorShopID);
         url.append("&");
         url.append(LANG);
         url.append("=");
@@ -2627,11 +2548,6 @@ public class PheidippidesService {
         }
         String currency = "ISK";
 
-        if (registration.getHeader().getCurrency().equals(Currency.ISK)) {
-            currency = "ISK";
-        } else {
-            currency = "EUR";
-        }
         url.append("&");
         url.append(GJALDMIDILL);
         url.append("=");
@@ -2681,11 +2597,7 @@ public class PheidippidesService {
         url.append("=");
         url.append(0);
 
-        if (header.getCurrency().equals(Currency.ISK)) {
-            securityString.append(valitorShopID);
-        } else {
-            securityString.append(valitorShopIDEUR);
-        }
+        securityString.append(valitorShopID);
         securityString.append(header.getUuid());
         securityString.append(valitorReturnURL);
         securityString.append(valitorReturnURLServerSide);
@@ -3094,7 +3006,8 @@ public class PheidippidesService {
                     body = body.replaceAll("<br />", "\r\n");
 
                     sendMessage(email.getEmailAddress(), subject, body,
-                            race.getSendRegistrationCCTo(), race.getEvent().getFromEmail());
+                            race.getSendRegistrationCCTo(),
+                            race.getEvent().getFromEmail());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 } catch (FinderException e) {
@@ -3143,7 +3056,8 @@ public class PheidippidesService {
             body = body.replaceAll("<br />", "\r\n");
 
             sendMessage(email.getEmailAddress(), subject, body,
-                    holder.getRace().getSendRegistrationCCTo(), holder.getRace().getEvent().getFromEmail());
+                    holder.getRace().getSendRegistrationCCTo(),
+                    holder.getRace().getEvent().getFromEmail());
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (FinderException e) {
@@ -3206,7 +3120,7 @@ public class PheidippidesService {
 
     private Group getGroupCreateIfNecessaryStoreAsApplicationBinding(
             String parameter, String createName, String createDescription)
-                    throws RemoteException, FinderException, CreateException {
+            throws RemoteException, FinderException, CreateException {
         IWMainApplicationSettings settings = IWMainApplication
                 .getDefaultIWMainApplication().getSettings();
         String groupId = settings.getProperty(parameter);
@@ -3603,7 +3517,9 @@ public class PheidippidesService {
         int memberCount = 1 + getOtherTeamMembers(registration).size();
 
         dao.updateTeamCategory(team,
-                memberCount >= 3 && memberCount <= 5 ? teamCategory : TeamCategory.NotFullTeam,
+                memberCount >= 3 && memberCount <= 5
+                        ? teamCategory
+                        : TeamCategory.NotFullTeam,
                 memberCount == 4);
     }
 
@@ -3877,14 +3793,12 @@ public class PheidippidesService {
                                                 .getLocalizedKey() + "."
                                                 + "registration_received_subject_mail",
                                         "Your registration has been received."));
-                        String body = MessageFormat.format(
-                                StringEscapeUtils
-                                        .unescapeHtml(iwrb.getLocalizedString(
-                                                registration.getRace()
-                                                        .getEvent()
-                                                        .getLocalizedKey() + "."
-                                                        + "registration_received_body_mail",
-                                                "Your registration has been received.")),
+                        String body = MessageFormat.format(StringEscapeUtils
+                                .unescapeHtml(iwrb.getLocalizedString(
+                                        registration.getRace().getEvent()
+                                                .getLocalizedKey() + "."
+                                                + "registration_received_body_mail",
+                                        "Your registration has been received.")),
                                 args);
 
                         body = body.replaceAll("<p>", "")
@@ -3895,7 +3809,9 @@ public class PheidippidesService {
 
                         sendMessage(email.getEmailAddress(), subject, body,
                                 registration.getRace()
-                                        .getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
+                                        .getSendRegistrationCCTo(),
+                                registration.getRace().getEvent()
+                                        .getFromEmail());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -4295,7 +4211,8 @@ public class PheidippidesService {
                     body = body.replaceAll("<br />", "\r\n");
 
                     sendMessage(email.getEmailAddress(), subject, body,
-                            registration.getRace().getSendRegistrationCCTo(), registration.getRace().getEvent().getFromEmail());
+                            registration.getRace().getSendRegistrationCCTo(),
+                            registration.getRace().getEvent().getFromEmail());
 
                     return passwordString;
                 }
@@ -4323,13 +4240,6 @@ public class PheidippidesService {
         String valitorSecurityNumber = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SECURITY_NUMBER, "12345");
-        String valitorShopIDEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SHOP_ID_EUR, "1");
-        String valitorSecurityNumberEUR = IWMainApplication
-                .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
-
         String valitorReturnURL = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_RETURN_URL_GIFTCARD,
@@ -4348,26 +4258,13 @@ public class PheidippidesService {
 
         Currency currency = Currency.ISK;
 
-        StringBuilder securityString = null;
-        if (currency != null) {
-            if (currency.equals(Currency.ISK)) {
-                securityString = new StringBuilder(valitorSecurityNumber);
-            } else {
-                securityString = new StringBuilder(valitorSecurityNumberEUR);
-            }
-        }
+        StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
 
         StringBuilder url = new StringBuilder(valitorURL);
         url.append("?");
         url.append(VEFVERSLUN_ID);
         url.append("=");
-        if (currency != null) {
-            if (currency.equals(Currency.ISK)) {
-                url.append(valitorShopID);
-            } else {
-                url.append(valitorShopIDEUR);
-            }
-        }
+        url.append(valitorShopID);
         url.append("&");
         url.append(LANG);
         url.append("=");
@@ -4380,15 +4277,7 @@ public class PheidippidesService {
         url.append("&");
         url.append(GJALDMIDILL);
         url.append("=");
-        if (currency != null) {
-            if (currency.equals(Currency.ISK)) {
-                url.append("ISK");
-            } else {
-                url.append("EUR");
-            }
-        } else {
-            url.append("ISK");
-        }
+        url.append("ISK");
         url.append("&");
         url.append(ADEINSHEIMILD);
         url.append("=");
@@ -4464,11 +4353,7 @@ public class PheidippidesService {
                 url.append("0");
             }
 
-            if (currency.equals(Currency.ISK)) {
-                securityString.append(valitorShopID);
-            } else {
-                securityString.append(valitorShopIDEUR);
-            }
+            securityString.append(valitorShopID);
             securityString.append(header.getUuid());
             securityString.append(valitorReturnURL);
             securityString.append(valitorReturnURLServerSide);

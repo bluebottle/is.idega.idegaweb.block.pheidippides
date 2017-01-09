@@ -339,7 +339,7 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -385,7 +385,7 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, null, null, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);

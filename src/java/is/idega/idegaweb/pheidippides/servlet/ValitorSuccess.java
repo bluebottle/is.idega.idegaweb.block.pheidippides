@@ -15,7 +15,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWContext;
 
-import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationHeaderStatus;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
@@ -26,7 +25,6 @@ public class ValitorSuccess extends HttpServlet {
 
 	private static final long serialVersionUID = -5479791076359839694L;
 
-	private static final String VALITOR_SECURITY_NUMBER_EUR = "VALITOR_SECURITY_NUMBER_EUR";
 	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
 
@@ -54,12 +52,6 @@ public class ValitorSuccess extends HttpServlet {
 			String securityNumber = IWMainApplication
 					.getDefaultIWApplicationContext().getApplicationSettings()
 					.getProperty(VALITOR_SECURITY_NUMBER, "12345");
-
-			if (header.getCurrency().equals(Currency.EUR)) {
-				securityNumber = IWMainApplication
-						.getDefaultIWApplicationContext().getApplicationSettings()
-						.getProperty(VALITOR_SECURITY_NUMBER_EUR, "12345");
-			}
 
 			List<Registration> registrations = dao.getRegistrations(header);
 			for (Registration registration : registrations) {

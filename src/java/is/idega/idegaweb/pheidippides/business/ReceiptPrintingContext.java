@@ -69,9 +69,6 @@ public class ReceiptPrintingContext extends PrintingContextImpl {
 		nf.setMaximumFractionDigits(0);
 		nf.setMinimumFractionDigits(0);
 		nf.setParseIntegerOnly(true);
-		if (header.getCurrency().equals(Currency.EUR)) {
-			nf.setCurrency(java.util.Currency.getInstance("EUR"));
-		}
 
 		List<RaceTrinket> raceTrinkets = new ArrayList<RaceTrinket>();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();

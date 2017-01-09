@@ -23,8 +23,6 @@ public class PheidippidesRegistrationSession {
 
 	private String valitorShopId = null;
 	private String valitorSecurityNumber = null;
-    private String valitorEURShopId = null;
-    private String valitorEURSecurityNumber = null;
     private String valitorReturnURLText = null;
     private String valitorReturnURL = null;
 
@@ -136,28 +134,12 @@ public class PheidippidesRegistrationSession {
         this.valitorShopId = valitorShopId;
     }
 
-    public String getValitorEURShopId() {
-        return valitorEURShopId;
-    }
-
-    public void setValitorEURShopId(String valitorEURShopId) {
-        this.valitorEURShopId = valitorEURShopId;
-    }
-
     public String getValitorSecurityNumber() {
         return valitorSecurityNumber;
     }
 
     public void setValitorSecurityNumber(String valitorSecurityNumber) {
         this.valitorSecurityNumber = valitorSecurityNumber;
-    }
-
-    public String getValitorEURSecurityNumber() {
-        return valitorEURSecurityNumber;
-    }
-
-    public void setValitorEURSecurityNumber(String valitorEURSecurityNumber) {
-        this.valitorEURSecurityNumber = valitorEURSecurityNumber;
     }
 
     public String getValitorReturnURLText() {

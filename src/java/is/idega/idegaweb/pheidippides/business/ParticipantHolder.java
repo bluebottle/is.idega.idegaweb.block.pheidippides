@@ -26,8 +26,8 @@ public class ParticipantHolder {
 	private long discount;
 
 	private boolean acceptsWaiver;
-	private boolean hasDoneMarathonBefore = false;
-	private boolean hasDoneLVBefore = false;
+	private boolean hasDoneMarathonBefore = true;
+	private boolean hasDoneLVBefore = true;
 	private boolean needsAssistance = false;
 	private boolean facebook = true;
 	private boolean showRegistration = true;
