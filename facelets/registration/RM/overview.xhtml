@@ -80,6 +80,15 @@
 							</tr>
 						</ui:repeat>
 					</ui:fragment>
+					<ui:fragment rendered="#{not empty current.trinkets}">
+						<ui:repeat value="#{current.trinkets}" var="racePrice">
+							<tr class="trinket">
+								<td class="firstColumn" ><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.code))])}" /></td>
+								<td><h:outputText escape="false" value="" /></td>
+								<td class="lastColumn"><h:outputText value="#{racePrice.price}" /></td>
+							</tr>
+						</ui:repeat>
+					</ui:fragment>
 
 					<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
 						<tr class="giftCard">

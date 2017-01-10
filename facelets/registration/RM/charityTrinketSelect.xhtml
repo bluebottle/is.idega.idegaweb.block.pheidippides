@@ -17,9 +17,10 @@
 
 		<div class="formItem required">
 			<fieldset class="formSection">
+				<legend><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_charity_trinket')])}" /></legend>
 				<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="racePrice">
 					<div class="formItem radioButtonItem">
-						<c:radioButton styleClass="required" name="prm_charity_trinket" content="#{racePrice.trinket.id}" />
+						<c:radioButton styleClass="required" name="prm_charity_trinket" content="#{racePrice.id}" />
 						<label for="prm_charity_trinket"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></label>
 					</div>
 				</ui:repeat>
