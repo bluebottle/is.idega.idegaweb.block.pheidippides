@@ -378,6 +378,15 @@ public class PheidippidesDaoImpl extends GenericDaoImpl implements
 						"currency", currency));
 	}
 
+   @Override
+    public List<RacePrice> getCurrentRaceTrinketPriceOrdered(Race race,
+            Currency currency) {
+        return getResultList("racePrice.findTrinketsByRaceAndDateOrdered",
+                RacePrice.class, new Param("race", race), new Param("date",
+                        IWTimestamp.getTimestampRightNow()), new Param(
+                        "currency", currency));
+    }
+
 	@Override
 	public List<RacePrice> getRaceTrinketPrice(Race race, Date date,
 			Currency currency) {

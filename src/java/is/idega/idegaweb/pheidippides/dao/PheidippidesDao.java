@@ -113,6 +113,9 @@ public interface PheidippidesDao extends GenericDao {
 	public List<RacePrice> getCurrentRaceTrinketPrice(Race race,
 			Currency currency);
 
+   public List<RacePrice> getCurrentRaceTrinketPriceOrdered(Race race,
+            Currency currency);
+
 	public List<RacePrice> getRaceTrinketPrice(Race race, Date date,
 			Currency currency);
 

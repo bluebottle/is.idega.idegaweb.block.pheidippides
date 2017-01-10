@@ -8,7 +8,7 @@
 >
 <ui:component>
 	<form class="registrationForm" action="" method="post">
-		<input type="hidden" name="prm_action" value="5" />
+		<input type="hidden" name="prm_action" value="55" />
 
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
@@ -20,7 +20,7 @@
 				<legend><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_charity_trinket')])}" /></legend>
 				<ui:repeat value="#{pheidippidesBean.raceTrinkets}" var="racePrice">
 					<div class="formItem radioButtonItem">
-						<c:radioButton styleClass="required" name="prm_charity_trinket" content="#{racePrice.id}" />
+						<c:radioButton styleClass="required" name="prm_charity_trinket" content="#{racePrice.id}" selected="#{pheidippidesBean.charityTrinket.id eq racePrice.id}" />
 						<label for="prm_charity_trinket"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', racePrice.trinket.localizedKey))])}" /></label>
 					</div>
 				</ui:repeat>
@@ -32,7 +32,7 @@
   	</div>
 
 		<fieldset class="submit">
-			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="back" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

@@ -52,6 +52,7 @@ public class PheidippidesBean {
 	private Map<RaceTrinket, RegistrationTrinket> registrationTrinkets;
 
 	private List<RacePrice> raceTrinkets;
+	private RacePrice charityTrinket;
 
 	private Race race;
 	private Collection<Race> races;
@@ -506,5 +507,13 @@ public class PheidippidesBean {
 
     public void setExternalCharities(List<ExternalCharity> externalCharities) {
         this.externalCharities = externalCharities;
+    }
+
+    public RacePrice getCharityTrinket() {
+        return charityTrinket;
+    }
+
+    public void setCharityTrinket(RacePrice charityTrinket) {
+        this.charityTrinket = charityTrinket;
     }
 }

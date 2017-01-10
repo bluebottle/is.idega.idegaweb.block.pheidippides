@@ -9,7 +9,7 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="6" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 6" /></h2>
 
@@ -21,7 +21,7 @@
 				<label for="prm_waiver"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.accept_waiter')]}" /></label>
 			</div>
 		</fieldset>
-		
+
 		<fieldset class="formSection facebook">
 			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.facebook_help')]}" /></div>
 
@@ -30,7 +30,7 @@
 				<label for="prm_facebook"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.facebook_decline')]}" /></label>
 			</div>
 		</fieldset>
-		
+
 		<fieldset class="formSection showRegistration">
 			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_help')]}" /></div>
 
@@ -39,9 +39,9 @@
 				<label for="prm_show_registration"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_decline')]}" /></label>
 			</div>
 		</fieldset>
-		
+
 		<fieldset class="submit">
-			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.charityRun and pheidippidesRegistrationSession.registrationWithPersonalId ? 5 : pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.charityRun ? 5 : pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
 	</form>

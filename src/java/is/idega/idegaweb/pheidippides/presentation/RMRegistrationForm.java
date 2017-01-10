@@ -50,6 +50,7 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final int ACTION_RACE_SELECT = 3;
     private static final int ACTION_RELAY_TEAM = 4;
     private static final int ACTION_CHARITY_SELECT = 5;
+    private static final int ACTION_CHARITY_TRINKET_SELECT = 55;
     private static final int ACTION_WAIVER = 6;
     private static final int ACTION_OVERVIEW = 7;
     private static final int ACTION_RECEIPT = 8;
@@ -84,7 +85,6 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_FACEBOOK = "prm_facebook";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_CHARITY_TRINKET = "prm_charity_trinket";
-
 
     @Autowired
     private PheidippidesService service;
@@ -263,17 +263,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                         } else {
                             if (getSession().getCurrentParticipant().getRace()
                                     .isCharityRun()) {
-                                if (getSession().isRegistrationWithPersonalId()) {
-                                    showCharitySelect(iwc, bean);
-                                } else {
-                                    bean.setRaceTrinkets(
-                                            dao.getCurrentRaceTrinketPrice(
-                                                    getSession()
-                                                            .getCurrentParticipant()
-                                                            .getRace(),
-                                                    getSession().getCurrency()));
-                                    showCharityTrinketSelect(iwc, bean);
-                                }
+                                showCharitySelect(iwc, bean);
                             } else {
                                 showWaiver(iwc, bean);
                             }
@@ -353,17 +343,7 @@ public class RMRegistrationForm extends IWBaseComponent {
 
                         if (getSession().getCurrentParticipant().getRace()
                                 .isCharityRun()) {
-                            if (getSession().isRegistrationWithPersonalId()) {
-                                showCharitySelect(iwc, bean);
-                            } else {
-                                bean.setRaceTrinkets(
-                                        dao.getCurrentRaceTrinketPrice(
-                                                getSession()
-                                                        .getCurrentParticipant()
-                                                        .getRace(),
-                                                getSession().getCurrency()));
-                                showCharityTrinketSelect(iwc, bean);
-                            }
+                            showCharitySelect(iwc, bean);
                         } else {
                             showWaiver(iwc, bean);
                         }
@@ -371,33 +351,76 @@ public class RMRegistrationForm extends IWBaseComponent {
                         showPersonSelect(iwc, bean);
                     }
                     break;
+                case ACTION_CHARITY_TRINKET_SELECT :
+                    if (getSession().getCurrentParticipant() != null) {
+                        if (iwc.isParameterSet(PARAMETER_USE_CHARITY)
+                                && iwc.isParameterSet(PARAMETER_CHARITY)) {
+                            String locale = iwc.getCurrentLocale()
+                                    .equals(LocaleUtil.getIcelandicLocale())
+                                            ? "is"
+                                            : "en";
+                            getSession().getCurrentParticipant()
+                                    .setExternalCharity(
+                                            getService().getExternalCharity(
+                                                    iwc.getParameter(
+                                                            PARAMETER_CHARITY),
+                                                    locale));
+                            getSession().getCurrentParticipant()
+                                    .clearTrinkets();
+
+                            showWaiver(iwc, bean);
+                        } else if (getSession()
+                                .isRegistrationWithPersonalId()) {
+                            getSession().getCurrentParticipant()
+                                    .setCharity(null);
+                            getSession().getCurrentParticipant()
+                                    .clearTrinkets();
+
+                            showWaiver(iwc, bean);
+                        } else {
+                            getSession().getCurrentParticipant()
+                                    .setCharity(null);
+                            List<RacePrice> charityTrinkets = dao
+                                    .getCurrentRaceTrinketPriceOrdered(
+                                            getSession().getCurrentParticipant()
+                                                    .getRace(),
+                                            getSession().getCurrency());
+                            bean.setRaceTrinkets(charityTrinkets);
+
+                            if (getSession().getCurrentParticipant()
+                                    .getTrinkets() == null
+                                    || getSession().getCurrentParticipant()
+                                            .getTrinkets().isEmpty()) {
+                                if (!charityTrinkets.isEmpty()) {
+                                    bean.setCharityTrinket(
+                                            charityTrinkets.get(0));
+                                }
+                            } else {
+                                bean.setCharityTrinket(
+                                        getSession().getCurrentParticipant()
+                                                .getTrinkets().get(0));
+                            }
+                            showCharityTrinketSelect(iwc, bean);
+                        }
+                    } else {
+                        showPersonSelect(iwc, bean);
+                    }
+
+                    break;
 
                 case ACTION_WAIVER :
                     if (getSession().getCurrentParticipant() != null) {
-                        if (getSession().isRegistrationWithPersonalId()) {
-                            if (iwc.isParameterSet(PARAMETER_USE_CHARITY)
-                                    && iwc.isParameterSet(PARAMETER_CHARITY)) {
-                                String locale = iwc.getCurrentLocale()
-                                        .equals(LocaleUtil.getIcelandicLocale())
-                                                ? "is"
-                                                : "en";
-                                getSession().getCurrentParticipant()
-                                        .setExternalCharity(
-                                                getService().getExternalCharity(
-                                                        iwc.getParameter(
-                                                                PARAMETER_CHARITY),
-                                                        locale));
-                            } else {
-                                getSession().getCurrentParticipant()
-                                        .setCharity(null);
-                            }
-                        } else {
-                            getSession().getCurrentParticipant().clearTrinkets();
-                            String trinketId = iwc.getParameter(PARAMETER_CHARITY_TRINKET);
+                        if (!getSession().isRegistrationWithPersonalId()) {
+                            getSession().getCurrentParticipant()
+                                    .clearTrinkets();
+                            String trinketId = iwc
+                                    .getParameter(PARAMETER_CHARITY_TRINKET);
                             if (trinketId != null && !"-1".equals(trinketId)) {
-                                RacePrice charityTrinket = dao.getRacePrice(new Long(trinketId));
+                                RacePrice charityTrinket = dao
+                                        .getRacePrice(new Long(trinketId));
                                 if (charityTrinket != null) {
-                                    getSession().getCurrentParticipant().addTrinket(charityTrinket);
+                                    getSession().getCurrentParticipant()
+                                            .addTrinket(charityTrinket);
                                 }
                             }
                         }

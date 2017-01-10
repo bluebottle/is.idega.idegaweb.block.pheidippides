@@ -1,7 +1,5 @@
 package is.idega.idegaweb.pheidippides.data;
 
-import is.idega.idegaweb.pheidippides.business.Currency;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,13 +22,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import is.idega.idegaweb.pheidippides.business.Currency;
+
 @Entity
 @Table(name = RacePrice.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "racePrice.findAll", query = "select r from RacePrice r"),
 	@NamedQuery(name = "racePrice.findByRace", query = "select r from RacePrice r where r.race = :race"),
 	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and r.trinket is null"),
-	@NamedQuery(name = "racePrice.findTrinketsByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null")
+	@NamedQuery(name = "racePrice.findTrinketsByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null"),
+    @NamedQuery(name = "racePrice.findTrinketsByRaceAndDateOrdered", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null order by r.price desc"),
+
 })
 public class RacePrice implements Serializable {
 	private static final long serialVersionUID = -1799532522822250416L;
@@ -49,7 +51,7 @@ public class RacePrice implements Serializable {
 	private static final String COLUMN_SHIRT_PRICE = "shirt_price";
 	private static final String COLUMN_CURRENCY = "currency";
 	private static final String COLUMN_TRINKET = "trinket_id";
-	
+
 	@PrePersist
 	@PreUpdate
 	public void setDefaultValues() {
@@ -61,10 +63,10 @@ public class RacePrice implements Serializable {
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			
+
 			setValidFrom(cal.getTime());
 		}
-		
+
 		if (getValidTo() != null) {
 			Date validTo = getValidTo();
 			GregorianCalendar cal = new GregorianCalendar();
@@ -73,11 +75,11 @@ public class RacePrice implements Serializable {
 			cal.set(Calendar.MINUTE, 59);
 			cal.set(Calendar.SECOND, 59);
 			cal.set(Calendar.MILLISECOND, 999);
-			
+
 			setValidTo(cal.getTime());
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = RacePrice.COLUMN_ENTRY_ID)
@@ -106,7 +108,7 @@ public class RacePrice implements Serializable {
 
 	@Column(name = RacePrice.COLUMN_SHIRT_PRICE)
 	private int shirtPrice;
-	
+
 	@Column(name = RacePrice.COLUMN_CURRENCY)
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
@@ -115,7 +117,7 @@ public class RacePrice implements Serializable {
 	@JoinColumn(name = RacePrice.COLUMN_TRINKET)
 	private RaceTrinket trinket;
 
-	
+
 	public Date getValidFrom() {
 		return validFrom;
 	}
@@ -163,11 +165,11 @@ public class RacePrice implements Serializable {
 	public void setShirtPrice(int shirtPrice) {
 		this.shirtPrice = shirtPrice;
 	}
-	
+
 	public Currency getCurrency() {
 		return this.currency;
 	}
-	
+
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
 	}
