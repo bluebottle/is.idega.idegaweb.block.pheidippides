@@ -9,14 +9,14 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="1" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_cards']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 1" /></h2>
 
 		<div class="helpText">
 			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card.person_select_help']}" />
 		</div>
-		
+
 		<fieldset class="formSection">
 			<div class="formItem required">
 				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
@@ -24,14 +24,14 @@
 			</div>
 			<div class="formItem required">
 				<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
-				<input type="text" class="required email" name="prm_email" />
+				<input id="prm_email" type="text" class="required email" name="prm_email" />
 			</div>
 			<div class="formItem required">
 				<label for="prm_email_repeat"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email_repeat']}" /></label>
-				<input id="prm_email" type="text" class="required email" name="prm_email_repeat" />
+				<input id="prm_email_repeat" type="text" class="required email" name="prm_email_repeat" />
 			</div>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
 		</fieldset>
