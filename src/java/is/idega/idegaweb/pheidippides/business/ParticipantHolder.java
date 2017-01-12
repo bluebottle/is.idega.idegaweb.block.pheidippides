@@ -44,6 +44,7 @@ public class ParticipantHolder {
 
 	private String runningGroup = null;
 
+	private String comment = null;
 
 	public Participant getParticipant() {
 		return participant;
@@ -236,5 +237,11 @@ public class ParticipantHolder {
     }
     public void setExternalCharity(ExternalCharity externalCharity) {
         this.externalCharity = externalCharity;
+    }
+    public String getComment() {
+        return comment;
+    }
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

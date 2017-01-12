@@ -20,130 +20,145 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = Event.ENTITY_NAME)
 @NamedQueries({
-	@NamedQuery(name = "event.findAll", query = "select e from Event e"),
-	@NamedQuery(name = "event.findByName", query = "select e from Event e where e.name = :name"),
-	@NamedQuery(name = "event.findByReportSign", query = "select e from Event e where e.reportSign = :reportSign")
-})
+        @NamedQuery(name = "event.findAll", query = "select e from Event e"),
+        @NamedQuery(name = "event.findByName", query = "select e from Event e where e.name = :name"),
+        @NamedQuery(name = "event.findByReportSign", query = "select e from Event e where e.reportSign = :reportSign")})
 public class Event implements Serializable {
-	private static final long serialVersionUID = 1146177106821030818L;
+    private static final long serialVersionUID = 1146177106821030818L;
 
-	public static final String ENTITY_NAME = "ph_event";
-	private static final String COLUMN_ENTRY_ID = "event_id";
-	private static final String COLUMN_NAME = "event_name";
-	private static final String COLUMN_DESCRIPTION = "event_description";
-	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
-	private static final String COLUMN_REPORT_SIGN = "report_sign";
-	private static final String COLUMN_CREATED_DATE = "created";
-	private static final String COLUMN_EVENT_EMAIL_FROM = "from_email";
+    public static final String ENTITY_NAME = "ph_event";
+    private static final String COLUMN_ENTRY_ID = "event_id";
+    private static final String COLUMN_NAME = "event_name";
+    private static final String COLUMN_DESCRIPTION = "event_description";
+    private static final String COLUMN_LOCALIZED_KEY = "localized_key";
+    private static final String COLUMN_REPORT_SIGN = "report_sign";
+    private static final String COLUMN_CREATED_DATE = "created";
+    private static final String COLUMN_EVENT_EMAIL_FROM = "from_email";
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = Event.COLUMN_ENTRY_ID)
-	private Long id;
+    private static final String COLUMN_PAYMENT_SHOP_ID = "payment_shop_id";
+    private static final String COLUMN_PAYMENT_SECURITY_NUMBER = "payment_security_number";
+    private static final String COLUMN_PAYMENT_RETURN_URL_TEXT = "payment_return_url_text";
+    private static final String COLUMN_PAYMENT_RETURN_URL = "payment_return_url";
 
-	@Column(name = Event.COLUMN_NAME)
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = Event.COLUMN_ENTRY_ID)
+    private Long id;
 
-	@Column(name = Event.COLUMN_DESCRIPTION)
-	private String description;
+    @Column(name = Event.COLUMN_NAME)
+    private String name;
 
-	@Column(name = Event.COLUMN_LOCALIZED_KEY)
-	private String localizedKey;
+    @Column(name = Event.COLUMN_DESCRIPTION)
+    private String description;
 
-	@Column(name = Event.COLUMN_REPORT_SIGN)
-	private String reportSign;
+    @Column(name = Event.COLUMN_LOCALIZED_KEY)
+    private String localizedKey;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = Event.COLUMN_CREATED_DATE)
-	private Date createdDate;
+    @Column(name = Event.COLUMN_REPORT_SIGN)
+    private String reportSign;
 
-	@Column(name = Event.COLUMN_EVENT_EMAIL_FROM)
-	private String fromEmail;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = Event.COLUMN_CREATED_DATE)
+    private Date createdDate;
 
+    @Column(name = Event.COLUMN_EVENT_EMAIL_FROM)
+    private String fromEmail;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Charity> charities;
+    @Column(name = Event.COLUMN_PAYMENT_SHOP_ID)
+    private String paymentShopID;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = Event.COLUMN_PAYMENT_SECURITY_NUMBER)
+    private String paymentSecurityNumber;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = Event.COLUMN_PAYMENT_RETURN_URL_TEXT)
+    private String paymentReturnURLText;
 
-	public String getName() {
-		return name;
-	}
+    @Column(name = Event.COLUMN_PAYMENT_RETURN_URL)
+    private String paymentReturnURL;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Charity> charities;
 
-	public String getDescription() {
-		return description;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getLocalizedKey() {
-		return localizedKey;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setLocalizedKey(String localizedKey) {
-		this.localizedKey = localizedKey;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getReportSign() {
-		return reportSign;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setReportSign(String reportSign) {
-		this.reportSign = reportSign;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    public String getLocalizedKey() {
+        return localizedKey;
+    }
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    public void setLocalizedKey(String localizedKey) {
+        this.localizedKey = localizedKey;
+    }
 
-	public List<Charity> getCharities() {
-		return charities;
-	}
+    public String getReportSign() {
+        return reportSign;
+    }
 
-	public void setCharities(List<Charity> charities) {
-		this.charities = charities;
-	}
+    public void setReportSign(String reportSign) {
+        this.reportSign = reportSign;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Event other = (Event) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public List<Charity> getCharities() {
+        return charities;
+    }
+
+    public void setCharities(List<Charity> charities) {
+        this.charities = charities;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Event other = (Event) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
     public String getFromEmail() {
         return fromEmail;
@@ -151,5 +166,37 @@ public class Event implements Serializable {
 
     public void setFromEmail(String fromEmail) {
         this.fromEmail = fromEmail;
+    }
+
+    public String getPaymentShopID() {
+        return paymentShopID;
+    }
+
+    public void setPaymentShopID(String paymentShopID) {
+        this.paymentShopID = paymentShopID;
+    }
+
+    public String getPaymentSecurityNumber() {
+        return paymentSecurityNumber;
+    }
+
+    public void setPaymentSecurityNumber(String paymentSecurityNumber) {
+        this.paymentSecurityNumber = paymentSecurityNumber;
+    }
+
+    public String getPaymentReturnURLText() {
+        return paymentReturnURLText;
+    }
+
+    public void setPaymentReturnURLText(String paymentReturnURLText) {
+        this.paymentReturnURLText = paymentReturnURLText;
+    }
+
+    public String getPaymentReturnURL() {
+        return paymentReturnURL;
+    }
+
+    public void setPaymentReturnURL(String paymentReturnURL) {
+        this.paymentReturnURL = paymentReturnURL;
     }
 }

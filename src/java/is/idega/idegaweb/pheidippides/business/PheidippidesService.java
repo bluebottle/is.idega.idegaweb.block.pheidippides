@@ -1707,6 +1707,10 @@ public class PheidippidesService {
                                     : participantHolder.getExternalCharity()
                                             .getId());
 
+                    if (participantHolder.getComment() != null && !"".equals(participantHolder.getComment())) {
+                        dao.updateExtraInformation(registration, null, participantHolder.getComment());
+                    }
+
                     amount += participantHolder.getAmount()
                             - participantHolder.getDiscount();
 

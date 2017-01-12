@@ -1,9 +1,5 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -22,71 +18,50 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
-import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.Currency;
-import is.idega.idegaweb.pheidippides.business.GiftCardService;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
 
-public class NorthernLightRegistrationForm extends IWBaseComponent {
+public class RIGRegistrationForm extends IWBaseComponent {
 
     private static final String PARAMETER_ACTION = "prm_action";
     private static final int ACTION_PERSON_SELECT = 1;
     private static final int ACTION_PARTICIPANT = 2;
-    private static final int ACTION_RACE_SELECT = 3;
-    private static final int ACTION_WAIVER = 5;
+    private static final int ACTION_EVENT_SELECT = 3;
+    private static final int ACTION_SEAT_SELECT = 4;
     private static final int ACTION_OVERVIEW = 6;
     private static final int ACTION_RECEIPT = 7;
     private static final int ACTION_REGISTER_ANOTHER = 8;
-    private static final int ACTION_GIFT_CARD = 9;
-    private static final int ACTION_ADD_GIFT_CARD = 10;
-    private static final int ACTION_REMOVE_GIFT_CARD = 11;
-    private static final int ACTION_FINISH_REGISTRATION = 12;
+    private static final int ACTION_FINISH_REGISTRATION = 9;
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
-    private static final String PARAMETER_NAME = "prm_name";
-    private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
-    private static final String PARAMETER_ADDRESS = "prm_address";
-    private static final String PARAMETER_CITY = "prm_city";
-    private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
-    private static final String PARAMETER_COUNTRY = "prm_country";
     private static final String PARAMETER_NATIONALITY = "prm_nationality";
     private static final String PARAMETER_GENDER = "prm_gender";
     private static final String PARAMETER_EMAIL = "prm_email";
-    private static final String PARAMETER_PHONE = "prm_phone";
     private static final String PARAMETER_MOBILE = "prm_mobile";
-    private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
-    private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
-    private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
-
+    private static final String PARAMETER_SEAT = "prm_seat";
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
     private static final String VALITOR_TOUR_RETURN_URL_TEXT = "VALITOR_TOUR_RETURN_URL_TEXT";
     private static final String VALITOR_TOUR_RETURN_URL = "VALITOR_TOUR_RETURN_URL";
 
-
     @Autowired
     private PheidippidesService service;
 
     @Autowired
     private PheidippidesRegistrationSession session;
-
-    @Autowired
-    private GiftCardService giftCardService;
 
     @Autowired
     private PheidippidesDao dao;
@@ -124,10 +99,12 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                 .getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");
         String valitorReturnURLText = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT, "tourofreykjavik.is");
+                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT,
+                        "tourofreykjavik.is");
         String valitorReturnURL = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_TOUR_RETURN_URL, "http://tourofreykjavik.is");
+                .getProperty(VALITOR_TOUR_RETURN_URL,
+                        "http://tourofreykjavik.is");
 
         getSession().setValitorShopId(valitorShopID);
         getSession().setValitorSecurityNumber(valitorSecurityNumber);
@@ -136,16 +113,20 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
 
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
-            if (event.getPaymentShopID() != null && !"".equals(event.getPaymentShopID())) {
+            if (event.getPaymentShopID() != null
+                    && !"".equals(event.getPaymentShopID())) {
                 valitorShopID = event.getPaymentShopID();
             }
-            if (event.getPaymentSecurityNumber() != null && !"".equals(event.getPaymentSecurityNumber())) {
+            if (event.getPaymentSecurityNumber() != null
+                    && !"".equals(event.getPaymentSecurityNumber())) {
                 valitorSecurityNumber = event.getPaymentSecurityNumber();
             }
-            if (event.getPaymentReturnURLText() != null && !"".equals(event.getPaymentReturnURLText())) {
+            if (event.getPaymentReturnURLText() != null
+                    && !"".equals(event.getPaymentReturnURLText())) {
                 valitorReturnURLText = event.getPaymentReturnURLText();
             }
-            if (event.getPaymentReturnURL() != null && !"".equals(event.getPaymentReturnURL())) {
+            if (event.getPaymentReturnURL() != null
+                    && !"".equals(event.getPaymentReturnURL())) {
                 valitorReturnURL = event.getPaymentReturnURL();
             }
 
@@ -191,10 +172,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
 
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
-                    if (bean.getLocale()
-                            .equals(LocaleUtil.getIcelandicLocale())) {
-                        getSession().setRegistrationWithPersonalId(true);
-                    }
+                    getSession().setRegistrationWithPersonalId(true);
                     showPersonSelect(iwc, bean);
                     break;
 
@@ -207,15 +185,11 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                         holder.setParticipant(participant);
 
                         getSession().setCurrentParticipant(holder);
-                        getSession().setRegistrationWithPersonalId(true);
-                    } else if (!bean.getLocale()
-                            .equals(LocaleUtil.getIcelandicLocale())) {
-                        getSession().setRegistrationWithPersonalId(false);
                     }
                     showParticipant(iwc, bean);
                     break;
 
-                case ACTION_RACE_SELECT :
+                case ACTION_EVENT_SELECT :
                     if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
                         Participant participant = null;
                         if (getSession().getCurrentParticipant() == null) {
@@ -228,47 +202,21 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                     .getParticipant();
                         }
 
-                        if (!getSession().isRegistrationWithPersonalId()) {
-                            DateFormat format = new SimpleDateFormat(
-                                    "dd.MM.yyyy");
-
-                            participant.setFullName(
-                                    iwc.getParameter(PARAMETER_NAME));
-                            try {
-                                participant.setDateOfBirth(
-                                        format.parse(iwc.getParameter(
-                                                PARAMETER_DATE_OF_BIRTH)));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            participant.setAddress(
-                                    iwc.getParameter(PARAMETER_ADDRESS));
-                            participant
-                                    .setCity(iwc.getParameter(PARAMETER_CITY));
-                            participant.setPostalCode(
-                                    iwc.getParameter(PARAMETER_POSTAL_CODE));
-                            participant.setCountry(
-                                    iwc.getParameter(PARAMETER_COUNTRY));
-                        }
                         participant.setNationality(
                                 iwc.getParameter(PARAMETER_NATIONALITY));
                         participant
                                 .setGender(iwc.getParameter(PARAMETER_GENDER));
                         participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
-                        participant.setPhoneHome(
-                                iwc.getParameter(PARAMETER_PHONE));
                         participant.setPhoneMobile(
                                 iwc.getParameter(PARAMETER_MOBILE));
-                        participant.setRunningGroup(
-                                iwc.getParameter(PARAMETER_BICYCLE_GROUP));
                         getSession().getCurrentParticipant()
                                 .setParticipant(participant);
                     }
 
-                    showRaceSelect(iwc, bean);
+                    showEventSelect(iwc, bean);
                     break;
 
-                case ACTION_WAIVER :
+                case ACTION_SEAT_SELECT :
                     if (getSession().getCurrentParticipant() != null) {
                         if (iwc.isParameterSet(PARAMETER_RACE)) {
                             getSession().getCurrentParticipant()
@@ -276,21 +224,53 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                             iwc.getParameter(PARAMETER_RACE))));
                         }
 
-                        showWaiver(iwc, bean);
+                        if (getSession().getCurrentParticipant().getRace()
+                                .getShowExtraInformation()) {
+                            showSeatSelect(iwc, bean);
+                        } else {
+                            getSession().getCurrentParticipant()
+                                    .setValitorDescription(getSession()
+                                            .getCurrentParticipant()
+                                            .getParticipant().getFullName()
+                                            + ": "
+                                            + getSession()
+                                                    .getCurrentParticipant()
+                                                    .getRace().getEvent()
+                                                    .getName()
+                                            + " - "
+                                            + getService()
+                                                    .getLocalizedRaceName(
+                                                            getSession()
+                                                                    .getCurrentParticipant()
+                                                                    .getRace(),
+                                                            iwc.getCurrentLocale()
+                                                                    .toString())
+                                                    .getValue());
+                            getService().calculatePrices(
+                                    getSession().getCurrentParticipant(),
+                                    getSession().getParticipantHolders(),
+                                    getSession().isRegistrationWithPersonalId(),
+                                    Currency.ISK);
+
+                            getSession().getCurrentParticipant().setComment("");
+
+                            showOverview(iwc, bean);
+                        }
                     } else {
                         showPersonSelect(iwc, bean);
                     }
+
                     break;
 
                 case ACTION_OVERVIEW :
                     if (getSession().getCurrentParticipant() != null
                             && getSession().getCurrentParticipant()
                                     .getRace() != null) {
-                        getSession().getCurrentParticipant()
-                                .setAcceptsWaiver(true);
-                        getSession().getCurrentParticipant()
-                                .setShowRegistration(!iwc.isParameterSet(
-                                        PARAMETER_SHOW_REGISTRATION));
+                        if (iwc.isParameterSet(PARAMETER_SEAT)) {
+                            getSession().getCurrentParticipant().setComment(
+                                    iwc.getParameter(PARAMETER_SEAT));
+                        }
+
                         getSession().getCurrentParticipant()
                                 .setValitorDescription(getSession()
                                         .getCurrentParticipant()
@@ -313,11 +293,10 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                 getSession().isRegistrationWithPersonalId(),
                                 Currency.ISK);
                     } else {
-                        getSession().setCurrentParticipant(
-                                getSession().getParticipantHolders()
-                                        .get(getSession()
-                                                .getParticipantHolders().size()
-                                                - 1));
+                        getSession().setCurrentParticipant(getSession()
+                                .getParticipantHolders()
+                                .get(getSession().getParticipantHolders().size()
+                                        - 1));
                     }
                     showOverview(iwc, bean);
                     break;
@@ -335,10 +314,12 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                 .storeRegistration(
                                         getSession().getParticipantHolders(),
                                         true, null,
-                                        !getSession()
-                                                .isRegistrationWithPersonalId(),
+                                        false,
                                         iwc.getCurrentLocale(), null, true,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK,
+                                        getSession().getGiftCards(),
+                                        valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -362,41 +343,8 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                         }
                         getSession().setCurrentParticipant(null);
                     }
-                    if (getSession().isRegistrationWithPersonalId()) {
-                        showPersonSelect(iwc, bean);
-                    } else {
-                        showParticipant(iwc, bean);
-                    }
-                    break;
+                    showPersonSelect(iwc, bean);
 
-                case ACTION_GIFT_CARD:
-                    showGiftCard(iwc, bean);
-                    break;
-
-                case ACTION_ADD_GIFT_CARD:
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getGiftCardService().reserveGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD), getSession().getTotalAmount(), null);
-                        if (usage != null) {
-                            getSession().addGiftCard(usage);
-                        }
-                        else {
-                            bean.addError(iwb.getResourceBundle(iwc).getLocalizedString("no_gift_card_found", "No gift card was found or already used"));
-                        }
-                    }
-
-                    showOverview(iwc, bean);
-                    break;
-
-                case ACTION_REMOVE_GIFT_CARD:
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getDao().getGiftCardUsage(Long.parseLong(iwc.getParameter(PARAMETER_GIFT_CARD)));
-                        if (usage != null) {
-                            getGiftCardService().releaseGiftCardReservation(usage);
-                            getSession().removeGiftCard(usage);
-                        }
-                    }
-
-                    showOverview(iwc, bean);
                     break;
 
                 case ACTION_FINISH_REGISTRATION :
@@ -414,7 +362,10 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK,
+                                        getSession().getGiftCards(),
+                                        valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);
@@ -445,7 +396,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/personSelect.xhtml"));
+                iwb.getFaceletURI("registration/RIG/personSelect.xhtml"));
         add(facelet);
     }
 
@@ -460,33 +411,36 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/participant.xhtml"));
+                iwb.getFaceletURI("registration/RIG/participant.xhtml"));
         add(facelet);
     }
 
-    private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
-        Collection<Race> races = getService().getAvailableRaces(bean.getEvent().getId(),
+    private void showEventSelect(IWContext iwc, PheidippidesBean bean) {
+        bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(),
                 IWTimestamp.RightNow().getYear(),
-                getSession().getCurrentParticipant().getParticipant());
-        if (races.isEmpty()) {
-            races = getService().getAvailableRaces(bean.getEvent().getId(),
-                    IWTimestamp.RightNow().getYear()+1,
-                    getSession().getCurrentParticipant().getParticipant());
-        }
-        bean.setRaces(races);
+                getSession().getCurrentParticipant().getParticipant()));
 
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/raceSelect.xhtml"));
+                iwb.getFaceletURI("registration/RIG/eventSelect.xhtml"));
         add(facelet);
     }
 
-    private void showWaiver(IWContext iwc, PheidippidesBean bean) {
+    private void showSeatSelect(IWContext iwc, PheidippidesBean bean) {
+        bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(),
+                IWTimestamp.RightNow().getYear(),
+                getSession().getCurrentParticipant().getParticipant()));
+        if (bean.getRaces() != null && bean.getRaces().size() == 1) {
+            getSession().getCurrentParticipant()
+                    .setRace(bean.getRaces().iterator().next());
+            bean.setRaces(null);
+        }
+
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/waiver.xhtml"));
+                iwb.getFaceletURI("registration/RIG/seatSelect.xhtml"));
         add(facelet);
     }
 
@@ -494,7 +448,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/overview.xhtml"));
+                iwb.getFaceletURI("registration/RIG/overview.xhtml"));
         add(facelet);
     }
 
@@ -502,13 +456,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/NLH/receipt.xhtml"));
-        add(facelet);
-    }
-
-    private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(iwb.getFaceletURI("registration/NLH/giftCard.xhtml"));
+                iwb.getFaceletURI("registration/RIG/receipt.xhtml"));
         add(facelet);
     }
 
@@ -530,14 +478,6 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         }
 
         return session;
-    }
-
-    private GiftCardService getGiftCardService() {
-        if (giftCardService == null) {
-            ELUtil.getInstance().autowire(this);
-        }
-
-        return giftCardService;
     }
 
     private PheidippidesDao getDao() {
