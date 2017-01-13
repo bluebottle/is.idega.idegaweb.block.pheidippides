@@ -56,7 +56,7 @@
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 				</div>
 			    <div class="formItem">
-					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['bicycle_group']}" /></label>
+					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.group')]}" /></label>
 					<input type="text" name="prm_bicycle_group" value="#{participant.runningGroup}" />
 				</div>
 			</ui:fragment>

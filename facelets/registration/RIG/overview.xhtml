@@ -27,8 +27,8 @@
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
-						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
+						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.participant')]}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.distance')]}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.seat')]}" /></th>
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 					</tr>

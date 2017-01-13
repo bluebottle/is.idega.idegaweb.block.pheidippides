@@ -21,7 +21,7 @@
 			<div class="formItem required">
 				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_event_info')]}" /></label>
 				<c:selectOne styleClass="required" name="prm_race_pk">
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_event']}" content="" />
+					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_event')]}" content="" />
 					<ui:repeat value="#{pheidippidesBean.races}" var="race">
 						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq participant.race.id}" />
 					</ui:repeat>
