@@ -29,6 +29,12 @@
 				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
 				<input type="text" class="required digits validUser hasRaces" name="prm_personal_id" value="#{param['prm_personal_id']}" />
 			</div>
+			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+				<div class="formItem checkbox">
+					<input id="prm_no_personal_id" type="checkbox" name="prm_no_personal_id" />
+					<label for="prm_no_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['no_personal_id']}" /></label>
+				</div>
+			</ui:fragment>
 		</fieldset>
 
 		<fieldset class="submit">

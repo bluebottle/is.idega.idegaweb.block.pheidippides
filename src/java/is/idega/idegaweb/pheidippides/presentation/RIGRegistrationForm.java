@@ -1,5 +1,8 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -18,6 +21,7 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -51,6 +55,13 @@ public class RIGRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_EMAIL = "prm_email";
     private static final String PARAMETER_MOBILE = "prm_mobile";
     private static final String PARAMETER_SEAT = "prm_seat";
+
+    private static final String PARAMETER_NAME = "prm_name";
+    private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
+    private static final String PARAMETER_ADDRESS = "prm_address";
+    private static final String PARAMETER_CITY = "prm_city";
+    private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
+    private static final String PARAMETER_COUNTRY = "prm_country";
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
@@ -172,7 +183,10 @@ public class RIGRegistrationForm extends IWBaseComponent {
 
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
-                    getSession().setRegistrationWithPersonalId(true);
+                    if (bean.getLocale()
+                            .equals(LocaleUtil.getIcelandicLocale())) {
+                        getSession().setRegistrationWithPersonalId(true);
+                    }
                     showPersonSelect(iwc, bean);
                     break;
 
@@ -185,6 +199,10 @@ public class RIGRegistrationForm extends IWBaseComponent {
                         holder.setParticipant(participant);
 
                         getSession().setCurrentParticipant(holder);
+                        getSession().setRegistrationWithPersonalId(true);
+                    } else if (!bean.getLocale()
+                            .equals(LocaleUtil.getIcelandicLocale())) {
+                        getSession().setRegistrationWithPersonalId(false);
                     }
                     showParticipant(iwc, bean);
                     break;
@@ -200,6 +218,29 @@ public class RIGRegistrationForm extends IWBaseComponent {
                         } else {
                             participant = getSession().getCurrentParticipant()
                                     .getParticipant();
+                        }
+
+                        if (!getSession().isRegistrationWithPersonalId()) {
+                            DateFormat format = new SimpleDateFormat(
+                                    "dd.MM.yyyy");
+
+                            participant.setFullName(
+                                    iwc.getParameter(PARAMETER_NAME));
+                            try {
+                                participant.setDateOfBirth(
+                                        format.parse(iwc.getParameter(
+                                                PARAMETER_DATE_OF_BIRTH)));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            participant.setAddress(
+                                    iwc.getParameter(PARAMETER_ADDRESS));
+                            participant
+                                    .setCity(iwc.getParameter(PARAMETER_CITY));
+                            participant.setPostalCode(
+                                    iwc.getParameter(PARAMETER_POSTAL_CODE));
+                            participant.setCountry(
+                                    iwc.getParameter(PARAMETER_COUNTRY));
                         }
 
                         participant.setNationality(
@@ -314,7 +355,8 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                 .storeRegistration(
                                         getSession().getParticipantHolders(),
                                         true, null,
-                                        false,
+                                        !getSession()
+                                        .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
                                         Currency.ISK,
                                         getSession().getGiftCards(),
@@ -343,7 +385,11 @@ public class RIGRegistrationForm extends IWBaseComponent {
                         }
                         getSession().setCurrentParticipant(null);
                     }
-                    showPersonSelect(iwc, bean);
+                    if (getSession().isRegistrationWithPersonalId()) {
+                        showPersonSelect(iwc, bean);
+                    } else {
+                        showParticipant(iwc, bean);
+                    }
 
                     break;
 
@@ -361,7 +407,8 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                         true, null,
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
-                                        iwc.getCurrentLocale(), null, false,
+                                        iwc.getCurrentLocale(), null, !getSession()
+                                        .isRegistrationWithPersonalId(),
                                         Currency.ISK,
                                         getSession().getGiftCards(),
                                         valitorShopID, valitorSecurityNumber,

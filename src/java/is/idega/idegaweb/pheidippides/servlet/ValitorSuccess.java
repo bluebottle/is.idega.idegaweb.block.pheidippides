@@ -55,7 +55,7 @@ public class ValitorSuccess extends HttpServlet {
 
 			List<Registration> registrations = dao.getRegistrations(header);
 			for (Registration registration : registrations) {
-	            if (registration.getRace().getEvent().getReportSign().equals("TOR") || registration.getRace().getEvent().getReportSign().equals("NLH")) {
+	            if (registration.getRace().getEvent().getReportSign().equals("TOR") || registration.getRace().getEvent().getReportSign().equals("NLH") || registration.getRace().getEvent().getReportSign().equals("RIG")) {
 	                securityNumber = IWMainApplication
 	                        .getDefaultIWApplicationContext().getApplicationSettings()
 	                        .getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");

@@ -18,6 +18,7 @@ public class Test {
 
 			ISBServiceServiceLocator locator = new ISBServiceServiceLocator();
 			ISBService port = locator.getISBService(new URL("http://skraning.marathon.is/services/ISBService"));
+//            ISBService port = locator.getISBService(new URL("http://pheidippidestest.illuminati.is/services/ISBService"));
 
 			Login login = new Login(loginName, password);
 
@@ -28,7 +29,7 @@ public class Test {
 			} else {
 				System.out.println("session = " + session.getSessionID());
 
-				RunnerInfo in1 = new RunnerInfo("640394-4479", "21km", "palli@illuminati.is", null, "8671374", null, "0610703899", "8671374", "palli", session, "M", "Male");
+				RunnerInfo in1 = new RunnerInfo(null, "21km", "palli@illuminati.is", null, "8671374", null, "0610703899", "8671374", "palli", session, "M", "Male");
 				String reg = port.registerRunner(in1 );
 
 				System.out.println("registered = "+ reg);

@@ -130,7 +130,7 @@ public class PheidippidesWebService {
             return "ERROR: Could not find distance for the event this company can register to for this year";
         }
 
-        if (IWTimestamp.RightNow().isLaterThan(new IWTimestamp(race.getOpenRegistrationDate()))) {
+        if (!IWTimestamp.RightNow().isBetween(new IWTimestamp(race.getOpenRegistrationDate()), new IWTimestamp(race.getCloseRegistrationDate()))) {
             return "ERROR: Registration closed for this distance.";
         }
 

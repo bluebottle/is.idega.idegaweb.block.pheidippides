@@ -47,7 +47,7 @@ public class Test {
 	                            "http://www.hlaupastyrkur.is/services/contestantservice.svc"));
 
 	            //ContestantRequest request = new ContestantRequest("21_km", new Login(password, userID), "", "65", "", "", "Palli Test", "pallitest", "", "pallitest", "0610703899", Boolean.TRUE);
-                ContestantRequest request = new ContestantRequest(new Login(password, userID), "65", "21_km", "Palli Test", "pallitest", "pallitest", "0610703899", Boolean.TRUE);
+                ContestantRequest request = new ContestantRequest(new Login(password, userID), null, "21_km", "Palli Test", "pallitest", "pallitest", "0610703899", Boolean.TRUE);
 	            port.registerContestant(request);
 	        } catch (Exception e) {
 	            e.printStackTrace();

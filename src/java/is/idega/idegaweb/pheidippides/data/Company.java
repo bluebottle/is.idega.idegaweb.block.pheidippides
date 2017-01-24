@@ -45,7 +45,7 @@ public class Company implements Serializable, Comparable<Company> {
 			setUuid(uuid);
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = Company.COLUMN_ENTRY_ID)
@@ -63,7 +63,7 @@ public class Company implements Serializable, Comparable<Company> {
 
 	@Column(name = Company.COLUMN_NUMBER_OF_PARTICIPANTS)
 	private int maxNumberOfParticipants;
-	
+
 	@Column(name = Company.COLUMN_USER_UUID)
 	private String userUUID;
 
@@ -75,10 +75,6 @@ public class Company implements Serializable, Comparable<Company> {
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -112,8 +108,9 @@ public class Company implements Serializable, Comparable<Company> {
 	public void setOpen(Boolean open) {
 		this.open = open;
 	}
-	
-	public int compareTo(Company company) {
+
+	@Override
+    public int compareTo(Company company) {
 		return this.getName().compareTo(company.getName());
 	}
 
@@ -129,7 +126,7 @@ public class Company implements Serializable, Comparable<Company> {
 		return uuid;
 	}
 
-	public void setUuid(String uuid) {
+	private void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
