@@ -1631,10 +1631,12 @@ public class PheidippidesService {
                                             participant.getDateOfBirth()),
                                     gender, participant.getAddress(),
                                     participant.getPostalCode(),
-                                    participant.getCity(),
+                                    participant.getCity(), participant.getCountry() != null ?
                                     getCountryHome()
                                             .findByPrimaryKey(new Integer(
-                                                    participant.getCountry())));
+                                                    participant.getCountry())) : getCountryHome()
+                                                    .findByPrimaryKey(new Integer(
+                                                            participant.getNationality())));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

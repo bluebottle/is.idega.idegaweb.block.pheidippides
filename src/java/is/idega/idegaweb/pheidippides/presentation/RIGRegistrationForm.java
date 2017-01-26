@@ -58,10 +58,10 @@ public class RIGRegistrationForm extends IWBaseComponent {
 
     private static final String PARAMETER_NAME = "prm_name";
     private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
-    private static final String PARAMETER_ADDRESS = "prm_address";
-    private static final String PARAMETER_CITY = "prm_city";
-    private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
-    private static final String PARAMETER_COUNTRY = "prm_country";
+    //private static final String PARAMETER_ADDRESS = "prm_address";
+    //private static final String PARAMETER_CITY = "prm_city";
+    //private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
+    //private static final String PARAMETER_COUNTRY = "prm_country";
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
@@ -233,14 +233,14 @@ public class RIGRegistrationForm extends IWBaseComponent {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            participant.setAddress(
+                            /*participant.setAddress(
                                     iwc.getParameter(PARAMETER_ADDRESS));
                             participant
                                     .setCity(iwc.getParameter(PARAMETER_CITY));
                             participant.setPostalCode(
                                     iwc.getParameter(PARAMETER_POSTAL_CODE));
                             participant.setCountry(
-                                    iwc.getParameter(PARAMETER_COUNTRY));
+                                    iwc.getParameter(PARAMETER_COUNTRY));*/
                         }
 
                         participant.setNationality(
