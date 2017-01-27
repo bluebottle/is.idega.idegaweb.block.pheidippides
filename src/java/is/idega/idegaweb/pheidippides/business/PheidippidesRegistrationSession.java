@@ -26,6 +26,10 @@ public class PheidippidesRegistrationSession {
     private String valitorReturnURLText = null;
     private String valitorReturnURL = null;
 
+    private String discountCode = null;
+
+    private Boolean showDiscountCode = false;
+
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
 	}
@@ -156,5 +160,21 @@ public class PheidippidesRegistrationSession {
 
     public void setValitorReturnURL(String valitorReturnURL) {
         this.valitorReturnURL = valitorReturnURL;
+    }
+
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
+    }
+
+    public Boolean getShowDiscountCode() {
+        return showDiscountCode;
+    }
+
+    public void setShowDiscountCode(Boolean showDiscountCode) {
+        this.showDiscountCode = showDiscountCode;
     }
 }

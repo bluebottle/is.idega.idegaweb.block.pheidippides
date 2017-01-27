@@ -291,7 +291,7 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                     getSession().getCurrentParticipant(),
                                     getSession().getParticipantHolders(),
                                     getSession().isRegistrationWithPersonalId(),
-                                    Currency.ISK);
+                                    Currency.ISK, getSession().getDiscountCode());
 
                             getSession().getCurrentParticipant().setComment("");
 
@@ -332,7 +332,7 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                Currency.ISK);
+                                Currency.ISK, getSession().getDiscountCode());
                     } else {
                         getSession().setCurrentParticipant(getSession()
                                 .getParticipantHolders()
@@ -360,6 +360,7 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                         iwc.getCurrentLocale(), null, true,
                                         Currency.ISK,
                                         getSession().getGiftCards(),
+                                        getSession().getDiscountCode(),
                                         valitorShopID, valitorSecurityNumber,
                                         valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
@@ -411,6 +412,7 @@ public class RIGRegistrationForm extends IWBaseComponent {
                                         .isRegistrationWithPersonalId(),
                                         Currency.ISK,
                                         getSession().getGiftCards(),
+                                        getSession().getDiscountCode(),
                                         valitorShopID, valitorSecurityNumber,
                                         valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),

@@ -54,6 +54,8 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
     private static final int ACTION_ADD_GIFT_CARD = 10;
     private static final int ACTION_REMOVE_GIFT_CARD = 11;
     private static final int ACTION_FINISH_REGISTRATION = 12;
+    private static final int ACTION_DISCOUNT_CODE = 100;
+
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
@@ -71,7 +73,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
-
+    private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
@@ -188,6 +190,8 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
             bean.setProperty(new AdvancedProperty(
                     String.valueOf(IWTimestamp.RightNow().getYear()),
                     String.valueOf(IWTimestamp.RightNow().getYear())));
+
+            getSession().setShowDiscountCode(true);
 
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
@@ -307,11 +311,16 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                                         iwc.getCurrentLocale()
                                                                 .toString())
                                                 .getValue());
+
+                        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+                            getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+                        }
+
                         getService().calculatePrices(
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                Currency.ISK);
+                                Currency.ISK, getSession().getDiscountCode());
                     } else {
                         getSession().setCurrentParticipant(
                                 getSession().getParticipantHolders()
@@ -338,7 +347,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -371,6 +380,10 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
 
                 case ACTION_GIFT_CARD:
                     showGiftCard(iwc, bean);
+                    break;
+
+                case ACTION_DISCOUNT_CODE:
+                    showDiscountCode(iwc, bean);
                     break;
 
                 case ACTION_ADD_GIFT_CARD:
@@ -414,7 +427,7 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);
@@ -511,6 +524,13 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         facelet.setFaceletURI(iwb.getFaceletURI("registration/NLH/giftCard.xhtml"));
         add(facelet);
     }
+
+    private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+        facelet.setFaceletURI(iwb.getFaceletURI("registration/NLH/discountCode.xhtml"));
+        add(facelet);
+    }
+
 
     private String getBundleIdentifier() {
         return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;

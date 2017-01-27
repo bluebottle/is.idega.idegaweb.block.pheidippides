@@ -26,6 +26,7 @@ import com.idega.util.expression.ELUtil;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.Currency;
 import is.idega.idegaweb.pheidippides.business.GiftCardService;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
@@ -298,7 +299,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                null);
+                                Currency.ISK, getSession().getDiscountCode());
                     } else {
                         getSession().setCurrentParticipant(
                                 getSession().getParticipantHolders()
@@ -326,7 +327,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        null, getSession().getGiftCards());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -409,7 +410,7 @@ public class LVRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        null, getSession().getGiftCards());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);

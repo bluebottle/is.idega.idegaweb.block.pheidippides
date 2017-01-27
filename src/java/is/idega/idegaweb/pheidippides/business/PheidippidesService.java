@@ -74,6 +74,7 @@ import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.DiscountCode;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.ExternalCharity;
@@ -1481,7 +1482,7 @@ public class PheidippidesService {
             List<ParticipantHolder> holders, boolean doPayment,
             String registrantUUID, boolean createUsers, Locale locale,
             String paymentGroup, boolean isBankTransfer, Currency fixedCurrency,
-            List<GiftCardUsage> giftCardUsage) {
+            List<GiftCardUsage> giftCardUsage, String discountCode) {
         String valitorShopID = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
                 .getProperty(VALITOR_SHOP_ID, "1");
@@ -1498,7 +1499,7 @@ public class PheidippidesService {
 
         return storeRegistration(holders, doPayment, registrantUUID,
                 createUsers, locale, paymentGroup, isBankTransfer,
-                fixedCurrency, giftCardUsage, valitorShopID,
+                fixedCurrency, giftCardUsage, discountCode, valitorShopID,
                 valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
     }
 
@@ -1506,9 +1507,9 @@ public class PheidippidesService {
             List<ParticipantHolder> holders, boolean doPayment,
             String registrantUUID, boolean createUsers, Locale locale,
             String paymentGroup, boolean isBankTransfer, Currency fixedCurrency,
-            List<GiftCardUsage> giftCardUsage, String valitorShopID,
-            String valitorSecurityNumber, String valitorReturnURLText,
-            String valitorReturnURL) {
+            List<GiftCardUsage> giftCardUsage, String discountCode,
+            String valitorShopID, String valitorSecurityNumber,
+            String valitorReturnURLText, String valitorReturnURL) {
 
         RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
 
@@ -1631,12 +1632,14 @@ public class PheidippidesService {
                                             participant.getDateOfBirth()),
                                     gender, participant.getAddress(),
                                     participant.getPostalCode(),
-                                    participant.getCity(), participant.getCountry() != null ?
-                                    getCountryHome()
-                                            .findByPrimaryKey(new Integer(
-                                                    participant.getCountry())) : getCountryHome()
-                                                    .findByPrimaryKey(new Integer(
-                                                            participant.getNationality())));
+                                    participant.getCity(),
+                                    participant.getCountry() != null
+                                            ? getCountryHome().findByPrimaryKey(
+                                                    new Integer(participant
+                                                            .getCountry()))
+                                            : getCountryHome().findByPrimaryKey(
+                                                    new Integer(participant
+                                                            .getNationality())));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1687,6 +1690,12 @@ public class PheidippidesService {
                                 team.isRelayTeam());
                     }
 
+                    DiscountCode dCode = null;
+                    if (discountCode != null
+                            && !"".equals(discountCode.trim())) {
+                        dCode = dao.getDiscountCodeByCode(discountCode);
+                    }
+
                     Registration registration = dao.storeRegistration(null,
                             header, RegistrationStatus.Unconfirmed,
                             participantHolder.getRace(),
@@ -1707,10 +1716,13 @@ public class PheidippidesService {
                             participantHolder.getExternalCharity() == null
                                     ? null
                                     : participantHolder.getExternalCharity()
-                                            .getId());
+                                            .getId(),
+                            dCode);
 
-                    if (participantHolder.getComment() != null && !"".equals(participantHolder.getComment())) {
-                        dao.updateExtraInformation(registration, null, participantHolder.getComment());
+                    if (participantHolder.getComment() != null
+                            && !"".equals(participantHolder.getComment())) {
+                        dao.updateExtraInformation(registration, null,
+                                participantHolder.getComment());
                     }
 
                     amount += participantHolder.getAmount()
@@ -1848,7 +1860,8 @@ public class PheidippidesService {
                                         participant.getNationality(),
                                         user.getUniqueId(), 0, false, false,
                                         null, null, false, true, true,
-                                        registration.getRunningGroup(), null);
+                                        registration.getRunningGroup(), null,
+                                        null);
                             }
                         }
                     }
@@ -2032,11 +2045,17 @@ public class PheidippidesService {
 
     public void calculatePrices(ParticipantHolder current,
             List<ParticipantHolder> holder,
-            boolean isRegistrationWithPersonalID, Currency fixedCurrency) {
+            boolean isRegistrationWithPersonalID, Currency fixedCurrency,
+            String discountCode) {
         IWTimestamp endOfYear = new IWTimestamp();
         endOfYear.setMonth(12);
         endOfYear.setDay(31);
         int childCount = 0;
+        DiscountCode dCode = null;
+        if (discountCode != null && !"".equals(discountCode.trim())) {
+            dCode = dao.getDiscountCodeByCode(discountCode);
+        }
+
         if (holder != null && !holder.isEmpty()) {
             for (ParticipantHolder participantHolder : holder) {
                 Race race = participantHolder.getRace();
@@ -2053,28 +2072,61 @@ public class PheidippidesService {
                 } else {
                     participantHolder.setAmount(price.getPrice());
                 }
-
-                if (race.isFamilyDiscount()) {
-                    if (age.getYears(
-                            endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
-                        childCount++;
+                if (dCode != null) {
+                    // Verify that discount code is enabled, is still valid and
+                    // applies to the current event.
+                    boolean isValid = true;
+                    if (!dCode.getIsEnabled()) {
+                        isValid = false;
                     }
 
-                    if (childCount > 1 && price.getFamilyDiscount() > 0) {
-                        participantHolder
-                                .setDiscount(participantHolder.getAmount()
-                                        - price.getFamilyDiscount());
+                    if (IWTimestamp.RightNow()
+                            .isLaterThan(new IWTimestamp(dCode.getValidUntil()))) {
+                        isValid = false;
+                    }
+
+                    if (dCode.getCompany() != null) {
+                        if (!dCode.getCompany().getEvent()
+                                .equals(current.getRace().getEvent())) {
+                            isValid = false;
+                        }
+                    }
+
+                    // apply discount
+                    if (isValid) {
+                        if (dCode.getDiscountPercentage() > 0) {
+                            participantHolder.setAmount(Math.round(participantHolder.getAmount() * ((100.0 - dCode.getDiscountPercentage()) / 100.0) ));
+                        } else {
+                            participantHolder.setAmount(participantHolder.getAmount() - dCode.getDiscountAmount() > 0 ? participantHolder.getAmount() - dCode.getDiscountAmount() : 0);
+                        }
+                    }
+
+                } else {
+                    if (race.isFamilyDiscount()) {
+                        if (age.getYears(
+                                endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
+                            childCount++;
+                        }
+
+                        if (childCount > 1 && price.getFamilyDiscount() > 0) {
+                            participantHolder
+                                    .setDiscount(participantHolder.getAmount()
+                                            - price.getFamilyDiscount());
+                        }
+                    }
+
+                    // Only for tour of reykjavík (for now)
+                    if (race.getEvent().isDiscountForPreviousRegistrations()) {
+                        List<Registration> allRegistrations = dao
+                                .getAllValidRegistrationsForUser(
+                                        participant.getUuid());
+                        if (allRegistrations != null
+                                && allRegistrations.size() > 0) {
+                            participantHolder.setAmount(Math.round(
+                                    participantHolder.getAmount() * 0.8));
+                        }
                     }
                 }
-
-                // Only for tour of reykjavík (for now)
-                /*
-                 * if (true) { List<Registration> allRegistrations =
-                 * dao.getAllValidRegistrationsForUser(participant.getUuid());
-                 * if (allRegistrations != null && allRegistrations.size() > 0)
-                 * { participantHolder.setAmount(Math.round(participantHolder.
-                 * getAmount() * 0.8)); } }
-                 */
             }
         }
 
@@ -2094,26 +2146,62 @@ public class PheidippidesService {
                 current.setAmount(price.getPrice());
             }
 
-            if (race.isFamilyDiscount()) {
-                if (age.getYears(endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
-                    childCount++;
+            if (dCode != null) {
+                // Verify that discount code is enabled, is still valid and
+                // applies to the current event.
+                boolean isValid = true;
+                if (!dCode.getIsEnabled()) {
+                    isValid = false;
                 }
 
-                if (childCount > 1 && price.getFamilyDiscount() > 0) {
-                    current.setDiscount(
-                            current.getAmount() - price.getFamilyDiscount());
+                if (IWTimestamp.RightNow()
+                        .isLaterThan(new IWTimestamp(dCode.getValidUntil()))) {
+                    isValid = false;
+                }
+
+                if (dCode.getCompany() != null) {
+                    if (!dCode.getCompany().getEvent()
+                            .equals(current.getRace().getEvent())) {
+                        isValid = false;
+                    }
+                }
+
+                // apply discount
+                if (isValid) {
+                    if (dCode.getDiscountPercentage() > 0) {
+                        current.setAmount(Math.round(current.getAmount() * ((100.0 - dCode.getDiscountPercentage()) / 100.0) ));
+                    } else {
+                        current.setAmount(current.getAmount() - dCode.getDiscountAmount() > 0 ? current.getAmount() - dCode.getDiscountAmount() : 0);
+                    }
+                }
+            } else {
+                if (race.isFamilyDiscount()) {
+                    if (age.getYears(
+                            endOfYear.getDate()) <= CHILD_DISCOUNT_AGE) {
+                        childCount++;
+                    }
+
+                    if (childCount > 1 && price.getFamilyDiscount() > 0) {
+                        current.setDiscount(current.getAmount()
+                                - price.getFamilyDiscount());
+                    }
+                }
+
+                // Only for tour of reykjavík (for now)
+                if (race.getEvent().isDiscountForPreviousRegistrations()) {
+                    if (participant != null && participant.getUuid() != null
+                            && !participant.getUuid().equals("")) {
+                        List<Registration> allRegistrations = dao
+                                .getAllValidRegistrationsForUser(
+                                        participant.getUuid());
+                        if (allRegistrations != null
+                                && allRegistrations.size() > 0) {
+                            current.setAmount(
+                                    Math.round(current.getAmount() * 0.8));
+                        }
+                    }
                 }
             }
-
-            // Only for tour of reykjavík (for now)
-            /*
-             * if (true) { if (participant != null && participant.getUuid() !=
-             * null && !participant.getUuid().equals("")) { List<Registration>
-             * allRegistrations =
-             * dao.getAllValidRegistrationsForUser(participant.getUuid()); if
-             * (allRegistrations != null && allRegistrations.size() > 0) {
-             * current.setAmount(Math.round(current.getAmount() * 0.8)); } } }
-             */
         }
     }
 
@@ -2468,7 +2556,8 @@ public class PheidippidesService {
                     registration.getFacebook(),
                     registration.getShowRegistration(),
                     registration.getRunningGroup(),
-                    registration.getExternalCharityId());
+                    registration.getExternalCharityId(),
+                    registration.getDiscountCode());
         } else {
             changeDistance(registration.getHeader(), registration, newDistance,
                     newShirtSize);
@@ -2492,7 +2581,8 @@ public class PheidippidesService {
                 oldRegistration.getFacebook(),
                 oldRegistration.getShowRegistration(),
                 oldRegistration.getRunningGroup(),
-                oldRegistration.getExternalCharityId());
+                oldRegistration.getExternalCharityId(),
+                oldRegistration.getDiscountCode());
 
         List<RegistrationTrinket> trinkets = oldRegistration.getTrinkets();
         for (RegistrationTrinket registrationTrinket : trinkets) {
@@ -2707,7 +2797,8 @@ public class PheidippidesService {
                         registration.getFacebook(),
                         registration.getShowRegistration(),
                         registration.getRunningGroup(),
-                        registration.getExternalCharityId());
+                        registration.getExternalCharityId(),
+                        registration.getDiscountCode());
             }
         }
 
@@ -2749,7 +2840,8 @@ public class PheidippidesService {
                         registration.getFacebook(),
                         registration.getShowRegistration(),
                         registration.getRunningGroup(),
-                        registration.getExternalCharityId());
+                        registration.getExternalCharityId(),
+                        registration.getDiscountCode());
 
                 Registration oldRegistration = registration.getMovedFrom();
                 dao.updateRegistrationStatus(oldRegistration.getId(), null,
@@ -2796,7 +2888,8 @@ public class PheidippidesService {
                         registration.getFacebook(),
                         registration.getShowRegistration(),
                         registration.getRunningGroup(),
-                        registration.getExternalCharityId());
+                        registration.getExternalCharityId(),
+                        registration.getDiscountCode());
             }
         }
 
@@ -2857,7 +2950,8 @@ public class PheidippidesService {
                         registration.getFacebook(),
                         registration.getShowRegistration(),
                         registration.getRunningGroup(),
-                        registration.getExternalCharityId());
+                        registration.getExternalCharityId(),
+                        registration.getDiscountCode());
 
                 Race race = registration.getRace();
                 List<RegistrationTrinket> trinkets = registration.getTrinkets();
@@ -3387,7 +3481,8 @@ public class PheidippidesService {
                 registration.getNeedsAssistance(), registration.getFacebook(),
                 registration.getShowRegistration(),
                 registration.getRunningGroup(),
-                registration.getExternalCharityId());
+                registration.getExternalCharityId(),
+                registration.getDiscountCode());
 
         RegistrationHeader header = registration.getHeader();
         boolean cancelHeader = true;
@@ -3427,7 +3522,8 @@ public class PheidippidesService {
                 registration.getNeedsAssistance(), registration.getFacebook(),
                 registration.getShowRegistration(),
                 registration.getRunningGroup(),
-                registration.getExternalCharityId());
+                registration.getExternalCharityId(),
+                registration.getDiscountCode());
 
         RegistrationHeader header = registration.getHeader();
         boolean cancelHeader = true;
@@ -3635,7 +3731,7 @@ public class PheidippidesService {
                             0, null, participant.getNationality(),
                             user.getUniqueId(), 0, false, false, null, null,
                             false, true, true, registration.getRunningGroup(),
-                            null);
+                            null, null);
                 }
             }
         } catch (RemoteException re) {
@@ -3734,7 +3830,7 @@ public class PheidippidesService {
                                 participantHolder.getRace(), null, null, null,
                                 0, null, country.getPrimaryKey().toString(),
                                 user.getUniqueId(), 0, false, false, null, null,
-                                false, true, true, null, null);
+                                false, true, true, null, null, null);
 
                         if (participantHolder.getTrinket() != null) {
                             // dao.getracep
@@ -3913,7 +4009,7 @@ public class PheidippidesService {
                                 participantHolder.getShirtSize(), null, null, 0,
                                 null, country.getPrimaryKey().toString(),
                                 user.getUniqueId(), 0, false, false, null, null,
-                                false, true, true, null, null);
+                                false, true, true, null, null, null);
 
                         if (!getUserBusiness().hasUserLogin(user)) {
                             try {
@@ -4047,7 +4143,7 @@ public class PheidippidesService {
                                 participantHolder.getShirtSize(), null, null, 0,
                                 null, country.getPrimaryKey().toString(),
                                 user.getUniqueId(), 0, false, false, null, null,
-                                false, true, true, null, null);
+                                false, true, true, null, null, null);
 
                         if (!getUserBusiness().hasUserLogin(user)) {
                             try {
@@ -4141,7 +4237,8 @@ public class PheidippidesService {
                             false, true, true, null,
                             holder.getExternalCharity() == null
                                     ? null
-                                    : holder.getExternalCharity().getId());
+                                    : holder.getExternalCharity().getId(),
+                            null);
 
                     String userNameString = "";
                     String passwordString = "";

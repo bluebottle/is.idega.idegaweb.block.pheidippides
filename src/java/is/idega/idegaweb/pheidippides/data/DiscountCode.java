@@ -4,18 +4,29 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.idega.core.idgenerator.business.UUIDGenerator;
 
+@Entity
+@Table(name = DiscountCode.ENTITY_NAME)
+@NamedQueries({
+    @NamedQuery(name = "discountCode.findAll", query = "select d from DiscountCode d"),
+    @NamedQuery(name = "discountCode.findByCode", query = "select d from DiscountCode d where d.uuid = :uuid"),
+    @NamedQuery(name = "discountCode.findByCompany", query = "select d from DiscountCode d where d.company = :company")
+})
 public class DiscountCode implements Serializable {
     private static final long serialVersionUID = 8543246008490028178L;
 

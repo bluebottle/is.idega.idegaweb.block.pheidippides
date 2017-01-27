@@ -72,7 +72,6 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final String VALITOR_TOUR_RETURN_URL_TEXT = "VALITOR_TOUR_RETURN_URL_TEXT";
     private static final String VALITOR_TOUR_RETURN_URL = "VALITOR_TOUR_RETURN_URL";
 
-
     @Autowired
     private PheidippidesService service;
 
@@ -115,10 +114,12 @@ public class TourRegistrationForm extends IWBaseComponent {
                 .getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");
         String valitorReturnURLText = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT, "tourofreykjavik.is");
+                .getProperty(VALITOR_TOUR_RETURN_URL_TEXT,
+                        "tourofreykjavik.is");
         String valitorReturnURL = IWMainApplication
                 .getDefaultIWApplicationContext().getApplicationSettings()
-                .getProperty(VALITOR_TOUR_RETURN_URL, "http://tourofreykjavik.is");
+                .getProperty(VALITOR_TOUR_RETURN_URL,
+                        "http://tourofreykjavik.is");
 
         getSession().setValitorShopId(valitorShopID);
         getSession().setValitorSecurityNumber(valitorSecurityNumber);
@@ -254,9 +255,10 @@ public class TourRegistrationForm extends IWBaseComponent {
                                             iwc.getParameter(PARAMETER_RACE))));
                         }
 
-                        List<RaceShirtSize> shirts = getDao().getRaceShirtSizes(getDao()
-                                .getRace(getSession().getCurrentParticipant()
-                                        .getRace().getId()));
+                        List<RaceShirtSize> shirts = getDao()
+                                .getRaceShirtSizes(getDao().getRace(
+                                        getSession().getCurrentParticipant()
+                                                .getRace().getId()));
 
                         if (shirts == null || shirts.isEmpty()) {
                             showWaiver(iwc, bean);
@@ -272,9 +274,10 @@ public class TourRegistrationForm extends IWBaseComponent {
                 case ACTION_WAIVER :
                     if (getSession().getCurrentParticipant() != null) {
                         if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
-                            getSession().getCurrentParticipant().setShirtSize(
-                                    getDao().getShirtSize(Long.parseLong(iwc
-                                            .getParameter(PARAMETER_SHIRT_SIZE))));
+                            getSession().getCurrentParticipant()
+                                    .setShirtSize(getDao().getShirtSize(
+                                            Long.parseLong(iwc.getParameter(
+                                                    PARAMETER_SHIRT_SIZE))));
                         }
 
                         showWaiver(iwc, bean);
@@ -312,13 +315,12 @@ public class TourRegistrationForm extends IWBaseComponent {
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                Currency.ISK);
+                                Currency.ISK, getSession().getDiscountCode());
                     } else {
-                        getSession().setCurrentParticipant(
-                                getSession().getParticipantHolders()
-                                        .get(getSession()
-                                                .getParticipantHolders().size()
-                                                - 1));
+                        getSession().setCurrentParticipant(getSession()
+                                .getParticipantHolders()
+                                .get(getSession().getParticipantHolders().size()
+                                        - 1));
                     }
                     showOverview(iwc, bean);
                     break;
@@ -339,7 +341,11 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK,
+                                        getSession().getGiftCards(),
+                                        getSession().getDiscountCode(),
+                                        valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -385,7 +391,11 @@ public class TourRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        Currency.ISK, getSession().getGiftCards(), valitorShopID, valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+                                        Currency.ISK,
+                                        getSession().getGiftCards(),
+                                        getSession().getDiscountCode(),
+                                        valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);

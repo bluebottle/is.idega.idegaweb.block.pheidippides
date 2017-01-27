@@ -982,6 +982,17 @@ table.giftCards tr.childRow>td {
 	margin-top: 1em;
 }
 
+table.discountCodes tr.childRow>td {
+        background-color: #fff !important;
+        border: 0 !important;
+        border-bottom: 2px #ccc solid !important;
+        border-top: 2px #ccc solid !important;
+}
+
+#discountCodeLookup .error, #discountCodeLookup .discountCodeOverview {
+        margin-top: 1em;
+}
+
 .formSection.noNavigation .formItem {
 	display: block;
 	clear: both;

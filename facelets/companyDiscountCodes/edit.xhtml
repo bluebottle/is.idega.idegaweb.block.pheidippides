@@ -1,0 +1,44 @@
+<html
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://xmlns.idega.com/com.idega.core"
+		xmlns:a="http://xmlns.idega.com/is.idega.idegaweb.egov.application"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://xmlns.idega.com/is.idega.idegaweb.pheidippides"
+>
+<ui:component>
+	<form class="smallAdminForm" id="discountCodeCreatorForm" action="" method="post">
+		<input type="hidden" name="idegaweb_event_classname" value="#{discountCodeBean.eventHandler}" />
+
+		<fieldset class="formSection">
+			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_discount_code']}" /></legend>
+
+			<div class="formItem">
+				<label for="prm_percentage"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_percentage']}" /></label>
+				<input type="text" class="number" name="prm_percentage" />
+			</div>
+			<div class="formItem">
+				<label for="prm_amount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_amount']}" /></label>
+				<input type="text" class="number" name="prm_amount" />
+			</div>
+			<div class="formItem">
+				<label for="prm_max_number_regs"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['max_number_of_registrations']}" /></label>
+				<input type="text" class="number" name="prm_max_number_regs" />
+			</div>
+			<div class="formItem required">
+				<label for="prm_valid_until"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valid_until']}" /></label>
+				<input class="datePicker required" name="prm_valid_until" value="#{p:formatDate(discountBean.validUntil, 'dd.MM.yyyy HH:mm')}" />
+			</div>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_enabled" content="true" checked="#{discountBean.enabled}" />
+				<label for="prm_enabled"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['enabled']}" /></label>
+			</div>
+		</fieldset>
+
+		<div class="submit">
+			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
+			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
+		</div>
+	</form>
+</ui:component>
+</html>

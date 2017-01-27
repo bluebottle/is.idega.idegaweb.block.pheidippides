@@ -40,6 +40,8 @@ public class Event implements Serializable {
     private static final String COLUMN_PAYMENT_RETURN_URL_TEXT = "payment_return_url_text";
     private static final String COLUMN_PAYMENT_RETURN_URL = "payment_return_url";
 
+    private static final String COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS = "discount_previous_registration";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = Event.COLUMN_ENTRY_ID)
@@ -75,6 +77,9 @@ public class Event implements Serializable {
 
     @Column(name = Event.COLUMN_PAYMENT_RETURN_URL)
     private String paymentReturnURL;
+
+    @Column(name = Event.COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS)
+    private Boolean discountForPreviousRegistrations;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Charity> charities;
@@ -198,5 +203,14 @@ public class Event implements Serializable {
 
     public void setPaymentReturnURL(String paymentReturnURL) {
         this.paymentReturnURL = paymentReturnURL;
+    }
+
+    public Boolean isDiscountForPreviousRegistrations() {
+        return discountForPreviousRegistrations;
+    }
+
+    public void setDiscountForPreviousRegistrations(
+            Boolean discountForPreviousRegistrations) {
+        this.discountForPreviousRegistrations = discountForPreviousRegistrations;
     }
 }

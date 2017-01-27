@@ -46,9 +46,9 @@ public class ValitorFilter extends BaseFilter {
 
 		RegistrationAnswerHolder holder = null;
 		if (session.getValitorShopId() != null) {
-            holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards(), session.getValitorShopId(), session.getValitorSecurityNumber(), session.getValitorReturnURLText(), session.getValitorReturnURL());
+            holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards(), session.getDiscountCode(), session.getValitorShopId(), session.getValitorSecurityNumber(), session.getValitorReturnURLText(), session.getValitorReturnURL());
 		} else {
-		    holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards());
+		    holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards(), session.getDiscountCode());
 		}
 
         /*List<Registration> registrations = dao.getRegistrations(holder.getHeader());

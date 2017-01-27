@@ -461,7 +461,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
                                 getSession().isRegistrationWithPersonalId(),
-                                null);
+                                Currency.ISK, getSession().getDiscountCode());
                     } else {
                         getSession().setCurrentParticipant(getSession()
                                 .getParticipantHolders()
@@ -487,7 +487,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        null, getSession().getGiftCards());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -570,7 +570,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        null, getSession().getGiftCards());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);
