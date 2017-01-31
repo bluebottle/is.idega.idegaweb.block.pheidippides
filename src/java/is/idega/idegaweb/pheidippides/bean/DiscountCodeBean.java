@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.DiscountCode;
 
 @Service("discountCodeBean")
@@ -18,6 +19,8 @@ public class DiscountCodeBean {
     private Locale locale;
 
     private List<DiscountCode> discountCodes;
+    private List<Company> companies;
+
 
     private boolean showCompany = false;
 
@@ -67,5 +70,13 @@ public class DiscountCodeBean {
 
     public void setShowCompany(boolean showCompany) {
         this.showCompany = showCompany;
+    }
+
+    public List<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
     }
 }

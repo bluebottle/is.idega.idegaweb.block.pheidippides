@@ -1553,19 +1553,28 @@ public class PheidippidesService {
         securityString.append("0");
 
         if (holders != null && !holders.isEmpty()) {
+            DiscountCode dCode = null;
+            if (discountCode != null
+                    && !"".equals(discountCode.trim())) {
+                dCode = dao.getDiscountCodeByCode(discountCode);
+                if (paymentGroup == null) {
+                    paymentGroup = dCode.getCompany().getName();
+                }
+            }
+
             RegistrationHeader header = null;
             if (doPayment) {
                 header = dao.storeRegistrationHeader(null,
                         RegistrationHeaderStatus.WaitingForPayment,
                         registrantUUID, paymentGroup, locale.toString(),
                         Currency.ISK, null, null, null, null, null, null, null,
-                        null, null, null);
+                        null, null, dCode != null ? dCode.getCompany() : null);
             } else {
                 header = dao.storeRegistrationHeader(null,
                         RegistrationHeaderStatus.RegisteredWithoutPayment,
                         registrantUUID, paymentGroup, locale.toString(),
                         Currency.ISK, null, null, null, null, null, null, null,
-                        null, null, null);
+                        null, null, dCode != null ? dCode.getCompany() : null);
             }
             holder.setHeader(header);
 
@@ -1688,12 +1697,6 @@ public class PheidippidesService {
                     if (relayPartners != null && !relayPartners.isEmpty()) {
                         team = dao.storeTeam(team.getId(), team.getName(),
                                 team.isRelayTeam());
-                    }
-
-                    DiscountCode dCode = null;
-                    if (discountCode != null
-                            && !"".equals(discountCode.trim())) {
-                        dCode = dao.getDiscountCodeByCode(discountCode);
                     }
 
                     Registration registration = dao.storeRegistration(null,
@@ -4714,6 +4717,11 @@ public class PheidippidesService {
         }
 
         return registration;
+    }
+
+    public void disableDiscountCode(String discountCode) {
+        DiscountCode dCode = dao.getDiscountCodeByCode(discountCode);
+        dao.updateDiscountCode(dCode.getId(), dCode.getCompany(), dCode.getDiscountPercentage(), dCode.getDiscountAmount(), dCode.getValidUntil(), false);
     }
 
     public void removeGiftCard(String code) {

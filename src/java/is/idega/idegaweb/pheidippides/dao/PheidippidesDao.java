@@ -68,6 +68,8 @@ public interface PheidippidesDao extends GenericDao {
 
     public boolean removeDistance(Long distanceID);
 
+    public List<DiscountCode> getDiscountCodes();
+
     public DiscountCode getDiscountCode(Long discountCodeID);
 
     public DiscountCode getDiscountCodeByCode(String code);

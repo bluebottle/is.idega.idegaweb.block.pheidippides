@@ -13,6 +13,14 @@
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_discount_code']}" /></legend>
 
+			<div class="formItem required">
+				<label for="prm_company_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company']}" /></label>
+				<c:selectOne name="prm_company_pk" styleClass="required">
+					<ui:repeat value="#{discountCodeBean.companies}" var="company">
+						<c:selectOption name="#{company.name}" content="#{company.id}" />
+					</ui:repeat>
+				</c:selectOne>
+			</div>
 			<div class="formItem">
 				<label for="prm_percentage"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_percentage']}" /></label>
 				<input type="text" class="number" name="prm_percentage" />
@@ -30,7 +38,7 @@
 				<input class="datePicker required" name="prm_valid_until" value="#{p:formatDate(discountBean.validUntil, 'dd.MM.yyyy HH:mm')}" />
 			</div>
 			<div class="formItem checkbox">
-				<c:checkBox name="prm_enabled" content="true" checked="#{discountBean.enabled}" />
+				<c:checkBox name="prm_enabled" content="true" checked="true" />
 				<label for="prm_enabled"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['enabled']}" /></label>
 			</div>
 		</fieldset>

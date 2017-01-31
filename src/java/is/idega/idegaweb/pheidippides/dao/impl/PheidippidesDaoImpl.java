@@ -155,6 +155,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
 
     /* Discount code methods */
     @Override
+    public List<DiscountCode> getDiscountCodes() {
+        return getResultList("discountCode.findAll", DiscountCode.class);
+    }
+
+
+    @Override
     public DiscountCode getDiscountCode(Long discountCodeID) {
         return find(DiscountCode.class, discountCodeID);
     }

@@ -31,10 +31,14 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Company;
 import is.idega.idegaweb.pheidippides.data.DiscountCode;
 
-public class DiscountCodes extends IWBaseComponent implements IWPageEventListener {
+public class DiscountCodes extends IWBaseComponent
+        implements
+            IWPageEventListener {
 
     private static final String PARAMETER_ACTION = "prm_action";
 
+    private static final String PARAMETER_COMPANY_PK = "prm_company_pk";
+    private static final String PARAMETER_EVENT_PK = "prm_event_pk";
     private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
     private static final String PARAMETER_PERCENTAGE = "prm_percentage";
     private static final String PARAMETER_AMOUNT = "prm_amount";
@@ -67,34 +71,51 @@ public class DiscountCodes extends IWBaseComponent implements IWPageEventListene
         IWContext iwc = IWContext.getIWContext(context);
         iwb = getBundle(context, getBundleIdentifier());
 
-        PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
-        PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-        PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
+        PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+                getJQuery().getBundleURIToJQueryLib());
+        PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc,
+                getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
+        PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc,
+                getJQuery().getBundleURISToValidation());
 
-        PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/discountCodes.js"));
+        PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+                iwb.getVirtualPathWithFileNameString(
+                        "javascript/discountCodes.js"));
 
-        PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-        PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+        PresentationUtil.addStyleSheetToHeader(iwc,
+                getWeb2Business().getBundleURIToFancyBoxStyleFile());
+        PresentationUtil.addStyleSheetToHeader(iwc,
+                iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
         DiscountCodeBean bean = getBeanInstance("discountCodeBean");
         bean.setAction(iwc.getRequestURI());
-        bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
+        bean.setEventHandler(
+                IWMainApplication.getEncryptedClassName(this.getClass()));
         bean.setLocale(iwc.getCurrentLocale());
-        bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
+        bean.setResponseURL(
+                getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(
+                        this.getClass(), new ArrayList<AdvancedProperty>()));
 
-//        if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-//           getService().removeGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD));
-//        }
+        List<Company> companies = getDao().getCompanies();
+        bean.setCompanies(companies);
 
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+            getService().disableDiscountCode(
+                    iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+        }
+
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+                .createComponent(FaceletComponent.COMPONENT_TYPE);
         switch (parseAction(iwc)) {
-            case ACTION_VIEW:
-                facelet.setFaceletURI(iwb.getFaceletURI("companyDiscountCodes/view.xhtml"));
+            case ACTION_VIEW :
+                facelet.setFaceletURI(
+                        iwb.getFaceletURI("discountCodes/view.xhtml"));
                 showView(iwc, bean);
                 break;
 
-            case ACTION_EDIT:
-                facelet.setFaceletURI(iwb.getFaceletURI("companyDiscountCodes/edit.xhtml"));
+            case ACTION_EDIT :
+                facelet.setFaceletURI(
+                        iwb.getFaceletURI("discountCodes/edit.xhtml"));
                 showEdit(iwc, bean);
                 break;
         }
@@ -103,14 +124,7 @@ public class DiscountCodes extends IWBaseComponent implements IWPageEventListene
     }
 
     private void showView(IWContext iwc, DiscountCodeBean bean) {
-        List<DiscountCode> discountCodes = null;
-
-        if (iwc.isSuperAdmin()) {
-            //discountCodes = dao.getd
-        } else {
-            Company company = getDao().getCompanyByUserUUID(iwc.getCurrentUser().getUniqueId());
-            discountCodes = dao.getDiscountCodesForCompany(company);
-        }
+        List<DiscountCode> discountCodes = dao.getDiscountCodes();
 
         bean.setDiscountCodes(discountCodes);
     }
@@ -120,24 +134,36 @@ public class DiscountCodes extends IWBaseComponent implements IWPageEventListene
 
     @Override
     public boolean actionPerformed(IWContext iwc) throws IWException {
-        int amount = iwc.isParameterSet(PARAMETER_AMOUNT) ? Integer.parseInt(iwc.getParameter(PARAMETER_AMOUNT)) : 0;
-        int percentage = iwc.isParameterSet(PARAMETER_PERCENTAGE) ? Integer.parseInt(iwc.getParameter(PARAMETER_PERCENTAGE)) : 0;
-        int maxNumberRegs = iwc.isParameterSet(PARAMETER_MAX_NUMBER_OF_REGISTRATIONS) ? Integer.parseInt(iwc.getParameter(PARAMETER_MAX_NUMBER_OF_REGISTRATIONS)) : 0;
-        Date validUntil = iwc.isParameterSet(PARAMETER_VALID_UNTIL) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_VALID_UNTIL), LocaleUtil.getIcelandicLocale()) : null;
+        int amount = iwc.isParameterSet(PARAMETER_AMOUNT)
+                ? Integer.parseInt(iwc.getParameter(PARAMETER_AMOUNT))
+                : 0;
+        int percentage = iwc.isParameterSet(PARAMETER_PERCENTAGE)
+                ? Integer.parseInt(iwc.getParameter(PARAMETER_PERCENTAGE))
+                : 0;
+        int maxNumberRegs = iwc
+                .isParameterSet(PARAMETER_MAX_NUMBER_OF_REGISTRATIONS)
+                        ? Integer.parseInt(iwc.getParameter(
+                                PARAMETER_MAX_NUMBER_OF_REGISTRATIONS))
+                        : 0;
+        Date validUntil = iwc.isParameterSet(PARAMETER_VALID_UNTIL)
+                ? IWDatePickerHandler.getParsedDate(
+                        iwc.getParameter(PARAMETER_VALID_UNTIL),
+                        LocaleUtil.getIcelandicLocale())
+                : null;
         boolean isEnabled = iwc.isParameterSet(PARAMETER_ENABLED);
+        Company company = getDao().getCompany(
+                Long.parseLong(iwc.getParameter(PARAMETER_COMPANY_PK)));
 
-        Company company = null;
-        if (!iwc.isSuperAdmin()) {
-            company = getDao().getCompanyByUserUUID(iwc.getCurrentUser().getUniqueId());
-        }
-
-        dao.storeDiscountCode(company, percentage, amount, maxNumberRegs, validUntil, isEnabled);
+        dao.storeDiscountCode(company, percentage, amount, maxNumberRegs,
+                validUntil, isEnabled);
 
         return true;
     }
 
     private int parseAction(IWContext iwc) {
-        int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
+        int action = iwc.isParameterSet(PARAMETER_ACTION)
+                ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION))
+                : ACTION_VIEW;
         return action;
     }
 

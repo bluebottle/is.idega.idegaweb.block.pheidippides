@@ -10,11 +10,23 @@
 	<fieldset class="formSection noNavigation">
 		<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_list']}" /></legend>
 
+		<h:outputLink value="#{discountCodeBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_discount_code']}" styleClass="addItem fancybox.ajax">
+			<f:param name="prm_action" value="2" />
+			<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_discount_code']}" /></span>
+		</h:outputLink>
+
+		<div class="formItem">
+			<label><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['filter']}" /></label>
+			<input type="search" class="light-table-filter" data-table="order-table" />
+		</div>
+
 		<ui:fragment rendered="#{not empty discountCodeBean.discountCodes}">
 			<table class="adminTable discountCodes order-table" width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
 						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['code']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_company']}" /></th>
+						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_percentage']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code_amount']}" /></th>
 						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['max_registrations']}" /></th>
@@ -28,11 +40,21 @@
 					<ui:repeat value="#{discountCodeBean.discountCodes}" var="discountCode">
 						<tr>
 							<td class="firstColumn"><h:outputText value="#{discountCode.uuid}" /></td>
+							<td><h:outputText value="#{discountCode.company.name}" /></td>
+							<td><h:outputText value="#{discountCode.company.event.name}" /></td>
 							<td><h:outputText value="#{discountCode.discountPercentage}" /></td>
 							<td><h:outputText value="#{discountCode.discountAmount}" /></td>
 							<td><h:outputText value="#{discountCode.maxNumberOfRegistrations}" /></td>
 							<td><h:outputText value="#{discountCode.validUntil}"><f:convertDateTime type="date" pattern="dd.MM.yyyy"/></h:outputText></td>
-							<td class="lastColumn discount_#{discountCode.isEnabled}"><span></span></td>
+							<td class="discount_#{discountCode.isEnabled}"><span></span></td>
+							<td class="action lastColumn">
+								<ui:fragment rendered="#{not empty discountCode.uuid}">
+									<h:outputLink styleClass="deleteItem" rel="#{localizedStrings['is.idega.idegaweb.pheidippides']['disable_discount_code']}">
+										<f:param name="prm_discount_code" value="#{discountCode.uuid}" />
+										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['disable']}" /></span>
+									</h:outputLink>
+								</ui:fragment>
+							</td>
 						</tr>
 					</ui:repeat>
 				</tbody>

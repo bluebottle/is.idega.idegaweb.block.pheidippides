@@ -25,7 +25,7 @@ import com.idega.core.idgenerator.business.UUIDGenerator;
 @NamedQueries({
     @NamedQuery(name = "discountCode.findAll", query = "select d from DiscountCode d"),
     @NamedQuery(name = "discountCode.findByCode", query = "select d from DiscountCode d where d.uuid = :uuid"),
-    @NamedQuery(name = "discountCode.findByCompany", query = "select d from DiscountCode d where d.company = :company")
+    @NamedQuery(name = "discountCode.findByCompany", query = "select d from DiscountCode d where d.company = :company and enabled=true")
 })
 public class DiscountCode implements Serializable {
     private static final long serialVersionUID = 8543246008490028178L;
