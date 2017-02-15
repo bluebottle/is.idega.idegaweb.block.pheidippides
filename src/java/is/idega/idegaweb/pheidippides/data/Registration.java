@@ -191,7 +191,8 @@ public class Registration implements Serializable {
     @Column(name = Registration.COLUMN_EXTERNAL_CHARITY_ID)
     private String externalCharityId;
 
-    @Column(name = Registration.COLUMN_DISCOUNT_CODE)
+    @ManyToOne
+    @JoinColumn(name = Registration.COLUMN_DISCOUNT_CODE)
     private DiscountCode discountCode;
 
 	public Long getId() {

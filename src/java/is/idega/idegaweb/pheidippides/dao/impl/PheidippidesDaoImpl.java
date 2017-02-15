@@ -804,6 +804,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
             newReg.setEstimatedTime(registration.getEstimatedTime());
             newReg.setComment(registration.getComment());
             newReg.setMovedFrom(registration);
+            newReg.setDiscountCode(registration.getDiscountCode());
             getEntityManager().persist(newReg);
 
             if (status == null
@@ -811,6 +812,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
                 registration.setStatus(RegistrationStatus.Moved);
             }
             registration.setMovedTo(newReg);
+
             getEntityManager().persist(registration);
 
             registration = newReg;
@@ -872,6 +874,10 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
 
         if (runningGroup != null) {
             registration.setRunningGroup(runningGroup);
+        }
+
+        if (discountCode != null) {
+            registration.setDiscountCode(discountCode);
         }
 
         getEntityManager().persist(registration);

@@ -13,7 +13,13 @@ public class TestClient {
 	 */
 	public static void main(String[] args) {
 		TestClient client = new TestClient();
-		client.doStuff2();
+		client.testStuff();
+	}
+
+	private void testStuff() {
+	    int x = 1;
+	    x += x++ * 2;
+	    System.out.println("x = " + x);
 	}
 
 	private void doStuff2() {
@@ -24,7 +30,7 @@ public class TestClient {
 	        for (int i = 0; i < charities.length; i++) {
                 System.out.println(i + ", id = " + charities[i].getID() + ", name = " + charities[i].getName() + ", ssn = " + charities[i].getSSN());
             }
-	        
+
            charities = port.getCharitiesLocalized("en");
             for (int i = 0; i < charities.length; i++) {
                 System.out.println(i + ", id = " + charities[i].getID() + ", name = " + charities[i].getName() + ", ssn = " + charities[i].getSSN());
@@ -34,27 +40,27 @@ public class TestClient {
 	        e.printStackTrace();
 	    }
 	}
-	
+
 	private void doStuff() {
 		try {
 			CharityServiceServiceLocator locator = new CharityServiceServiceLocator();
 			//CharityService port = locator.getCharityService(new URL("http://pheidippidestest.sidan.is/services/CharityService"));
 			CharityService port = locator.getCharityService(new URL("http://skraning.marathon.is/services/CharityService"));
-			
+
 			//Session session = port.authenticateUser("isb", "ch4r1tys3rv1c3");//getCharities();//getCharityInformation("0610703899");
 			CharityInformation charity = port.getCharityInformation("2211785649");
 
 			/*Charity info[] = port.getCharities();
-			
+
 			if (info != null) {
 				for (Charity charity : info) {
 					System.out.println(charity.getId() + ", " + charity.getName() + ", " + charity.getDescription());
 				}
 			}*/
-			
+
 			//System.out.println("session = " + session.getSessionID());
 			if (charity == null) {
-				System.out.println("no charity");				
+				System.out.println("no charity");
 			} else {
 				System.out.println("address = " + charity.getAddress());
 				System.out.println("charity id = " + charity.getCharityID());
@@ -71,7 +77,7 @@ public class TestClient {
 				System.out.println("phone = " + charity.getPhone());
 				System.out.println("postal code = " + charity.getPostalCode());
 			}
-			
+
 			//Charity charity = port.getCharity("0610703899");
 			//if (charity != null) {
 			//	System.out.println("Got something");
