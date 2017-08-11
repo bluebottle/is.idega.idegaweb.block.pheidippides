@@ -86,7 +86,7 @@ public class ResultsImporter extends IWBaseComponent {
 
 		Event event = getDao().getEventByReportSign("LV");
 		bean.setEvent(event);
-		List<Race> races = getDao().getRaces(event, 2015);
+		List<Race> races = getDao().getRaces(event, 2017);
 		/**
 		 * @TODO make the year selectable
 		 */

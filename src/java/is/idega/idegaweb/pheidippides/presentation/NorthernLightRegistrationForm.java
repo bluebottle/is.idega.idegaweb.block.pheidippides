@@ -56,7 +56,6 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
     private static final int ACTION_FINISH_REGISTRATION = 12;
     private static final int ACTION_DISCOUNT_CODE = 100;
 
-
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
     private static final String PARAMETER_NAME = "prm_name";
@@ -530,7 +529,6 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
         facelet.setFaceletURI(iwb.getFaceletURI("registration/NLH/discountCode.xhtml"));
         add(facelet);
     }
-
 
     private String getBundleIdentifier() {
         return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;

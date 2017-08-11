@@ -96,7 +96,7 @@ public class ParticipantsFileCreator {
 			sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + race.getDistance().getLocalizedKey() + (race.getNumberOfRelayLegs() > 1 ? ".relay" : ""), race.getDistance().getName()).replaceAll("\\<[^>]*>", ""));
 		}
 		else {
-			sheetname = StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + ".name", event.getName()) + " - " + year);
+			sheetname = StringEscapeUtils.unescapeHtml((iwrb.getLocalizedString(event.getLocalizedKey() + ".name", event.getName()) + " - " + year).replaceAll("\\<[^>]*>", ""));
 		}
 
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -453,5 +453,13 @@ public class ParticipantsFileCreator {
 		} catch (RemoteException rme) {
 			throw new RuntimeException(rme.getMessage());
 		}
+	}
+	
+	public static void main(String args[]) {
+		String localized = "<p>WOW Tour of Reykjavik</p>";
+		
+		String sheetname = StringEscapeUtils.unescapeHtml(localized  + ".name" + " - " + "2017").replaceAll("\\<[^>]*>", "");
+		
+		System.out.println("sheetname = " + sheetname);
 	}
 }

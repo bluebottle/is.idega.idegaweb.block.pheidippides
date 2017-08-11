@@ -53,7 +53,8 @@ public class MHRegistrationForm extends IWBaseComponent {
     private static final int ACTION_ADD_GIFT_CARD = 10;
     private static final int ACTION_REMOVE_GIFT_CARD = 11;
     private static final int ACTION_FINISH_REGISTRATION = 12;
-
+    private static final int ACTION_DISCOUNT_CODE = 100;
+    
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
     private static final String PARAMETER_NAME = "prm_name";
@@ -70,6 +71,7 @@ public class MHRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
     private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+    private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
     @Autowired
     private PheidippidesService service;
@@ -148,6 +150,8 @@ public class MHRegistrationForm extends IWBaseComponent {
                     String.valueOf(IWTimestamp.RightNow().getYear()),
                     String.valueOf(IWTimestamp.RightNow().getYear())));
 
+            getSession().setShowDiscountCode(true);
+            
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
                     if (bean.getLocale()
@@ -294,6 +298,11 @@ public class MHRegistrationForm extends IWBaseComponent {
                                                         iwc.getCurrentLocale()
                                                                 .toString())
                                                 .getValue());
+                        
+                        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+                            getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+                        }
+
                         getService().calculatePrices(
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
@@ -358,6 +367,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 
                 case ACTION_GIFT_CARD :
                     showGiftCard(iwc, bean);
+                    break;
+
+                case ACTION_DISCOUNT_CODE:
+                    showDiscountCode(iwc, bean);
                     break;
 
                 case ACTION_ADD_GIFT_CARD :
@@ -515,6 +528,12 @@ public class MHRegistrationForm extends IWBaseComponent {
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
                 iwb.getFaceletURI("registration/MH/giftCard.xhtml"));
+        add(facelet);
+    }
+
+    private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+        facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/discountCode.xhtml"));
         add(facelet);
     }
 

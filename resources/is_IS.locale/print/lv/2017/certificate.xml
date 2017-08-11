@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//UJAC.org//Print Document//EN" 
+	"http://ujac.sourceforge.net/ujac-print-document.dtd">
+
+<document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
+	<register-font family="antiqua" source="antiqua.ttf"/>
+
+	<color-def name="black" color-space="RGB" value="0,0,0"/>
+    <color-def name="silver" color-space="RGB" value="192,192,192"/>
+
+    <font-def name="header" color="black" family="antiqua" size="39.25" style="normal"/>
+    <font-def name="text" color="black" family="antiqua" size="17.26" style="normal"/>
+
+	<overlay source="lv/2017/LV17-vidurkenningarskjal-minna.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
+
+	<box x="25" y="200" width="580" valign="top" height="260" padding="10.0">
+		<paragraph font="header" halign="center" spacing-after="12.0">
+			${name}
+		</paragraph>
+
+		<paragraph font="text" halign="center" spacing-after="6.0">
+			Lauk 55 km ultra maraþoni með eftirfarandi árangri:
+		</paragraph>
+		
+		<paragraph font="text" halign="center" spacing-after="6.0">
+			Lokatími: ${finishTime}
+		</paragraph>
+
+		<paragraph font="text" halign="center" spacing-after="6.0">
+			${placement}. sæti af 430 þátttakendum
+		</paragraph>
+
+		<paragraph font="text" halign="center" spacing-after="6.0">
+			${genderPlacement}. sæti kynjaskipt, 291 karl og 139 konur luku hlaupi
+		</paragraph>
+
+		<paragraph font="text" halign="center" spacing-after="6.0">
+			${groupPlacement}. sæti í flokknum ${ageGroup} ${gender}
+		</paragraph>
+	</box>	
+</document>

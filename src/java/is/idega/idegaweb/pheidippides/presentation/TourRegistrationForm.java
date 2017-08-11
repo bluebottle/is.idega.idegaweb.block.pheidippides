@@ -49,6 +49,7 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final int ACTION_RECEIPT = 7;
     private static final int ACTION_REGISTER_ANOTHER = 8;
     private static final int ACTION_FINISH_REGISTRATION = 9;
+    private static final int ACTION_DISCOUNT_CODE = 100;
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
@@ -66,6 +67,7 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_MOBILE = "prm_mobile";
     private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+    private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
@@ -168,6 +170,8 @@ public class TourRegistrationForm extends IWBaseComponent {
                     String.valueOf(IWTimestamp.RightNow().getYear()),
                     String.valueOf(IWTimestamp.RightNow().getYear())));
 
+            getSession().setShowDiscountCode(true);
+            
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
                     if (bean.getLocale()
@@ -273,6 +277,12 @@ public class TourRegistrationForm extends IWBaseComponent {
 
                 case ACTION_WAIVER :
                     if (getSession().getCurrentParticipant() != null) {
+                    	if (iwc.isParameterSet(PARAMETER_RACE)) {
+                            getSession().getCurrentParticipant()
+                                    .setRace(getDao().getRace(Long.parseLong(
+                                            iwc.getParameter(PARAMETER_RACE))));
+                        }
+                    	
                         if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE)) {
                             getSession().getCurrentParticipant()
                                     .setShirtSize(getDao().getShirtSize(
@@ -311,6 +321,11 @@ public class TourRegistrationForm extends IWBaseComponent {
                                                         iwc.getCurrentLocale()
                                                                 .toString())
                                                 .getValue());
+                        
+                        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+                            getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+                        }
+
                         getService().calculatePrices(
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
@@ -375,6 +390,11 @@ public class TourRegistrationForm extends IWBaseComponent {
                         showParticipant(iwc, bean);
                     }
                     break;
+                    
+                case ACTION_DISCOUNT_CODE:
+                    showDiscountCode(iwc, bean);
+                    break;
+
 
                 case ACTION_FINISH_REGISTRATION :
                     if (getSession().getCurrentParticipant() != null
@@ -493,6 +513,12 @@ public class TourRegistrationForm extends IWBaseComponent {
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
                 iwb.getFaceletURI("registration/TOR/overview.xhtml"));
+        add(facelet);
+    }
+
+    private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+        facelet.setFaceletURI(iwb.getFaceletURI("registration/TOR/discountCode.xhtml"));
         add(facelet);
     }
 

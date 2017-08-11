@@ -18,7 +18,7 @@ public class PDFTest {
 			// defining the document properties, this map is used for dynamical content evaluation.
 			Map<String, String> documentProperties = new HashMap<String, String>();
 			documentProperties.put("name", "Þorbergur Ingi Jónsson");
-			documentProperties.put("finishTime", "4:07:47");
+			documentProperties.put("finishTime", "4:13:25");
 			documentProperties.put("placement", "1");
 			documentProperties.put("genderPlacement", "1");
 			documentProperties.put("groupPlacement", "1");
@@ -26,7 +26,7 @@ public class PDFTest {
 			documentProperties.put("gender", "karlar");
 						
 			// instantiating the document printer
-			FileInputStream templateStream = new FileInputStream("/illuminati/git/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/resources/is_IS.locale/print/lv/2014/certificate.xml");
+			FileInputStream templateStream = new FileInputStream("/Users/palli/Development/illuminati/git/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/resources/is_IS.locale/print/lv/2017/certificate.xml");
 			DocumentPrinter documentPrinter = new DocumentPrinter(templateStream, documentProperties);
 			// in case you'd like to use a XML parser different from the default implementation
 			// you can specify it here (apache xerces in this case).

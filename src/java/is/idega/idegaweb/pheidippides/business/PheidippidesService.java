@@ -3601,7 +3601,7 @@ public class PheidippidesService {
                         teamRegistration);
                 if (!registrantGender.getName()
                         .equals(memberGender.getName())) {
-                    teamCategory = TeamCategory.NotFullTeam;
+                    teamCategory = TeamCategory.Mixed;
                 }
 
                 if (currentTeamMembers.contains(teamRegistration)) {
@@ -3622,7 +3622,7 @@ public class PheidippidesService {
         int memberCount = 1 + getOtherTeamMembers(registration).size();
 
         dao.updateTeamCategory(team,
-                memberCount >= 3 && memberCount <= 5
+                memberCount == 4
                         ? teamCategory
                         : TeamCategory.NotFullTeam,
                 memberCount == 4);

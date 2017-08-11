@@ -10,7 +10,7 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="6" />
 		<input type="hidden" name="prm_gift_card" value="" />
-	
+
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 6" /></h2>
 
@@ -24,7 +24,7 @@
 					</ui:repeat>
 				</ul>
 			</ui:fragment>
-	
+
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
@@ -33,7 +33,7 @@
 						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
 					</tr>
 				</thead>
-			
+
 				<tbody>
 					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 
@@ -55,7 +55,7 @@
 							</ui:repeat>
 						</ui:fragment>
 					</ui:repeat>
-					
+
 					<tr>
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
@@ -85,7 +85,7 @@
 				</tbody>
 			</table>
 		</fieldset>
-		
+
 		<fieldset class="submit">
 			<a href="#" class="back" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
 			<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
@@ -94,8 +94,11 @@
 					<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
 				</ui:fragment -->
 				<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-				<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}">
+<!--				<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}"> -->
 					<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
+<!--				</ui:fragment> -->
+				<ui:fragment rendered="#{pheidippidesRegistrationSession.showDiscountCode}">
+					<a href="#" class="next" rel="100"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code']}" /></span></a>
 				</ui:fragment>
 			</ui:fragment>
 			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount eq 0}">

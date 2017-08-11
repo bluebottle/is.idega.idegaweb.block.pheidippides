@@ -59,6 +59,7 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final int ACTION_ADD_GIFT_CARD = 11;
     private static final int ACTION_REMOVE_GIFT_CARD = 12;
     private static final int ACTION_FINISH_REGISTRATION = 13;
+    private static final int ACTION_DISCOUNT_CODE = 100;
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_TEAM_NAME = "prm_team_name";
@@ -85,6 +86,7 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_FACEBOOK = "prm_facebook";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_CHARITY_TRINKET = "prm_charity_trinket";
+    private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
     @Autowired
     private PheidippidesService service;
@@ -162,6 +164,8 @@ public class RMRegistrationForm extends IWBaseComponent {
             bean.setProperty(new AdvancedProperty(
                     String.valueOf(IWTimestamp.RightNow().getYear()),
                     String.valueOf(IWTimestamp.RightNow().getYear())));
+
+            getSession().setShowDiscountCode(true);
 
             switch (parseAction(iwc)) {
                 case ACTION_PERSON_SELECT :
@@ -351,6 +355,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                         showPersonSelect(iwc, bean);
                     }
                     break;
+                    
                 case ACTION_CHARITY_TRINKET_SELECT :
                     if (getSession().getCurrentParticipant() != null) {
                         if (iwc.isParameterSet(PARAMETER_USE_CHARITY)
@@ -457,6 +462,11 @@ public class RMRegistrationForm extends IWBaseComponent {
                                                         iwc.getCurrentLocale()
                                                                 .toString())
                                                 .getValue());
+                        
+                        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+                            getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+                        }
+                        
                         getService().calculatePrices(
                                 getSession().getCurrentParticipant(),
                                 getSession().getParticipantHolders(),
@@ -520,6 +530,10 @@ public class RMRegistrationForm extends IWBaseComponent {
 
                 case ACTION_GIFT_CARD :
                     showGiftCard(iwc, bean);
+                    break;
+
+                case ACTION_DISCOUNT_CODE:
+                    showDiscountCode(iwc, bean);
                     break;
 
                 case ACTION_ADD_GIFT_CARD :
@@ -717,6 +731,12 @@ public class RMRegistrationForm extends IWBaseComponent {
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
                 iwb.getFaceletURI("registration/RM/giftCard.xhtml"));
+        add(facelet);
+    }
+
+    private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+        facelet.setFaceletURI(iwb.getFaceletURI("registration/RM/discountCode.xhtml"));
         add(facelet);
     }
 
