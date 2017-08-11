@@ -12,7 +12,7 @@
     <font-def name="header" color="black" family="antiqua" size="39.25" style="normal"/>
     <font-def name="text" color="black" family="antiqua" size="17.26" style="normal"/>
     
-	<overlay source="lv/2017/Laugavegur_vidurk_2015.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
+	<overlay source="lv/2017/LV17-vidurkenningarskjal-minna.pdf" margin-top="0" margin-bottom="0" margin-left="0" margin-right="0" x="0" y="0" />
 
 	<box x="25" y="200" width="580" valign="top" height="260" padding="10.0">
 		<paragraph font="header" halign="center" spacing-after="12.0">
