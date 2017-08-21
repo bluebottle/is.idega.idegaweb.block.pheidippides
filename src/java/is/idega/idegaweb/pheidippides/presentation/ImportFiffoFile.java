@@ -52,42 +52,30 @@ public class ImportFiffoFile extends IWBaseComponent {
 	@Autowired
 	private PheidippidesDao dao;
 
-
 	@Override
 	protected void initializeComponent(FacesContext context) {
 		IWContext iwc = IWContext.getIWContext(context);
 		iwb = getBundle(context, getBundleIdentifier());
 
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery()
-				.getBundleURIToJQueryLib());
-		PresentationUtil.addJavaScriptSourcesLinesToHeader(
-				iwc,
-				getJQuery().getBundleURISToValidation(
-						iwc.getCurrentLocale().getLanguage()));
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery()
-				.getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc,
+				getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+				getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
+
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-				CoreConstants.DWR_ENGINE_SCRIPT);
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-				CoreConstants.DWR_UTIL_SCRIPT);
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-				"/dwr/interface/PheidippidesService.js");
-
-		PresentationUtil
-		.addJavaScriptSourceLineToHeader(
-				iwc,
 				iwb.getVirtualPathWithFileNameString("javascript/fiffoImporter.js"));
 
-		PresentationUtil.addStyleSheetToHeader(iwc,
-				iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		FiffoImportBean bean = getBeanInstance("fiffoImportBean");
 		bean.setLocale(iwc.getCurrentLocale());
-		bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp
-				.RightNow().getYear()), String.valueOf(IWTimestamp.RightNow()
-				.getYear())));
-
+		bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp.RightNow().getYear()),
+				String.valueOf(IWTimestamp.RightNow().getYear())));
 
 		Event event = getDao().getEventByReportSign("RM");
 		bean.setEvent(event);
@@ -119,15 +107,13 @@ public class ImportFiffoFile extends IWBaseComponent {
 
 	private void showDone(IWContext iwc) {
 		UploadFile uploadFile = iwc.getUploadedFile();
-		if (uploadFile != null && uploadFile.getName() != null
-				&& uploadFile.getName().length() > 0) {
+		if (uploadFile != null && uploadFile.getName() != null && uploadFile.getName().length() > 0) {
 			try {
 				FiffoImportBean bean = getBeanInstance("fiffoImportBean");
 
-				FileInputStream input = new FileInputStream(
-						uploadFile.getRealPath());
-				Map<FiffoImportStatus, List<Participant>> toImport = getService()
-						.importFiffoUpdateExcelFile(input, bean.getEvent(), IWTimestamp.RightNow().getYear());
+				FileInputStream input = new FileInputStream(uploadFile.getRealPath());
+				Map<FiffoImportStatus, List<Participant>> toImport = getService().importFiffoUpdateExcelFile(input,
+						bean.getEvent(), IWTimestamp.RightNow().getYear());
 
 				boolean hasError = false;
 				List<Participant> errors = null;
@@ -139,8 +125,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 						hasError = true;
 					}
 
-					errors = toImport
-							.get(FiffoImportStatus.ERROR_IN_PERSONAL_ID);
+					errors = toImport.get(FiffoImportStatus.ERROR_IN_PERSONAL_ID);
 					if (errors != null && !errors.isEmpty()) {
 						bean.setInvalidPersonalID(errors);
 						hasError = true;
@@ -158,7 +143,8 @@ public class ImportFiffoFile extends IWBaseComponent {
 								holder.setParticipant(participant);
 
 								String distanceString = participant.getDistanceString();
-								if (!distanceString.endsWith("km") && !distanceString.startsWith("Krakka")) {
+								if (!distanceString.endsWith("km") && !distanceString.startsWith("Krakka")
+										&& !distanceString.startsWith("Skemmti")) {
 									distanceString += "km";
 								}
 								Distance distance = dao.getDistance(distanceString);
@@ -170,7 +156,8 @@ public class ImportFiffoFile extends IWBaseComponent {
 							}
 
 							if (!holders.isEmpty()) {
-								getService().storeFiffoUpdateImportRegistration(holders, iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
+								getService().storeFiffoUpdateImportRegistration(holders,
+										iwc.getCurrentUser().getUniqueId(), iwc.getCurrentLocale());
 							}
 
 							System.out.println("Got " + participantList.size() + " entries to import");
@@ -188,7 +175,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 							}
 
 						} else {
-						    System.out.println("No new entries in file");
+							System.out.println("No new entries in file");
 
 							bean.setUnableToImportFile(true);
 							hasError = true;
@@ -204,9 +191,8 @@ public class ImportFiffoFile extends IWBaseComponent {
 				try {
 					FileUtil.delete(uploadFile);
 				} catch (Exception ex) {
-					System.err
-							.println("MediaBusiness: deleting the temporary file at "
-									+ uploadFile.getRealPath() + " failed.");
+					System.err.println(
+							"MediaBusiness: deleting the temporary file at " + uploadFile.getRealPath() + " failed.");
 				}
 
 				if (hasError) {
@@ -260,8 +246,7 @@ public class ImportFiffoFile extends IWBaseComponent {
 	}
 
 	private int parseAction(IWContext iwc) {
-		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer
-				.parseInt(iwc.getParameter(PARAMETER_ACTION))
+		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION))
 				: ACTION_SELECT_FILE;
 
 		return action;
