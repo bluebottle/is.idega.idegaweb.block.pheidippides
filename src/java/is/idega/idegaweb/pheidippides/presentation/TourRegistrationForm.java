@@ -28,12 +28,14 @@ import com.idega.util.expression.ELUtil;
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
 import is.idega.idegaweb.pheidippides.business.Currency;
+import is.idega.idegaweb.pheidippides.business.GiftCardService;
 import is.idega.idegaweb.pheidippides.business.ParticipantHolder;
 import is.idega.idegaweb.pheidippides.business.PheidippidesRegistrationSession;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
 import is.idega.idegaweb.pheidippides.business.RegistrationAnswerHolder;
 import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.RaceShirtSize;
 
@@ -49,6 +51,10 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final int ACTION_RECEIPT = 7;
     private static final int ACTION_REGISTER_ANOTHER = 8;
     private static final int ACTION_FINISH_REGISTRATION = 9;
+    private static final int ACTION_GIFT_CARD = 10;
+    private static final int ACTION_ADD_GIFT_CARD = 11;
+    private static final int ACTION_REMOVE_GIFT_CARD = 12;
+
     private static final int ACTION_DISCOUNT_CODE = 100;
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
@@ -68,6 +74,8 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
+    private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
+
 
     private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
     private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
@@ -79,6 +87,9 @@ public class TourRegistrationForm extends IWBaseComponent {
 
     @Autowired
     private PheidippidesRegistrationSession session;
+    
+    @Autowired
+    private GiftCardService giftCardService;
 
     @Autowired
     private PheidippidesDao dao;
@@ -391,10 +402,46 @@ public class TourRegistrationForm extends IWBaseComponent {
                     }
                     break;
                     
+                case ACTION_GIFT_CARD :
+                    showGiftCard(iwc, bean);
+                    break;
+
                 case ACTION_DISCOUNT_CODE:
                     showDiscountCode(iwc, bean);
                     break;
 
+                case ACTION_ADD_GIFT_CARD :
+                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+                        GiftCardUsage usage = getGiftCardService()
+                                .reserveGiftCard(
+                                        iwc.getParameter(PARAMETER_GIFT_CARD),
+                                        getSession().getTotalAmount(), null);
+                        if (usage != null) {
+                            getSession().addGiftCard(usage);
+                        } else {
+                            bean.addError(iwb.getResourceBundle(iwc)
+                                    .getLocalizedString("no_gift_card_found",
+                                            "No gift card was found or already used"));
+                        }
+                    }
+
+                    showOverview(iwc, bean);
+                    break;
+
+                case ACTION_REMOVE_GIFT_CARD :
+                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+                        GiftCardUsage usage = getDao()
+                                .getGiftCardUsage(Long.parseLong(
+                                        iwc.getParameter(PARAMETER_GIFT_CARD)));
+                        if (usage != null) {
+                            getGiftCardService()
+                                    .releaseGiftCardReservation(usage);
+                            getSession().removeGiftCard(usage);
+                        }
+                    }
+
+                    showOverview(iwc, bean);
+                    break;
 
                 case ACTION_FINISH_REGISTRATION :
                     if (getSession().getCurrentParticipant() != null
@@ -530,6 +577,14 @@ public class TourRegistrationForm extends IWBaseComponent {
         add(facelet);
     }
 
+    private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
+        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+                .createComponent(FaceletComponent.COMPONENT_TYPE);
+        facelet.setFaceletURI(
+                iwb.getFaceletURI("registration/TOR/giftCard.xhtml"));
+        add(facelet);
+    }
+    
     private String getBundleIdentifier() {
         return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
     }
@@ -550,6 +605,14 @@ public class TourRegistrationForm extends IWBaseComponent {
         return session;
     }
 
+    private GiftCardService getGiftCardService() {
+        if (giftCardService == null) {
+            ELUtil.getInstance().autowire(this);
+        }
+
+        return giftCardService;
+    }
+    
     private PheidippidesDao getDao() {
         if (dao == null) {
             ELUtil.getInstance().autowire(this);

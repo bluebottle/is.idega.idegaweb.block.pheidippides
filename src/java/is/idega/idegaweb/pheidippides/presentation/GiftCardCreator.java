@@ -177,11 +177,11 @@ public class GiftCardCreator extends IWBaseComponent {
 		amounts.add(new AdvancedProperty("2000", formatter.format(2000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("3000", formatter.format(3000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("4000", formatter.format(4000).replaceAll(",", "")));
-        amounts.add(new AdvancedProperty("4300", formatter.format(4300).replaceAll(",", "")));
+        amounts.add(new AdvancedProperty("4500", formatter.format(4500).replaceAll(",", "")));
+        amounts.add(new AdvancedProperty("4900", formatter.format(4900).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("5000", formatter.format(5000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("6000", formatter.format(6000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("7000", formatter.format(7000).replaceAll(",", "")));
-        amounts.add(new AdvancedProperty("7300", formatter.format(7300).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("8000", formatter.format(8000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("9000", formatter.format(9000).replaceAll(",", "")));
 		amounts.add(new AdvancedProperty("10000", formatter.format(10000).replaceAll(",", "")));

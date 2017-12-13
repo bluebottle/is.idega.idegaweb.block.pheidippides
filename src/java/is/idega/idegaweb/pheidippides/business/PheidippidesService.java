@@ -3621,11 +3621,20 @@ public class PheidippidesService {
 
         int memberCount = 1 + getOtherTeamMembers(registration).size();
 
+        boolean isValid = memberCount >= 3 && memberCount <=5;
+        
+        if (!isValid) {
+        	teamCategory = TeamCategory.NotFullTeam;
+        }
+        
+        if (teamCategory == TeamCategory.Mixed) {
+        	isValid = false;
+        }
+        
+        
         dao.updateTeamCategory(team,
-                memberCount == 4
-                        ? teamCategory
-                        : TeamCategory.NotFullTeam,
-                memberCount == 4);
+                teamCategory,
+                isValid);
     }
 
     private Gender getGenderForRegistration(Registration registration) {
