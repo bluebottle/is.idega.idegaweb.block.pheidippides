@@ -1048,3 +1048,48 @@ ul.image-selection li input + label:after {
 ul.image-selection li label img {
     pointer-events: none;
 }
+
+@media (max-width: 600px) {
+    footer {
+        line-height: 1.5em !important;
+        padding: 1em;
+    }
+    form.registrationForm fieldset.formSection .helpText {
+        line-height: 1.5em;
+    }
+    form.registrationForm fieldset.formSection div.formItem:not(:last-child) {
+        margin-bottom: 1em;
+    }
+    form.registrationForm fieldset.formSection div.formItem label,
+    form.loginForm label {
+        display: block;
+        float: none;
+    }
+    form.registrationForm fieldset.formSection div.formItem input,
+    form.registrationForm fieldset.formSection div.formItem select,
+    form.loginForm input {
+        width: 100% !important;
+    }
+    form.registrationForm fieldSet.formSection div.formItem.checkbox {
+        display: flex;
+    }
+    form.registrationForm fieldSet.formSection div.formItem.checkbox input {
+        width: auto !important;
+    }
+    form.registrationForm fieldSet.formSection div.formItem.checkbox label {
+        flex-grow: 2;
+    }
+    form.registrationForm fieldSet.formSection div.formItem.checkbox label p {
+        display: inline-block
+    }
+    form.registrationForm fieldset.formSection .helpText p {
+        font-size: 14px;
+        line-height: 1.5em;
+    }
+    form.registrationForm fieldset.formSection .helpText p strong {
+        font-size: 16px;
+    }
+    form.registrationForm fieldset.submit a.next:not(:last-child), form.registrationForm fieldset.submit a.valitor {
+        margin-bottom: 0.5em;
+    }
+}
