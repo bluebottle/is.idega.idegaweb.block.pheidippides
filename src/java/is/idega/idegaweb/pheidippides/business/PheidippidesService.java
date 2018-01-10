@@ -107,7 +107,7 @@ import is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebSer
 @Service("pheidippidesService")
 public class PheidippidesService {
 
-    private static final int CHILD_DISCOUNT_AGE = 17;
+    private static final int CHILD_DISCOUNT_AGE = 19;
     private static final String RAFRAEN_UNDIRSKRIFT = "RafraenUndirskrift";
     private static final String SLOD_NOTANDI_HAETTIR_VID = "SlodNotandiHaettirVid";
     private static final String SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE = "SlodTokstAdGjaldfaeraServerSide";
