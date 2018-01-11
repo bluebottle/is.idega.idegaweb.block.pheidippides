@@ -39,7 +39,8 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	private static final String PARAMETER_DESCRIPTION = "prm_description";
 	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
 	private static final String PARAMETER_REPORT_SIGN = "prm_report_sign";
-	private static final String PARAMETER_CHARITY = "prm_charity_pk";
+	private static final String PARAMETER_ENABLE_PREVIOUS_REGISTRATION_DISCOUNT = "prm_enable_prev_reg_discount";
+	//private static final String PARAMETER_CHARITY = "prm_charity_pk";
 	
 	@Autowired
 	private PheidippidesDao dao;
@@ -140,13 +141,13 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	}
 	
 	public boolean actionPerformed(IWContext iwc) throws IWException {
-		List<Charity> charities = new ArrayList<Charity>();
+		/*List<Charity> charities = new ArrayList<Charity>();
 		if (iwc.isParameterSet(PARAMETER_CHARITY)) {
 			String[] charityPKs = iwc.getParameterValues(PARAMETER_CHARITY);
 			for (String charityPK : charityPKs) {
 				charities.add(getDao().getCharity(Long.parseLong(charityPK)));
 			}
-		}
+		}*/
 		
 		getDao().storeEvent(
 			iwc.isParameterSet(PARAMETER_EVENT_PK) ? Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)) : null,
@@ -154,7 +155,8 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 			iwc.getParameter(PARAMETER_DESCRIPTION),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
 			iwc.getParameter(PARAMETER_REPORT_SIGN),
-			charities
+			iwc.isParameterSet(PARAMETER_ENABLE_PREVIOUS_REGISTRATION_DISCOUNT)
+			//charities
 		);
 		
 		return true;

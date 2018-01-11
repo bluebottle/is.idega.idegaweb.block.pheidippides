@@ -76,7 +76,7 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
     @Override
     @Transactional(readOnly = false)
     public Event storeEvent(Long eventID, String name, String description,
-            String localizedKey, String reportSign, List<Charity> charities) {
+            String localizedKey, String reportSign, boolean enablePreviousRegistrationDiscount) {//, List<Charity> charities) {
         Event event = eventID != null ? getEvent(eventID) : null;
         if (event == null) {
             event = new Event();
@@ -86,7 +86,8 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
         event.setDescription(description);
         event.setLocalizedKey(localizedKey);
         event.setReportSign(reportSign);
-        event.setCharities(charities);
+        event.setDiscountForPreviousRegistrations(enablePreviousRegistrationDiscount);
+        //event.setCharities(charities);
 
         getEntityManager().persist(event);
 

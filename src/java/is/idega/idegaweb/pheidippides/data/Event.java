@@ -79,7 +79,7 @@ public class Event implements Serializable {
     private String paymentReturnURL;
 
     @Column(name = Event.COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS)
-    private Boolean discountForPreviousRegistrations;
+    private boolean discountForPreviousRegistrations;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Charity> charities;
@@ -205,12 +205,12 @@ public class Event implements Serializable {
         this.paymentReturnURL = paymentReturnURL;
     }
 
-    public Boolean isDiscountForPreviousRegistrations() {
+    public boolean isDiscountForPreviousRegistrations() {
         return discountForPreviousRegistrations;
     }
 
     public void setDiscountForPreviousRegistrations(
-            Boolean discountForPreviousRegistrations) {
+            boolean discountForPreviousRegistrations) {
         this.discountForPreviousRegistrations = discountForPreviousRegistrations;
     }
 }

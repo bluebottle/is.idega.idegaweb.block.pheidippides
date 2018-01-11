@@ -10,10 +10,10 @@
 	<form class="smallAdminForm" id="eventEditorForm" action="" method="post">
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
 		<input type="hidden" name="prm_event_pk" value="#{pheidippidesBean.event.id}" />
-		
+
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_event']}" /></legend>
-			
+
 			<div class="formItem required">
 				<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
 				<input type="text" class="required" name="prm_name" value="#{pheidippidesBean.event.name}" />
@@ -30,19 +30,12 @@
 				<label for="prm_report_sign"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_sign']}" /></label>
 				<input type="text" name="prm_report_sign" value="#{pheidippidesBean.event.reportSign}" />
 			</div>
-			<div class="formItem">
-				<label for="prm_charity_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['charities']}" /></label>
-				<ul class="checkboxItem">
-					<ui:repeat value="#{pheidippidesBean.charities}" var="charity">
-						<li>
-							<c:checkBox name="prm_charity_pk" content="#{charity.id}" checked="#{not empty pheidippidesBean.event.charities ? p:contains(pheidippidesBean.event.charities, charity) : false}" />
-							<label for="prm_charity_pk"><h:outputText value="#{charity.name}" /></label>
-						</li>
-					</ui:repeat>
-				</ul>
+			<div class="formItem checkbox">
+				<c:checkBox name="prm_enable_prev_reg_discount" content="true" checked="#{pheidippidesBean.event.discountForPreviousRegistrations}" />
+				<label for="prm_enable_prev_reg_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['enable_discount_prev_reg']}" /></label>
 			</div>
 		</fieldset>
-		
+
 		<div class="submit">
 			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
 			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
