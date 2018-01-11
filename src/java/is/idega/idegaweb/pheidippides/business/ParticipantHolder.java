@@ -25,6 +25,7 @@ public class ParticipantHolder {
 	private long amount;
 	private long discount;
 	private long previousRegistrationDiscount;
+	private long earlyBirdDiscount;
 
 	private boolean acceptsWaiver;
 	private boolean hasDoneMarathonBefore = true;
@@ -107,6 +108,13 @@ public class ParticipantHolder {
 	public void setPreviousRegistrationDiscount(long discount) {
 		this.previousRegistrationDiscount = discount;
 	}
+	public long getEarlyBirdDiscount() {
+		return earlyBirdDiscount;
+	}
+	public void setEarlyBirdDiscount(long discount) {
+		this.earlyBirdDiscount = discount;
+	}
+
 	public boolean isAcceptsWaiver() {
 		return acceptsWaiver;
 	}

@@ -15,6 +15,7 @@ import com.idega.builder.bean.AdvancedProperty;
 import com.idega.core.localisation.business.LocaleSwitcher;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
+import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.text.Text;
@@ -73,6 +74,11 @@ public class MHRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
+	private static final String VALITOR_SHOP_ID = "VALITOR_SHOP_ID";
+	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
+	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
+	private static final String VALITOR_RETURN_URL = "VALITOR_RETURN_URL";
+    
     @Autowired
     private PheidippidesService service;
 
@@ -107,9 +113,32 @@ public class MHRegistrationForm extends IWBaseComponent {
         }
 
         getSession().setCurrency(Currency.ISK);
+        
+		String valitorShopID = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SHOP_ID, "1");
+		String valitorSecurityNumber = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+		String valitorReturnURLText = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL_TEXT, "Halda afram");
+		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+				.getProperty(VALITOR_RETURN_URL, "http://skraning.marathon.is/pages/valitor");
+
 
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
+			if (event.getPaymentShopID() != null && !"".equals(event.getPaymentShopID())) {
+				valitorShopID = event.getPaymentShopID();
+			}
+			if (event.getPaymentSecurityNumber() != null && !"".equals(event.getPaymentSecurityNumber())) {
+				valitorSecurityNumber = event.getPaymentSecurityNumber();
+			}
+			if (event.getPaymentReturnURLText() != null && !"".equals(event.getPaymentReturnURLText())) {
+				valitorReturnURLText = event.getPaymentReturnURLText();
+			}
+			if (event.getPaymentReturnURL() != null && !"".equals(event.getPaymentReturnURL())) {
+				valitorReturnURL = event.getPaymentReturnURL();
+			}
+
             List<ParticipantHolder> holders = getSession()
                     .getParticipantHolders();
             if (holders != null && !holders.isEmpty()) {
@@ -334,7 +363,8 @@ public class MHRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, true,
-                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         bean.setAnswer(answer);
                         getSession().empty();
 
@@ -421,7 +451,8 @@ public class MHRegistrationForm extends IWBaseComponent {
                                         !getSession()
                                                 .isRegistrationWithPersonalId(),
                                         iwc.getCurrentLocale(), null, false,
-                                        null, getSession().getGiftCards(), getSession().getDiscountCode());
+                                        null, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
+                                        valitorReturnURLText, valitorReturnURL);
                         getService().markRegistrationAsPaid(answer.getHeader(),
                                 true, false, null, null, null, null, null, null,
                                 null, null, null);

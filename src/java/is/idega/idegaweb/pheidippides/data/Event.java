@@ -41,6 +41,7 @@ public class Event implements Serializable {
     private static final String COLUMN_PAYMENT_RETURN_URL = "payment_return_url";
 
     private static final String COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS = "discount_previous_registration";
+    private static final String COLUMN_DATE_FOR_EARLY_BIRD_DISCOUNT = "early_bird_discount_date";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,6 +81,10 @@ public class Event implements Serializable {
 
     @Column(name = Event.COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS)
     private boolean discountForPreviousRegistrations;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = Event.COLUMN_DATE_FOR_EARLY_BIRD_DISCOUNT)
+	private Date earlyBirdDiscountDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Charity> charities;
@@ -213,4 +218,12 @@ public class Event implements Serializable {
             boolean discountForPreviousRegistrations) {
         this.discountForPreviousRegistrations = discountForPreviousRegistrations;
     }
+
+	public Date getEarlyBirdDiscountDate() {
+		return earlyBirdDiscountDate;
+	}
+
+	public void setEarlyBirdDiscountDate(Date earlyBirdDiscountDate) {
+		this.earlyBirdDiscountDate = earlyBirdDiscountDate;
+	}
 }

@@ -134,13 +134,30 @@ public class TourRegistrationForm extends IWBaseComponent {
                 .getProperty(VALITOR_TOUR_RETURN_URL,
                         "http://tourofreykjavik.is");
 
-        getSession().setValitorShopId(valitorShopID);
-        getSession().setValitorSecurityNumber(valitorSecurityNumber);
-        getSession().setValitorReturnURLText(valitorReturnURLText);
-        getSession().setValitorReturnURL(valitorReturnURL);
-
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
+            if (event.getPaymentShopID() != null
+                    && !"".equals(event.getPaymentShopID())) {
+                valitorShopID = event.getPaymentShopID();
+            }
+            if (event.getPaymentSecurityNumber() != null
+                    && !"".equals(event.getPaymentSecurityNumber())) {
+                valitorSecurityNumber = event.getPaymentSecurityNumber();
+            }
+            if (event.getPaymentReturnURLText() != null
+                    && !"".equals(event.getPaymentReturnURLText())) {
+                valitorReturnURLText = event.getPaymentReturnURLText();
+            }
+            if (event.getPaymentReturnURL() != null
+                    && !"".equals(event.getPaymentReturnURL())) {
+                valitorReturnURL = event.getPaymentReturnURL();
+            }
+
+            getSession().setValitorShopId(valitorShopID);
+            getSession().setValitorSecurityNumber(valitorSecurityNumber);
+            getSession().setValitorReturnURLText(valitorReturnURLText);
+            getSession().setValitorReturnURL(valitorReturnURL);
+
             List<ParticipantHolder> holders = getSession()
                     .getParticipantHolders();
             if (holders != null && !holders.isEmpty()) {

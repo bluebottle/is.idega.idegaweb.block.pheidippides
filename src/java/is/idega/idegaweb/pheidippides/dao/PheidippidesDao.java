@@ -45,7 +45,7 @@ public interface PheidippidesDao extends GenericDao {
     public List<Event> getEvents();
 
     public Event storeEvent(Long eventID, String name, String description,
-            String localizedKey, String reportSign, boolean enablePreviousRegistrationDiscount);//, List<Charity> charities);
+            String localizedKey, String reportSign, boolean enablePreviousRegistrationDiscount, Date earlyBirdDiscountDate);//, List<Charity> charities);
 
     public boolean removeEvent(Long eventID);
 

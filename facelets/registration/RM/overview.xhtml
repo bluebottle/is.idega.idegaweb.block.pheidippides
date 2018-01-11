@@ -44,13 +44,23 @@
 								<td class="firstColumn"><h:outputText value="#{holder.participant.fullName}" /></td>
 								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
 								<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
-								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount + holder.previousRegistrationDiscount}" /></td>
+								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount + holder.previousRegistrationDiscount + holder.earlyBirdDiscount}" /></td>
 							</tr>
+							<ui:fragment rendered="#{holder.earlyBirdDiscount gt 0}">
+							  <tr>
+									<td class="firstColumn"><h:outputText value="" /></td>
+									<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.early_bird_discount')]}" /></td>
+									<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
+									<td class="lastColumn"><h:outputText value="#{-holder.earlyBirdDiscount}" /></td>
+								</tr>
+  						</ui:fragment>
 							<ui:fragment rendered="#{holder.previousRegistrationDiscount gt 0}">
-								<td class="firstColumn"><h:outputText value="" /></td>
-								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.previous_registration_discount')]}" /></td>
-								<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
-								<td class="lastColumn"><h:outputText value="#{-holder.previousRegistrationDiscount}" /></td>
+								<tr>
+									<td class="firstColumn"><h:outputText value="" /></td>
+									<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.previous_registration_discount')]}" /></td>
+									<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
+									<td class="lastColumn"><h:outputText value="#{-holder.previousRegistrationDiscount}" /></td>
+								</tr>
   						</ui:fragment>
 
 							<ui:fragment rendered="#{not empty holder.relayPartners}">
@@ -77,13 +87,23 @@
 						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
 						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
 						<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td -->
-						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount + current.previousRegistrationDiscount}" /></td>
+						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount + current.previousRegistrationDiscount + current.earlyBirdDiscount}" /></td>
 					</tr>
+					<ui:fragment rendered="#{current.earlyBirdDiscount gt 0}">
+					  <tr>
+							<td class="firstColumn"><h:outputText value="" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.early_bird_discount')]}" /></td>
+							<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
+							<td class="lastColumn"><h:outputText value="#{-current.earlyBirdDiscount}" /></td>
+						</tr>
+					</ui:fragment>
 					<ui:fragment rendered="#{current.previousRegistrationDiscount gt 0}">
-						<td class="firstColumn"><h:outputText value="" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.previous_registration_discount')]}" /></td>
-						<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
-						<td class="lastColumn"><h:outputText value="#{-current.previousRegistrationDiscount}" /></td>
+					  <tr>
+							<td class="firstColumn"><h:outputText value="" /></td>
+							<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.previous_registration_discount')]}" /></td>
+							<!-- td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td-->
+							<td class="lastColumn"><h:outputText value="#{-current.previousRegistrationDiscount}" /></td>
+						</tr>
 					</ui:fragment>
 
 					<ui:fragment rendered="#{not empty current.relayPartners}">

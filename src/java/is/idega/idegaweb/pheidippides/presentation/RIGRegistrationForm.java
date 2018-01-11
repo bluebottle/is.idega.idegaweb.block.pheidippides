@@ -117,11 +117,6 @@ public class RIGRegistrationForm extends IWBaseComponent {
                 .getProperty(VALITOR_TOUR_RETURN_URL,
                         "http://tourofreykjavik.is");
 
-        getSession().setValitorShopId(valitorShopID);
-        getSession().setValitorSecurityNumber(valitorSecurityNumber);
-        getSession().setValitorReturnURLText(valitorReturnURLText);
-        getSession().setValitorReturnURL(valitorReturnURL);
-
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
             if (event.getPaymentShopID() != null
@@ -140,6 +135,11 @@ public class RIGRegistrationForm extends IWBaseComponent {
                     && !"".equals(event.getPaymentReturnURL())) {
                 valitorReturnURL = event.getPaymentReturnURL();
             }
+
+            getSession().setValitorShopId(valitorShopID);
+            getSession().setValitorSecurityNumber(valitorSecurityNumber);
+            getSession().setValitorReturnURLText(valitorReturnURLText);
+            getSession().setValitorReturnURL(valitorReturnURL);
 
             List<ParticipantHolder> holders = getSession()
                     .getParticipantHolders();

@@ -108,8 +108,9 @@ import is.idega.idegaweb.pheidippides.webservice.org.hlaupastyrkur.CharityWebSer
 public class PheidippidesService {
 
 	private static final int CHILD_DISCOUNT_AGE = 19;
-	private static final double PREVIOUS_REGISTRATION_DISCOUNT = 0.875d;
-	
+	private static final double EARLY_BIRD_DISCOUNT = 0.8d;
+	private static final double PREVIOUS_REGISTRATION_DISCOUNT = 0.7d;
+
 	private static final String RAFRAEN_UNDIRSKRIFT = "RafraenUndirskrift";
 	private static final String SLOD_NOTANDI_HAETTIR_VID = "SlodNotandiHaettirVid";
 	private static final String SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE = "SlodTokstAdGjaldfaeraServerSide";
@@ -1939,16 +1940,27 @@ public class PheidippidesService {
 						}
 					}
 
-					// Only for tour of reykjavík (for now)
-					if (race.getEvent().isDiscountForPreviousRegistrations()) {
+					// Only apply previous registration discount if the early
+					// bird discount is still valid
+					boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
+							.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
+
+					if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
 						List<Registration> allRegistrations = dao
 								.getAllValidRegistrationsForUser(participant.getUuid());
-						if (allRegistrations != null && allRegistrations.size() > 0) {
-							long newAmount = Math.round(participantHolder.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
-							long discountAmount = participantHolder.getAmount() - newAmount;
-							participantHolder.setAmount(newAmount);
-							participantHolder.setPreviousRegistrationDiscount(discountAmount);
+						boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
+							
+						long newAmount = Math.round(participantHolder.getAmount() * EARLY_BIRD_DISCOUNT);
+						long earlyBirdDiscountAmount = participantHolder.getAmount() - newAmount;
+						long previousRegistrationDiscountAmount = 0;
+						if (getsPreviousRegistrationDiscount) {
+							newAmount = Math.round(participantHolder.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
+							previousRegistrationDiscountAmount = participantHolder.getAmount() - newAmount - earlyBirdDiscountAmount;
 						}
+						
+						participantHolder.setAmount(newAmount);
+						participantHolder.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
+						participantHolder.setEarlyBirdDiscount(earlyBirdDiscountAmount);
 					}
 				}
 			}
@@ -2009,18 +2021,27 @@ public class PheidippidesService {
 					}
 				}
 
-				// Only for tour of reykjavík (for now)
-				if (race.getEvent().isDiscountForPreviousRegistrations()) {
-					if (participant != null && participant.getUuid() != null && !participant.getUuid().equals("")) {
-						List<Registration> allRegistrations = dao
-								.getAllValidRegistrationsForUser(participant.getUuid());
-						if (allRegistrations != null && allRegistrations.size() > 0) {
-							long newAmount = Math.round(current.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
-							long discountAmount = current.getAmount() - newAmount;
-							current.setAmount(newAmount);
-							current.setPreviousRegistrationDiscount(discountAmount);
-						}
+				// Only apply previous registration discount if the early
+				// bird discount is still valid
+				boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
+						.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
+
+				if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
+					List<Registration> allRegistrations = dao
+							.getAllValidRegistrationsForUser(participant.getUuid());
+					boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
+						
+					long newAmount = Math.round(current.getAmount() * EARLY_BIRD_DISCOUNT);
+					long earlyBirdDiscountAmount = current.getAmount() - newAmount;
+					long previousRegistrationDiscountAmount = 0;
+					if (getsPreviousRegistrationDiscount) {
+						newAmount = Math.round(current.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
+						previousRegistrationDiscountAmount = current.getAmount() - newAmount - earlyBirdDiscountAmount;
 					}
+					
+					current.setAmount(newAmount);
+					current.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
+					current.setEarlyBirdDiscount(earlyBirdDiscountAmount);
 				}
 			}
 		}

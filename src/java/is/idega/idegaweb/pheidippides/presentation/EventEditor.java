@@ -24,6 +24,8 @@ import com.idega.idegaweb.IWException;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWBaseComponent;
 import com.idega.presentation.IWContext;
+import com.idega.presentation.ui.handlers.IWDatePickerHandler;
+import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
 
@@ -40,6 +42,7 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 	private static final String PARAMETER_LOCALIZED_KEY = "prm_localized_key";
 	private static final String PARAMETER_REPORT_SIGN = "prm_report_sign";
 	private static final String PARAMETER_ENABLE_PREVIOUS_REGISTRATION_DISCOUNT = "prm_enable_prev_reg_discount";
+	private static final String PARAMETER_EARLY_BIRD_DISCOUNT_DATE = "prm_early_bird_discount_date";
 	//private static final String PARAMETER_CHARITY = "prm_charity_pk";
 	
 	@Autowired
@@ -155,7 +158,8 @@ public class EventEditor extends IWBaseComponent implements IWPageEventListener 
 			iwc.getParameter(PARAMETER_DESCRIPTION),
 			iwc.getParameter(PARAMETER_LOCALIZED_KEY),
 			iwc.getParameter(PARAMETER_REPORT_SIGN),
-			iwc.isParameterSet(PARAMETER_ENABLE_PREVIOUS_REGISTRATION_DISCOUNT)
+			iwc.isParameterSet(PARAMETER_ENABLE_PREVIOUS_REGISTRATION_DISCOUNT),
+			iwc.isParameterSet(PARAMETER_EARLY_BIRD_DISCOUNT_DATE) ? IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_EARLY_BIRD_DISCOUNT_DATE), LocaleUtil.getIcelandicLocale()) : null
 			//charities
 		);
 		

@@ -34,6 +34,11 @@
 				<c:checkBox name="prm_enable_prev_reg_discount" content="true" checked="#{pheidippidesBean.event.discountForPreviousRegistrations}" />
 				<label for="prm_enable_prev_reg_discount"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['enable_discount_prev_reg']}" /></label>
 			</div>
+			<div class="formItem required">
+	      <label for="prm_early_bird_discount_date"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['early_bird_discount_date']}" /></label>
+	      <input class="datePicker required" name="prm_early_bird_discount_date" value="#{p:formatDate(pheidippidesBean.event.earlyBirdDiscountDate, 'dd.MM.yyyy HH:mm')}" />
+      </div>
+
 		</fieldset>
 
 		<div class="submit">
