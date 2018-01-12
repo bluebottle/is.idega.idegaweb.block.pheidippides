@@ -1945,9 +1945,9 @@ public class PheidippidesService {
 					boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
 							.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
-					if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid && participant.getUuid() != null) {
-						List<Registration> allRegistrations = dao
-								.getAllValidRegistrationsForUser(participant.getUuid());
+					if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
+						List<Registration> allRegistrations = participant.getUuid() != null ? dao
+								.getAllValidRegistrationsForUser(participant.getUuid()) : null;
 						boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 							
 						long newAmount = Math.round(participantHolder.getAmount() * EARLY_BIRD_DISCOUNT);
@@ -2026,9 +2026,9 @@ public class PheidippidesService {
 				boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
 						.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
-				if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid  && participant.getUuid() != null) {
-					List<Registration> allRegistrations = dao
-							.getAllValidRegistrationsForUser(participant.getUuid());
+				if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
+					List<Registration> allRegistrations = participant.getUuid() != null ? dao
+							.getAllValidRegistrationsForUser(participant.getUuid()) : null;
 					boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 						
 					long newAmount = Math.round(current.getAmount() * EARLY_BIRD_DISCOUNT);
