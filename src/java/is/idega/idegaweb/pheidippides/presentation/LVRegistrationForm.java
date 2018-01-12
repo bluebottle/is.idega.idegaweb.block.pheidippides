@@ -141,6 +141,11 @@ public class LVRegistrationForm extends IWBaseComponent {
 				valitorReturnURL = event.getPaymentReturnURL();
 			}
 
+            getSession().setValitorShopId(valitorShopID);
+            getSession().setValitorSecurityNumber(valitorSecurityNumber);
+            getSession().setValitorReturnURLText(valitorReturnURLText);
+            getSession().setValitorReturnURL(valitorReturnURL);
+
 			List<ParticipantHolder> holders = getSession().getParticipantHolders();
 			if (holders != null && !holders.isEmpty()) {
 				for (ParticipantHolder participantHolder : holders) {

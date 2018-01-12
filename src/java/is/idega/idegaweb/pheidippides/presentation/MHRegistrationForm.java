@@ -123,6 +123,10 @@ public class MHRegistrationForm extends IWBaseComponent {
 		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL, "http://skraning.marathon.is/pages/valitor");
 
+        getSession().setValitorShopId(valitorShopID);
+        getSession().setValitorSecurityNumber(valitorSecurityNumber);
+        getSession().setValitorReturnURLText(valitorReturnURLText);
+        getSession().setValitorReturnURL(valitorReturnURL);
 
         Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
         if (event != null) {
