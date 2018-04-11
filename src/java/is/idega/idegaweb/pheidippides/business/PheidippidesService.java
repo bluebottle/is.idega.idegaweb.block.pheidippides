@@ -1940,27 +1940,32 @@ public class PheidippidesService {
 						}
 					}
 
-					// Only apply previous registration discount if the early
-					// bird discount is still valid
+					// Apply early bird discount and previous registration
+					// discount if valid
 					boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
 							.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
-					if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
-						List<Registration> allRegistrations = participant.getUuid() != null ? dao
-								.getAllValidRegistrationsForUser(participant.getUuid()) : null;
-						boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
-							
+					if (earlyBirdDiscountValid) {
 						long newAmount = Math.round(participantHolder.getAmount() * EARLY_BIRD_DISCOUNT);
 						long earlyBirdDiscountAmount = participantHolder.getAmount() - newAmount;
-						long previousRegistrationDiscountAmount = 0;
-						if (getsPreviousRegistrationDiscount) {
-							newAmount = Math.round(participantHolder.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
-							previousRegistrationDiscountAmount = participantHolder.getAmount() - newAmount - earlyBirdDiscountAmount;
-						}
-						
+
 						participantHolder.setAmount(newAmount);
-						participantHolder.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
 						participantHolder.setEarlyBirdDiscount(earlyBirdDiscountAmount);
+					}
+
+					if (race.getEvent().isDiscountForPreviousRegistrations()) {
+						List<Registration> allRegistrations = participant.getUuid() != null
+								? dao.getAllValidRegistrationsForUser(participant.getUuid()) : null;
+						boolean getsPreviousRegistrationDiscount = allRegistrations != null
+								&& allRegistrations.size() > 0;
+
+						if (getsPreviousRegistrationDiscount) {
+							long newAmount = Math.round(participantHolder.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
+							long previousRegistrationDiscountAmount = participantHolder.getAmount() - newAmount;
+
+							participantHolder.setAmount(newAmount);
+							participantHolder.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
+						}
 					}
 				}
 			}
@@ -2021,27 +2026,31 @@ public class PheidippidesService {
 					}
 				}
 
-				// Only apply previous registration discount if the early
-				// bird discount is still valid
+				// Apply early bird discount and previous registration discount
+				// if valid
 				boolean earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
 						.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
-				if (race.getEvent().isDiscountForPreviousRegistrations() && earlyBirdDiscountValid) {
-					List<Registration> allRegistrations = participant.getUuid() != null ? dao
-							.getAllValidRegistrationsForUser(participant.getUuid()) : null;
-					boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
-						
+				if (earlyBirdDiscountValid) {
 					long newAmount = Math.round(current.getAmount() * EARLY_BIRD_DISCOUNT);
 					long earlyBirdDiscountAmount = current.getAmount() - newAmount;
-					long previousRegistrationDiscountAmount = 0;
-					if (getsPreviousRegistrationDiscount) {
-						newAmount = Math.round(current.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
-						previousRegistrationDiscountAmount = current.getAmount() - newAmount - earlyBirdDiscountAmount;
-					}
-					
+
 					current.setAmount(newAmount);
-					current.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
 					current.setEarlyBirdDiscount(earlyBirdDiscountAmount);
+				}
+
+				if (race.getEvent().isDiscountForPreviousRegistrations()) {
+					List<Registration> allRegistrations = participant.getUuid() != null
+							? dao.getAllValidRegistrationsForUser(participant.getUuid()) : null;
+					boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
+
+					if (getsPreviousRegistrationDiscount) {
+						long newAmount = Math.round(current.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
+						long previousRegistrationDiscountAmount = current.getAmount() - newAmount;
+
+						current.setAmount(newAmount);
+						current.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
+					}
 				}
 			}
 		}
@@ -2331,7 +2340,29 @@ public class PheidippidesService {
 
 		RacePrice price = dao.getRacePrice(newDistance, registration.getHeader().getCreatedDate(),
 				registration.getHeader().getCurrency());
-		long amount = price.getPrice() - registration.getAmountPaid();
+
+		long currentPrice = price.getPrice();
+
+		// Apply early bird discount and previous registration discount if valid
+		boolean earlyBirdDiscountValid = registration.getRace().getEvent().getEarlyBirdDiscountDate() != null
+				&& IWTimestamp.RightNow()
+						.isEarlierThan(new IWTimestamp(registration.getRace().getEvent().getEarlyBirdDiscountDate()));
+
+		if (earlyBirdDiscountValid) {
+			currentPrice = Math.round(currentPrice * EARLY_BIRD_DISCOUNT);
+		}
+
+		if (registration.getRace().getEvent().isDiscountForPreviousRegistrations()) {
+			List<Registration> allRegistrations = registration.getUserUUID() != null
+					? dao.getAllValidRegistrationsForUser(registration.getUserUUID()) : null;
+			boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
+
+			if (getsPreviousRegistrationDiscount) {
+				currentPrice = Math.round(currentPrice * PREVIOUS_REGISTRATION_DISCOUNT);
+			}
+		}
+
+		long amount = currentPrice - registration.getAmountPaid();
 
 		if (amount > 0) {
 			RegistrationHeader newHeader = dao.storeRegistrationHeader(null, RegistrationHeaderStatus.WaitingForPayment,
