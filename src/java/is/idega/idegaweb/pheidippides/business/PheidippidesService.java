@@ -2338,10 +2338,13 @@ public class PheidippidesService {
 			return null;
 		}
 
-		RacePrice price = dao.getRacePrice(newDistance, registration.getHeader().getCreatedDate(),
+		RacePrice priceNewDistance = dao.getRacePrice(newDistance, IWTimestamp.getTimestampRightNow(),
+				registration.getHeader().getCurrency());
+		RacePrice priceOldDistance = dao.getRacePrice(registration.getRace(), IWTimestamp.getTimestampRightNow(),
 				registration.getHeader().getCurrency());
 
-		long currentPrice = price.getPrice();
+		long currentPriceNewDistance = priceNewDistance.getPrice();
+		long currentPriceOldDistance = priceOldDistance.getPrice();
 
 		// Apply early bird discount and previous registration discount if valid
 		boolean earlyBirdDiscountValid = registration.getRace().getEvent().getEarlyBirdDiscountDate() != null
@@ -2349,7 +2352,8 @@ public class PheidippidesService {
 						.isEarlierThan(new IWTimestamp(registration.getRace().getEvent().getEarlyBirdDiscountDate()));
 
 		if (earlyBirdDiscountValid) {
-			currentPrice = Math.round(currentPrice * EARLY_BIRD_DISCOUNT);
+			currentPriceNewDistance = Math.round(currentPriceNewDistance * EARLY_BIRD_DISCOUNT);
+			currentPriceOldDistance = Math.round(currentPriceOldDistance * EARLY_BIRD_DISCOUNT);
 		}
 
 		if (registration.getRace().getEvent().isDiscountForPreviousRegistrations()) {
@@ -2358,11 +2362,15 @@ public class PheidippidesService {
 			boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 
 			if (getsPreviousRegistrationDiscount) {
-				currentPrice = Math.round(currentPrice * PREVIOUS_REGISTRATION_DISCOUNT);
+				currentPriceNewDistance = Math.round(currentPriceNewDistance * PREVIOUS_REGISTRATION_DISCOUNT);
+				currentPriceOldDistance = Math.round(currentPriceOldDistance * PREVIOUS_REGISTRATION_DISCOUNT);
 			}
 		}
 
-		long amount = currentPrice - registration.getAmountPaid();
+		long amount = currentPriceNewDistance - currentPriceOldDistance;
+		if (registration.getAmountPaid() == 0 || registration.getDiscountCode().getDiscountPercentage() == 100) {
+			amount = 0;
+		}
 
 		if (amount > 0) {
 			RegistrationHeader newHeader = dao.storeRegistrationHeader(null, RegistrationHeaderStatus.WaitingForPayment,
@@ -2370,7 +2378,7 @@ public class PheidippidesService {
 					oldHeader.getCurrency(), null, null, null, null, null, null, null, null, null,
 					oldHeader.getCompany());
 			registration = dao.storeRegistration(registration.getId(), newHeader, RegistrationStatus.InTransition,
-					newDistance, newShirtSize, null, null, price.getPrice(), null, null, null, 0,
+					newDistance, newShirtSize, null, null, priceNewDistance.getPrice(), null, null, null, 0,
 					registration.isHasDoneMarathonBefore(), registration.isHasDoneLVBefore(), null, null,
 					registration.getNeedsAssistance(), registration.getFacebook(), registration.getShowRegistration(),
 					registration.getRunningGroup(), registration.getExternalCharityId(),
