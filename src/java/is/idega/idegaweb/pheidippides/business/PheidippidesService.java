@@ -2368,7 +2368,7 @@ public class PheidippidesService {
 		}
 
 		long amount = currentPriceNewDistance - currentPriceOldDistance;
-		if (registration.getAmountPaid() == 0 || registration.getDiscountCode().getDiscountPercentage() == 100) {
+		if (registration.getAmountPaid() == 0 || (registration.getDiscountCode() != null && registration.getDiscountCode().getDiscountPercentage() == 100)) {
 			amount = 0;
 		}
 
