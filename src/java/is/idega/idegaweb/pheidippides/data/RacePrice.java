@@ -26,15 +26,14 @@ import is.idega.idegaweb.pheidippides.business.Currency;
 
 @Entity
 @Table(name = RacePrice.ENTITY_NAME)
-@NamedQueries({
-	@NamedQuery(name = "racePrice.findAll", query = "select r from RacePrice r"),
-	@NamedQuery(name = "racePrice.findByRace", query = "select r from RacePrice r where r.race = :race"),
-	@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and r.trinket is null"),
-	@NamedQuery(name = "racePrice.findTrinketsByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null"),
-    @NamedQuery(name = "racePrice.findTrinketsByRaceAndDateOrdered", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null order by r.price desc"),
+@NamedQueries({ @NamedQuery(name = "racePrice.findAll", query = "select r from RacePrice r"),
+		@NamedQuery(name = "racePrice.findByRace", query = "select r from RacePrice r where r.race = :race"),
+		@NamedQuery(name = "racePrice.findByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and r.trinket is null"),
+		@NamedQuery(name = "racePrice.findTrinketsByRaceAndDate", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null"),
+		@NamedQuery(name = "racePrice.findTrinketsByRaceAndDateOrdered", query = "select r from RacePrice r where r.race = :race and r.validFrom <= :date and (r.validTo is null or r.validTo >= :date) and r.currency = :currency and not r.trinket is null order by r.price desc"),
 
 })
-public class RacePrice implements Serializable {
+public class RacePrice implements Serializable, Comparable<RacePrice> {
 	private static final long serialVersionUID = -1799532522822250416L;
 
 	public static final String ENTITY_NAME = "ph_race_price";
@@ -116,7 +115,6 @@ public class RacePrice implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = RacePrice.COLUMN_TRINKET)
 	private RaceTrinket trinket;
-
 
 	public Date getValidFrom() {
 		return validFrom;
@@ -209,5 +207,27 @@ public class RacePrice implements Serializable {
 
 	public void setTrinket(RaceTrinket trinket) {
 		this.trinket = trinket;
+	}
+
+	@Override
+	public int compareTo(RacePrice o) {
+		Integer p1 = this.getTrinket().getDisplayOrder();
+		Integer p2 = o.getTrinket().getDisplayOrder();
+
+		if (p1 == null) {
+			p1 = 0;
+		}
+		
+		if (p2 == null) {
+			p2 = 0;
+		}
+		
+		if (p1 > p2) {
+			return 1;
+		} else if (p1 < p2) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 }

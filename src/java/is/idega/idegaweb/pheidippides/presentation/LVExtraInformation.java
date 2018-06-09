@@ -1,16 +1,7 @@
 package is.idega.idegaweb.pheidippides.presentation;
 
-import is.idega.idegaweb.pheidippides.PheidippidesConstants;
-import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.RacePrice;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +23,16 @@ import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+
+import is.idega.idegaweb.pheidippides.PheidippidesConstants;
+import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.RacePrice;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
 
 public class LVExtraInformation extends IWBaseComponent implements IWPageEventListener {
 
@@ -82,7 +83,9 @@ public class LVExtraInformation extends IWBaseComponent implements IWPageEventLi
 			bean.setEvent(registration.getRace().getEvent());
 			bean.setRegistration(registration);
 			bean.setParticipant(getService().getParticipant(registration));
-			bean.setRaceTrinkets(getDao().getCurrentRaceTrinketPrice(registration.getRace(), registration.getHeader().getCurrency()));
+			List<RacePrice> raceTrinkets = getDao().getCurrentRaceTrinketPrice(registration.getRace(), registration.getHeader().getCurrency()); 
+			Collections.sort(raceTrinkets);
+			bean.setRaceTrinkets(raceTrinkets);
 			
 			Map<RaceTrinket, RegistrationTrinket> registrationTrinkets = new HashMap<RaceTrinket, RegistrationTrinket>();
 			List<RegistrationTrinket> trinkets = registration.getTrinkets();

@@ -33,6 +33,7 @@ public class RaceTrinket implements Serializable {
 	private static final String COLUMN_LOCALIZED_KEY = "localized_key";
 	private static final String COLUMN_CREATED_DATE = "created";
 	private static final String COLUMN_PARAMETER_NAME = "param_name";
+	private static final String COLUMN_DISPLAY_ORDER = "display_order";
 
 	public static final String PARAM_PREFIX = "prm_trinket_";
 	
@@ -69,6 +70,10 @@ public class RaceTrinket implements Serializable {
 
 	@Column(name = RaceTrinket.COLUMN_PARAMETER_NAME)
 	private String paramName;
+
+	@Column(name = RaceTrinket.COLUMN_DISPLAY_ORDER)
+	private Integer displayOrder;
+
 
 	public Long getId() {
 		return id;
@@ -163,5 +168,13 @@ public class RaceTrinket implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Integer getDisplayOrder() {
+		return displayOrder;
+	}
+
+	public void setDisplayOrder(Integer displayOrder) {
+		this.displayOrder = displayOrder;
 	}
 }
