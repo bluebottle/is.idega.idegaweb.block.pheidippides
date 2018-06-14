@@ -53,7 +53,7 @@
 					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['yes']}" /></label>
 				</div>
 				<div class="formItem radioButton">
-					<c:radioButton styleClass="required" name="#{raceTrinket.trinket.paramName}" content="false" selected="#{not empty pheidippidesBean.registrationTrinkets and empty registrationTrinket}" />
+					<c:radioButton styleClass="required" name="#{raceTrinket.trinket.paramName}" content="false" selected="#{empty registrationTrinket}" />
 					<label for="#{raceTrinket.trinket.paramName}"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['no']}" /></label>
 				</div>
 
