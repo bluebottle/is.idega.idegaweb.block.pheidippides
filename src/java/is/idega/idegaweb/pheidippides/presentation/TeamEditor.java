@@ -87,7 +87,7 @@ public class TeamEditor extends IWBaseComponent {
 			bean.setEvent(registration.getRace().getEvent());
 
 			List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
-			for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= 3; i++) {
 				properties.add(new AdvancedProperty(String.valueOf(i), String.valueOf(i)));
 			}
 			bean.setProperties(properties);

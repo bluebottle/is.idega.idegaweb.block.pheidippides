@@ -3255,7 +3255,7 @@ public class PheidippidesService {
 
 		int memberCount = 1 + getOtherTeamMembers(registration).size();
 
-		boolean isValid = memberCount >= 3 && memberCount <= 5;
+		boolean isValid = memberCount == 4; //memberCount >= 3 && memberCount <= 5;
 
 		if (!isValid) {
 			teamCategory = TeamCategory.NotFullTeam;
@@ -3720,6 +3720,12 @@ public class PheidippidesService {
 				}
 
 				if (user != null) {
+					int year = IWTimestamp.RightNow().getYear();
+					if (isRegistered(user, holder.getRace().getEvent(), year)) {
+						return "Error: User already registered for this event";
+					}
+					
+					
 					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
 						try {
 							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());

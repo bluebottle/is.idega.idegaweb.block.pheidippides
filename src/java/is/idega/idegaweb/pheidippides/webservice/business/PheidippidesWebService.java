@@ -170,6 +170,7 @@ public class PheidippidesWebService {
          */
 
         // Add checks and relay handling
+        
 
         ParticipantHolder holder = new ParticipantHolder();
         holder.setAcceptsWaiver(true);
