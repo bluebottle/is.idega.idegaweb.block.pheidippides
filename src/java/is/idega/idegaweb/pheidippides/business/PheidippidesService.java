@@ -3261,9 +3261,9 @@ public class PheidippidesService {
 			teamCategory = TeamCategory.NotFullTeam;
 		}
 
-		if (teamCategory == TeamCategory.Mixed) {
+		/*if (teamCategory == TeamCategory.Mixed) {
 			isValid = false;
-		}
+		}*/
 
 		dao.updateTeamCategory(team, teamCategory, isValid);
 	}
