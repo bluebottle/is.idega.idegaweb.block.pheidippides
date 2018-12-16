@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE document
-	PUBLIC "-//UJAC.org//Print Document//EN" 
+	PUBLIC "-//UJAC.org//Print Document//EN"
 	"http://ujac.sourceforge.net/ujac-print-document.dtd">
 
 <document size="A4" margin-left="0" margin-right="0" margin-top="0" margin-bottom="0">
-	
+
 	<register-font family="chancery" source="apple_chancery.ttf"/>
 	<register-font family="corsiva" source="corsiva.ttf"/>
 
@@ -28,7 +28,7 @@
 			Veflykill þinn er: <phrase font="normal">${key}</phrase>
 		</paragraph>
 	</box>
-	
+
 	<box x="0" y="40" width="580" valign="top" height="50" padding="10.0">
 		<paragraph font="small" halign="center">
 			Útgáfudagur ${created}.
