@@ -12,7 +12,7 @@
 
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_list']}" /></legend>
-			
+
 			<div class="formItem">
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
@@ -23,9 +23,10 @@
 			</div>
 			<div class="formItem">
 				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
+				<ui:param value="#{pheidippidesBean.property}" name="defaultYear" />
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq defaultYear.value}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
@@ -51,7 +52,7 @@
 					<f:param name="prm_status" value="OK" />
 				</c:DownloadLink>
 			</div>
-		
+
 			<fieldset class="formSection">
 				<table class="adminTable" width="100%" cellspacing="0" cellpadding="0">
 					<thead>
@@ -69,11 +70,11 @@
 							<th class="action lastColumn"></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						<ui:repeat value="#{pheidippidesBean.registrations}" var="registration">
 							<ui:param value="#{pheidippidesBean.participantsMap[registration]}" name="participant" />
-							
+
 							<tr>
 								<td class="firstColumn"><h:outputText value="#{registration.id}" /></td>
 								<td><h:outputText value="#{participant.fullName}" /></td>
@@ -115,7 +116,7 @@
 									</h:outputLink>
 								</td>
 							</tr>
-							
+
 							<ui:fragment rendered="#{registration.race.numberOfRelayLegs > 1}">
 								<tr class="childRow">
 									<td class="childCell" colspan="9">

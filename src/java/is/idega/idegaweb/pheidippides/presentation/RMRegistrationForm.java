@@ -83,7 +83,7 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_CHARITY = "prm_charity";
     private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
     private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
-    private static final String PARAMETER_FACEBOOK = "prm_facebook";
+//    private static final String PARAMETER_FACEBOOK = "prm_facebook";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_CHARITY_TRINKET = "prm_charity_trinket";
     private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
@@ -441,8 +441,8 @@ public class RMRegistrationForm extends IWBaseComponent {
                                     .getRace() != null) {
                         getSession().getCurrentParticipant()
                                 .setAcceptsWaiver(true);
-                        getSession().getCurrentParticipant().setFacebook(
-                                !iwc.isParameterSet(PARAMETER_FACEBOOK));
+                        //getSession().getCurrentParticipant().setFacebook(
+                        //        !iwc.isParameterSet(PARAMETER_FACEBOOK));
                         getSession().getCurrentParticipant()
                                 .setShowRegistration(!iwc.isParameterSet(
                                         PARAMETER_SHOW_REGISTRATION));

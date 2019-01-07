@@ -13,7 +13,7 @@
 
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment_list']}" /></legend>
-			
+
 			<div class="formItem">
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
@@ -26,7 +26,7 @@
 				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+					  <c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq pheidippidesBean.property.value}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
@@ -49,12 +49,12 @@
 							<th class="action lastColumn"></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						<ui:repeat value="#{pheidippidesBean.registrationHeaders}" var="registrationHeader">
 							<ui:param value="#{pheidippidesBean.participantMap[registrationHeader.uuid]}" name="participant" />
 							<ui:param value="#{pheidippidesBean.bankReferencesMap[registrationHeader]}" name="bankReference" />
-							
+
 							<ui:fragment rendered="#{not empty participant}">
 								<tr>
 									<td class="firstColumn"><h:outputText value="#{registrationHeader.id}" /></td>
@@ -82,7 +82,7 @@
 					</tbody>
 				</table>
 			</fieldset>
-			
+
 			<fieldset class="submit">
 				<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 			</fieldset>

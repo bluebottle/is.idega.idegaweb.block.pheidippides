@@ -68,8 +68,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
 	private static final String PARAMETER_CITY = "prm_city";
 	private static final String PARAMETER_COUNTRY_PK = "prm_country";
-	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
-	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
+//	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+//	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
 	private static final String PARAMETER_GENDER = "prm_gender";
 	private static final String PARAMETER_EMAIL = "prm_email";
 	private static final String PARAMETER_PHONE = "prm_phone";
@@ -102,7 +102,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getWeb2Business().getBundleURIsToFancyBoxScriptFiles());
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+				getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.TABLE_SORTER));
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, getJQuery().getBundleURISToValidation());
 
 		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
@@ -115,17 +116,23 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_CORE));
 		scripts.add(jQuery.getBundleURIToJQueryUILib(JQueryUIType.UI_DATEPICKER));
 		if (!iwc.getCurrentLocale().equals(Locale.ENGLISH)) {
-			scripts.add(jQuery.getBundleURIToJQueryUILib("1.8.17/i18n", "ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
+			scripts.add(jQuery.getBundleURIToJQueryUILib("1.8.17/i18n",
+					"ui.datepicker-" + iwc.getCurrentLocale().getLanguage() + ".js"));
 		}
 		PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc, scripts);
 
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/pheidippides.js"));
-		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+				iwb.getVirtualPathWithFileNameString("javascript/pheidippides.js"));
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+				iwb.getVirtualPathWithFileNameString("javascript/participantsList.js"));
 
 		PresentationUtil.addStyleSheetToHeader(iwc, getWeb2Business().getBundleURIToFancyBoxStyleFile());
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.theme.css"));
-		PresentationUtil.addStyleSheetToHeader(iwc, jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.datepicker.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc,
+				jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.core.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc,
+				jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.theme.css"));
+		PresentationUtil.addStyleSheetToHeader(iwc,
+				jQuery.getBundleURIToJQueryUILib("1.8.17/themes/base", "ui.datepicker.css"));
 		PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
 		List<AdvancedProperty> years = new ArrayList<AdvancedProperty>();
@@ -136,7 +143,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setAction(iwc.getRequestURI());
-		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(), new ArrayList<AdvancedProperty>()));
+		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(this.getClass(),
+				new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(this.getClass()));
 		bean.setDownloadWriter(ParticipantsWriter.class);
 		bean.setLocale(iwc.getCurrentLocale());
@@ -144,34 +152,42 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		/* Events */
 		bean.setEvents(getDao().getEvents());
-		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
+		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK)
+				? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK)))
+				: null);
 
 		/* Years */
+		String defaultYear = Integer.toString(IWTimestamp.RightNow().getYear());
 		bean.setProperties(years);
-		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
+		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR)
+				? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR))
+				: new AdvancedProperty(defaultYear, defaultYear));
 
 		/* Races */
 		if (bean.getEvent() != null && bean.getProperty() != null) {
 			bean.setRaces(getDao().getRaces(bean.getEvent(), Integer.parseInt(bean.getProperty().getValue())));
 		}
-		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK) ? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK))) : null);
+		bean.setRace(iwc.isParameterSet(PARAMETER_RACE_PK)
+				? getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK)))
+				: null);
 
-		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
 		switch (parseAction(iwc)) {
-			case ACTION_VIEW:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
-				showView(iwc, bean);
-				break;
+		case ACTION_VIEW:
+			facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
+			showView(iwc, bean);
+			break;
 
-			case ACTION_EDIT:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
-				showEdit(iwc, bean);
-				break;
+		case ACTION_EDIT:
+			facelet.setFaceletURI(iwb.getFaceletURI("participantsList/edit.xhtml"));
+			showEdit(iwc, bean);
+			break;
 
-			case ACTION_DELETE:
-				facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
-				handleDelete(iwc, bean);
-				break;
+		case ACTION_DELETE:
+			facelet.setFaceletURI(iwb.getFaceletURI("participantsList/view.xhtml"));
+			handleDelete(iwc, bean);
+			break;
 		}
 
 		add(facelet);
@@ -182,7 +198,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 
 	private int parseAction(IWContext iwc) {
-		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION)) : ACTION_VIEW;
+		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION))
+				: ACTION_VIEW;
 		return action;
 	}
 
@@ -216,13 +233,15 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 
 	private void showEdit(IWContext iwc, PheidippidesBean bean) {
-		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+		Registration registration = getDao()
+				.getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Participant participant = getService().getParticipant(registration);
 
 		bean.setRaces(getService().getRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
 		bean.setProperties(getService().getCountries());
 		bean.setCompanies(getDao().getCompanies());
-		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"), iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+				iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
 
 		bean.setRegistration(registration);
 		bean.setParticipant(participant);
@@ -230,7 +249,8 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 
 	private void handleDelete(IWContext iwc, PheidippidesBean bean) {
-		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+		Registration registration = getDao()
+				.getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		getService().deregister(registration);
 
 		showView(iwc, bean);
@@ -277,8 +297,9 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 	}
 
 	@Override
-    public boolean actionPerformed(IWContext iwc) throws IWException {
-		Registration registration = getDao().getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
+	public boolean actionPerformed(IWContext iwc) throws IWException {
+		Registration registration = getDao()
+				.getRegistration(Long.parseLong(iwc.getParameter(PARAMETER_REGISTRATION_PK)));
 		Long racePK = Long.parseLong(iwc.getParameter(PARAMETER_RACE_PK));
 		Long shirtSizePK = null;
 		if (iwc.isParameterSet(PARAMETER_SHIRT_SIZE_PK)) {
@@ -291,12 +312,13 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			getService().moveRegistrationToCompany(registration, company);
 		}
 
-		//boolean showRegistration = iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION);
-		//String runningGroup = iwc.getParameter(PARAMETER_RUNNING_GROUP);
+		// boolean showRegistration = iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION);
+		// String runningGroup = iwc.getParameter(PARAMETER_RUNNING_GROUP);
 
 		boolean distanceChange = registration.getRace().getId().intValue() != racePK.intValue();
 		List<RegistrationTrinket> trinkets = registration.getTrinkets();
-		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK, null, null);
+		registration = getDao().updateRegistration(registration.getId(), racePK, shirtSizePK, nationalityPK, null,
+				null);
 
 		if (distanceChange) {
 			for (RegistrationTrinket registrationTrinket : trinkets) {
@@ -309,17 +331,22 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 		String fullName = iwc.getParameter(PARAMETER_NAME);
 		@SuppressWarnings("deprecation")
-		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), LocaleUtil.getIcelandicLocale())).getSQLDate() : null;
+		Date dateOfBirth = iwc.isParameterSet(PARAMETER_DATE_OF_BIRTH) ? new IWTimestamp(IWDatePickerHandler
+				.getParsedDate(iwc.getParameter(PARAMETER_DATE_OF_BIRTH), LocaleUtil.getIcelandicLocale())).getSQLDate()
+				: null;
 		String address = iwc.getParameter(PARAMETER_ADDRESS);
 		String postalCode = iwc.getParameter(PARAMETER_POSTAL_CODE);
 		String city = iwc.getParameter(PARAMETER_CITY);
-		Integer countryPK = iwc.isParameterSet(PARAMETER_COUNTRY_PK) ? Integer.parseInt(iwc.getParameter(PARAMETER_COUNTRY_PK)) : null;
+		Integer countryPK = iwc.isParameterSet(PARAMETER_COUNTRY_PK)
+				? Integer.parseInt(iwc.getParameter(PARAMETER_COUNTRY_PK))
+				: null;
 		String gender = iwc.getParameter(PARAMETER_GENDER);
 		String email = iwc.getParameter(PARAMETER_EMAIL);
 		String phone = iwc.getParameter(PARAMETER_PHONE);
 		String mobile = iwc.getParameter(PARAMETER_MOBILE);
 
-		User user = getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode, city, countryPK, gender, email, phone, mobile, null);
+		User user = getService().updateUser(registration.getUserUUID(), fullName, dateOfBirth, address, postalCode,
+				city, countryPK, gender, email, phone, mobile, null);
 
 		if (iwc.isParameterSet(PARAMETER_PASSWORD) || iwc.isParameterSet(PARAMETER_LOGIN)) {
 			String password = iwc.isParameterSet(PARAMETER_PASSWORD) ? iwc.getParameter(PARAMETER_PASSWORD) : null;
@@ -329,15 +356,12 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 			if (loginEntry != null && login != null && !LoginDBHandler.isLoginInUse(login)) {
 				loginEntry.setUserLogin(login);
 				loginEntry.store();
-			}
-			else if (loginEntry == null && login != null && !LoginDBHandler.isLoginInUse(login)) {
+			} else if (loginEntry == null && login != null && !LoginDBHandler.isLoginInUse(login)) {
 				try {
 					loginEntry = LoginDBHandler.createLogin(user, login, password);
-				}
-				catch (LoginCreateException lce) {
+				} catch (LoginCreateException lce) {
 					lce.printStackTrace();
-				}
-				catch (RemoteException re) {
+				} catch (RemoteException re) {
 					re.printStackTrace();
 				}
 			}
@@ -351,12 +375,10 @@ public class ParticipantsList extends IWBaseComponent implements IWPageEventList
 
 			try {
 				getService().addUserToRootRunnersGroup(user);
-			}
-			catch (RemoteException re) {
+			} catch (RemoteException re) {
 				re.printStackTrace();
 			}
 		}
-
 
 		return true;
 	}
