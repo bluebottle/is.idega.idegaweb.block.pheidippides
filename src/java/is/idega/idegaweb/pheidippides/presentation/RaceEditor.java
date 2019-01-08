@@ -108,7 +108,13 @@ public class RaceEditor extends IWBaseComponent implements IWPageEventListener {
 		PheidippidesBean bean = getBeanInstance("pheidippidesBean");
 		bean.setResponseURL(getBuilderLogicWrapper().getBuilderService(iwc).getUriToObject(RaceEditor.class, new ArrayList<AdvancedProperty>()));
 		bean.setEventHandler(IWMainApplication.getEncryptedClassName(RaceEditor.class));
+		
+		String defaultYear = Integer.toString(IWTimestamp.RightNow().getYear());
 		bean.setProperties(years);
+		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR)
+				? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR))
+				: new AdvancedProperty(defaultYear, defaultYear));
+		
 		bean.setDistances(getDao().getDistances());
 		bean.setEvents(getDao().getEvents());
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);

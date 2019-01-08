@@ -12,7 +12,7 @@
 
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participants_report']}" /></legend>
-			
+
 			<div class="formItem">
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
@@ -25,7 +25,7 @@
 				<label for="prm_year"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq pheidippidesBean.property.value}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
@@ -79,7 +79,7 @@
 				<input type="submit" value="#{localizedStrings['is.idega.idegaweb.pheidippides']['get']}" />
 			</div>
 		</fieldset>
-		
+
 		<ui:fragment rendered="#{not empty param['prm_email']}">
 			<p class="info"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['report_being_created']}" /></p>
 		</ui:fragment>

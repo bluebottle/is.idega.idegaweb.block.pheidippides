@@ -99,8 +99,11 @@ public class ParticipantsReport extends IWBaseComponent {
 		bean.setEvent(iwc.isParameterSet(PARAMETER_EVENT_PK) ? getDao().getEvent(Long.parseLong(iwc.getParameter(PARAMETER_EVENT_PK))) : null);
 
 		/* Years */
+		String defaultYear = Integer.toString(IWTimestamp.RightNow().getYear());
 		bean.setProperties(years);
-		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR) ? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR)) : null);
+		bean.setProperty(iwc.isParameterSet(PARAMETER_YEAR)
+				? new AdvancedProperty(iwc.getParameter(PARAMETER_YEAR), iwc.getParameter(PARAMETER_YEAR))
+				: new AdvancedProperty(defaultYear, defaultYear));
 
 		/* Races */
 		if (bean.getEvent() != null && bean.getProperty() != null) {

@@ -9,10 +9,10 @@
 <ui:component>
 	<form class="adminForm" action="" method="post">
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
-	
+
 		<fieldset class="navigation">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['race_price_editor']}" /></legend>
-			
+
 			<ui:fragment rendered="#{not empty param['prm_event_pk'] and not empty param['prm_year'] and not empty param['prm_race_pk']}">
 				<h:outputLink value="#{pheidippidesBean.responseURL}" title="#{localizedStrings['is.idega.idegaweb.pheidippides']['create_race_price']}" styleClass="addItem fancybox.ajax">
 					<f:param name="prm_event_pk" value="#{param['prm_event_pk']}" />
@@ -22,7 +22,7 @@
 					<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['new_race_price']}" /></span>
 				</h:outputLink>
 			</ui:fragment>
-	
+
 			<div class="formItem">
 				<label for="prm_event_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['event']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_event_pk">
@@ -35,7 +35,7 @@
 				<label for="prm_locale"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['year']}" /></label>
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year']}" />
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq pheidippidesBean.property.value}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
@@ -72,7 +72,7 @@
 							<th class="action lastColumn"></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						<ui:repeat value="#{pheidippidesBean.racePrices}" var="racePrice">
 							<tr>
