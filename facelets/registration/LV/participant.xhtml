@@ -19,8 +19,16 @@
 			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant.participant}" name="participant" />
 			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
 				<div class="formItem required">
-					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['full_name']}" /></label>
-					<input type="text" class="required" name="prm_name" value="#{participant.fullName}" />
+					<label for="prm_first_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['first_name']}" /></label>
+					<input type="text" class="required" name="prm_first_name" value="#{participant.firstName}" />
+				</div>
+				<div class="formItem">
+					<label for="prm_middle_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['middle_name']}" /></label>
+					<input type="text" name="prm_middle_name" value="#{participant.middleName}" />
+				</div>
+				<div class="formItem required">
+					<label for="prm_last_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['last_name']}" /></label>
+					<input type="text" class="required" name="prm_last_name" value="#{participant.lastName}" />
 				</div>
 				<div class="formItem required">
 					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></label>

@@ -1515,9 +1515,12 @@ public class PheidippidesService {
 							} else {
 								gender = getGenderHome().getFemaleGender();
 							}
-							user = saveUser(new Name(participant.getFullName()),
+							user = saveUser(
+									new Name(participant.getFirstName(), participant.getMiddleName(),
+											participant.getLastName()),
 									new IWTimestamp(participant.getDateOfBirth()), gender, participant.getAddress(),
-									participant.getPostalCode(), participant.getCity(), participant.getCountry() != null
+									participant.getPostalCode(), participant.getCity(),
+									participant.getCountry() != null
 											? getCountryHome().findByPrimaryKey(new Integer(participant.getCountry()))
 											: getCountryHome()
 													.findByPrimaryKey(new Integer(participant.getNationality())));
@@ -1542,12 +1545,6 @@ public class PheidippidesService {
 						}
 					}
 
-					if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-						try {
-							getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
-						} catch (Exception e) {
-						}
-					}
 
 					if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
 						try {
@@ -1925,7 +1922,8 @@ public class PheidippidesService {
 									participantHolder.getAmount() * ((100.0 - dCode.getDiscountPercentage()) / 100.0)));
 						} else {
 							participantHolder.setAmount(participantHolder.getAmount() - dCode.getDiscountAmount() > 0
-									? participantHolder.getAmount() - dCode.getDiscountAmount() : 0);
+									? participantHolder.getAmount() - dCode.getDiscountAmount()
+									: 0);
 						}
 					}
 
@@ -1946,7 +1944,7 @@ public class PheidippidesService {
 					boolean getsPreviousRegistrationDiscount = false;
 					long previousRegistrationDiscountAmount = 0l;
 					long earlyBirdDiscountAmount = 0l;
-										
+
 					earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
 							.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
@@ -1954,27 +1952,28 @@ public class PheidippidesService {
 						long newAmount = Math.round(participantHolder.getAmount() * EARLY_BIRD_DISCOUNT);
 						earlyBirdDiscountAmount = participantHolder.getAmount() - newAmount;
 
-						//participantHolder.setAmount(newAmount);
+						// participantHolder.setAmount(newAmount);
 						participantHolder.setEarlyBirdDiscount(earlyBirdDiscountAmount);
 					}
 
 					if (race.getEvent().isDiscountForPreviousRegistrations()) {
 						List<Registration> allRegistrations = participant.getUuid() != null
-								? dao.getAllValidRegistrationsForUser(participant.getUuid()) : null;
-						getsPreviousRegistrationDiscount = allRegistrations != null
-								&& allRegistrations.size() > 0;
+								? dao.getAllValidRegistrationsForUser(participant.getUuid())
+								: null;
+						getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 
 						if (getsPreviousRegistrationDiscount) {
 							long newAmount = Math.round(participantHolder.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
 							previousRegistrationDiscountAmount = participantHolder.getAmount() - newAmount;
 
-							//participantHolder.setAmount(newAmount);
+							// participantHolder.setAmount(newAmount);
 							participantHolder.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
 						}
 					}
-					
+
 					if (earlyBirdDiscountValid || getsPreviousRegistrationDiscount) {
-						participantHolder.setAmount(participantHolder.getAmount() - previousRegistrationDiscountAmount - earlyBirdDiscountAmount);
+						participantHolder.setAmount(participantHolder.getAmount() - previousRegistrationDiscountAmount
+								- earlyBirdDiscountAmount);
 					}
 				}
 			}
@@ -2021,7 +2020,8 @@ public class PheidippidesService {
 								Math.round(current.getAmount() * ((100.0 - dCode.getDiscountPercentage()) / 100.0)));
 					} else {
 						current.setAmount(current.getAmount() - dCode.getDiscountAmount() > 0
-								? current.getAmount() - dCode.getDiscountAmount() : 0);
+								? current.getAmount() - dCode.getDiscountAmount()
+								: 0);
 					}
 				}
 			} else {
@@ -2042,33 +2042,35 @@ public class PheidippidesService {
 				long previousRegistrationDiscountAmount = 0l;
 				long earlyBirdDiscountAmount = 0l;
 
-				earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp
-						.RightNow().isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
+				earlyBirdDiscountValid = race.getEvent().getEarlyBirdDiscountDate() != null && IWTimestamp.RightNow()
+						.isEarlierThan(new IWTimestamp(race.getEvent().getEarlyBirdDiscountDate()));
 
 				if (earlyBirdDiscountValid) {
 					long newAmount = Math.round(current.getAmount() * EARLY_BIRD_DISCOUNT);
 					earlyBirdDiscountAmount = current.getAmount() - newAmount;
 
-					//current.setAmount(newAmount);
+					// current.setAmount(newAmount);
 					current.setEarlyBirdDiscount(earlyBirdDiscountAmount);
 				}
 
 				if (race.getEvent().isDiscountForPreviousRegistrations()) {
 					List<Registration> allRegistrations = participant.getUuid() != null
-							? dao.getAllValidRegistrationsForUser(participant.getUuid()) : null;
+							? dao.getAllValidRegistrationsForUser(participant.getUuid())
+							: null;
 					getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 
 					if (getsPreviousRegistrationDiscount) {
 						long newAmount = Math.round(current.getAmount() * PREVIOUS_REGISTRATION_DISCOUNT);
 						previousRegistrationDiscountAmount = current.getAmount() - newAmount;
 
-						//current.setAmount(newAmount);
+						// current.setAmount(newAmount);
 						current.setPreviousRegistrationDiscount(previousRegistrationDiscountAmount);
 					}
 				}
-				
+
 				if (earlyBirdDiscountValid || getsPreviousRegistrationDiscount) {
-					current.setAmount(current.getAmount() - previousRegistrationDiscountAmount - earlyBirdDiscountAmount);
+					current.setAmount(
+							current.getAmount() - previousRegistrationDiscountAmount - earlyBirdDiscountAmount);
 				}
 			}
 		}
@@ -2299,7 +2301,8 @@ public class PheidippidesService {
 							user.getName(), passwordString, userNameString,
 							user.getPersonalID() != null && user.getPersonalID().length() > 0
 									&& SocialSecurityNumber.isValidIcelandicSocialSecurityNumber(user.getPersonalID())
-											? user.getPersonalID() : userNameString,
+											? user.getPersonalID()
+											: userNameString,
 							Boolean.TRUE);
 					port.registerContestant(request);
 				} catch (Exception e) {
@@ -2376,7 +2379,8 @@ public class PheidippidesService {
 
 		if (registration.getRace().getEvent().isDiscountForPreviousRegistrations()) {
 			List<Registration> allRegistrations = registration.getUserUUID() != null
-					? dao.getAllValidRegistrationsForUser(registration.getUserUUID()) : null;
+					? dao.getAllValidRegistrationsForUser(registration.getUserUUID())
+					: null;
 			boolean getsPreviousRegistrationDiscount = allRegistrations != null && allRegistrations.size() > 0;
 
 			if (getsPreviousRegistrationDiscount) {
@@ -2386,7 +2390,8 @@ public class PheidippidesService {
 		}
 
 		long amount = currentPriceNewDistance - currentPriceOldDistance;
-		if (registration.getAmountPaid() == 0 || (registration.getDiscountCode() != null && registration.getDiscountCode().getDiscountPercentage() == 100)) {
+		if (registration.getAmountPaid() == 0 || (registration.getDiscountCode() != null
+				&& registration.getDiscountCode().getDiscountPercentage() == 100)) {
 			amount = 0;
 		}
 
@@ -2791,9 +2796,8 @@ public class PheidippidesService {
 									registration.getExternalCharityId(), registration.getRace().getDistance().getName(),
 									user.getName(), passwordString, userNameString,
 									user.getPersonalID() != null && user.getPersonalID().length() > 0
-											&& SocialSecurityNumber
-													.isValidIcelandicSocialSecurityNumber(user.getPersonalID())
-															? user.getPersonalID() : userNameString,
+											&& SocialSecurityNumber.isValidIcelandicSocialSecurityNumber(
+													user.getPersonalID()) ? user.getPersonalID() : userNameString,
 									Boolean.TRUE);
 							port.registerContestant(request);
 						} catch (Exception e) {
@@ -2803,9 +2807,7 @@ public class PheidippidesService {
 
 					Email email = getUserBusiness().getUserMail(user);
 					Object[] args = { user.getName(), user.getPersonalID() != null ? user.getPersonalID() : "",
-							new IWTimestamp(user.getDateOfBirth())
-									.getDateString(
-											"dd.MM.yyyy"),
+							new IWTimestamp(user.getDateOfBirth()).getDateString("dd.MM.yyyy"),
 							registration.getShirtSize() != null
 									? getLocalizedShirtName(registration.getRace().getEvent(),
 											registration.getShirtSize(), header.getLocale()).getValue()
@@ -2888,9 +2890,8 @@ public class PheidippidesService {
 			String subject = iwrb.getLocalizedString("new_password.subject", "A new password for your account");
 
 			Object[] arguments = { loginTable.getUserLogin(), password };
-			String body = MessageFormat.format(
-					iwrb.getLocalizedString("new_password.body",
-							"A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"),
+			String body = MessageFormat.format(iwrb.getLocalizedString("new_password.body",
+					"A new password has been created for your account:\n\nLogin: {0}\nPassword:{1}\n\nBest regards,\nReykjavik Marathon"),
 					arguments);
 
 			sendMessage(participant.getEmail(), subject, body, null, null);
@@ -3273,15 +3274,15 @@ public class PheidippidesService {
 
 		int memberCount = 1 + getOtherTeamMembers(registration).size();
 
-		boolean isValid = memberCount == 4; //memberCount >= 3 && memberCount <= 5;
+		boolean isValid = memberCount == 4; // memberCount >= 3 && memberCount <= 5;
 
 		if (!isValid) {
 			teamCategory = TeamCategory.NotFullTeam;
 		}
 
-		/*if (teamCategory == TeamCategory.Mixed) {
-			isValid = false;
-		}*/
+		/*
+		 * if (teamCategory == TeamCategory.Mixed) { isValid = false; }
+		 */
 
 		dao.updateTeamCategory(team, teamCategory, isValid);
 	}
@@ -3742,8 +3743,7 @@ public class PheidippidesService {
 					if (isRegistered(user, holder.getRace().getEvent(), year)) {
 						return "Error: User already registered for this event";
 					}
-					
-					
+
 					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
 						try {
 							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());
@@ -3807,9 +3807,7 @@ public class PheidippidesService {
 					IWResourceBundle iwrb = IWMainApplication.getDefaultIWMainApplication()
 							.getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(locale);
 					Object[] args = { user.getName(), user.getPersonalID() != null ? user.getPersonalID() : "",
-							new IWTimestamp(user.getDateOfBirth())
-									.getDateString(
-											"dd.MM.yyyy"),
+							new IWTimestamp(user.getDateOfBirth()).getDateString("dd.MM.yyyy"),
 							registration.getShirtSize() != null
 									? getLocalizedShirtName(registration.getRace().getEvent(),
 											registration.getShirtSize(), header.getLocale()).getValue()

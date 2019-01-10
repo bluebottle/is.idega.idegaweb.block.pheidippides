@@ -25,6 +25,7 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.LocaleUtil;
 import com.idega.util.PresentationUtil;
 import com.idega.util.expression.ELUtil;
+import com.idega.util.text.Name;
 
 import is.idega.idegaweb.pheidippides.PheidippidesConstants;
 import is.idega.idegaweb.pheidippides.bean.PheidippidesBean;
@@ -58,7 +59,9 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
 
     private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
     private static final String PARAMETER_RACE = "prm_race_pk";
-    private static final String PARAMETER_NAME = "prm_name";
+    private static final String PARAMETER_FIRST_NAME = "prm_first_name";
+    private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
+    private static final String PARAMETER_LAST_NAME = "prm_last_name";
     private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
     private static final String PARAMETER_ADDRESS = "prm_address";
     private static final String PARAMETER_CITY = "prm_city";
@@ -236,8 +239,11 @@ public class NorthernLightRegistrationForm extends IWBaseComponent {
                             DateFormat format = new SimpleDateFormat(
                                     "dd.MM.yyyy");
 
-                            participant.setFullName(
-                                    iwc.getParameter(PARAMETER_NAME));
+                            participant.setFirstName(iwc.getParameter(PARAMETER_FIRST_NAME));
+                            participant.setMiddleName(iwc.getParameter(PARAMETER_MIDDLE_NAME));
+                            participant.setLastName(iwc.getParameter(PARAMETER_LAST_NAME));
+                            Name name = new Name(participant.getFirstName(), participant.getMiddleName(), participant.getLastName());
+                            participant.setFullName(name.getName());
                             try {
                                 participant.setDateOfBirth(
                                         format.parse(iwc.getParameter(
