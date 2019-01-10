@@ -17,6 +17,7 @@ import is.idega.idegaweb.pheidippides.business.TeamCategory;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Country;
 import is.idega.idegaweb.pheidippides.data.DiscountCode;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -69,6 +70,8 @@ public interface PheidippidesDao extends GenericDao {
     public boolean removeDistance(Long distanceID);
 
     public List<DiscountCode> getDiscountCodes();
+
+    public List<Country> getCountries();
 
     public DiscountCode getDiscountCode(Long discountCodeID);
 

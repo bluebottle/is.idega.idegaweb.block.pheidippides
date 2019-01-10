@@ -95,7 +95,6 @@ public class PheidippidesWebService {
         Participant participant = new Participant();
         participant.setPersonalId(personalID);
         participant.setEmail(email);
-        participant.setPhoneHome(phone);
         participant.setPhoneMobile(mobile);
 
         Charity charity = null;

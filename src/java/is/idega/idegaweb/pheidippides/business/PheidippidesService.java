@@ -502,15 +502,6 @@ public class PheidippidesService {
 		}
 
 		try {
-			Phone homePhone = user.getUsersHomePhone();
-			if (homePhone != null) {
-				p.setPhoneHome(homePhone.getNumber());
-			}
-		} catch (EJBException e) {
-		} catch (RemoteException e) {
-		}
-
-		try {
 			Phone mobilePhone = user.getUsersMobilePhone();
 			if (mobilePhone != null) {
 				p.setPhoneMobile(mobilePhone.getNumber());
@@ -734,7 +725,6 @@ public class PheidippidesService {
 							participant.setCountry(country);
 							participant.setGender(gender);
 							participant.setEmail(email);
-							participant.setPhoneHome(phone);
 							participant.setPhoneMobile(mobile);
 							participant.setNationality(nationality);
 						}
@@ -750,7 +740,6 @@ public class PheidippidesService {
 
 						participant = getParticipant(user);
 						participant.setEmail(email);
-						participant.setPhoneHome(phone);
 						participant.setPhoneMobile(mobile);
 					}
 				}
@@ -1380,7 +1369,6 @@ public class PheidippidesService {
 		errorParticipant.setCountry(country);
 		errorParticipant.setGender(gender);
 		errorParticipant.setEmail(email);
-		errorParticipant.setPhoneHome(phone);
 		errorParticipant.setPhoneMobile(mobile);
 		errorParticipant.setNationality(nationality);
 
@@ -3430,13 +3418,6 @@ public class PheidippidesService {
 							}
 						}
 
-						if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-							try {
-								getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
-							} catch (Exception e) {
-							}
-						}
-
 						if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
 							try {
 								getUserBusiness().updateUserMail(user, participant.getEmail());
@@ -3562,13 +3543,6 @@ public class PheidippidesService {
 							}
 						}
 
-						if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-							try {
-								getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
-							} catch (Exception e) {
-							}
-						}
-
 						if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
 							try {
 								getUserBusiness().updateUserMail(user, participant.getEmail());
@@ -3670,13 +3644,6 @@ public class PheidippidesService {
 							}
 						}
 
-						if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-							try {
-								getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
-							} catch (Exception e) {
-							}
-						}
-
 						if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
 							try {
 								getUserBusiness().updateUserMail(user, participant.getEmail());
@@ -3747,13 +3714,6 @@ public class PheidippidesService {
 					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
 						try {
 							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());
-						} catch (Exception e) {
-						}
-					}
-
-					if (participant.getPhoneHome() != null && !"".equals(participant.getPhoneHome())) {
-						try {
-							getUserBusiness().updateUserHomePhone(user, participant.getPhoneHome());
 						} catch (Exception e) {
 						}
 					}

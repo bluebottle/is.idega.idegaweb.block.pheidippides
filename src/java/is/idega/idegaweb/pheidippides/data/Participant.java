@@ -22,7 +22,7 @@ public class Participant implements Serializable {
 	private String country;
 	private String nationality;
 	private String email;
-	private String phoneHome;
+	private String phoneCountryCode;
 	private String phoneMobile;
 	private String gender;
 	private boolean foreigner;
@@ -121,14 +121,6 @@ public class Participant implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPhoneHome() {
-		return phoneHome;
-	}
-
-	public void setPhoneHome(String phoneHome) {
-		this.phoneHome = phoneHome;
 	}
 
 	public String getPhoneMobile() {
@@ -318,5 +310,13 @@ public class Participant implements Serializable {
 
 	public void setRunningGroup(String runningGroup) {
 		this.runningGroup = runningGroup;
+	}
+
+	public String getPhoneCountryCode() {
+		return phoneCountryCode;
+	}
+
+	public void setPhoneCountryCode(String phoneCountryCode) {
+		this.phoneCountryCode = phoneCountryCode;
 	}
 }

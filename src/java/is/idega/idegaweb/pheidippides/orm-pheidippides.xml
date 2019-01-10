@@ -7,6 +7,7 @@
     <entity class="is.idega.idegaweb.pheidippides.data.BankReference" />
     <entity class="is.idega.idegaweb.pheidippides.data.Charity" />
     <entity class="is.idega.idegaweb.pheidippides.data.Company" />
+    <entity class="is.idega.idegaweb.pheidippides.data.Country" />
     <entity class="is.idega.idegaweb.pheidippides.data.DiscountCode" />
     <entity class="is.idega.idegaweb.pheidippides.data.Distance" />
     <entity class="is.idega.idegaweb.pheidippides.data.Event" />

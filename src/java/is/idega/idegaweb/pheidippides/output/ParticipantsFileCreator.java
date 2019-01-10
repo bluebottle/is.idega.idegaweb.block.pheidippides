@@ -281,7 +281,7 @@ public class ParticipantsFileCreator {
 			row.createCell(iCell++).setCellValue(participant.getAddress());
 			row.createCell(iCell++).setCellValue(participant.getPostalAddress());
 			row.createCell(iCell++).setCellValue(country != null ? country.getName() : "");
-			row.createCell(iCell++).setCellValue(participant.getPhoneHome());
+			row.createCell(iCell++).setCellValue("");
 			row.createCell(iCell++).setCellValue(participant.getPhoneMobile());
 			row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
 			row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
@@ -385,7 +385,7 @@ public class ParticipantsFileCreator {
 					row.createCell(iCell++).setCellValue(otherParticipant.getAddress());
 					row.createCell(iCell++).setCellValue(otherParticipant.getPostalAddress());
 					row.createCell(iCell++).setCellValue(country != null ? country.getName() : "");
-					row.createCell(iCell++).setCellValue(otherParticipant.getPhoneHome());
+					row.createCell(iCell++).setCellValue("");
 					row.createCell(iCell++).setCellValue(otherParticipant.getPhoneMobile());
 					row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
 					row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");

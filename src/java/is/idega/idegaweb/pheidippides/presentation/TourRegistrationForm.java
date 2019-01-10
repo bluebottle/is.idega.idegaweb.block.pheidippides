@@ -69,7 +69,6 @@ public class TourRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_NATIONALITY = "prm_nationality";
     private static final String PARAMETER_GENDER = "prm_gender";
     private static final String PARAMETER_EMAIL = "prm_email";
-    private static final String PARAMETER_PHONE = "prm_phone";
     private static final String PARAMETER_MOBILE = "prm_mobile";
     private static final String PARAMETER_BICYCLE_GROUP = "prm_bicycle_group";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
@@ -266,8 +265,6 @@ public class TourRegistrationForm extends IWBaseComponent {
                         participant
                                 .setGender(iwc.getParameter(PARAMETER_GENDER));
                         participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
-                        participant.setPhoneHome(
-                                iwc.getParameter(PARAMETER_PHONE));
                         participant.setPhoneMobile(
                                 iwc.getParameter(PARAMETER_MOBILE));
                         participant.setRunningGroup(

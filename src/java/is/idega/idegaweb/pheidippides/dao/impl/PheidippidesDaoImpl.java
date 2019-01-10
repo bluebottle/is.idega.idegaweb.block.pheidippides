@@ -25,6 +25,7 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Country;
 import is.idega.idegaweb.pheidippides.data.DiscountCode;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -155,6 +156,12 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
         return false;
     }
 
+    @Override
+    public List<Country> getCountries() {
+        return getResultList("country.findAll", Country.class);
+    }
+
+    
     /* Discount code methods */
     @Override
     public List<DiscountCode> getDiscountCodes() {
