@@ -81,6 +81,7 @@ import is.idega.idegaweb.pheidippides.data.ExternalCharity;
 import is.idega.idegaweb.pheidippides.data.GiftCard;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+import is.idega.idegaweb.pheidippides.data.IAAFCountry;
 import is.idega.idegaweb.pheidippides.data.Participant;
 import is.idega.idegaweb.pheidippides.data.ParticipantResult;
 import is.idega.idegaweb.pheidippides.data.Race;
@@ -1528,11 +1529,17 @@ public class PheidippidesService {
 				if (user != null) {
 					if (participant.getPhoneMobile() != null && !"".equals(participant.getPhoneMobile())) {
 						try {
-							getUserBusiness().updateUserMobilePhone(user, participant.getPhoneMobile());
+							StringBuilder fullPhone = new StringBuilder();
+							if (participant.getPhoneCountryCode() != null) {
+								IAAFCountry country = dao.getCountry(new Integer(participant.getPhoneCountryCode()));
+								fullPhone.append(country.getPhoneCode());
+								fullPhone.append(" ");
+							}
+							fullPhone.append(participant.getPhoneMobile());
+							getUserBusiness().updateUserMobilePhone(user, fullPhone.toString());
 						} catch (Exception e) {
 						}
 					}
-
 
 					if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
 						try {
@@ -2064,17 +2071,33 @@ public class PheidippidesService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<AdvancedProperty> getCountries() {
 		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
 
-		try {
-			Collection<Country> countries = getCountryHome().findAll();
-			for (Country country : countries) {
-				properties.add(new AdvancedProperty(country.getPrimaryKey().toString(), country.getName()));
-			}
-		} catch (FinderException fe) {
-			fe.printStackTrace();
+		Collection<IAAFCountry> countries = dao.getCountries();
+		for (IAAFCountry country : countries) {
+			StringBuilder name = new StringBuilder(country.getName());
+			name.append(" (");
+			name.append(country.getCode());
+			name.append(")");
+			properties.add(new AdvancedProperty(
+					country.getIcCountryID() == null ? "-1" : country.getIcCountryID().toString(), name.toString()));
+		}
+
+		return properties;
+	}
+
+	public List<AdvancedProperty> getCountryPrefixes() {
+		List<AdvancedProperty> properties = new ArrayList<AdvancedProperty>();
+
+		Collection<IAAFCountry> countries = dao.getCountries();
+		for (IAAFCountry country : countries) {
+			StringBuilder name = new StringBuilder(country.getName());
+			name.append(" (");
+			name.append(country.getPhoneCode());
+			name.append(")");
+			properties.add(new AdvancedProperty(
+					country.getIcCountryID() == null ? "-1" : country.getIcCountryID().toString(), name.toString()));
 		}
 
 		return properties;

@@ -73,6 +73,12 @@
 				</div>
 				<div class="formItem">
 					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
+					<c:selectOne name="prm_phone_prefix">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
+							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.phoneCountryCode}" />
+						</ui:repeat>
+					</c:selectOne>
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 				</div>
 				<div class="formItem required">
@@ -123,6 +129,12 @@
 				</div>
 				<div class="formItem">
 					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
+					<c:selectOne name="prm_phone_prefix">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
+							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.phoneCountryCode ? country.id eq participant.phoneCountryCode : country.id eq pheidippidesBean.property2.value}" />
+						</ui:repeat>
+					</c:selectOne>
 					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 			 	</div>
 			</ui:fragment>

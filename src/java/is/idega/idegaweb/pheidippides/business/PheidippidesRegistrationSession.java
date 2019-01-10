@@ -55,6 +55,7 @@ public class PheidippidesRegistrationSession {
 		this.holders = null;
 		this.currentParticipant = null;
 		this.giftCards = null;
+		this.discountCode = null;
 	}
 
 	public String getRegistrantUUID() {

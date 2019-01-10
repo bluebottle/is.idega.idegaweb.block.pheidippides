@@ -81,13 +81,13 @@ public class RMRegistrationForm extends IWBaseComponent {
     private static final String PARAMETER_NATIONALITY = "prm_nationality";
     private static final String PARAMETER_GENDER = "prm_gender";
     private static final String PARAMETER_EMAIL = "prm_email";
+    private static final String PARAMETER_PHONE_PREFIX = "prm_phone_prefix";
     private static final String PARAMETER_MOBILE = "prm_mobile";
     private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
     private static final String PARAMETER_USE_CHARITY = "prm_use_charity";
     private static final String PARAMETER_CHARITY = "prm_charity";
     private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
     private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
-//    private static final String PARAMETER_FACEBOOK = "prm_facebook";
     private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
     private static final String PARAMETER_CHARITY_TRINKET = "prm_charity_trinket";
     private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
@@ -240,6 +240,7 @@ public class RMRegistrationForm extends IWBaseComponent {
                         participant
                                 .setGender(iwc.getParameter(PARAMETER_GENDER));
                         participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+                        participant.setPhoneCountryCode(iwc.getParameter(PARAMETER_PHONE_PREFIX));
                         participant.setPhoneMobile(
                                 iwc.getParameter(PARAMETER_MOBILE));
                         participant.setRunningGroup(
@@ -634,6 +635,13 @@ public class RMRegistrationForm extends IWBaseComponent {
                 iwc.getApplicationSettings().getProperty("default.ic_country",
                         "104")));
 
+        bean.setProperties2(getService().getCountryPrefixes());
+        bean.setProperty2(new AdvancedProperty(
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104"),
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104")));
+
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);
         facelet.setFaceletURI(
@@ -645,11 +653,6 @@ public class RMRegistrationForm extends IWBaseComponent {
         bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(),
                 IWTimestamp.RightNow().getYear(),
                 getSession().getCurrentParticipant().getParticipant()));
-        // bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE) ?
-        // getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))))
-        // : (getSession().getCurrentParticipant().getRace() != null ?
-        // getDao().getRaceShirtSizes(getDao().getRace(getSession().getCurrentParticipant().getRace().getId()))
-        // : null));
 
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
                 .createComponent(FaceletComponent.COMPONENT_TYPE);

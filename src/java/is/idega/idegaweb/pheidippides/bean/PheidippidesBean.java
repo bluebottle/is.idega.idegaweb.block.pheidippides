@@ -91,6 +91,9 @@ public class PheidippidesBean {
 	private AdvancedProperty property;
 	private List<AdvancedProperty> properties;
 
+	private AdvancedProperty property2;
+	private List<AdvancedProperty> properties2;
+
 	private RegistrationAnswerHolder answer;
 	private Map<String, Registration> registrationMap;
 	private Map<String, Participant> participantMap;
@@ -516,4 +519,20 @@ public class PheidippidesBean {
     public void setCharityTrinket(RacePrice charityTrinket) {
         this.charityTrinket = charityTrinket;
     }
+
+	public AdvancedProperty getProperty2() {
+		return property2;
+	}
+
+	public void setProperty2(AdvancedProperty property2) {
+		this.property2 = property2;
+	}
+
+	public List<AdvancedProperty> getProperties2() {
+		return properties2;
+	}
+
+	public void setProperties2(List<AdvancedProperty> properties2) {
+		this.properties2 = properties2;
+	}
 }

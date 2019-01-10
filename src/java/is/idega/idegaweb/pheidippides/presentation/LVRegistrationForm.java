@@ -68,6 +68,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_NATIONALITY = "prm_nationality";
 	private static final String PARAMETER_GENDER = "prm_gender";
 	private static final String PARAMETER_EMAIL = "prm_email";
+	private static final String PARAMETER_PHONE_PREFIX = "prm_phone_prefix";
 	private static final String PARAMETER_MOBILE = "prm_mobile";
 	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
@@ -235,6 +236,7 @@ public class LVRegistrationForm extends IWBaseComponent {
 					participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
 					participant.setGender(iwc.getParameter(PARAMETER_GENDER));
 					participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+					participant.setPhoneCountryCode(iwc.getParameter(PARAMETER_PHONE_PREFIX));
 					participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
 					participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
 					getSession().getCurrentParticipant().setParticipant(participant);
@@ -402,9 +404,19 @@ public class LVRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
-		bean.setProperties(getService().getCountries());
-		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
-				iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+        bean.setProperties(getService().getCountries());
+        bean.setProperty(new AdvancedProperty(
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104"),
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104")));
+
+        bean.setProperties2(getService().getCountryPrefixes());
+        bean.setProperty2(new AdvancedProperty(
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104"),
+                iwc.getApplicationSettings().getProperty("default.ic_country",
+                        "104")));
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);

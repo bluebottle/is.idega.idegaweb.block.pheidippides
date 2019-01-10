@@ -25,7 +25,7 @@ import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
 import is.idega.idegaweb.pheidippides.data.BankReference;
 import is.idega.idegaweb.pheidippides.data.Charity;
 import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Country;
+import is.idega.idegaweb.pheidippides.data.IAAFCountry;
 import is.idega.idegaweb.pheidippides.data.DiscountCode;
 import is.idega.idegaweb.pheidippides.data.Distance;
 import is.idega.idegaweb.pheidippides.data.Event;
@@ -157,8 +157,14 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
     }
 
     @Override
-    public List<Country> getCountries() {
-        return getResultList("country.findAll", Country.class);
+    public List<IAAFCountry> getCountries() {
+        return getResultList("country.findAll", IAAFCountry.class);
+    }
+
+    @Override
+    public IAAFCountry getCountry(Integer ICCountryID) {
+        return getSingleResult("country.findByICCountryID", IAAFCountry.class,
+                new Param("icCountryID", ICCountryID));
     }
 
     

@@ -12,11 +12,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = Country.ENTITY_NAME)
-@NamedQueries({ @NamedQuery(name = "country.findAll", query = "select c from Country c")})
-public class Country implements Serializable {
+@Table(name = IAAFCountry.ENTITY_NAME)
+@NamedQueries({
+	@NamedQuery(name = "country.findAll", query = "select c from IAAFCountry c"),
+	@NamedQuery(name = "country.findByICCountryID", query = "select c from IAAFCountry c where c.icCountryID = :icCountryID")
+})
+public class IAAFCountry implements Serializable {
 	private static final long serialVersionUID = 9019385306196118993L;
-	
+
 	public static final String ENTITY_NAME = "ph_country";
 	private static final String COLUMN_ENTRY_ID = "country_id";
 	private static final String COLUMN_NAME = "name";
@@ -24,26 +27,26 @@ public class Country implements Serializable {
 	private static final String COLUMN_ISO_CODE = "iso_code";
 	private static final String COLUMN_PHONE_CODE = "phone_code";
 	private static final String COLUMN_IC_COUNTRY_ID = "ic_country_id";
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = Country.COLUMN_ENTRY_ID)
+	@Column(name = IAAFCountry.COLUMN_ENTRY_ID)
 	private Long id;
 
-	@Column(name = Country.COLUMN_NAME)
+	@Column(name = IAAFCountry.COLUMN_NAME)
 	private String name;
 
-	@Column(name = Country.COLUMN_CODE)
+	@Column(name = IAAFCountry.COLUMN_CODE)
 	private String code;
 
-	@Column(name = Country.COLUMN_ISO_CODE)
+	@Column(name = IAAFCountry.COLUMN_ISO_CODE)
 	private String isoCode;
-	
-	@Column(name = Country.COLUMN_PHONE_CODE)
+
+	@Column(name = IAAFCountry.COLUMN_PHONE_CODE)
 	private String phoneCode;
 
-	@Column(name = Country.COLUMN_IC_COUNTRY_ID)
-	private int icCountryID;
+	@Column(name = IAAFCountry.COLUMN_IC_COUNTRY_ID)
+	private Integer icCountryID;
 
 	public Long getId() {
 		return id;
@@ -77,11 +80,11 @@ public class Country implements Serializable {
 		this.phoneCode = phoneCode;
 	}
 
-	public int getIcCountryID() {
+	public Integer getIcCountryID() {
 		return icCountryID;
 	}
 
-	public void setIcCountryID(int icCountryID) {
+	public void setIcCountryID(Integer icCountryID) {
 		this.icCountryID = icCountryID;
 	}
 
