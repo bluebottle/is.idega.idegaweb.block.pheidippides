@@ -26,7 +26,7 @@
 				<ui:param value="#{pheidippidesBean.property}" name="defaultYear" />
 				<c:selectOne styleClass="dwrEnabled" name="prm_year">
 					<ui:repeat value="#{pheidippidesBean.properties}" var="year">
-						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq defaultYear.value}" />
+						<c:selectOption name="#{year.value}" content="#{year.id}" selected="#{year.id eq param['prm_year'] or year.id eq pheidippidesBean.property.value}" />
 					</ui:repeat>
 				</c:selectOne>
 			</div>
