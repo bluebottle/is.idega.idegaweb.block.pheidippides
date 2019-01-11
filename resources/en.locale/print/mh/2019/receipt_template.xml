@@ -10,18 +10,18 @@
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
 
 	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
-		<cell><image source="logo.jpg" width="150" scale-to-fit="true" /></cell>
+		<cell><image source="ibr_logo.png" width="150" scale-to-fit="true" /></cell>
 		<cell halign="right">
-			Reykjavik Marathon<br />
-			ID number: 590493-2369<br />
+			Reykjavik Sports Union<br />
+			ID number: 670169-1709<br />
 			Engjavegi 6, 104 Reykjavik, Iceland<br />
 			Telephone: +354 535 3700<br />
-			<anchor reference="http://www.marathon.is">www.marathon.is</anchor>
+			<anchor reference="http://www.reykjaviksport.is">www.reykjaviksport.is</anchor>
 		</cell>
 	</table>
 
 	<paragraph font="bold" spacing-after="18.0">
-		Receipt for registration for the Suzuki Midnight Sun Run, June 20th 2019.
+		Receipt for registration for the Suzuki Midnight Sun Run, June 20th 2019
 	</paragraph>
 
 	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
@@ -41,7 +41,7 @@
 		Runners must pick up their race material on the day of the race at Laugardalshöll Sports Hall from 16:00 until 30 minutes before the race.
 	</paragraph>
 	<paragraph font="normal" spacing-after="18.0">
-		Please study all race information on the web-site <anchor reference="http://www.marathon.is/midnight-run">www.marathon.is/midnight-run</anchor>.
+		Please study all race information on the web-site <anchor reference="http://www.midnightrun.is">www.midnightrun.is</anchor>.
 	</paragraph>
 
 	<paragraph font="small" halign="right">

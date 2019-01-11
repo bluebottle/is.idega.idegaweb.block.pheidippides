@@ -10,7 +10,7 @@
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
 
 	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
-		<cell><image source="logo.jpg" width="150" scale-to-fit="true" /></cell>
+		<cell><image source="rmi_logo.png" width="150" scale-to-fit="true" /></cell>
 		<cell halign="right">
 			Reykjavíkurmaraþon<br />
 			kt. 590493-2369<br />
@@ -21,7 +21,7 @@
 	</table>
 
 	<paragraph font="bold" spacing-after="18.0">
-		Kvittun fyrir skráningu í Reykjavíkurmaraþon Íslandsbanka 24. ágúst 2019.
+		Kvittun fyrir skráningu í Reykjavíkurmaraþon Íslandsbanka 24. ágúst 2019
 	</paragraph>
 
 	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
@@ -36,10 +36,7 @@
 	</table>
 
 	<paragraph font="normal" spacing-after="18.0">
-		Afhending gagna fer fram í Laugardalshöll kl.15-20 fimmtudaginn 16.ágúst og kl.14-19 föstudaginn 17.ágúst.
-	</paragraph>
-	<paragraph font="normal" spacing-after="18.0">
-		Vinsamlegast kynnið ykkur nánari upplýsingar um hlaupið á heimasíðunni <anchor reference="http://www.marathon.is/reykjavikurmaraton">www.marathon.is/reykjavikurmaraton</anchor>.
+		Afhending gagna fer fram í Laugardalshöll fimmtudag og föstudag fyrir hlaup. Vinsamlegast kynnið ykkur nánari upplýsingar á vefnum <anchor reference="http://www.rmi.is">www.rmi.is</anchor>.
 	</paragraph>
 	<paragraph font="normal" spacing-after="18.0">
 		Þau sem vilja hlaupa til góðs geta safnað áheitum á vefnum <anchor reference="http://www.hlaupastyrkur.is">www.hlaupastyrkur.is</anchor>.

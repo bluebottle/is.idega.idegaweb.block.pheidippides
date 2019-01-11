@@ -40,8 +40,6 @@ public class ValitorFilter extends BaseFilter {
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
 		PheidippidesRegistrationSession session = (PheidippidesRegistrationSession) springContext.getBean("pheidippidesRegistrationSession");
 
-	    //PheidippidesDao dao = (PheidippidesDao) springContext.getBean("pheidippidesDao");
-
 		session.addParticipantHolder(session.getCurrentParticipant());
 
 		RegistrationAnswerHolder holder = null;
@@ -50,11 +48,6 @@ public class ValitorFilter extends BaseFilter {
 		} else {
 		    holder = service.storeRegistration(session.getParticipantHolders(), true, session.getRegistrantUUID(), !session.isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, session.getCurrency(), session.getGiftCards(), session.getDiscountCode());
 		}
-
-        /*List<Registration> registrations = dao.getRegistrations(holder.getHeader());
-        for (Registration registration : registrations) {
-            System.out.println("registration = " + registration.getId());
-        }*/
 
 		session.empty();
 

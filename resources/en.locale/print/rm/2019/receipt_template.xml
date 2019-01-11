@@ -10,7 +10,7 @@
 	<font-def name="bold" family="Helvetica" size="12" style="bold"/>
 
 	<table font="small" columns="2" width="100" widths="60,40" cell-valign="top" spacing-after="36.0">
-		<cell><image source="logo.jpg" width="150" scale-to-fit="true" /></cell>
+		<cell><image source="rmi_logo.png" width="150" scale-to-fit="true" /></cell>
 		<cell halign="right">
 			Reykjavik Marathon<br />
 			ID number: 590493-2369<br />
@@ -21,7 +21,7 @@
 	</table>
 
 	<paragraph font="bold" spacing-after="18.0">
-		Receipt for registration for the Islandsbanki Reykjavik Marathon, August 24th 2019.
+		Receipt for registration for the Islandsbanki Reykjavik Marathon, August 24th 2019
 	</paragraph>
 
 	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
@@ -34,10 +34,10 @@
 	</table>
 
 	<paragraph font="normal" spacing-after="18.0">
-		Runners must pick up their race material at the EXPO. The location is Laugardalsholl, Engjavegur 8, 104 Reykjavik. The EXPO will be open from 15:00 to 20:00 on Thursday August 16th and from 14:00 to 19:00 on Friday August 17th.
+		Runners must pick up their race material at the EXPO. The location is Laugardalsholl, Engjavegur 8, 104 Reykjavik. The EXPO will be open from 15:00 to 20:00 on Thursday and from 14:00 to 19:00 on Friday before the race.
 	</paragraph>
 	<paragraph font="normal" spacing-after="18.0">
-		Please study all race information on the website <anchor reference="http://www.marathon.is/reykjavik-marathon">www.marathon.is/reykjavik-marathon</anchor>.
+		Please study all race information on the website <anchor reference="http://www.reykjavikmarathon.is">www.reykjavikmarathon.is</anchor>.
 	</paragraph>
 
 	<paragraph font="small" halign="right">

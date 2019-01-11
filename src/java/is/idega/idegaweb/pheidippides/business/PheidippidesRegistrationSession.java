@@ -23,12 +23,12 @@ public class PheidippidesRegistrationSession {
 
 	private String valitorShopId = null;
 	private String valitorSecurityNumber = null;
-    private String valitorReturnURLText = null;
-    private String valitorReturnURL = null;
+	private String valitorReturnURLText = null;
+	private String valitorReturnURL = null;
 
-    private String discountCode = null;
+	private String discountCode = null;
 
-    private Boolean showDiscountCode = false;
+	private Boolean showDiscountCode = false;
 
 	public boolean isRegistrationWithPersonalId() {
 		return registrationWithPersonalId;
@@ -56,6 +56,10 @@ public class PheidippidesRegistrationSession {
 		this.currentParticipant = null;
 		this.giftCards = null;
 		this.discountCode = null;
+		this.valitorShopId = null;
+		this.valitorSecurityNumber = null;
+		this.valitorReturnURLText = null;
+		this.valitorReturnURL = null;
 	}
 
 	public String getRegistrantUUID() {
@@ -131,51 +135,51 @@ public class PheidippidesRegistrationSession {
 		return amount;
 	}
 
-    public String getValitorShopId() {
-        return valitorShopId;
-    }
+	public String getValitorShopId() {
+		return valitorShopId;
+	}
 
-    public void setValitorShopId(String valitorShopId) {
-        this.valitorShopId = valitorShopId;
-    }
+	public void setValitorShopId(String valitorShopId) {
+		this.valitorShopId = valitorShopId;
+	}
 
-    public String getValitorSecurityNumber() {
-        return valitorSecurityNumber;
-    }
+	public String getValitorSecurityNumber() {
+		return valitorSecurityNumber;
+	}
 
-    public void setValitorSecurityNumber(String valitorSecurityNumber) {
-        this.valitorSecurityNumber = valitorSecurityNumber;
-    }
+	public void setValitorSecurityNumber(String valitorSecurityNumber) {
+		this.valitorSecurityNumber = valitorSecurityNumber;
+	}
 
-    public String getValitorReturnURLText() {
-        return valitorReturnURLText;
-    }
+	public String getValitorReturnURLText() {
+		return valitorReturnURLText;
+	}
 
-    public void setValitorReturnURLText(String valitorReturnURLText) {
-        this.valitorReturnURLText = valitorReturnURLText;
-    }
+	public void setValitorReturnURLText(String valitorReturnURLText) {
+		this.valitorReturnURLText = valitorReturnURLText;
+	}
 
-    public String getValitorReturnURL() {
-        return valitorReturnURL;
-    }
+	public String getValitorReturnURL() {
+		return valitorReturnURL;
+	}
 
-    public void setValitorReturnURL(String valitorReturnURL) {
-        this.valitorReturnURL = valitorReturnURL;
-    }
+	public void setValitorReturnURL(String valitorReturnURL) {
+		this.valitorReturnURL = valitorReturnURL;
+	}
 
-    public String getDiscountCode() {
-        return discountCode;
-    }
+	public String getDiscountCode() {
+		return discountCode;
+	}
 
-    public void setDiscountCode(String discountCode) {
-        this.discountCode = discountCode;
-    }
+	public void setDiscountCode(String discountCode) {
+		this.discountCode = discountCode;
+	}
 
-    public Boolean getShowDiscountCode() {
-        return showDiscountCode;
-    }
+	public Boolean getShowDiscountCode() {
+		return showDiscountCode;
+	}
 
-    public void setShowDiscountCode(Boolean showDiscountCode) {
-        this.showDiscountCode = showDiscountCode;
-    }
+	public void setShowDiscountCode(Boolean showDiscountCode) {
+		this.showDiscountCode = showDiscountCode;
+	}
 }

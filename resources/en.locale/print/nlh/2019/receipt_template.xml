@@ -13,15 +13,15 @@
 		<cell><image source="ibr_logo.png" width="150" scale-to-fit="true" /></cell>
 		<cell halign="right">
 			Reykjavik Sports Union<br />
-			ID number: 590493-2369<br />
+			ID number: 670169-1709<br />
 			Engjavegi 6, 104 Reykjavik, Iceland<br />
 			Telephone: +354 535 3700<br />
-			<anchor reference="http://www.ibr.is">www.ibr.is</anchor>
+			<anchor reference="http://www.reykjaviksport.is">www.reykjaviksport.is</anchor>
 		</cell>
 	</table>
 
 	<paragraph font="bold" spacing-after="18.0">
-		Receipt for registration for the Northern Lights Run powered by Orkusalan on February 9th 2019.
+		Receipt for registration for the Northern Lights Run powered by Orkusalan on February 9th 2019
 	</paragraph>
 
 	<table font="normal" padding="0" columns="2" width="100" widths="25,75" halign="center" border-style="none" spacing-after="18.0">
@@ -34,9 +34,9 @@
 	</table>
 
 	<paragraph font="normal" spacing-after="18.0">
-		Registration package pickup time and location will be announced closer to the race. All registered participants will get an e-mail with further information about it
+		Registration package pickup time and location will be announced closer to the race. All registered participants will get an e-mail with further information about it.
 	</paragraph>
-	
+
 	<paragraph font="small" halign="right">
 		Receipt number: ${id}
 	</paragraph>
