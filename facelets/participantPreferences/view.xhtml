@@ -12,19 +12,19 @@
 		<input type="hidden" name="idegaweb_event_classname" value="#{pheidippidesBean.eventHandler}" />
 		<input type="hidden" name="prm_action" value="store" />
 		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_settings']}" /></h1>
-	
+
 		<ui:fragment rendered="#{not empty param['prm_action']}">
 			<div class="success"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['preferences_stored']}" /></div>
 		</ui:fragment>
-	
+
 		<ui:param value="#{pheidippidesBean.participant}" name="participant" />
 		<ui:param value="#{not empty participant.personalId}" name="hasPersonalID" />
-		
+
 		<div class="formItem">
 			<label for="fileupload"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['image']}" /></label>
 			<input type="file" name="fileupload" />
 		</div>
-		
+
 		<t:div rendered="#{hasPersonalID}">
 			<div class="formItem">
 				<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
@@ -79,14 +79,10 @@
 			<input type="text" class="required email" name="prm_email" value="#{participant.email}" />
 		</div>
 		<div class="formItem">
-			<label for="prm_phone"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></label>
-			<input type="text" name="prm_phone" value="#{participant.phoneHome}" />
-		</div>
-		<div class="formItem">
 			<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
 			<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 		</div>
-		
+
 		<div class="submit">
 			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
 		</div>

@@ -19,10 +19,10 @@
 		<ui:param value="#{pheidippidesBean.participant}" name="participant" />
 		<ui:param value="#{pheidippidesBean.registration}" name="registration" />
 		<ui:param value="#{not empty participant.personalId}" name="hasPersonalID" />
-		
+
 		<fieldset class="formSection">
 			<legend><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant_information']}" /></legend>
-			
+
 			<div class="formItem">
 				<label for="prm_company_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['company']}" /></label>
 				<c:selectOne name="prm_company_pk">
@@ -92,10 +92,6 @@
 				<input type="text" class="required email" name="prm_email" value="#{participant.email}" />
 			</div>
 			<div class="formItem">
-				<label for="prm_phone"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['phone']}" /></label>
-				<input type="text" name="prm_phone" value="#{participant.phoneHome}" />
-			</div>
-			<div class="formItem">
 				<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
 				<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
 			</div>
@@ -144,7 +140,7 @@
 				<input type="password" name="prm_password" />
 			</div>
 		</fieldset>
-		
+
 		<div class="submit">
 			<a href="#" class="close"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['close']}" /></span></a>
 			<a href="#" class="store"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['store']}" /></span></a>
