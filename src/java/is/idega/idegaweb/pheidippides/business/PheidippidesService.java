@@ -334,6 +334,20 @@ public class PheidippidesService {
 		return p;
 	}
 
+	public Participant getRegistrationParticipant(String personalID) {
+		Participant p = null;
+
+		try {
+			User user = getUserBusiness().getUser(personalID);
+			p = getRegistrationParticipant(user);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (FinderException e) {
+		}
+
+		return p;
+	}
+
 	public Participant getParticipantStripped(String personalID) {
 		Participant p = null;
 
@@ -550,9 +564,9 @@ public class PheidippidesService {
 		p.setPersonalId(user.getPersonalID());
 		p.setDateOfBirth(user.getDateOfBirth());
 		p.setUuid(user.getUniqueId());
-		if (user.getGender() != null) {
+		/*if (user.getGender() != null) {
 			p.setGender(user.getGender().getName());
-		}
+		}*/
 		p.setForeigner(p.getPersonalId() == null);
 
 		try {
@@ -600,6 +614,18 @@ public class PheidippidesService {
 
 		return p;
 	}
+	
+	public Participant getRegistrationParticipant(User user) {
+		Participant p = new Participant();
+		p.setFirstName(user.getFirstName());
+		p.setMiddleName(user.getMiddleName());
+		p.setLastName(user.getLastName());
+		p.setFullName(user.getName());
+		p.setPersonalId(user.getPersonalID());
+
+		return p;
+	}
+
 
 	public Map<CompanyImportStatus, List<Participant>> importCompanyExcelFile(FileInputStream input, Event event,
 			int year) {

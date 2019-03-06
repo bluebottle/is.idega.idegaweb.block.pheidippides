@@ -38,7 +38,7 @@ jQuery(document).ready(function() {
 		var value = input.val();
 
 		if (value.length == 10) {
-			PheidippidesService.getParticipant(value, {
+			PheidippidesService.getRegistrationParticipant(value, {
 				callback: function(participant) {
 					if (participant != null) {
 						validUser = participant.personalId;

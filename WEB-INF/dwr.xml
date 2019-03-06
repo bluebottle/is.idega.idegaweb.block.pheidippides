@@ -11,6 +11,7 @@
             <include method="getShirts" />
             <include method="isValidPersonalID" />
             <include method="getParticipant" />
+            <include method="getRegistrationParticipant" />
             <include method="hasAvailableRaces" />
             <include method="getLocalizedRaces" />
             <include method="getLocalizedShirts" />

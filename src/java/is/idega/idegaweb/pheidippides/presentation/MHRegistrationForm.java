@@ -501,18 +501,18 @@ public class MHRegistrationForm extends IWBaseComponent {
 
     private void showParticipant(IWContext iwc, PheidippidesBean bean) {
         bean.setProperties(getService().getCountries());
-        bean.setProperty(new AdvancedProperty(
+/*        bean.setProperty(new AdvancedProperty(
                 iwc.getApplicationSettings().getProperty("default.ic_country",
                         "104"),
                 iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));
+                        "104")));*/
 
         bean.setProperties2(getService().getCountryPrefixes());
-        bean.setProperty2(new AdvancedProperty(
+/*        bean.setProperty2(new AdvancedProperty(
                 iwc.getApplicationSettings().getProperty("default.ic_country",
                         "104"),
                 iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));
+                        "104")));*/
 
 
         FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
