@@ -42,82 +42,82 @@ import is.idega.idegaweb.pheidippides.data.RacePrice;
 
 public class MHRegistrationForm extends IWBaseComponent {
 
-    private static final String PARAMETER_ACTION = "prm_action";
-    private static final int ACTION_PERSON_SELECT = 1;
-    private static final int ACTION_PARTICIPANT = 2;
-    private static final int ACTION_RACE_SELECT = 3;
-    private static final int ACTION_TRINKET_SELECT = 4;
-    private static final int ACTION_WAIVER = 5;
-    private static final int ACTION_OVERVIEW = 6;
-    private static final int ACTION_RECEIPT = 7;
-    private static final int ACTION_REGISTER_ANOTHER = 8;
-    private static final int ACTION_GIFT_CARD = 9;
-    private static final int ACTION_ADD_GIFT_CARD = 10;
-    private static final int ACTION_REMOVE_GIFT_CARD = 11;
-    private static final int ACTION_FINISH_REGISTRATION = 12;
-    private static final int ACTION_DISCOUNT_CODE = 100;
-    
-    private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
-    private static final String PARAMETER_RACE = "prm_race_pk";
-    private static final String PARAMETER_FIRST_NAME = "prm_first_name";
-    private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
-    private static final String PARAMETER_LAST_NAME = "prm_last_name";
-    private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
-    private static final String PARAMETER_ADDRESS = "prm_address";
-    private static final String PARAMETER_CITY = "prm_city";
-    private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
-    private static final String PARAMETER_COUNTRY = "prm_country";
-    private static final String PARAMETER_NATIONALITY = "prm_nationality";
-    private static final String PARAMETER_GENDER = "prm_gender";
-    private static final String PARAMETER_EMAIL = "prm_email";
-    private static final String PARAMETER_PHONE_PREFIX = "prm_phone_prefix";
-    private static final String PARAMETER_MOBILE = "prm_mobile";
-    private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
-    private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
-    private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
-    private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
-    private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
+	private static final String PARAMETER_ACTION = "prm_action";
+	private static final int ACTION_PERSON_SELECT = 1;
+	private static final int ACTION_PARTICIPANT = 2;
+	private static final int ACTION_RACE_SELECT = 3;
+	private static final int ACTION_TRINKET_SELECT = 4;
+	private static final int ACTION_WAIVER = 5;
+	private static final int ACTION_OVERVIEW = 6;
+	private static final int ACTION_RECEIPT = 7;
+	private static final int ACTION_REGISTER_ANOTHER = 8;
+	private static final int ACTION_GIFT_CARD = 9;
+	private static final int ACTION_ADD_GIFT_CARD = 10;
+	private static final int ACTION_REMOVE_GIFT_CARD = 11;
+	private static final int ACTION_FINISH_REGISTRATION = 12;
+	private static final int ACTION_DISCOUNT_CODE = 100;
+
+	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
+	private static final String PARAMETER_RACE = "prm_race_pk";
+	private static final String PARAMETER_FIRST_NAME = "prm_first_name";
+	private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
+	private static final String PARAMETER_LAST_NAME = "prm_last_name";
+	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
+	private static final String PARAMETER_ADDRESS = "prm_address";
+	private static final String PARAMETER_CITY = "prm_city";
+	private static final String PARAMETER_POSTAL_CODE = "prm_postal_code";
+	private static final String PARAMETER_COUNTRY = "prm_country";
+	private static final String PARAMETER_NATIONALITY = "prm_nationality";
+	private static final String PARAMETER_GENDER = "prm_gender";
+	private static final String PARAMETER_EMAIL = "prm_email";
+	private static final String PARAMETER_PHONE_PREFIX = "prm_phone_prefix";
+	private static final String PARAMETER_MOBILE = "prm_mobile";
+	private static final String PARAMETER_RUNNING_GROUP = "prm_running_group";
+	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
+	private static final String PARAMETER_NEEDS_ASSISTANCE = "prm_needs_assistance";
+	private static final String PARAMETER_SHOW_REGISTRATION = "prm_show_registration";
+	private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 
 	private static final String VALITOR_SHOP_ID = "VALITOR_SHOP_ID";
 	private static final String VALITOR_SECURITY_NUMBER = "VALITOR_SECURITY_NUMBER";
 	private static final String VALITOR_RETURN_URL_TEXT = "VALITOR_RETURN_URL_TEXT";
 	private static final String VALITOR_RETURN_URL = "VALITOR_RETURN_URL";
-    
-    @Autowired
-    private PheidippidesService service;
 
-    @Autowired
-    private PheidippidesRegistrationSession session;
+	@Autowired
+	private PheidippidesService service;
 
-    @Autowired
-    private GiftCardService giftCardService;
+	@Autowired
+	private PheidippidesRegistrationSession session;
 
-    @Autowired
-    private PheidippidesDao dao;
+	@Autowired
+	private GiftCardService giftCardService;
 
-    @Autowired
-    private JQuery jQuery;
+	@Autowired
+	private PheidippidesDao dao;
 
-    private IWBundle iwb;
+	@Autowired
+	private JQuery jQuery;
 
-    private Long eventPK;
+	private IWBundle iwb;
 
-    @Override
-    protected void initializeComponent(FacesContext context) {
-        IWContext iwc = IWContext.getIWContext(context);
-        iwb = getBundle(context, getBundleIdentifier());
+	private Long eventPK;
 
-        if (getSession().getLocale() == null) {
-            getSession().setLocale(iwc.getCurrentLocale());
-        }
-        if (iwc.isParameterSet(LocaleSwitcher.languageParameterString)
-                && !iwc.getCurrentLocale().equals(getSession().getLocale())) {
-            getSession().empty();
-            getSession().setLocale(iwc.getCurrentLocale());
-        }
+	@Override
+	protected void initializeComponent(FacesContext context) {
+		IWContext iwc = IWContext.getIWContext(context);
+		iwb = getBundle(context, getBundleIdentifier());
 
-        getSession().setCurrency(Currency.ISK);
-        
+		if (getSession().getLocale() == null) {
+			getSession().setLocale(iwc.getCurrentLocale());
+		}
+		if (iwc.isParameterSet(LocaleSwitcher.languageParameterString)
+				&& !iwc.getCurrentLocale().equals(getSession().getLocale())) {
+			getSession().empty();
+			getSession().setLocale(iwc.getCurrentLocale());
+		}
+
+		getSession().setCurrency(Currency.ISK);
+
 		String valitorShopID = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_SHOP_ID, "1");
 		String valitorSecurityNumber = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
@@ -127,8 +127,8 @@ public class MHRegistrationForm extends IWBaseComponent {
 		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL, "http://skraning.marathon.is/pages/valitor");
 
-        Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
-        if (event != null) {
+		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
+		if (event != null) {
 			if (event.getPaymentShopID() != null && !"".equals(event.getPaymentShopID())) {
 				valitorShopID = event.getPaymentShopID();
 			}
@@ -142,497 +142,409 @@ public class MHRegistrationForm extends IWBaseComponent {
 				valitorReturnURL = event.getPaymentReturnURL();
 			}
 
-	        getSession().setValitorShopId(valitorShopID);
-	        getSession().setValitorSecurityNumber(valitorSecurityNumber);
-	        getSession().setValitorReturnURLText(valitorReturnURLText);
-	        getSession().setValitorReturnURL(valitorReturnURL);
-			
-            List<ParticipantHolder> holders = getSession()
-                    .getParticipantHolders();
-            if (holders != null && !holders.isEmpty()) {
-                for (ParticipantHolder participantHolder : holders) {
-                    if (!participantHolder.getRace().getEvent().equals(event)) {
-                        getSession().empty();
-                        break;
-                    }
-                }
-            }
+			getSession().setValitorShopId(valitorShopID);
+			getSession().setValitorSecurityNumber(valitorSecurityNumber);
+			getSession().setValitorReturnURLText(valitorReturnURLText);
+			getSession().setValitorReturnURL(valitorReturnURL);
 
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-                    getJQuery().getBundleURIToJQueryLib());
-            PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc,
-                    getJQuery().getBundleURISToValidation(
-                            iwc.getCurrentLocale().getLanguage()));
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery()
-                    .getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
+			List<ParticipantHolder> holders = getSession().getParticipantHolders();
+			if (holders != null && !holders.isEmpty()) {
+				for (ParticipantHolder participantHolder : holders) {
+					if (!participantHolder.getRace().getEvent().equals(event)) {
+						getSession().empty();
+						break;
+					}
+				}
+			}
 
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-                    CoreConstants.DWR_ENGINE_SCRIPT);
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-                    CoreConstants.DWR_UTIL_SCRIPT);
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-                    "/dwr/interface/PheidippidesService.js");
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, getJQuery().getBundleURIToJQueryLib());
+			PresentationUtil.addJavaScriptSourcesLinesToHeader(iwc,
+					getJQuery().getBundleURISToValidation(iwc.getCurrentLocale().getLanguage()));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+					getJQuery().getBundleURIToJQueryPlugin(JQueryPlugin.MASKED_INPUT));
 
-            PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
-                    iwb.getVirtualPathWithFileNameString(
-                            "javascript/registration.js"));
-            PresentationUtil.addStyleSheetToHeader(iwc,
-                    iwb.getVirtualPathWithFileNameString(
-                            "style/pheidippides.css"));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/PheidippidesService.js");
 
-            PheidippidesBean bean = getBeanInstance("pheidippidesBean");
-            bean.setEvent(event);
-            bean.setLocale(iwc.getCurrentLocale());
-            bean.setProperty(new AdvancedProperty(
-                    String.valueOf(IWTimestamp.RightNow().getYear()),
-                    String.valueOf(IWTimestamp.RightNow().getYear())));
+			PresentationUtil.addJavaScriptSourceLineToHeader(iwc,
+					iwb.getVirtualPathWithFileNameString("javascript/registration.js"));
+			PresentationUtil.addStyleSheetToHeader(iwc, iwb.getVirtualPathWithFileNameString("style/pheidippides.css"));
 
-            getSession().setShowDiscountCode(true);
-            
-            switch (parseAction(iwc)) {
-                case ACTION_PERSON_SELECT :
-                    if (bean.getLocale()
-                            .equals(LocaleUtil.getIcelandicLocale())) {
-                        getSession().setRegistrationWithPersonalId(true);
-                    }
-                    showPersonSelect(iwc, bean);
-                    break;
+			PheidippidesBean bean = getBeanInstance("pheidippidesBean");
+			bean.setEvent(event);
+			bean.setLocale(iwc.getCurrentLocale());
+			bean.setProperty(new AdvancedProperty(String.valueOf(IWTimestamp.RightNow().getYear()),
+					String.valueOf(IWTimestamp.RightNow().getYear())));
 
-                case ACTION_PARTICIPANT :
-                    if (iwc.isParameterSet(PARAMETER_PERSONAL_ID)) {
-                        Participant participant = getService()
-                                .getParticipantStripped(iwc
-                                        .getParameter(PARAMETER_PERSONAL_ID));
-                        ParticipantHolder holder = new ParticipantHolder();
-                        holder.setParticipant(participant);
+			getSession().setShowDiscountCode(true);
 
-                        getSession().setCurrentParticipant(holder);
-                        getSession().setRegistrationWithPersonalId(true);
-                    } else if (!bean.getLocale()
-                            .equals(LocaleUtil.getIcelandicLocale())) {
-                        getSession().setRegistrationWithPersonalId(false);
-                    }
-                    showParticipant(iwc, bean);
-                    break;
+			switch (parseAction(iwc)) {
+			case ACTION_PERSON_SELECT:
+				if (bean.getLocale().equals(LocaleUtil.getIcelandicLocale())) {
+					getSession().setRegistrationWithPersonalId(true);
+				}
+				showPersonSelect(iwc, bean);
+				break;
 
-                case ACTION_RACE_SELECT :
-                    if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
-                        Participant participant = null;
-                        if (getSession().getCurrentParticipant() == null) {
-                            ParticipantHolder holder = new ParticipantHolder();
-                            getSession().setCurrentParticipant(holder);
+			case ACTION_PARTICIPANT:
+				if (iwc.isParameterSet(PARAMETER_PERSONAL_ID)) {
+					Participant participant = getService()
+							.getParticipantStripped(iwc.getParameter(PARAMETER_PERSONAL_ID));
+					ParticipantHolder holder = new ParticipantHolder();
+					holder.setParticipant(participant);
 
-                            participant = new Participant();
-                        } else {
-                            participant = getSession().getCurrentParticipant()
-                                    .getParticipant();
-                        }
+					getSession().setCurrentParticipant(holder);
+					getSession().setRegistrationWithPersonalId(true);
+				} else if (!bean.getLocale().equals(LocaleUtil.getIcelandicLocale())) {
+					getSession().setRegistrationWithPersonalId(false);
+				}
+				showParticipant(iwc, bean);
+				break;
 
-                        if (!getSession().isRegistrationWithPersonalId()) {
-                            DateFormat format = new SimpleDateFormat(
-                                    "dd.MM.yyyy");
+			case ACTION_RACE_SELECT:
+				if (iwc.isParameterSet(PARAMETER_NATIONALITY)) {
+					Participant participant = null;
+					if (getSession().getCurrentParticipant() == null) {
+						ParticipantHolder holder = new ParticipantHolder();
+						getSession().setCurrentParticipant(holder);
 
-                            participant.setFirstName(iwc.getParameter(PARAMETER_FIRST_NAME));
-                            participant.setMiddleName(iwc.getParameter(PARAMETER_MIDDLE_NAME));
-                            participant.setLastName(iwc.getParameter(PARAMETER_LAST_NAME));
-                            Name name = new Name(participant.getFirstName(), participant.getMiddleName(), participant.getLastName());
-                            participant.setFullName(name.getName());
-                            try {
-                                participant.setDateOfBirth(
-                                        format.parse(iwc.getParameter(
-                                                PARAMETER_DATE_OF_BIRTH)));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            participant.setAddress(
-                                    iwc.getParameter(PARAMETER_ADDRESS));
-                            participant
-                                    .setCity(iwc.getParameter(PARAMETER_CITY));
-                            participant.setPostalCode(
-                                    iwc.getParameter(PARAMETER_POSTAL_CODE));
-                            participant.setCountry(
-                                    iwc.getParameter(PARAMETER_COUNTRY));
-                        }
-                        participant.setNationality(
-                                iwc.getParameter(PARAMETER_NATIONALITY));
-                        participant
-                                .setGender(iwc.getParameter(PARAMETER_GENDER));
-                        participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
-                        participant.setPhoneCountryCode(iwc.getParameter(PARAMETER_PHONE_PREFIX));
-                        participant.setPhoneMobile(
-                                iwc.getParameter(PARAMETER_MOBILE));
-                        participant.setRunningGroup(
-                                iwc.getParameter(PARAMETER_RUNNING_GROUP));
-                        getSession().getCurrentParticipant()
-                                .setParticipant(participant);
-                    }
+						participant = new Participant();
+					} else {
+						participant = getSession().getCurrentParticipant().getParticipant();
+					}
 
-                    showRaceSelect(iwc, bean);
-                    break;
+					if (!getSession().isRegistrationWithPersonalId()) {
+						DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-                case ACTION_TRINKET_SELECT :
-                    if (getSession().getCurrentParticipant() != null) {
-                        if (iwc.isParameterSet(PARAMETER_RACE)) {
-                            getSession().getCurrentParticipant()
-                                    .setRace(getDao().getRace(Long.parseLong(
-                                            iwc.getParameter(PARAMETER_RACE))));
-                            bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(
-                                    getSession().getCurrentParticipant()
-                                            .getRace(),
-                                    getSession().getCurrency()));
-                        }
-                        if (iwc.isParameterSet(PARAMETER_NEEDS_ASSISTANCE)) {
-                            getSession().getCurrentParticipant()
-                                    .setNeedsAssistance(true);
-                        }
+						participant.setFirstName(iwc.getParameter(PARAMETER_FIRST_NAME));
+						participant.setMiddleName(iwc.getParameter(PARAMETER_MIDDLE_NAME));
+						participant.setLastName(iwc.getParameter(PARAMETER_LAST_NAME));
+						Name name = new Name(participant.getFirstName(), participant.getMiddleName(),
+								participant.getLastName());
+						participant.setFullName(name.getName());
+						try {
+							participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						participant.setAddress(iwc.getParameter(PARAMETER_ADDRESS));
+						participant.setCity(iwc.getParameter(PARAMETER_CITY));
+						participant.setPostalCode(iwc.getParameter(PARAMETER_POSTAL_CODE));
+						participant.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
+					}
+					participant.setNationality(iwc.getParameter(PARAMETER_NATIONALITY));
+					participant.setGender(iwc.getParameter(PARAMETER_GENDER));
+					participant.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+					participant.setPhoneCountryCode(iwc.getParameter(PARAMETER_PHONE_PREFIX));
+					participant.setPhoneMobile(iwc.getParameter(PARAMETER_MOBILE));
+					participant.setRunningGroup(iwc.getParameter(PARAMETER_RUNNING_GROUP));
+					getSession().getCurrentParticipant().setParticipant(participant);
+				}
 
-                        showTrinketsSelect(iwc, bean);
-                    } else {
-                        showPersonSelect(iwc, bean);
-                    }
-                    break;
+				showRaceSelect(iwc, bean);
+				break;
 
-                case ACTION_WAIVER :
-                    if (getSession().getCurrentParticipant() != null) {
-                        List<RacePrice> raceTrinkets = dao
-                                .getCurrentRaceTrinketPrice(
-                                        getSession().getCurrentParticipant()
-                                                .getRace(),
-                                        getSession().getCurrency());
-                        getSession().getCurrentParticipant().clearTrinkets();
-                        for (RacePrice racePrice : raceTrinkets) {
-                            if (iwc.getBooleanParameter(
-                                    racePrice.getTrinket().getParamName())) {
-                                getSession().getCurrentParticipant()
-                                        .addTrinket(racePrice);
-                            }
-                        }
+			case ACTION_TRINKET_SELECT:
+				if (getSession().getCurrentParticipant() != null) {
+					if (iwc.isParameterSet(PARAMETER_RACE)) {
+						getSession().getCurrentParticipant()
+								.setRace(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))));
+						bean.setRaceTrinkets(dao.getCurrentRaceTrinketPrice(
+								getSession().getCurrentParticipant().getRace(), getSession().getCurrency()));
+					}
+					if (iwc.isParameterSet(PARAMETER_NEEDS_ASSISTANCE)) {
+						getSession().getCurrentParticipant().setNeedsAssistance(true);
+					}
 
-                        showWaiver(iwc, bean);
-                    } else {
-                        showPersonSelect(iwc, bean);
-                    }
-                    break;
+					showTrinketsSelect(iwc, bean);
+				} else {
+					showPersonSelect(iwc, bean);
+				}
+				break;
 
-                case ACTION_OVERVIEW :
-                    if (getSession().getCurrentParticipant() != null
-                            && getSession().getCurrentParticipant()
-                                    .getRace() != null) {
-                        getSession().getCurrentParticipant()
-                                .setAcceptsWaiver(true);
-                        getSession().getCurrentParticipant()
-                                .setShowRegistration(!iwc.isParameterSet(
-                                        PARAMETER_SHOW_REGISTRATION));
-                        getSession().getCurrentParticipant()
-                                .setValitorDescription(getSession()
-                                        .getCurrentParticipant()
-                                        .getParticipant().getFullName()
-                                        + ": "
-                                        + getSession().getCurrentParticipant()
-                                                .getRace().getEvent().getName()
-                                        + " - "
-                                        + getService()
-                                                .getLocalizedRaceName(
-                                                        getSession()
-                                                                .getCurrentParticipant()
-                                                                .getRace(),
-                                                        iwc.getCurrentLocale()
-                                                                .toString())
-                                                .getValue());
-                        
-                        if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
-                            getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
-                        }
+			case ACTION_WAIVER:
+				if (getSession().getCurrentParticipant() != null) {
+					List<RacePrice> raceTrinkets = dao.getCurrentRaceTrinketPrice(
+							getSession().getCurrentParticipant().getRace(), getSession().getCurrency());
+					getSession().getCurrentParticipant().clearTrinkets();
+					for (RacePrice racePrice : raceTrinkets) {
+						if (iwc.getBooleanParameter(racePrice.getTrinket().getParamName())) {
+							getSession().getCurrentParticipant().addTrinket(racePrice);
+						}
+					}
 
-                        getService().calculatePrices(
-                                getSession().getCurrentParticipant(),
-                                getSession().getParticipantHolders(),
-                                getSession().isRegistrationWithPersonalId(),
-                                Currency.ISK,
-                                getSession().getDiscountCode());
-                    } else {
-                        getSession().setCurrentParticipant(getSession()
-                                .getParticipantHolders()
-                                .get(getSession().getParticipantHolders().size()
-                                        - 1));
-                    }
-                    showOverview(iwc, bean);
-                    break;
+					showWaiver(iwc, bean);
+				} else {
+					showPersonSelect(iwc, bean);
+				}
+				break;
 
-                case ACTION_RECEIPT :
-                    if (getSession().getCurrentParticipant() != null
-                            && getSession().getCurrentParticipant()
-                                    .getRace() != null) {
-                        getSession().addParticipantHolder(
-                                getSession().getCurrentParticipant());
-                        ParticipantHolder holder = getSession()
-                                .getParticipantHolders().get(0);
+			case ACTION_OVERVIEW:
+				if (getSession().getCurrentParticipant() != null
+						&& getSession().getCurrentParticipant().getRace() != null) {
+					getSession().getCurrentParticipant().setAcceptsWaiver(true);
+					getSession().getCurrentParticipant()
+							.setShowRegistration(!iwc.isParameterSet(PARAMETER_SHOW_REGISTRATION));
+					getSession().getCurrentParticipant()
+							.setValitorDescription(getSession().getCurrentParticipant().getParticipant().getFullName()
+									+ ": " + getSession().getCurrentParticipant().getRace().getEvent().getName() + " - "
+									+ getService().getLocalizedRaceName(getSession().getCurrentParticipant().getRace(),
+											iwc.getCurrentLocale().toString()).getValue());
 
-                        RegistrationAnswerHolder answer = getService()
-                                .storeRegistration(
-                                        getSession().getParticipantHolders(),
-                                        true, null,
-                                        !getSession()
-                                                .isRegistrationWithPersonalId(),
-                                        iwc.getCurrentLocale(), null, true,
-                                        null, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
-                                        valitorReturnURLText, valitorReturnURL);
-                        bean.setAnswer(answer);
-                        getSession().empty();
+					if (iwc.isParameterSet(PARAMETER_DISCOUNT_CODE)) {
+						getSession().setDiscountCode(iwc.getParameter(PARAMETER_DISCOUNT_CODE));
+					}
 
-                        getService().sendPaymentTransferEmail(holder, answer,
-                                iwc.getCurrentLocale());
+					getService().calculatePrices(getSession().getCurrentParticipant(),
+							getSession().getParticipantHolders(), getSession().isRegistrationWithPersonalId(),
+							Currency.ISK, getSession().getDiscountCode());
+				} else {
+					getSession().setCurrentParticipant(
+							getSession().getParticipantHolders().get(getSession().getParticipantHolders().size() - 1));
+				}
+				showOverview(iwc, bean);
+				break;
 
-                        showReceipt(iwc, bean);
-                    } else {
-                        showPersonSelect(iwc, bean);
-                    }
-                    break;
+			case ACTION_RECEIPT:
+				if (getSession().getCurrentParticipant() != null
+						&& getSession().getCurrentParticipant().getRace() != null) {
+					getSession().addParticipantHolder(getSession().getCurrentParticipant());
+					ParticipantHolder holder = getSession().getParticipantHolders().get(0);
 
-                case ACTION_REGISTER_ANOTHER :
-                    if (getSession().getCurrentParticipant() != null) {
-                        if (getSession().getParticipantHolders() == null
-                                || !getSession().getParticipantHolders()
-                                        .contains(getSession()
-                                                .getCurrentParticipant())) {
-                            getSession().addParticipantHolder(
-                                    getSession().getCurrentParticipant());
-                        }
-                        getSession().setCurrentParticipant(null);
-                    }
-                    if (getSession().isRegistrationWithPersonalId()) {
-                        showPersonSelect(iwc, bean);
-                    } else {
-                        showParticipant(iwc, bean);
-                    }
-                    break;
+					RegistrationAnswerHolder answer = getService().storeRegistration(
+							getSession().getParticipantHolders(), true, null,
+							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null,
+							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
+							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+					bean.setAnswer(answer);
+					getSession().empty();
 
-                case ACTION_GIFT_CARD :
-                    showGiftCard(iwc, bean);
-                    break;
+					getService().sendPaymentTransferEmail(holder, answer, iwc.getCurrentLocale());
 
-                case ACTION_DISCOUNT_CODE:
-                    showDiscountCode(iwc, bean);
-                    break;
+					showReceipt(iwc, bean);
+				} else {
+					showPersonSelect(iwc, bean);
+				}
+				break;
 
-                case ACTION_ADD_GIFT_CARD :
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getGiftCardService()
-                                .reserveGiftCard(
-                                        iwc.getParameter(PARAMETER_GIFT_CARD),
-                                        getSession().getTotalAmount(), null);
-                        if (usage != null) {
-                            getSession().addGiftCard(usage);
-                        } else {
-                            bean.addError(iwb.getResourceBundle(iwc)
-                                    .getLocalizedString("no_gift_card_found",
-                                            "No gift card was found or already used"));
-                        }
-                    }
+			case ACTION_REGISTER_ANOTHER:
+				if (getSession().getCurrentParticipant() != null) {
+					if (getSession().getParticipantHolders() == null
+							|| !getSession().getParticipantHolders().contains(getSession().getCurrentParticipant())) {
+						getSession().addParticipantHolder(getSession().getCurrentParticipant());
+					}
+					getSession().setCurrentParticipant(null);
+				}
+				if (getSession().isRegistrationWithPersonalId()) {
+					showPersonSelect(iwc, bean);
+				} else {
+					showParticipant(iwc, bean);
+				}
+				break;
 
-                    showOverview(iwc, bean);
-                    break;
+			case ACTION_GIFT_CARD:
+				showGiftCard(iwc, bean);
+				break;
 
-                case ACTION_REMOVE_GIFT_CARD :
-                    if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
-                        GiftCardUsage usage = getDao()
-                                .getGiftCardUsage(Long.parseLong(
-                                        iwc.getParameter(PARAMETER_GIFT_CARD)));
-                        if (usage != null) {
-                            getGiftCardService()
-                                    .releaseGiftCardReservation(usage);
-                            getSession().removeGiftCard(usage);
-                        }
-                    }
+			case ACTION_DISCOUNT_CODE:
+				showDiscountCode(iwc, bean);
+				break;
 
-                    showOverview(iwc, bean);
-                    break;
+			case ACTION_ADD_GIFT_CARD:
+				if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+					GiftCardUsage usage = getGiftCardService().reserveGiftCard(iwc.getParameter(PARAMETER_GIFT_CARD),
+							getSession().getTotalAmount(), null);
+					if (usage != null) {
+						getSession().addGiftCard(usage);
+					} else {
+						bean.addError(iwb.getResourceBundle(iwc).getLocalizedString("no_gift_card_found",
+								"No gift card was found or already used"));
+					}
+				}
 
-                case ACTION_FINISH_REGISTRATION :
-                    if (getSession().getCurrentParticipant() != null
-                            && getSession().getCurrentParticipant()
-                                    .getRace() != null
-                            && getSession().getTotalAmount() == 0) {
-                        getSession().addParticipantHolder(
-                                getSession().getCurrentParticipant());
+				showOverview(iwc, bean);
+				break;
 
-                        RegistrationAnswerHolder answer = getService()
-                                .storeRegistration(
-                                        getSession().getParticipantHolders(),
-                                        true, null,
-                                        !getSession()
-                                                .isRegistrationWithPersonalId(),
-                                        iwc.getCurrentLocale(), null, false,
-                                        null, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
-                                        valitorReturnURLText, valitorReturnURL);
-                        getService().markRegistrationAsPaid(answer.getHeader(),
-                                true, false, null, null, null, null, null, null,
-                                null, null, null);
-                        bean.setAnswer(answer);
-                        getSession().empty();
+			case ACTION_REMOVE_GIFT_CARD:
+				if (iwc.isParameterSet(PARAMETER_GIFT_CARD)) {
+					GiftCardUsage usage = getDao()
+							.getGiftCardUsage(Long.parseLong(iwc.getParameter(PARAMETER_GIFT_CARD)));
+					if (usage != null) {
+						getGiftCardService().releaseGiftCardReservation(usage);
+						getSession().removeGiftCard(usage);
+					}
+				}
 
-                        showReceipt(iwc, bean);
-                    } else {
-                        showPersonSelect(iwc, bean);
-                    }
-            }
-        } else {
-            add(new Text("No event selected..."));
-        }
-    }
+				showOverview(iwc, bean);
+				break;
 
-    private int parseAction(IWContext iwc) {
-        int action = iwc.isParameterSet(PARAMETER_ACTION)
-                ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION))
-                : ACTION_PERSON_SELECT;
-        return action;
-    }
+			case ACTION_FINISH_REGISTRATION:
+				if (getSession().getCurrentParticipant() != null
+						&& getSession().getCurrentParticipant().getRace() != null
+						&& getSession().getTotalAmount() == 0) {
+					getSession().addParticipantHolder(getSession().getCurrentParticipant());
 
-    private void showPersonSelect(IWContext iwc, PheidippidesBean bean) {
-        bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(),
-                IWTimestamp.RightNow().getYear()));
+					RegistrationAnswerHolder answer = getService().storeRegistration(
+							getSession().getParticipantHolders(), true, null,
+							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, null,
+							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
+							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+					getService().markRegistrationAsPaid(answer.getHeader(), true, false, null, null, null, null, null,
+							null, null, null, null);
+					bean.setAnswer(answer);
+					getSession().empty();
 
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/personSelect.xhtml"));
-        add(facelet);
-    }
+					showReceipt(iwc, bean);
+				} else {
+					showPersonSelect(iwc, bean);
+				}
+			}
+		} else {
+			add(new Text("No event selected..."));
+		}
+	}
 
-    private void showParticipant(IWContext iwc, PheidippidesBean bean) {
-        bean.setProperties(getService().getCountries());
-/*        bean.setProperty(new AdvancedProperty(
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104"),
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));*/
+	private int parseAction(IWContext iwc) {
+		int action = iwc.isParameterSet(PARAMETER_ACTION) ? Integer.parseInt(iwc.getParameter(PARAMETER_ACTION))
+				: ACTION_PERSON_SELECT;
+		return action;
+	}
 
-        bean.setProperties2(getService().getCountryPrefixes());
-/*        bean.setProperty2(new AdvancedProperty(
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104"),
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));*/
+	private void showPersonSelect(IWContext iwc, PheidippidesBean bean) {
+		bean.setRaces(getService().getOpenRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear()));
 
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/personSelect.xhtml"));
+		add(facelet);
+	}
 
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/participant.xhtml"));
-        add(facelet);
-    }
+	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
+		bean.setProperties(getService().getCountries());
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+					iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		}
 
-    private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
-        bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(),
-                IWTimestamp.RightNow().getYear(),
-                getSession().getCurrentParticipant().getParticipant()));
-        bean.setRaceShirtSizes(iwc.isParameterSet(PARAMETER_RACE)
-                ? getDao().getRaceShirtSizes(getDao().getRace(
-                        Long.parseLong(iwc.getParameter(PARAMETER_RACE))))
-                : (getSession().getCurrentParticipant().getRace() != null
-                        ? getDao().getRaceShirtSizes(getDao()
-                                .getRace(getSession().getCurrentParticipant()
-                                        .getRace().getId()))
-                        : null));
+		bean.setProperties2(getService().getCountryPrefixes());
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty2(
+					new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+							iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
 
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/raceSelect.xhtml"));
-        add(facelet);
-    }
+		}
 
-    private void showTrinketsSelect(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/trinketSelect.xhtml"));
-        add(facelet);
-    }
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/participant.xhtml"));
+		add(facelet);
+	}
 
-    private void showWaiver(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/waiver.xhtml"));
-        add(facelet);
-    }
+	private void showRaceSelect(IWContext iwc, PheidippidesBean bean) {
+		bean.setRaces(getService().getAvailableRaces(bean.getEvent().getId(), IWTimestamp.RightNow().getYear(),
+				getSession().getCurrentParticipant().getParticipant()));
+		bean.setRaceShirtSizes(
+				iwc.isParameterSet(PARAMETER_RACE)
+						? getDao().getRaceShirtSizes(getDao().getRace(Long.parseLong(iwc.getParameter(PARAMETER_RACE))))
+						: (getSession().getCurrentParticipant().getRace() != null
+								? getDao().getRaceShirtSizes(
+										getDao().getRace(getSession().getCurrentParticipant().getRace().getId()))
+								: null));
 
-    private void showOverview(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/overview.xhtml"));
-        add(facelet);
-    }
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/raceSelect.xhtml"));
+		add(facelet);
+	}
 
-    private void showReceipt(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/receipt.xhtml"));
-        add(facelet);
-    }
+	private void showTrinketsSelect(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/trinketSelect.xhtml"));
+		add(facelet);
+	}
 
-    private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
-                .createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(
-                iwb.getFaceletURI("registration/MH/giftCard.xhtml"));
-        add(facelet);
-    }
+	private void showWaiver(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/waiver.xhtml"));
+		add(facelet);
+	}
 
-    private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
-        FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
-        facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/discountCode.xhtml"));
-        add(facelet);
-    }
+	private void showOverview(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/overview.xhtml"));
+		add(facelet);
+	}
 
-    private String getBundleIdentifier() {
-        return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
-    }
+	private void showReceipt(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/receipt.xhtml"));
+		add(facelet);
+	}
 
-    private PheidippidesService getService() {
-        if (service == null) {
-            ELUtil.getInstance().autowire(this);
-        }
+	private void showGiftCard(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/giftCard.xhtml"));
+		add(facelet);
+	}
 
-        return service;
-    }
+	private void showDiscountCode(IWContext iwc, PheidippidesBean bean) {
+		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
+				.createComponent(FaceletComponent.COMPONENT_TYPE);
+		facelet.setFaceletURI(iwb.getFaceletURI("registration/MH/discountCode.xhtml"));
+		add(facelet);
+	}
 
-    private PheidippidesRegistrationSession getSession() {
-        if (session == null) {
-            ELUtil.getInstance().autowire(this);
-        }
+	private String getBundleIdentifier() {
+		return PheidippidesConstants.IW_BUNDLE_IDENTIFIER;
+	}
 
-        return session;
-    }
+	private PheidippidesService getService() {
+		if (service == null) {
+			ELUtil.getInstance().autowire(this);
+		}
 
-    private GiftCardService getGiftCardService() {
-        if (giftCardService == null) {
-            ELUtil.getInstance().autowire(this);
-        }
+		return service;
+	}
 
-        return giftCardService;
-    }
+	private PheidippidesRegistrationSession getSession() {
+		if (session == null) {
+			ELUtil.getInstance().autowire(this);
+		}
 
-    private PheidippidesDao getDao() {
-        if (dao == null) {
-            ELUtil.getInstance().autowire(this);
-        }
+		return session;
+	}
 
-        return dao;
-    }
+	private GiftCardService getGiftCardService() {
+		if (giftCardService == null) {
+			ELUtil.getInstance().autowire(this);
+		}
 
-    private JQuery getJQuery() {
-        if (jQuery == null) {
-            ELUtil.getInstance().autowire(this);
-        }
+		return giftCardService;
+	}
 
-        return jQuery;
-    }
+	private PheidippidesDao getDao() {
+		if (dao == null) {
+			ELUtil.getInstance().autowire(this);
+		}
 
-    public void setEventPK(String eventPK) {
-        this.eventPK = Long.parseLong(eventPK);
-    }
+		return dao;
+	}
+
+	private JQuery getJQuery() {
+		if (jQuery == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+
+		return jQuery;
+	}
+
+	public void setEventPK(String eventPK) {
+		this.eventPK = Long.parseLong(eventPK);
+	}
 }

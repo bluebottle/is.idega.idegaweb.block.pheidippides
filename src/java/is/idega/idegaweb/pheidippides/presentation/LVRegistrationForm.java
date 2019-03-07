@@ -57,9 +57,9 @@ public class LVRegistrationForm extends IWBaseComponent {
 
 	private static final String PARAMETER_PERSONAL_ID = "prm_personal_id";
 	private static final String PARAMETER_SHIRT_SIZE = "prm_shirt_size";
-    private static final String PARAMETER_FIRST_NAME = "prm_first_name";
-    private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
-    private static final String PARAMETER_LAST_NAME = "prm_last_name";
+	private static final String PARAMETER_FIRST_NAME = "prm_first_name";
+	private static final String PARAMETER_MIDDLE_NAME = "prm_middle_name";
+	private static final String PARAMETER_LAST_NAME = "prm_last_name";
 	private static final String PARAMETER_DATE_OF_BIRTH = "prm_date_of_birth";
 	private static final String PARAMETER_ADDRESS = "prm_address";
 	private static final String PARAMETER_CITY = "prm_city";
@@ -145,10 +145,10 @@ public class LVRegistrationForm extends IWBaseComponent {
 				valitorReturnURL = event.getPaymentReturnURL();
 			}
 
-            getSession().setValitorShopId(valitorShopID);
-            getSession().setValitorSecurityNumber(valitorSecurityNumber);
-            getSession().setValitorReturnURLText(valitorReturnURLText);
-            getSession().setValitorReturnURL(valitorReturnURL);
+			getSession().setValitorShopId(valitorShopID);
+			getSession().setValitorSecurityNumber(valitorSecurityNumber);
+			getSession().setValitorReturnURLText(valitorReturnURLText);
+			getSession().setValitorReturnURL(valitorReturnURL);
 
 			List<ParticipantHolder> holders = getSession().getParticipantHolders();
 			if (holders != null && !holders.isEmpty()) {
@@ -218,11 +218,12 @@ public class LVRegistrationForm extends IWBaseComponent {
 					if (!getSession().isRegistrationWithPersonalId()) {
 						DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-                        participant.setFirstName(iwc.getParameter(PARAMETER_FIRST_NAME));
-                        participant.setMiddleName(iwc.getParameter(PARAMETER_MIDDLE_NAME));
-                        participant.setLastName(iwc.getParameter(PARAMETER_LAST_NAME));
-                        Name name = new Name(participant.getFirstName(), participant.getMiddleName(), participant.getLastName());
-                        participant.setFullName(name.getName());
+						participant.setFirstName(iwc.getParameter(PARAMETER_FIRST_NAME));
+						participant.setMiddleName(iwc.getParameter(PARAMETER_MIDDLE_NAME));
+						participant.setLastName(iwc.getParameter(PARAMETER_LAST_NAME));
+						Name name = new Name(participant.getFirstName(), participant.getMiddleName(),
+								participant.getLastName());
+						participant.setFullName(name.getName());
 						try {
 							participant.setDateOfBirth(format.parse(iwc.getParameter(PARAMETER_DATE_OF_BIRTH)));
 						} catch (ParseException e) {
@@ -304,8 +305,8 @@ public class LVRegistrationForm extends IWBaseComponent {
 					RegistrationAnswerHolder answer = getService().storeRegistration(
 							getSession().getParticipantHolders(), true, null,
 							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true, null,
-							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
-                            valitorReturnURLText, valitorReturnURL);
+							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
+							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
 					bean.setAnswer(answer);
 					getSession().empty();
 
@@ -373,8 +374,8 @@ public class LVRegistrationForm extends IWBaseComponent {
 					RegistrationAnswerHolder answer = getService().storeRegistration(
 							getSession().getParticipantHolders(), true, null,
 							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false, null,
-							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID, valitorSecurityNumber,
-                            valitorReturnURLText, valitorReturnURL);
+							getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
+							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
 					getService().markRegistrationAsPaid(answer.getHeader(), true, false, null, null, null, null, null,
 							null, null, null, null);
 					bean.setAnswer(answer);
@@ -404,19 +405,18 @@ public class LVRegistrationForm extends IWBaseComponent {
 	}
 
 	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
-        bean.setProperties(getService().getCountries());
-/*        bean.setProperty(new AdvancedProperty(
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104"),
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));*/
+		bean.setProperties(getService().getCountries());
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+					iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		}
 
-        bean.setProperties2(getService().getCountryPrefixes());
-/*        bean.setProperty2(new AdvancedProperty(
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104"),
-                iwc.getApplicationSettings().getProperty("default.ic_country",
-                        "104")));*/
+		bean.setProperties2(getService().getCountryPrefixes());
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty2(
+					new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+							iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);

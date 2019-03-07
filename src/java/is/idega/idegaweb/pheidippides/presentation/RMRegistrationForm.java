@@ -544,12 +544,17 @@ public class RMRegistrationForm extends IWBaseComponent {
 
 	private void showParticipant(IWContext iwc, PheidippidesBean bean) {
 		bean.setProperties(getService().getCountries());
-/*		bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
-				iwc.getApplicationSettings().getProperty("default.ic_country", "104")));*/
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+					iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		}
 
 		bean.setProperties2(getService().getCountryPrefixes());
-/*		bean.setProperty2(new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
-				iwc.getApplicationSettings().getProperty("default.ic_country", "104")));*/
+		if (getSession().isRegistrationWithPersonalId()) {
+			bean.setProperty2(
+					new AdvancedProperty(iwc.getApplicationSettings().getProperty("default.ic_country", "104"),
+							iwc.getApplicationSettings().getProperty("default.ic_country", "104")));
+		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication()
 				.createComponent(FaceletComponent.COMPONENT_TYPE);
