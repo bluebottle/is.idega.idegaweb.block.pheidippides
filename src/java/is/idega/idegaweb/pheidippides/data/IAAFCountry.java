@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Table(name = IAAFCountry.ENTITY_NAME)
 @NamedQueries({
 	@NamedQuery(name = "country.findAll", query = "select c from IAAFCountry c"),
-	@NamedQuery(name = "country.findByICCountryID", query = "select c from IAAFCountry c where c.icCountryID = :icCountryID")
+	@NamedQuery(name = "country.findByICCountryID", query = "select c from IAAFCountry c where c.icCountryID = :icCountryID"),
+	@NamedQuery(name = "country.findByCode", query = "select c from IAAFCountry c where c.code = :code")
 })
 public class IAAFCountry implements Serializable {
 	private static final long serialVersionUID = 9019385306196118993L;

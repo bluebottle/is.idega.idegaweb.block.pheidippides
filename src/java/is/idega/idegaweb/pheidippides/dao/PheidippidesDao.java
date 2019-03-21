@@ -73,6 +73,7 @@ public interface PheidippidesDao extends GenericDao {
 
     public List<IAAFCountry> getCountries();
     public IAAFCountry getCountry(Integer ICCountryID);
+    public IAAFCountry getCountry(String countryCode);
 
     public DiscountCode getDiscountCode(Long discountCodeID);
 

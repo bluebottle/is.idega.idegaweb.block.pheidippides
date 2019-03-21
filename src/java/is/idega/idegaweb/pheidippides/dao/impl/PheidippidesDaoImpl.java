@@ -167,6 +167,11 @@ public class PheidippidesDaoImpl extends GenericDaoImpl
                 new Param("icCountryID", ICCountryID));
     }
 
+    public IAAFCountry getCountry(String countryCode) {
+        return getSingleResult("country.findByCode", IAAFCountry.class,
+                new Param("code", countryCode));
+    }
+
     
     /* Discount code methods */
     @Override

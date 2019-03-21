@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -564,9 +566,9 @@ public class PheidippidesService {
 		p.setPersonalId(user.getPersonalID());
 		p.setDateOfBirth(user.getDateOfBirth());
 		p.setUuid(user.getUniqueId());
-		/*if (user.getGender() != null) {
-			p.setGender(user.getGender().getName());
-		}*/
+		/*
+		 * if (user.getGender() != null) { p.setGender(user.getGender().getName()); }
+		 */
 		p.setForeigner(p.getPersonalId() == null);
 
 		try {
@@ -614,7 +616,7 @@ public class PheidippidesService {
 
 		return p;
 	}
-	
+
 	public Participant getRegistrationParticipant(User user) {
 		Participant p = new Participant();
 		p.setFirstName(user.getFirstName());
@@ -625,7 +627,6 @@ public class PheidippidesService {
 
 		return p;
 	}
-
 
 	public Map<CompanyImportStatus, List<Participant>> importCompanyExcelFile(FileInputStream input, Event event,
 			int year) {
@@ -727,7 +728,7 @@ public class PheidippidesService {
 							rowHasError = true;
 						}
 
-						if (country == null || "".equals(country.trim())) {
+						if (country == null || "".equals(country.trim()) || country.indexOf("(") == -1 || country.indexOf(")") == -1) {
 							rowHasError = true;
 						}
 
@@ -739,7 +740,7 @@ public class PheidippidesService {
 							rowHasError = true;
 						}
 
-						if (nationality == null || "".equals(nationality.trim())) {
+						if (nationality == null || "".equals(nationality.trim())  || nationality.indexOf("(") == -1 || nationality.indexOf(")") == -1) {
 							rowHasError = true;
 						}
 
@@ -3421,6 +3422,18 @@ public class PheidippidesService {
 		}
 	}
 
+	// Will always be "Name (code)". Get code from string and find entry by code
+	private IAAFCountry getIAAFCountryFromString(String IAAFCountryString) {
+		Pattern p = Pattern.compile("\\((.*?)\\)");
+		Matcher m = p.matcher(IAAFCountryString);
+
+		if (m.find()) {
+			return dao.getCountry(m.group(1));
+		}
+
+		return null;
+	}
+
 	public void storeCompanyRegistration(List<ParticipantHolder> holders, Company company, String registrantUUID,
 			Locale locale) {
 
@@ -3449,10 +3462,13 @@ public class PheidippidesService {
 							} else {
 								gender = getGenderHome().getFemaleGender();
 							}
+
+							IAAFCountry iaafCountry = getIAAFCountryFromString(participant.getCountry());
+
 							user = saveUser(new Name(participant.getFullName()),
 									new IWTimestamp(participant.getDateOfBirth()), gender, participant.getAddress(),
 									participant.getPostalCode(), participant.getCity(),
-									getCountryHome().findByCountryName(participant.getCountry()));
+									getCountryHome().findByPrimaryKey(iaafCountry.getIcCountryID()));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -3475,8 +3491,10 @@ public class PheidippidesService {
 						}
 
 						Country country = null;
+						IAAFCountry iaafCountry = getIAAFCountryFromString(participant.getNationality());
+
 						try {
-							country = getCountryHome().findByCountryName(participant.getNationality());
+							country = getCountryHome().findByPrimaryKey(iaafCountry.getIcCountryID());
 						} catch (Exception e) {
 							country = getCountryHome()
 									.findByIsoAbbreviation(LocaleUtil.getIcelandicLocale().getCountry());
