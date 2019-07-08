@@ -3491,13 +3491,15 @@ public class PheidippidesService {
 						}
 
 						Country country = null;
-						IAAFCountry iaafCountry = getIAAFCountryFromString(participant.getNationality());
+						IAAFCountry iaafCountry = null;
 
 						try {
+							iaafCountry = getIAAFCountryFromString(participant.getNationality());
 							country = getCountryHome().findByPrimaryKey(iaafCountry.getIcCountryID());
 						} catch (Exception e) {
 							country = getCountryHome()
 									.findByIsoAbbreviation(LocaleUtil.getIcelandicLocale().getCountry());
+							iaafCountry = dao.getCountry((Integer)country.getPrimaryKey());
 						}
 
 						Registration registration = dao.storeRegistration(null, header, RegistrationStatus.OK,
