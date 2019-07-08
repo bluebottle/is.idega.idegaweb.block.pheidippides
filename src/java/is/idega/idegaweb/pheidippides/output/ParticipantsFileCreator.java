@@ -1,19 +1,5 @@
 package is.idega.idegaweb.pheidippides.output;
 
-import is.idega.idegaweb.pheidippides.business.PheidippidesService;
-import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
-import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
-import is.idega.idegaweb.pheidippides.data.Company;
-import is.idega.idegaweb.pheidippides.data.Event;
-import is.idega.idegaweb.pheidippides.data.Participant;
-import is.idega.idegaweb.pheidippides.data.Race;
-import is.idega.idegaweb.pheidippides.data.RaceTrinket;
-import is.idega.idegaweb.pheidippides.data.Registration;
-import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
-import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
-import is.idega.idegaweb.pheidippides.data.ShirtSize;
-import is.idega.idegaweb.pheidippides.data.Team;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,6 +29,23 @@ import com.idega.io.MemoryOutputStream;
 import com.idega.util.IWTimestamp;
 import com.idega.util.StringHandler;
 import com.idega.util.expression.ELUtil;
+
+import is.idega.idegaweb.pheidippides.business.GiftCardUsageStatus;
+import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.business.RegistrationStatus;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Company;
+import is.idega.idegaweb.pheidippides.data.Event;
+import is.idega.idegaweb.pheidippides.data.GiftCardUsage;
+import is.idega.idegaweb.pheidippides.data.IAAFCountry;
+import is.idega.idegaweb.pheidippides.data.Participant;
+import is.idega.idegaweb.pheidippides.data.Race;
+import is.idega.idegaweb.pheidippides.data.RaceTrinket;
+import is.idega.idegaweb.pheidippides.data.Registration;
+import is.idega.idegaweb.pheidippides.data.RegistrationHeader;
+import is.idega.idegaweb.pheidippides.data.RegistrationTrinket;
+import is.idega.idegaweb.pheidippides.data.ShirtSize;
+import is.idega.idegaweb.pheidippides.data.Team;
 
 public class ParticipantsFileCreator {
 
@@ -125,6 +128,15 @@ public class ParticipantsFileCreator {
 		cell.setCellValue(this.iwrb.getLocalizedString("name", "Name"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("first_name", "First name"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("middle_name", "Middle name"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("last_name", "Last name"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("personal_id", "Personal ID"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
@@ -156,6 +168,9 @@ public class ParticipantsFileCreator {
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("nationality", "Nationality"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("nationality_code", "Nationality code"));
 		cell.setCellStyle(style);
 		cell = row.createCell(iCell++);
 		cell.setCellValue(this.iwrb.getLocalizedString("company", "Company"));
@@ -226,6 +241,13 @@ public class ParticipantsFileCreator {
 			cell.setCellStyle(style);
 		}
 
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("discount_code", "Discount code"));
+		cell.setCellStyle(style);
+		cell = row.createCell(iCell++);
+		cell.setCellValue(this.iwrb.getLocalizedString("gift_card", "Gift card"));
+		cell.setCellStyle(style);
+
 		for (Registration registration : registrations) {
 			Participant participant = participantsMap.get(registration);
 			if (participant == null) {
@@ -273,6 +295,9 @@ public class ParticipantsFileCreator {
 				row.createCell(iCell++).setCellValue(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + participantRace.getDistance().getLocalizedKey() + (participantRace.getNumberOfRelayLegs() > 1 ? ".relay" : ""), participantRace.getDistance().getName()).replaceAll("\\<[^>]*>", "")));
 			}
 			row.createCell(iCell++).setCellValue(participant.getFullName());
+			row.createCell(iCell++).setCellValue(participant.getFirstName());
+			row.createCell(iCell++).setCellValue(participant.getMiddleName());
+			row.createCell(iCell++).setCellValue(participant.getLastName());
 			row.createCell(iCell++).setCellValue(participant.getPersonalId());
 			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("d.M.yyyy"));
 			row.createCell(iCell++).setCellValue(dateOfBirth.getDateString("yyyy"));
@@ -283,7 +308,15 @@ public class ParticipantsFileCreator {
 			row.createCell(iCell++).setCellValue(country != null ? country.getName() : "");
 			row.createCell(iCell++).setCellValue("");
 			row.createCell(iCell++).setCellValue(participant.getPhoneMobile());
-			row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
+			if (nationality != null) {
+				row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
+				IAAFCountry iaaf = getDao().getCountry(new Integer((String)nationality.getPrimaryKey()));
+				row.createCell(iCell++).setCellValue(iaaf.getCode());
+			} else {
+				row.createCell(iCell++).setCellValue("");
+				row.createCell(iCell++).setCellValue("");
+			}
+
 			row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
 			if (shirtSize != null) {
 				row.createCell(iCell++).setCellValue(shirtSize.getSize() + " - " + shirtSize.getGender());
@@ -336,6 +369,15 @@ public class ParticipantsFileCreator {
 				}
 			}
 
+			row.createCell(iCell++).setCellValue(registration.getDiscountCode() != null ? registration.getDiscountCode().getUuid() : "");
+			List<GiftCardUsage> usage = getDao().getGiftCardUsage(registration.getHeader(), GiftCardUsageStatus.Confirmed);
+			if (usage == null || usage.isEmpty()) {
+				row.createCell(iCell++).setCellValue("");
+			} else {
+				GiftCardUsage giftCardUsage = usage.iterator().next();
+				row.createCell(iCell++).setCellValue(giftCardUsage.getCard().getCode());
+			}
+
 			if (registrationRace.getNumberOfRelayLegs() > 1) {
 				List<Registration> teamMembers = getService().getRelayPartners(registration);
 
@@ -377,6 +419,9 @@ public class ParticipantsFileCreator {
 						row.createCell(iCell++).setCellValue(StringEscapeUtils.unescapeHtml(iwrb.getLocalizedString(event.getLocalizedKey() + "." + participantRace.getDistance().getLocalizedKey() + (participantRace.getNumberOfRelayLegs() > 1 ? ".relay" : ""), participantRace.getDistance().getName()).replaceAll("\\<[^>]*>", "")));
 					}
 					row.createCell(iCell++).setCellValue(otherParticipant.getFullName());
+					row.createCell(iCell++).setCellValue(otherParticipant.getFirstName());
+					row.createCell(iCell++).setCellValue(otherParticipant.getMiddleName());
+					row.createCell(iCell++).setCellValue(otherParticipant.getLastName());
 					row.createCell(iCell++).setCellValue(otherParticipant.getPersonalId());
 					row.createCell(iCell++).setCellValue(dateOfBirth != null ? dateOfBirth.getDateString("d.M.yyyy") : "");
 					row.createCell(iCell++).setCellValue(dateOfBirth != null ? dateOfBirth.getDateString("yyyy") : "");
@@ -388,6 +433,8 @@ public class ParticipantsFileCreator {
 					row.createCell(iCell++).setCellValue("");
 					row.createCell(iCell++).setCellValue(otherParticipant.getPhoneMobile());
 					row.createCell(iCell++).setCellValue(nationality != null ? nationality.getName() : "");
+					row.createCell(iCell++).setCellValue("");
+
 					row.createCell(iCell++).setCellValue(company != null ? company.getName() : "");
 					if (shirtSize != null) {
 						row.createCell(iCell++).setCellValue(shirtSize.getSize() + " - " + shirtSize.getGender());
@@ -455,11 +502,11 @@ public class ParticipantsFileCreator {
 		}
 	}
 	
-	public static void main(String args[]) {
-		String localized = "<p>WOW Tour of Reykjavik</p>";
-		
-		String sheetname = StringEscapeUtils.unescapeHtml(localized  + ".name" + " - " + "2017").replaceAll("\\<[^>]*>", "");
-		
-		System.out.println("sheetname = " + sheetname);
+	private PheidippidesDao getDao() {
+		if (dao == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+
+		return dao;
 	}
 }

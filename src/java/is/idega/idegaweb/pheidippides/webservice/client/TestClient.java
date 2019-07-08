@@ -13,7 +13,7 @@ public class TestClient {
 	 */
 	public static void main(String[] args) {
 		TestClient client = new TestClient();
-		client.testStuff();
+		client.doStuff2();
 	}
 
 	private void testStuff() {
