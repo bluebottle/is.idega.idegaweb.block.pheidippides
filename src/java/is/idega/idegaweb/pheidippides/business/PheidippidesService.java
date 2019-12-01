@@ -3894,6 +3894,12 @@ public class PheidippidesService {
 		String valitorReturnURLCancel = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL_GIFTCARD_CANCEL, "http://skraning.marathon.is/pages/valitorGiftCard");
 
+		Event giftCardEvent = dao.getEvent(11l);
+		if (giftCardEvent != null) {
+			valitorShopID = giftCardEvent.getPaymentShopID();
+			valitorSecurityNumber = giftCardEvent.getPaymentSecurityNumber();
+		}
+
 		Currency currency = Currency.ISK;
 
 		StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
