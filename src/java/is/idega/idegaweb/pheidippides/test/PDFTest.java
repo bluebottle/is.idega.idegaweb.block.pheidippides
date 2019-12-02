@@ -65,7 +65,7 @@ public class PDFTest {
 			documentProperties.put("created", "16. desember 2018");
 						
 			// instantiating the document printer
-			FileInputStream templateStream = new FileInputStream("/Users/palli/Development/illuminati/git/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/resources/is_IS.locale/print/gift_card_template_2.xml");
+			FileInputStream templateStream = new FileInputStream("/Users/palli/Development/illuminati/git/com.idega.block.custom/is.idega.idegaweb.block.pheidippides/resources/is_IS.locale/print/gift_card_template_10.xml");
 			DocumentPrinter documentPrinter = new DocumentPrinter(templateStream, documentProperties);
 			// in case you'd like to use a XML parser different from the default implementation
 			// you can specify it here (apache xerces in this case).
