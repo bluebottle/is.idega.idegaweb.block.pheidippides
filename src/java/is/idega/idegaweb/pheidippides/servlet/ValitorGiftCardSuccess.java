@@ -16,6 +16,8 @@ import com.idega.presentation.IWContext;
 
 import is.idega.idegaweb.pheidippides.business.GiftCardHeaderStatus;
 import is.idega.idegaweb.pheidippides.business.PheidippidesService;
+import is.idega.idegaweb.pheidippides.dao.PheidippidesDao;
+import is.idega.idegaweb.pheidippides.data.Event;
 import is.idega.idegaweb.pheidippides.data.GiftCardHeader;
 
 public class ValitorGiftCardSuccess extends HttpServlet {
@@ -38,6 +40,7 @@ public class ValitorGiftCardSuccess extends HttpServlet {
 		IWContext iwc = new IWContext(req, resp, req.getSession().getServletContext());
 		WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(iwc.getServletContext());
 		PheidippidesService service = (PheidippidesService) springContext.getBean("pheidippidesService");
+		PheidippidesDao dao = (PheidippidesDao) springContext.getBean("pheidippidesDao");
 
 		String uniqueID = iwc.getParameter("uniqueID");
 		GiftCardHeader header = service.getGiftCardHeader(uniqueID);
@@ -48,6 +51,11 @@ public class ValitorGiftCardSuccess extends HttpServlet {
 			String securityNumber = IWMainApplication
 					.getDefaultIWApplicationContext().getApplicationSettings()
 					.getProperty(VALITOR_SECURITY_NUMBER, "12345");
+
+			Event giftCardEvent = dao.getEvent(11l);
+			if (giftCardEvent != null) {
+				securityNumber = giftCardEvent.getPaymentSecurityNumber();
+			}
 
 			if (validateSecurityString(service, securityNumber, referenceNumber, securityString)) {
 				String cardType = iwc.getParameter("Kortategund");
