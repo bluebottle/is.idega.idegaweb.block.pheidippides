@@ -9,32 +9,79 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="5" />
-	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
 
-		<fieldset class="formSection waiver">
-			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.waiver_help')]}" /></div>
-
-			<div class="formItem required checkbox">
-				<c:checkBox name="prm_waiver" styleClass="required" checked="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}" />
-				<label for="prm_waiver"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.accept_waiter')]}" /></label>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+				</ol>
 			</div>
-		</fieldset>
-		
-		<fieldset class="formSection showRegistration">
-			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_help')]}" /></div>
+		</div>
 
-			<div class="formItem checkbox">
-				<c:checkBox name="prm_show_registration" checked="#{!pheidippidesRegistrationSession.currentParticipant.showRegistration}" />
-				<label for="prm_show_registration"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_decline')]}" /></label>
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.waiver_help')]}" />
+				</div>
 			</div>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<a href="#" class="back" rel="4"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="checkbox">
+					<ui:fragment rendered="#{pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}">
+						<input type="checkbox" name="prm_waiver" id="prm_waiver" class="checkbox__input required" checked="checked" />
+					</ui:fragment>
+					<ui:fragment rendered="#{!pheidippidesRegistrationSession.currentParticipant.acceptsWaiver}">
+						<input type="checkbox" name="prm_waiver" id="prm_waiver" class="checkbox__input required" />
+					</ui:fragment>
+					<label for="prm_waiver" class="checkbox__label">
+						<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.accept_waiter')]}" /></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_help')]}" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="checkbox">
+					<ui:fragment rendered="#{pheidippidesRegistrationSession.currentParticipant.showRegistration}">
+						<input type="checkbox" name="prm_show_registration" id="prm_show_registration" class="checkbox__input" checked="checked" />
+					</ui:fragment>
+					<ui:fragment rendered="#{!pheidippidesRegistrationSession.currentParticipant.showRegistration}">
+						<input type="checkbox" name="prm_show_registration" id="prm_show_registration" class="checkbox__input" />
+					</ui:fragment>
+					<label for="prm_show_registration" class="checkbox__label">
+						<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.show_registration_decline')]}" /></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a class="textbutton back" href="#" rel="4"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a class="button next" href="#" rel="6"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

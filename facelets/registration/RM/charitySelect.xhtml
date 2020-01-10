@@ -10,31 +10,65 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="5" />
 
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 5" /></h2>
-
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_charity_help')]}" /></div>
-
-		<fieldset class="formSection">
-			<div class="formItem checkbox">
-				<c:checkBox name="prm_use_charity" checked="#{not empty pheidippidesRegistrationSession.currentParticipant.charity}" />
-				<label for="prm_use_charity"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.use_charity')]}" /></label>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+				</ol>
 			</div>
-			<br />
-			<div class="formItem">
-				<c:selectOne id="prm_charity" styleClass="required" name="prm_charity" disabled="#{empty pheidippidesRegistrationSession.currentParticipant.externalCharity}">
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_charity']}" content="" />
-					<ui:repeat value="#{pheidippidesBean.externalCharities}" var="charity">
-						<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationSession.currentParticipant.externalCharity.id}" />
-					</ui:repeat>
-				</c:selectOne>
-			</div>
-		</fieldset>
+		</div>
 
-		<fieldset class="submit">
-			<a href="#" class="back" rel="#{pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="55"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_charity_help')]}" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="checkbox">
+					<ui:fragment rendered="#{pheidippidesRegistrationSession.currentParticipant.charity}">
+						<input type="checkbox" name="prm_use_charity" id="prm_use_charity" class="checkbox__input" checked="checked" />
+					</ui:fragment>
+					<ui:fragment rendered="#{!pheidippidesRegistrationSession.currentParticipant.charity}">
+						<input type="checkbox" name="prm_use_charity" id="prm_use_charity" class="checkbox__input" />
+					</ui:fragment>
+					<label for="prm_use_charity" class="checkbox__label">
+						<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.use_charity')]}" /></span>
+					</label>
+				</div>
+				<div class="select">
+					<c:selectOne id="prm_charity" styleClass="select__input required" name="prm_charity" disabled="#{empty pheidippidesRegistrationSession.currentParticipant.externalCharity}">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_charity']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.externalCharities}" var="charity">
+							<c:selectOption name="#{charity.name}" content="#{charity.id}" selected="#{charity.id eq pheidippidesRegistrationSession.currentParticipant.externalCharity.id}" />
+						</ui:repeat>
+					</c:selectOne>
+					<label for="prm_charity" class="select__label">
+						<span><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.charity')]}" /></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a class="textbutton back" href="#" rel="#{pheidippidesRegistrationSession.currentParticipant.race.numberOfRelayLegs > 1 ? 4 : 3}"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a class="button next" href="#" rel="55"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

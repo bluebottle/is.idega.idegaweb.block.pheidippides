@@ -8,18 +8,47 @@
 >
 <ui:component>
 	<form class="registrationForm" action="" method="post">
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 7" /></h2>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+				</ol>
+			</div>
+		</div>
 
 		<ui:fragment rendered="#{pheidippidesBean.answer.amount gt 0}">
-			<div class="receipt"><h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" /></div>
+			<div class="segment__item">
+				<div class="text">
+					<div class="text__copy">
+						<h:outputText escape="false" value="#{p:formatReceipt(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt')], pheidippidesBean.answer)}" />
+					</div>
+				</div>
+			</div>
 
-			<fieldset class="submit">
-				<a href="/pages/skraningmottekin/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
-			</fieldset>
+			<div class="segment__item">
+				<div class="buttons">
+					<div class="buttons__wrap">
+						<div class="buttons__list">
+							<a href="/pages/skraningmottekin/" class="button"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</ui:fragment>
 		<ui:fragment rendered="#{pheidippidesBean.answer.amount eq 0}">
-			<div class="receipt"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt_no_payment')]}" /></div>
+			<div class="segment__item">
+				<div class="text">
+					<div class="text__copy">
+						<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.receipt_no_payment')]}" />
+					</div>
+				</div>
+			</div>
 		</ui:fragment>
 	</form>
 </ui:component>

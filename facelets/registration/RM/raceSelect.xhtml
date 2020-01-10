@@ -10,38 +10,80 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="3" />
 		<input type="hidden" name="prm_language" value="#{pheidippidesBean.locale}" />
-	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 3" /></h2>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_race_help')]}" /></div>
-
-		<fieldset class="formSection">
-			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="participant" />
-			<div class="formItem required">
-				<label for="prm_race_pk"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></label>
-				<c:selectOne styleClass="required" name="prm_race_pk">
-					<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
-					<ui:repeat value="#{pheidippidesBean.races}" var="race">
-						<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq participant.race.id}" />
-					</ui:repeat>
-				</c:selectOne>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+				</ol>
 			</div>
-		</fieldset>
-		
-		<fieldset class="formSection">
-			<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.needs_assistance_help')]}" /></div>
+		</div>
 
-			<div class="formItem checkbox">
-				<c:checkBox name="prm_needs_assistance" checked="#{pheidippidesRegistrationSession.currentParticipant.needsAssistance}" />
-				<label for="prm_needs_assistance"><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, 'needs_assistance')])}" /></label>
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.select_race_help')]}" />
+				</div>
 			</div>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<a href="#" class="back" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="4"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="participant" />
+				<div class="select required">
+					<label for="prm_race_pk" class="select__label">
+						<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></span>
+					</label>
+					<c:selectOne styleClass="select__input required" name="prm_race_pk">
+						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_race']}" content="" />
+						<ui:repeat value="#{pheidippidesBean.races}" var="race">
+							<c:selectOption name="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(race.distance.localizedKey, race.numberOfRelayLegs > 1 ? '.relay' : '')))])}" content="#{race.id}" selected="#{race.id eq participant.race.id}" />
+						</ui:repeat>
+					</c:selectOne>
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.needs_assistance_help')]}" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="checkbox">
+					<ui:fragment rendered="#{pheidippidesRegistrationSession.currentParticipant.needsAssistance}">
+						<input type="checkbox" class="checkbox__input" id="prm_needs_assistance" name="prm_needs_assistance" checked="checked" />
+					</ui:fragment>
+					<ui:fragment rendered="#{!pheidippidesRegistrationSession.currentParticipant.needsAssistance}">
+						<input type="checkbox" class="checkbox__input" id="prm_needs_assistance" name="prm_needs_assistance" />
+					</ui:fragment>
+					<label for="prm_needs_assistance" class="checkbox__label">
+						<span><h:outputText value="#{p:escapeXML(localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, 'needs_assistance')])}" /></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a class="textbutton back" href="#" rel="2"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a class="button next" href="#" rel="4"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

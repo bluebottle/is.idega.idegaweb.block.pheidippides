@@ -11,33 +11,60 @@
 		<input type="hidden" name="prm_action" value="1" />
 		<input type="hidden" name="prm_event_pk" value="#{pheidippidesBean.event.id}" />
 		<input type="hidden" name="prm_year" value="#{pheidippidesBean.property.value}" />
-	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 1" /></h2>
 
-		<div class="helpText">
-			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.available_races_information')]}" />
-		</div>
-		
-		<fieldset class="formSection">
-			<div class="formItem required">
-				<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
-				<input type="text" class="required digits validUser hasRaces" name="prm_personal_id" value="#{param['prm_personal_id']}" />
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+				</ol>
 			</div>
-			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
-				<div class="formItem checkbox">
-					<input id="prm_no_personal_id" type="checkbox" name="prm_no_personal_id" />
-					<label for="prm_no_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['no_personal_id']}" /></label>
+		</div>
+
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.available_races_information')]}" />
 				</div>
-			</ui:fragment>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<ui:fragment rendered="#{not empty pheidippidesRegistrationSession.participantHolders}">
-				<a href="#" class="back" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			</ui:fragment>
-			<a href="#" class="next" rel="2"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="textbox">
+					<input id="prm_personal_id" name="prm_personal_id" class="textbox__input digits validUser hasRaces" type="text" value="#{param['prm_personal_id']}" />
+					<label for="prm_personal_id" class="textbox__label required">
+						<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></span>
+					</label>
+				</div>
+				<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+					<div class="checkbox">
+						<input id="prm_no_personal_id" class="checkbox__input" type="checkbox" name="prm_no_personal_id" />
+						<label for="prm_no_personal_id" class="checkbox__label">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['no_personal_id']}" /></span>
+						</label>
+					</div>
+				</ui:fragment>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<ui:fragment rendered="#{not empty pheidippidesRegistrationSession.participantHolders}">
+						<a class="textbutton back" href="#" rel="7"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						</ui:fragment>
+						<a class="button next" href="#" rel="2"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

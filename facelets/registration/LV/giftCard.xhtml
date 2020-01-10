@@ -9,24 +9,50 @@
 <ui:component>
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="9" />
-	
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
 
-		<div class="helpText">
-			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.gift_card_help')]}" />
-		</div>
-		
-		<fieldset class="formSection">
-			<div class="formItem">
-				<label for="prm_gift_card"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card_code']}" /></label>
-				<input type="text" class="required" name="prm_gift_card" />
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+				</ol>
 			</div>
-		</fieldset>
-		
-		<fieldset class="submit">
-			<a href="#" class="back" rel="6"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="10"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+		</div>
+
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.gift_card_help')]}" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="form">
+				<div class="textbox">
+					<label for="prm_gift_card" class="textbox__label">
+						<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card_code']}" /></span>
+					</label>
+					<input type="text" class="textbox__input required" name="prm_gift_card" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a href="#" class="textbutton back" rel="6"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a href="#" class="button next" rel="10"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

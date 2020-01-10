@@ -10,23 +10,49 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="100" />
 
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-
-		<div class="helpText">
-			<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.discount_code_help')]}" />
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+				</ol>
+			</div>
 		</div>
 
-		<fieldset class="formSection">
-			<div class="formItem">
-				<label for="prm_discount_code"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code']}" /></label>
-				<input type="text" class="required" name="prm_discount_code" />
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.discount_code_help')]}" />
+				</div>
 			</div>
-		</fieldset>
+		</div>
 
-		<fieldset class="submit">
-			<a href="#" class="back" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+		<div class="segment__item">
+			<div class="form">
+				<div class="textbox">
+					<label for="prm_discount_code" class="textbox__label">
+						<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['discount_code']}" /></span>
+					</label>
+					<input type="text" class="textbox__input required" name="prm_discount_code" />
+				</div>
+			</div>
+		</div>
+
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a href="#" class="textbutton back" rel="7"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a href="#" class="button next" rel="7"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

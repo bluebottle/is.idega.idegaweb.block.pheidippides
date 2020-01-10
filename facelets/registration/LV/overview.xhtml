@@ -11,98 +11,130 @@
 		<input type="hidden" name="prm_action" value="6" />
 		<input type="hidden" name="prm_gift_card" value="" />
 
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 6" /></h2>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+				</ol>
+			</div>
+		</div>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.overview_help')]}" /></div>
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.overview_help')]}" />
+				</div>
+			</div>
+		</div>
 
-		<fieldset class="formSection">
-			<ui:fragment rendered="#{not empty pheidippidesBean.errors}">
+		<ui:fragment rendered="#{not empty pheidippidesBean.errors}">
+			<div class="segment__item">
 				<ul class="errors">
 					<ui:repeat value="#{pheidippidesBean.errors}" var="error">
 						<li><h:outputText value="#{error}" /></li>
 					</ui:repeat>
 				</ul>
-			</ui:fragment>
+			</div>
+		</ui:fragment>
 
-			<table width="100%" cellspacing="0" cellpadding="0">
-				<thead>
-					<tr>
-						<th class="firstColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></th>
-						<th><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></th>
-						<th class="lastColumn"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></th>
-					</tr>
-				</thead>
+		<div class="segment__item">
+			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
 
-				<tbody>
-					<ui:param value="#{pheidippidesRegistrationSession.currentParticipant}" name="current" />
+			<ui:repeat value="#{pheidippidesRegistrationSession.participantHolders}" var="holder">
+				<ui:fragment rendered="#{current ne holder}">
+					<div class="summary three">
+						<div class="summary__runner">
+							<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></div>
+							<div class="summary__name"><h:outputText value="#{holder.participant.fullName}" /></div>
+						</div>
 
-					<ui:repeat value="#{pheidippidesRegistrationSession.participantHolders}" var="holder">
-						<ui:fragment rendered="#{current ne holder}">
-							<tr>
-								<td class="firstColumn"><h:outputText value="#{holder.participant.fullName}" /></td>
-								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-								<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></td>
-								<td class="lastColumn"><h:outputText value="#{holder.amount - holder.discount}" /></td>
-							</tr>
-							<ui:fragment rendered="#{not empty holder.relayPartners}">
-								<ui:repeat value="#{holder.relayPartners}" var="partner">
-									<tr class="relayPartner">
-										<td class="firstColumn" colspan="3"><h:outputText value="#{partner.fullName}" /></td>
-										<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
-									</tr>
-								</ui:repeat>
-							</ui:fragment>
-						</ui:fragment>
-					</ui:repeat>
+						<div class="summary__table">
+							<div class="summary__header">
+								<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></div>
+								<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></div>
+								<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></div>
+							</div>
 
-					<tr>
-						<td class="firstColumn"><h:outputText value="#{current.participant.fullName}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></td>
-						<td><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></td>
-						<td class="lastColumn"><h:outputText value="#{current.amount - current.discount}" /></td>
-					</tr>
-					<ui:fragment rendered="#{not empty current.relayPartners}">
-						<ui:repeat value="#{current.relayPartners}" var="partner">
-							<tr class="relayPartner">
-								<td class="firstColumn" colspan="2"><h:outputText value="#{partner.fullName}" /></td>
-								<td class="lastColumn" colspan="2"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', partner.shirtSize.localizedKey))]}" /></td>
-							</tr>
+							<div class="summary_body">
+								<div class="summary__row">
+									<div class="summary__value"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(holder.race.distance.localizedKey, holder.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></div>
+									<div class="summary__value"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', holder.shirtSize.localizedKey))]}" /></div>
+									<div class="summary__value"><h:outputText value="#{holder.amount - holder.discount}" /></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ui:fragment>
+			</ui:repeat>
+
+			<div class="summary three">
+				<div class="summary__runner">
+					<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['participant']}" /></div>
+					<div class="summary__name"><h:outputText value="#{current.participant.fullName}" /></div>
+				</div>
+
+				<div class="summary__table">
+					<div class="summary__header">
+						<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['distance']}" /></div>
+						<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['shirt_size']}" /></div>
+						<div class="summary__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['amount']}" /></div>
+					</div>
+
+					<div class="summary_body">
+						<div class="summary__row">
+							<div class="summary__value"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', p:concat(current.race.distance.localizedKey, current.race.numberOfRelayLegs > 1 ? '.relay' : '')))]}" /></div>
+							<div class="summary__value"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, p:concat('.', current.shirtSize.localizedKey))]}" /></div>
+							<div class="summary__value"><h:outputText value="#{current.amount - current.discount}" /></div>
+						</div>
+
+						<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
+							<div class="summary__row">
+								<div class="summary__value">
+									<h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card']}" />: <code><h:outputText value="#{giftCard.card.code}" /></code>
+									<a title="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" data-action="12" data-giftcard="#{giftCard.id}" class="removeGiftCard">
+										<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove']}" /></span>
+									</a>
+								</div>
+								<div class="summary__value">-<h:outputText value="#{giftCard.amount}" /></div>
+							</div>
 						</ui:repeat>
-					</ui:fragment>
+					</div>
+				</div>
+			</div>
+		</div>
 
-					<ui:repeat value="#{pheidippidesRegistrationSession.giftCards}" var="giftCard">
-						<tr class="giftCard">
-							<td class="firstColumn" colspan="3">
-								<h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gift_card']}" />: <code><h:outputText value="#{giftCard.card.code}" /></code>
-								<a title="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove_gift_card']}" data-action="11" data-giftcard="#{giftCard.id}" class="removeGiftCard">
-									<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['remove']}" /></span>
-								</a>
-							</td>
-							<td class="lastColumn">-<h:outputText value="#{giftCard.amount}" /></td>
-						</tr>
-					</ui:repeat>
-				</tbody>
-			</table>
-		</fieldset>
+		<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount gt 0}">
+			<div class="segment__item">
+				<div class="buttons">
+					<div class="buttons__wrap">
+						<div class="buttons__list">
+							<a href="#" class="button next" rel="9"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
+							<a href="/valitor/" class="button valitor"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ui:fragment>
 
-		<fieldset class="submit">
-			<a href="#" class="back" rel="5"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="8"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
-			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount gt 0}">
-				<!-- ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and empty pheidippidesRegistrationSession.giftCards}">
-					<a href="#" class="next" rel="7"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['transfer_payment']}" /></span></a>
-				</ui:fragment -->
-				<a href="/valitor/" class="valitor"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['valitor_payment']}" /></span></a>
-				<!--<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId}"> -->
-					<a href="#" class="next" rel="9"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['add_gift_card']}" /></span></a>
-				<!--</ui:fragment>-->
-			</ui:fragment>
-			<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount eq 0}">
-				<a href="#" class="next" rel="12"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
-			</ui:fragment>
-		</fieldset>
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a href="#" class="textbutton back" rel="5"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a href="#" class="textbutton next" rel="8"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['register_another_participant']}" /></span></a>
+						<ui:fragment rendered="#{pheidippidesRegistrationSession.totalAmount eq 0}">
+							<a href="#" class="button next" rel="12"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['finish_registration']}" /></span></a>
+						</ui:fragment>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>

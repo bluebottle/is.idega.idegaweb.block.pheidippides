@@ -424,7 +424,7 @@ form.smallAdminForm table thead tr th {
 }
 
 /* Registration form */
-form.registrationForm h1 {
+/* form.registrationForm h1 {
 	font-size: 1.5em;
 	float: left;
 	margin-bottom: 8px;
@@ -541,7 +541,7 @@ form.registrationForm fieldSet.formSection div.formItem.checkbox label.error + l
 
 form.registrationForm fieldset.formSection table,table.relayTeam {
 	font-size: 0.85em;
-}
+} */
 
 table.relayTeam {
 	margin-top: 18px;

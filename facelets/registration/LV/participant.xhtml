@@ -10,148 +10,204 @@
 	<form class="registrationForm" action="" method="post">
 		<input type="hidden" name="prm_action" value="2" />
 
-		<h1><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['registration']}" /></h1>
-		<h2><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['step']} 2" /></h2>
+		<div class="segment__item">
+			<div class="counter">
+				<ol class="counter__list">
+					<li class="counter__item"></li>
+					<li class="counter__item active"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+					<li class="counter__item"></li>
+				</ol>
+			</div>
+		</div>
 
-		<div class="helpText"><h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.participant_help')]}" /></div>
+		<div class="segment__item">
+			<div class="text">
+				<div class="text__copy">
+					<h:outputText escape="false" value="#{localizedStrings['is.idega.idegaweb.pheidippides'][p:concat(pheidippidesBean.event.localizedKey, '.participant_help')]}" />
+				</div>
+			</div>
+		</div>
 
-		<fieldset class="formSection">
-			<ui:param value="#{pheidippidesRegistrationSession.currentParticipant.participant}" name="participant" />
-			<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
-				<div class="formItem required">
-					<label for="prm_first_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['first_name']}" /></label>
-					<input type="text" class="required" name="prm_first_name" value="#{participant.firstName}" />
-				</div>
-				<div class="formItem">
-					<label for="prm_middle_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['middle_name']}" /></label>
-					<input type="text" name="prm_middle_name" value="#{participant.middleName}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_last_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['last_name']}" /></label>
-					<input type="text" class="required" name="prm_last_name" value="#{participant.lastName}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_date_of_birth"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></label>
-					<input type="text" class="required" name="prm_date_of_birth" value="#{p:formatDate(participant.dateOfBirth, 'dd.MM.yyyy')}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_address"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></label>
-					<input type="text" class="required" name="prm_address" value="#{participant.address}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_city"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['city']}" /></label>
-					<input type="text" class="required" name="prm_city" value="#{participant.city}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_postal_code"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['postal_code']}" /></label>
-					<input type="text" class="required" name="prm_postal_code" value="#{participant.postalCode}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_country"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['country']}" /></label>
-					<c:selectOne styleClass="required" name="prm_country">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_country']}" content="" />
-						<ui:repeat value="#{pheidippidesBean.properties}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.country}" />
-						</ui:repeat>
-					</c:selectOne>
-				</div>
-				<div class="formItem required">
-					<label for="prm_gender"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
-					<c:selectOne styleClass="required" name="prm_gender">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}"  />
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"  />
-					</c:selectOne>
-				</div>
-				<div class="formItem required">
-					<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
-					<input id="prm_email" type="text" class="required email" name="prm_email" value="#{participant.email}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_email_repeat"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email_repeat']}" /></label>
-					<input id="prm_email_repeat" type="text" class="required email" name="prm_email_repeat" />
-				</div>
-				<div class="formItem">
-					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
-					<c:selectOne name="prm_phone_prefix">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
-						<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.phoneCountryCode}" />
-						</ui:repeat>
-					</c:selectOne>
-					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_nationality"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></label>
-					<c:selectOne styleClass="required" name="prm_nationality">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_nationality']}" content="" />
-						<ui:repeat value="#{pheidippidesBean.properties}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.nationality}" />
-						</ui:repeat>
-					</c:selectOne>
-				</div>
-			    <div class="formItem">
-					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
-					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
-				</div>
+		<div class="segment__item">
+			<div class="form">
+				<ui:param value="#{pheidippidesRegistrationSession.currentParticipant.participant}" name="participant" />
+				<ui:fragment rendered="#{!pheidippidesRegistrationSession.registrationWithPersonalId}">
+					<div class="textbox">
+						<label for="prm_first_name" class="textbox__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['first_name']}" /></span>
+						</label>
+						<input type="text" class="textbox__input required" name="prm_first_name" value="#{participant.firstName}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_middle_name" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['middle_name']}" /></label>
+						<input type="text" class="textbox__input" name="prm_middle_name" value="#{participant.middleName}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_last_name" class="textbox__label required"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['last_name']}" /></label>
+						<input type="text" class="textbox__input required" name="prm_last_name" value="#{participant.lastName}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_date_of_birth" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['date_of_birth']}" /><em>(dd.mm.yyyy)</em></label>
+						<input type="text" class="textbox__input required" name="prm_date_of_birth" value="#{p:formatDate(participant.dateOfBirth, 'dd.MM.yyyy')}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_address" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['address']}" /></label>
+						<input type="text" class="textbox__input required" name="prm_address" value="#{participant.address}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_city" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['city']}" /></label>
+						<input type="text" class="textbox__input required" name="prm_city" value="#{participant.city}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_postal_code" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['postal_code']}" /></label>
+						<input type="text" class="textbox__input required" name="prm_postal_code" value="#{participant.postalCode}" />
+					</div>
+					<div class="select">
+						<label for="prm_country" class="select__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['country']}" /></label>
+						<c:selectOne styleClass="select__input required" name="prm_country">
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_country']}" content="" />
+							<ui:repeat value="#{pheidippidesBean.properties}" var="country">
+								<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.country}" />
+							</ui:repeat>
+						</c:selectOne>
+					</div>
+					<div class="select">
+						<label for="prm_gender" class="select__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
+						<c:selectOne styleClass="select__input required" name="prm_gender">
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}"  />
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"  />
+						</c:selectOne>
+					</div>
+					<div class="textbox">
+						<label for="prm_email" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
+						<input id="prm_email" type="text" class="textbox__input required email" name="prm_email" value="#{participant.email}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_email_repeat" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email_repeat']}" /></label>
+						<input id="prm_email_repeat" type="text" class="textbox__input required email" name="prm_email_repeat" />
+					</div>
+					<fieldset class="fieldset">
+						<div class="fieldset__body">
+							<legend class="fieldset__legend"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></legend>
+							<div class="fieldset__content">
+								<div class="select">
+									<c:selectOne styleClass="select__input" name="prm_phone_prefix">
+										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
+										<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
+											<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.phoneCountryCode ? country.id eq participant.phoneCountryCode : country.id eq pheidippidesBean.property2.value}" />
+										</ui:repeat>
+									</c:selectOne>
+								</div>
+								<div class="textbox">
+									<input type="text" class="textbox__input" name="prm_mobile" value="#{participant.phoneMobile}" />
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<div class="select">
+						<label for="prm_nationality" class="select__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></label>
+						<c:selectOne styleClass="select__input required" name="prm_nationality">
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_nationality']}" content="" />
+							<ui:repeat value="#{pheidippidesBean.properties}" var="country">
+								<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{country.id eq participant.nationality}" />
+							</ui:repeat>
+						</c:selectOne>
+					</div>
+				    <div class="textbox">
+						<label for="prm_running_group" class="textbox__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
+						<input type="text" class="textbox__input" name="prm_running_group" value="#{participant.runningGroup}" />
+					</div>
+				</ui:fragment>
 
-			</ui:fragment>
+				<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and not empty pheidippidesRegistrationSession.currentParticipant}">
+					<div class="textbox">
+						<label for="prm_name" class="textbox__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></span>
+						</label>
+						<input type="text" class="textbox__input" name="prm_name" value="#{participant.fullName}" disabled="disabled" />
+					</div>
+					<div class="textbox">
+						<label for="prm_personal_id" class="textbox__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></span>
+						</label>
+						<input type="text" class="textbox__input" name="prm_personal_id" value="#{participant.personalId}" disabled="disabled" />
+					</div>
+					<div class="select">
+						<label for="prm_gender" class="select__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></span>
+						</label>
+						<c:selectOne styleClass="select__input required" name="prm_gender">
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}" />
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"/>
+						</c:selectOne>
+					</div>
+					<div class="select">
+						<label for="prm_nationality" class="select__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></span>
+						</label>
+						<c:selectOne styleClass="select__input required" name="prm_nationality">
+							<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_nationality']}" content="" />
+							<ui:repeat value="#{pheidippidesBean.properties}" var="country">
+								<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.nationality ? country.id eq participant.nationality : country.id eq pheidippidesBean.property.value}" />
+							</ui:repeat>
+						</c:selectOne>
+					</div>
+					<div class="textbox">
+						<label for="prm_email" class="textbox__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></span>
+						</label>
+						<input id="prm_email" type="text" class="textbox__input email required" name="prm_email" value="#{participant.email}" />
+					</div>
+					<div class="textbox">
+						<label for="prm_email_repeat" class="textbox__label required">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email_repeat']}" /></span>
+						</label>
+						<input id="prm_email_repeat" type="text" class="textbox__input email required" name="prm_email_repeat" />
+					</div>
+					<fieldset class="fieldset">
+						<div class="fieldset__body">
+							<legend class="fieldset__legend"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></legend>
+							<div class="fieldset__content">
+								<div class="select">
+									<c:selectOne styleClass="select__input" name="prm_phone_prefix">
+										<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
+										<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
+											<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.phoneCountryCode ? country.id eq participant.phoneCountryCode : country.id eq pheidippidesBean.property2.value}" />
+										</ui:repeat>
+									</c:selectOne>
+								</div>
+								<div class="textbox">
+									<input type="text" class="textbox__input" name="prm_mobile" value="#{participant.phoneMobile}" />
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				  <div class="textbox">
+						<label for="prm_running_group" class="textbox__label">
+							<span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></span>
+						</label>
+						<input type="text" class="textbox__input" name="prm_running_group" value="#{participant.runningGroup}" />
+					</div>
+				</ui:fragment>
+			</div>
+		</div>
 
-			<ui:fragment rendered="#{pheidippidesRegistrationSession.registrationWithPersonalId and not empty pheidippidesRegistrationSession.currentParticipant}">
-				<div class="formItem required">
-					<label for="prm_name"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['name']}" /></label>
-					<input type="text" name="prm_name" value="#{participant.fullName}" disabled="disabled" />
+		<div class="segment__item">
+			<div class="buttons">
+				<div class="buttons__wrap">
+					<div class="buttons__list">
+						<a class="textbutton back" href="#" rel="1"><span class="textbutton__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
+						<a class="button next" href="#" rel="3"><span class="button__label"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
+					</div>
 				</div>
-				<div class="formItem required">
-					<label for="prm_personal_id"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['personal_id']}" /></label>
-					<input type="text" name="prm_personal_id" value="#{participant.personalId}" disabled="disabled" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_gender"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['gender']}" /></label>
-					<c:selectOne styleClass="required" name="prm_gender">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_gender']}" content="" />
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['male']}" content="male" selected="#{participant.gender eq 'male'}" />
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['female']}" content="female" selected="#{participant.gender eq 'female'}"/>
-					</c:selectOne>
-				</div>
-				<div class="formItem required">
-					<label for="prm_nationality"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['nationality']}" /></label>
-					<c:selectOne styleClass="required" name="prm_nationality">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_nationality']}" content="" />
-						<ui:repeat value="#{pheidippidesBean.properties}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.nationality ? country.id eq participant.nationality : country.id eq pheidippidesBean.property.value}" />
-						</ui:repeat>
-					</c:selectOne>
-				</div>
-				<div class="formItem required">
-					<label for="prm_email"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email']}" /></label>
-					<input id="prm_email" type="text" class="required email" name="prm_email" value="#{participant.email}" />
-				</div>
-				<div class="formItem required">
-					<label for="prm_email_repeat"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['email_repeat']}" /></label>
-					<input id="prm_email_repeat" type="text" class="required email" name="prm_email_repeat" />
-				</div>
-				<div class="formItem">
-					<label for="prm_mobile"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['mobile']}" /></label>
-					<c:selectOne name="prm_phone_prefix">
-						<c:selectOption name="#{localizedStrings['is.idega.idegaweb.pheidippides']['select_phone_prefix']}" content="" />
-						<ui:repeat value="#{pheidippidesBean.properties2}" var="country">
-							<c:selectOption name="#{country.value}" content="#{country.id}" selected="#{not empty participant.phoneCountryCode ? country.id eq participant.phoneCountryCode : country.id eq pheidippidesBean.property2.value}" />
-						</ui:repeat>
-					</c:selectOne>
-					<input type="text" name="prm_mobile" value="#{participant.phoneMobile}" />
-				</div>
-			    <div class="formItem">
-					<label for="prm_running_group"><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['running_group']}" /></label>
-					<input type="text" name="prm_running_group" value="#{participant.runningGroup}" />
-				</div>
-			</ui:fragment>
-		</fieldset>
-
-		<fieldset class="submit">
-			<a href="#" class="back" rel="1"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['back']}" /></span></a>
-			<a href="#" class="next" rel="3"><span><h:outputText value="#{localizedStrings['is.idega.idegaweb.pheidippides']['next']}" /></span></a>
-		</fieldset>
+			</div>
+		</div>
 	</form>
 </ui:component>
 </html>
