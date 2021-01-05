@@ -75,11 +75,6 @@ public class TourRegistrationForm extends IWBaseComponent {
 	private static final String PARAMETER_DISCOUNT_CODE = "prm_discount_code";
 	private static final String PARAMETER_GIFT_CARD = "prm_gift_card";
 
-	private static final String VALITOR_TOUR_SHOP_ID = "VALITOR_TOUR_SHOP_ID";
-	private static final String VALITOR_TOUR_SECURITY_NUMBER = "VALITOR_TOUR_SECURITY_NUMBER";
-	private static final String VALITOR_TOUR_RETURN_URL_TEXT = "VALITOR_TOUR_RETURN_URL_TEXT";
-	private static final String VALITOR_TOUR_RETURN_URL = "VALITOR_TOUR_RETURN_URL";
-
 	@Autowired
 	private PheidippidesService service;
 
@@ -117,34 +112,35 @@ public class TourRegistrationForm extends IWBaseComponent {
 
 		getSession().setCurrency(Currency.ISK);
 
-		String valitorShopID = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
-				.getProperty(VALITOR_TOUR_SHOP_ID, "1");
-		String valitorSecurityNumber = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
-				.getProperty(VALITOR_TOUR_SECURITY_NUMBER, "12345");
-		String valitorReturnURLText = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
-				.getProperty(VALITOR_TOUR_RETURN_URL_TEXT, "tourofreykjavik.is");
-		String valitorReturnURL = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
-				.getProperty(VALITOR_TOUR_RETURN_URL, "http://tourofreykjavik.is");
+		String kortaMerchant = "";
+		String kortaTerminal = "";
+		String kortaSecretcode = "";
+		String kortaReturnURL = "";
+		String kortaReturnURLText = "";
 
 		Event event = eventPK != null ? getDao().getEvent(eventPK) : null;
 		if (event != null) {
-			if (event.getPaymentShopID() != null && !"".equals(event.getPaymentShopID())) {
-				valitorShopID = event.getPaymentShopID();
+			if (event.getKortaMerchant() != null && !"".equals(event.getKortaMerchant())) {
+				kortaMerchant = event.getKortaMerchant();
 			}
-			if (event.getPaymentSecurityNumber() != null && !"".equals(event.getPaymentSecurityNumber())) {
-				valitorSecurityNumber = event.getPaymentSecurityNumber();
+			if (event.getKortaTerminal() != null && !"".equals(event.getKortaTerminal())) {
+				kortaTerminal = event.getKortaTerminal();
 			}
-			if (event.getPaymentReturnURLText() != null && !"".equals(event.getPaymentReturnURLText())) {
-				valitorReturnURLText = event.getPaymentReturnURLText();
+			if (event.getKortaSecretcode() != null && !"".equals(event.getKortaSecretcode())) {
+				kortaSecretcode = event.getKortaSecretcode();
 			}
-			if (event.getPaymentReturnURL() != null && !"".equals(event.getPaymentReturnURL())) {
-				valitorReturnURL = event.getPaymentReturnURL();
+			if (event.getKortaReturnURL() != null && !"".equals(event.getKortaReturnURL())) {
+				kortaReturnURL = event.getKortaReturnURL();
+			}
+			if (event.getKortaReturnURLText() != null && !"".equals(event.getKortaReturnURLText())) {
+				kortaReturnURLText = event.getKortaReturnURLText();
 			}
 
-			getSession().setValitorShopId(valitorShopID);
-			getSession().setValitorSecurityNumber(valitorSecurityNumber);
-			getSession().setValitorReturnURLText(valitorReturnURLText);
-			getSession().setValitorReturnURL(valitorReturnURL);
+			getSession().setKortaMerchant(kortaMerchant);
+			getSession().setKortaTerminal(kortaTerminal);
+			getSession().setKortaSecretcode(kortaSecretcode);
+			getSession().setKortaReturnURL(kortaReturnURL);
+			getSession().setKortaReturnURLText(kortaReturnURLText);
 
 			List<ParticipantHolder> holders = getSession().getParticipantHolders();
 			if (holders != null && !holders.isEmpty()) {
@@ -312,8 +308,8 @@ public class TourRegistrationForm extends IWBaseComponent {
 					RegistrationAnswerHolder answer = getService().storeRegistration(
 							getSession().getParticipantHolders(), true, null,
 							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, true,
-							Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
-							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+							Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), "",
+							"", "", "");
 					bean.setAnswer(answer);
 					getSession().empty();
 
@@ -385,8 +381,8 @@ public class TourRegistrationForm extends IWBaseComponent {
 					RegistrationAnswerHolder answer = getService().storeRegistration(
 							getSession().getParticipantHolders(), true, null,
 							!getSession().isRegistrationWithPersonalId(), iwc.getCurrentLocale(), null, false,
-							Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), valitorShopID,
-							valitorSecurityNumber, valitorReturnURLText, valitorReturnURL);
+							Currency.ISK, getSession().getGiftCards(), getSession().getDiscountCode(), "",
+							"", "", "");
 					getService().markRegistrationAsPaid(answer.getHeader(), true, false, null, null, null, null, null,
 							null, null, null, null);
 					bean.setAnswer(answer);

@@ -1,3 +1,5 @@
 target
 .settings
 .DS_Store
+src/java/is/idega/idegaweb/pheidippides/test/TestKorta.java
+src/java/is/idega/idegaweb/pheidippides/test/TestKorta2.java

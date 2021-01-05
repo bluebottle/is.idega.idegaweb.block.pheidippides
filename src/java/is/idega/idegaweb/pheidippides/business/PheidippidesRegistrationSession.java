@@ -26,6 +26,12 @@ public class PheidippidesRegistrationSession {
 	private String valitorReturnURLText = null;
 	private String valitorReturnURL = null;
 
+	private String kortaMerchant = null;
+	private String kortaTerminal = null;
+	private String kortaSecretcode = null;
+	private String kortaReturnURL = null;
+	private String kortaReturnURLText = null;
+
 	private String discountCode = null;
 
 	private Boolean showDiscountCode = false;
@@ -181,5 +187,45 @@ public class PheidippidesRegistrationSession {
 
 	public void setShowDiscountCode(Boolean showDiscountCode) {
 		this.showDiscountCode = showDiscountCode;
+	}
+
+	public String getKortaMerchant() {
+		return kortaMerchant;
+	}
+
+	public void setKortaMerchant(String kortaMerchant) {
+		this.kortaMerchant = kortaMerchant;
+	}
+
+	public String getKortaTerminal() {
+		return kortaTerminal;
+	}
+
+	public void setKortaTerminal(String kortaTerminal) {
+		this.kortaTerminal = kortaTerminal;
+	}
+
+	public String getKortaSecretcode() {
+		return kortaSecretcode;
+	}
+
+	public void setKortaSecretcode(String kortaSecretcode) {
+		this.kortaSecretcode = kortaSecretcode;
+	}
+
+	public String getKortaReturnURL() {
+		return kortaReturnURL;
+	}
+
+	public void setKortaReturnURL(String kortaReturnURL) {
+		this.kortaReturnURL = kortaReturnURL;
+	}
+
+	public String getKortaReturnURLText() {
+		return kortaReturnURLText;
+	}
+
+	public void setKortaReturnURLText(String kortaReturnURLText) {
+		this.kortaReturnURLText = kortaReturnURLText;
 	}
 }

@@ -728,7 +728,8 @@ public class PheidippidesService {
 							rowHasError = true;
 						}
 
-						if (country == null || "".equals(country.trim()) || country.indexOf("(") == -1 || country.indexOf(")") == -1) {
+						if (country == null || "".equals(country.trim()) || country.indexOf("(") == -1
+								|| country.indexOf(")") == -1) {
 							rowHasError = true;
 						}
 
@@ -740,7 +741,8 @@ public class PheidippidesService {
 							rowHasError = true;
 						}
 
-						if (nationality == null || "".equals(nationality.trim())  || nationality.indexOf("(") == -1 || nationality.indexOf(")") == -1) {
+						if (nationality == null || "".equals(nationality.trim()) || nationality.indexOf("(") == -1
+								|| nationality.indexOf(")") == -1) {
 							rowHasError = true;
 						}
 
@@ -1800,6 +1802,228 @@ public class PheidippidesService {
 		return holder;
 	}
 
+	/*
+	 * public RegistrationAnswerHolder storeRegistrationNew(List<ParticipantHolder>
+	 * holders, boolean doPayment, String registrantUUID, boolean createUsers,
+	 * Locale locale, String paymentGroup, boolean isBankTransfer, Currency
+	 * fixedCurrency, List<GiftCardUsage> giftCardUsage, String discountCode, String
+	 * kortaMerchant, String kortaTerminal, String kortaSecuritycode, String
+	 * kortaReturnURL, String kortaReturnURLText) {
+	 * 
+	 * RegistrationAnswerHolder holder = new RegistrationAnswerHolder();
+	 * 
+	 * String valitorURL =
+	 * IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+	 * .getProperty(VALITOR_URL, "https://testvefverslun.valitor.is/default.aspx");
+	 * 
+	 * String valitorReturnURLServerSide =
+	 * IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+	 * .getProperty(VALITOR_RETURN_URL_SERVER_SIDE,
+	 * "http://skraning.marathon.is/pages/valitor"); String valitorReturnURLCancel =
+	 * IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
+	 * .getProperty(VALITOR_RETURN_URL_CANCEL,
+	 * "http://skraning.marathon.is/pages/valitor");
+	 * 
+	 * StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
+	 * 
+	 * StringBuilder url = new StringBuilder(valitorURL); url.append("?");
+	 * url.append(VEFVERSLUN_ID); url.append("="); url.append(valitorShopID);
+	 * url.append("&"); url.append(LANG); url.append("="); if
+	 * (Locale.ENGLISH.equals(locale)) { url.append("en"); } else {
+	 * url.append("is"); } String currency = "ISK"; url.append("&");
+	 * url.append(GJALDMIDILL); url.append("="); url.append(currency);
+	 * url.append("&"); url.append(ADEINSHEIMILD); url.append("="); url.append("0");
+	 * securityString.append("0");
+	 * 
+	 * if (holders != null && !holders.isEmpty()) { DiscountCode dCode = null; if
+	 * (discountCode != null && !"".equals(discountCode.trim())) { dCode =
+	 * dao.getDiscountCodeByCode(discountCode); if (paymentGroup == null) {
+	 * paymentGroup = dCode.getCompany().getName(); } }
+	 * 
+	 * RegistrationHeader header = null; if (doPayment) { header =
+	 * dao.storeRegistrationHeader(null, RegistrationHeaderStatus.WaitingForPayment,
+	 * registrantUUID, paymentGroup, locale.toString(), Currency.ISK, null, null,
+	 * null, null, null, null, null, null, null, dCode != null ? dCode.getCompany()
+	 * : null); } else { header = dao.storeRegistrationHeader(null,
+	 * RegistrationHeaderStatus.RegisteredWithoutPayment, registrantUUID,
+	 * paymentGroup, locale.toString(), Currency.ISK, null, null, null, null, null,
+	 * null, null, null, null, dCode != null ? dCode.getCompany() : null); }
+	 * holder.setHeader(header);
+	 * 
+	 * valitorReturnURLServerSide += "?uniqueID=" + header.getUuid();
+	 * valitorReturnURLCancel += "?uniqueID=" + header.getUuid();
+	 * 
+	 * if (isBankTransfer) { BankReference reference =
+	 * dao.storeBankReference(header); holder.setBankReference(reference); }
+	 * 
+	 * int amount = 0;
+	 * 
+	 * if (giftCardUsage != null) { for (GiftCardUsage usage : giftCardUsage) {
+	 * dao.updateGiftCardUsage(usage, holder.getHeader(),
+	 * GiftCardUsageStatus.Reservation); int discount = usage.getAmount(); for
+	 * (ParticipantHolder participantHolder : holders) { if (discount > 0) { if
+	 * ((participantHolder.getAmount() - participantHolder.getDiscount()) >=
+	 * discount) { participantHolder.setDiscount(participantHolder.getDiscount() +
+	 * discount); discount = 0; } else { discount -= (participantHolder.getAmount()
+	 * - participantHolder.getDiscount());
+	 * participantHolder.setDiscount(participantHolder.getAmount()); } } } } }
+	 * 
+	 * int counter = 1; for (ParticipantHolder participantHolder : holders) { User
+	 * user = null; Participant participant = participantHolder.getParticipant(); if
+	 * (createUsers) { if (participant.getUuid() != null) { try { user =
+	 * getUserBusiness().getUserByUniqueId(participant.getUuid()); } catch
+	 * (RemoteException e) { } catch (FinderException e) { } }
+	 * 
+	 * try { if (user == null) { Gender gender = null; if
+	 * (participant.getGender().equals(getGenderHome().getMaleGender().getName())) {
+	 * gender = getGenderHome().getMaleGender(); } else { gender =
+	 * getGenderHome().getFemaleGender(); } user = saveUser( new
+	 * Name(participant.getFirstName(), participant.getMiddleName(),
+	 * participant.getLastName()), new IWTimestamp(participant.getDateOfBirth()),
+	 * gender, participant.getAddress(), participant.getPostalCode(),
+	 * participant.getCity(), participant.getCountry() != null ?
+	 * getCountryHome().findByPrimaryKey(new Integer(participant.getCountry())) :
+	 * getCountryHome() .findByPrimaryKey(new
+	 * Integer(participant.getNationality()))); } } catch (Exception e) {
+	 * e.printStackTrace(); user = null; // Something got fucked up } } else { try {
+	 * user = getUserBusiness().getUserByUniqueId(participant.getUuid()); } catch
+	 * (Exception e) { e.printStackTrace(); } }
+	 * 
+	 * if (user != null) { if (participant.getPhoneMobile() != null &&
+	 * !"".equals(participant.getPhoneMobile())) { try { StringBuilder fullPhone =
+	 * new StringBuilder(); if (participant.getPhoneCountryCode() != null) {
+	 * IAAFCountry country = dao.getCountry(new
+	 * Integer(participant.getPhoneCountryCode()));
+	 * fullPhone.append(country.getPhoneCode()); fullPhone.append(" "); }
+	 * fullPhone.append(participant.getPhoneMobile());
+	 * getUserBusiness().updateUserMobilePhone(user, fullPhone.toString()); } catch
+	 * (Exception e) { } }
+	 * 
+	 * if (participant.getEmail() != null && !"".equals(participant.getEmail())) {
+	 * try { getUserBusiness().updateUserMail(user, participant.getEmail()); } catch
+	 * (Exception e) { } }
+	 * 
+	 * List<Participant> relayPartners = participantHolder.getRelayPartners(); Team
+	 * team = participantHolder.getTeam(); if (relayPartners != null &&
+	 * !relayPartners.isEmpty()) { team = dao.storeTeam(team.getId(),
+	 * team.getName(), team.isRelayTeam()); }
+	 * 
+	 * Registration registration = dao.storeRegistration(null, header,
+	 * RegistrationStatus.Unconfirmed, participantHolder.getRace(),
+	 * participantHolder.getShirtSize(), team, participantHolder.getLeg(),
+	 * participantHolder.getAmount(), participantHolder.getCharity(),
+	 * participant.getNationality(), user.getUniqueId(),
+	 * participantHolder.getDiscount(), participantHolder.isHasDoneMarathonBefore(),
+	 * participantHolder.isHasDoneLVBefore(),
+	 * participantHolder.getBestMarathonTime(),
+	 * participantHolder.getBestUltraMarathonTime(),
+	 * participantHolder.isNeedsAssistance(), participantHolder.isFacebook(),
+	 * participantHolder.isShowRegistration(), participant.getRunningGroup(),
+	 * participantHolder.getExternalCharity() == null ? null :
+	 * participantHolder.getExternalCharity().getId(), dCode);
+	 * 
+	 * if (participantHolder.getComment() != null &&
+	 * !"".equals(participantHolder.getComment())) {
+	 * dao.updateExtraInformation(registration, null,
+	 * participantHolder.getComment()); }
+	 * 
+	 * amount += participantHolder.getAmount() - participantHolder.getDiscount();
+	 * 
+	 * securityString.append("1");
+	 * securityString.append(participantHolder.getAmount());
+	 * securityString.append(participantHolder.getDiscount());
+	 * 
+	 * url.append("&"); url.append(VARA); url.append(counter);
+	 * url.append(VARA_LYSING); url.append("="); try {
+	 * url.append(URLEncoder.encode(participantHolder.getValitorDescription(),
+	 * "UTF-8")); } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+	 * url.append("&"); url.append(VARA); url.append(counter);
+	 * url.append(VARA_FJOLDI); url.append("="); url.append("1"); url.append("&");
+	 * url.append(VARA); url.append(counter); url.append(VARA_VERD);
+	 * url.append("="); url.append(participantHolder.getAmount()); url.append("&");
+	 * url.append(VARA); url.append(counter++); url.append(VARA_AFSLATTUR);
+	 * url.append("="); url.append(participantHolder.getDiscount());
+	 * 
+	 * List<RacePrice> trinkets = participantHolder.getTrinkets(); if (trinkets !=
+	 * null && !trinkets.isEmpty()) { for (RacePrice trinket : trinkets) {
+	 * dao.storeRegistrationTrinket(null, registration, trinket, 0);
+	 * securityString.append("1"); securityString.append(trinket.getPrice());
+	 * securityString.append("0");
+	 * 
+	 * url.append("&"); url.append(VARA); url.append(counter);
+	 * url.append(VARA_LYSING); url.append("="); try {
+	 * url.append(URLEncoder.encode(trinket.getTrinket().getDescription(),
+	 * "UTF-8")); } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+	 * url.append("&"); url.append(VARA); url.append(counter);
+	 * url.append(VARA_FJOLDI); url.append("="); url.append("1"); url.append("&");
+	 * url.append(VARA); url.append(counter); url.append(VARA_VERD);
+	 * url.append("="); url.append(trinket.getPrice()); url.append("&");
+	 * url.append(VARA); url.append(counter++); url.append(VARA_AFSLATTUR);
+	 * url.append("=0");
+	 * 
+	 * amount += trinket.getPrice(); } }
+	 * 
+	 * if (relayPartners != null && !relayPartners.isEmpty()) { for (Participant
+	 * participant2 : relayPartners) { user = null;
+	 * 
+	 * if (createUsers) { if (participant2.getPersonalId() != null) { try { user =
+	 * getUserBusiness().getUser(participant2.getPersonalId()); } catch
+	 * (RemoteException e) { } catch (FinderException e) { } }
+	 * 
+	 * try { if (user == null) { user = saveUser(new
+	 * Name(participant2.getFullName()), new
+	 * IWTimestamp(participant2.getDateOfBirth()), null, null, null, null, null); }
+	 * } catch (Exception e) { e.printStackTrace(); user = null; // Something got
+	 * fucked up } } else { try { user =
+	 * getUserBusiness().getUser(participant2.getPersonalId()); } catch (Exception
+	 * e) { e.printStackTrace(); } }
+	 * 
+	 * if (user != null) { if (participant2.getEmail() != null &&
+	 * !"".equals(participant2.getEmail())) { try {
+	 * getUserBusiness().updateUserMail(user, participant2.getEmail()); } catch
+	 * (Exception e) { } }
+	 * 
+	 * dao.storeRegistration(null, header, RegistrationStatus.RelayPartner,
+	 * participantHolder.getRace(), participant2.getShirtSize(), team,
+	 * participant2.getRelayLeg(), 0, null, participant.getNationality(),
+	 * user.getUniqueId(), 0, false, false, null, null, false, true, true,
+	 * registration.getRunningGroup(), null, null); } } } } }
+	 * 
+	 * securityString.append(valitorShopID);
+	 * securityString.append(header.getUuid());
+	 * securityString.append(valitorReturnURL);
+	 * securityString.append(valitorReturnURLServerSide);
+	 * securityString.append(currency);
+	 * 
+	 * url.append("&"); url.append(KAUPANDA_UPPLYSINGAR); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("NafnSkylda"); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("FelaKennitala");
+	 * url.append("="); url.append("1"); url.append("&"); url.append("FelaSimi");
+	 * url.append("="); url.append("1"); url.append("&");
+	 * url.append("FelaHeimilisfang"); url.append("="); url.append("1");
+	 * url.append("&"); url.append("FelaPostnumer"); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("FelaStadur"); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("FelaLand"); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("FelaNetfang"); url.append("=");
+	 * url.append("1"); url.append("&"); url.append("FelaAthugasemdir");
+	 * url.append("="); url.append("1"); url.append("&");
+	 * url.append(TILVISUNARNUMER); url.append("="); url.append(header.getUuid());
+	 * url.append("&"); url.append(SLOD_TOKST_AD_GJALDFAERA); url.append("=");
+	 * url.append(valitorReturnURL); url.append("&");
+	 * url.append(SLOD_TOKST_AD_GJALDFAERA_TEXTI); url.append("=");
+	 * url.append(valitorReturnURLText); url.append("&");
+	 * url.append(SLOD_TOKST_AD_GJALDFAERA_SERVER_SIDE); url.append("=");
+	 * url.append(valitorReturnURLServerSide); url.append("&");
+	 * url.append(SLOD_NOTANDI_HAETTIR_VID); url.append("=");
+	 * url.append(valitorReturnURLCancel); url.append("&");
+	 * url.append(RAFRAEN_UNDIRSKRIFT); url.append("=");
+	 * url.append(createValitorSecurityString(securityString.toString()));
+	 * 
+	 * holder.setAmount(amount); holder.setValitorURL(url.toString()); }
+	 * 
+	 * return holder; }
+	 */
+
 	public User saveUser(Name fullName, IWTimestamp dateOfBirth, Gender gender, String address, String postal,
 			String city, Country country) {
 		User user = null;
@@ -2491,6 +2715,22 @@ public class PheidippidesService {
 						"http://skraning.marathon.is/pages/valitor");
 		String valitorReturnURLCancel = IWMainApplication.getDefaultIWApplicationContext().getApplicationSettings()
 				.getProperty(VALITOR_RETURN_URL_CHANGE_DISTANCE_CANCEL, "http://skraning.marathon.is/pages/valitor");
+
+		if (registration.getRace().getEvent().getPaymentShopID() != null) {
+			valitorShopID = registration.getRace().getEvent().getPaymentShopID();
+		}
+
+		if (registration.getRace().getEvent().getPaymentSecurityNumber() != null) {
+			valitorSecurityNumber = registration.getRace().getEvent().getPaymentSecurityNumber();
+		}
+
+		if (registration.getRace().getEvent().getPaymentReturnURL() != null) {
+			valitorReturnURL = registration.getRace().getEvent().getPaymentReturnURL();
+		}
+
+		if (registration.getRace().getEvent().getPaymentReturnURLText() != null) {
+			valitorReturnURLText = registration.getRace().getEvent().getPaymentReturnURLText();
+		}
 
 		StringBuilder securityString = new StringBuilder(valitorSecurityNumber);
 
@@ -3499,7 +3739,7 @@ public class PheidippidesService {
 						} catch (Exception e) {
 							country = getCountryHome()
 									.findByIsoAbbreviation(LocaleUtil.getIcelandicLocale().getCountry());
-							iaafCountry = dao.getCountry((Integer)country.getPrimaryKey());
+							iaafCountry = dao.getCountry((Integer) country.getPrimaryKey());
 						}
 
 						Registration registration = dao.storeRegistration(null, header, RegistrationStatus.OK,

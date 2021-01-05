@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idega.block.web2.business.JQuery;
 import com.idega.block.web2.business.JQueryPlugin;
 import com.idega.builder.bean.AdvancedProperty;
+import com.idega.core.messaging.MessagingSettings;
 import com.idega.facelets.ui.FaceletComponent;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWMainApplication;
@@ -125,7 +126,17 @@ public class ParticipantsReport extends IWBaseComponent {
 
 			IWResourceBundle iwrb = iwc.getIWMainApplication().getBundle(PheidippidesConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(iwc.getCurrentLocale());
 
-			createReport(email, iwrb, dateFrom, dateTo, gender, event, theYear, race, company, status);
+			String mailServer = "";
+			String fromAddress = "";
+			try {
+				MessagingSettings messagingSetting = IWMainApplication.getDefaultIWMainApplication().getMessagingSettings();
+				mailServer = messagingSetting.getSMTPMailServer();
+				fromAddress = messagingSetting.getFromMailAddress();
+			} catch (Exception e) {
+				System.err.println("MessageBusinessBean: Error getting mail property from bundle");
+				e.printStackTrace();
+			}
+			createReport(fromAddress, email, mailServer, iwrb, dateFrom, dateTo, gender, event, theYear, race, company, status);
 		}
 
 		FaceletComponent facelet = (FaceletComponent) iwc.getApplication().createComponent(FaceletComponent.COMPONENT_TYPE);
@@ -133,7 +144,7 @@ public class ParticipantsReport extends IWBaseComponent {
 		add(facelet);
 	}
 
-	private void createReport(final String email, final IWResourceBundle iwrb, final IWTimestamp dateFrom, final IWTimestamp dateTo, final String gender, final Event event, final Integer year, final Race race, final Company company, final RegistrationStatus status) {
+	private void createReport(final String emailFrom, final String emailTo, final String host, final IWResourceBundle iwrb, final IWTimestamp dateFrom, final IWTimestamp dateTo, final String gender, final Event event, final Integer year, final Race race, final Company company, final RegistrationStatus status) {
 		Thread results = new Thread(new Runnable() {
 
 			@Override
@@ -153,8 +164,8 @@ public class ParticipantsReport extends IWBaseComponent {
 					List<RaceTrinket> trinkets = getDao().getRaceTrinkets();
 					ParticipantsFileCreator writer = new ParticipantsFileCreator();
 					File file = writer.createReport(iwrb, dateFrom, dateTo, gender,event, year, race, trinkets, registrations, participantsMap, status);
-					System.out.println("Sending report to " + email + "...");
-					SendMail.send("admin@marathon.is", email, null, null, null, null, "Participants report", "", false, false, file);
+					System.out.println("Sending report to " + emailTo + "...");
+					SendMail.send(emailFrom, emailTo, null, null, null, host, "Participants report", "", false, false, file);
 					System.out.println("Report creation done!");
 				}
 				catch (MessagingException e) {

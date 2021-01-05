@@ -39,6 +39,12 @@ public class Event implements Serializable {
     private static final String COLUMN_PAYMENT_SECURITY_NUMBER = "payment_security_number";
     private static final String COLUMN_PAYMENT_RETURN_URL_TEXT = "payment_return_url_text";
     private static final String COLUMN_PAYMENT_RETURN_URL = "payment_return_url";
+    
+    private static final String COLUMN_KORTA_MERCHANT = "korta_merchant";
+    private static final String COLUMN_KORTA_TERMINAL = "korta_terminal";
+    private static final String COLUMN_KORTA_SECRETCODE = "korta_secretcode";
+    private static final String COLUMN_KORTA_RETURN_URL = "korta_return_url";
+    private static final String COLUMN_KORTA_RETURN_URL_TEXT = "korta_return_url_text";
 
     private static final String COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS = "discount_previous_registration";
     private static final String COLUMN_DATE_FOR_EARLY_BIRD_DISCOUNT = "early_bird_discount_date";
@@ -78,6 +84,21 @@ public class Event implements Serializable {
 
     @Column(name = Event.COLUMN_PAYMENT_RETURN_URL)
     private String paymentReturnURL;
+
+    @Column(name = Event.COLUMN_KORTA_MERCHANT)
+    private String kortaMerchant;
+
+    @Column(name = Event.COLUMN_KORTA_TERMINAL)
+    private String kortaTerminal;
+    
+    @Column(name = Event.COLUMN_KORTA_SECRETCODE)
+    private String kortaSecretcode;
+
+    @Column(name = Event.COLUMN_KORTA_RETURN_URL)
+    private String kortaReturnURL;
+
+    @Column(name = Event.COLUMN_KORTA_RETURN_URL_TEXT)
+    private String kortaReturnURLText;
 
     @Column(name = Event.COLUMN_DISCOUNT_FOR_PREVIOUS_REGISTRATIONS)
     private boolean discountForPreviousRegistrations;
@@ -225,5 +246,45 @@ public class Event implements Serializable {
 
 	public void setEarlyBirdDiscountDate(Date earlyBirdDiscountDate) {
 		this.earlyBirdDiscountDate = earlyBirdDiscountDate;
+	}
+
+	public String getKortaMerchant() {
+		return kortaMerchant;
+	}
+
+	public void setKortaMerchant(String kortaMerchant) {
+		this.kortaMerchant = kortaMerchant;
+	}
+
+	public String getKortaTerminal() {
+		return kortaTerminal;
+	}
+
+	public void setKortaTerminal(String kortaTerminal) {
+		this.kortaTerminal = kortaTerminal;
+	}
+
+	public String getKortaSecretcode() {
+		return kortaSecretcode;
+	}
+
+	public void setKortaSecretcode(String kortaSecretcode) {
+		this.kortaSecretcode = kortaSecretcode;
+	}
+
+	public String getKortaReturnURL() {
+		return kortaReturnURL;
+	}
+
+	public void setKortaReturnURL(String kortaReturnURL) {
+		this.kortaReturnURL = kortaReturnURL;
+	}
+
+	public String getKortaReturnURLText() {
+		return kortaReturnURLText;
+	}
+
+	public void setKortaReturnURLText(String kortaReturnURLText) {
+		this.kortaReturnURLText = kortaReturnURLText;
 	}
 }
